@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="AL\" />
+    <Folder Include="DL\" />
+    <Folder Include="IPL\" />
+  </ItemGroup>
+
 </Project>

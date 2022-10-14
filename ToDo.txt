@@ -1,0 +1,1 @@
+When figured out how to best do Saga, make generic version or similar and add to Common project and then push the Common project.

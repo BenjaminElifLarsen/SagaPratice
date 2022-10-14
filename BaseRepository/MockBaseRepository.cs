@@ -6,6 +6,13 @@ namespace BaseRepository;
 
 public class MockBaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot
 {
+    private static IEnumerable<TEntity> _entities = new List<TEntity>();
+
+    public MockBaseRepository()
+    {
+
+    }
+
     public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
         throw new NotImplementedException();

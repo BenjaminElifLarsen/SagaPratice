@@ -1,1 +1,5 @@
 When figured out how to best do Saga, make generic version or similar and add to Common project and then push the Common project.
+
+since dealing with events for the saga, maybe look into event sourcing at the same time.
+
+update ValueObject to be a record instead of class, if a record can be abstract

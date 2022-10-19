@@ -7,7 +7,7 @@ namespace BaseRepository;
 public class MockBaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot
 {
     private static IEnumerable<TEntity> _entities = new List<TEntity>();
-
+    //have the collection over in a "context" file
     public MockBaseRepository()
     {
 

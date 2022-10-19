@@ -37,7 +37,7 @@ internal class License
         throw new NotImplementedException();
     }
 
-    public bool AbouttoExpire()
+    public bool CheckIfAboutToExpire()
     {//check if there is less than half a year left
         throw new NotImplementedException();
     }

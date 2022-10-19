@@ -1,6 +1,7 @@
 ﻿using Common.RepositoryPattern;
+using People.DL.Model.Genders;
 
-namespace People.DL.Models;
+namespace People.DL.Model.People;
 
 internal class Person : IAggregateRoot
 {

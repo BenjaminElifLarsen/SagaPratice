@@ -13,13 +13,13 @@
     <Folder Include="DL\CQRS\Commands\Handlers\" />
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Enums\" />
-    <Folder Include="DL\Errors\" />
     <Folder Include="DL\Factories\" />
     <Folder Include="DL\Validators\" />
     <Folder Include="IPL\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaseRepository\BaseRepository.csproj" />
     <ProjectReference Include="..\Common\Common\Common.csproj" />
   </ItemGroup>
 

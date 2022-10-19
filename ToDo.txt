@@ -3,3 +3,9 @@ When figured out how to best do Saga, make generic version or similar and add to
 since dealing with events for the saga, maybe look into event sourcing at the same time.
 
 update ValueObject to be a record instead of class, if a record can be abstract
+
+consider based your solution on the Domain Events section from https://vaadin.com/blog/ddd-part-2-tactical-domain-driven-design#_guideline_2_refer_to_other_aggregates_by_id
+but code to work with the idea of no service can run all the time
+also look at Domain Services
+
+

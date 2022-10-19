@@ -1,7 +1,7 @@
 ﻿using Common.RepositoryPattern;
 using System.Linq.Expressions;
 
-namespace People.DL.Models;
+namespace People.DL.Model.Genders;
 internal class Gender : IAggregateRoot
 {
     private int _genderId;
@@ -10,7 +10,7 @@ internal class Gender : IAggregateRoot
 
     public int GenderId { get => _genderId; private set => _genderId = value; }
     public string Name { get => _name; private set => _name = value; }
-    public IEnumerable<Person> People { get => _people;}
+    public IEnumerable<Person> People { get => _people; }
     //what is the term for things like her/him/they and the term for she/him???
     private Gender()
     {

@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models;
+namespace Vehicle.DL.Models.People;
 
 internal class Person : IAggregateRoot
 {
@@ -39,7 +39,7 @@ internal class Person : IAggregateRoot
 
     public bool AddLicense(IdReference type, DateTime arquired)
     {
-        return _license.Add(new(type,arquired));
+        return _license.Add(new(type, arquired));
     }
 
     public bool RemoveLicense(License license)

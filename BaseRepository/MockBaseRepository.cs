@@ -1,5 +1,6 @@
 ﻿using Common.CQRS.Queries;
 using Common.RepositoryPattern;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace BaseRepository;
@@ -11,25 +12,10 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
     /// If the id already exist over in the context it will be overwitten (a kind of 'update')
     /// </summary>
     private static IList<EntityState<TEntity>> _entities = new List<EntityState<TEntity>>();
-
-    public MockBaseRepository()
+    private readonly TContext _context;
+    public MockBaseRepository(TContext context)
     {
-
-    }
-
-    public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<TProjection>> AllByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<TEntity>> AllByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
-    {
-        throw new NotImplementedException();
+        _context = context;
     }
 
     public void Create(TEntity entity)
@@ -37,34 +23,56 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
         _entities.Add(new(entity, States.Add));
     }
 
+    public void Update(TEntity entity)
+    {
+        _entities.Add(new(entity, States.Update));
+    }
+
     public void Delete(TEntity entity)
     {
-        _entities.Add(new(entity, States.Remove));
+        _entities.Add(new(entity, States.Remove)); //need to check if it is already in another state, same for the other methods. Also need to deal with children. In cases of 1/m-m references can permit the 'deleted' entity to be found.
     }
 
-    public Task<TProjection> FindByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
+    public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        throw new NotImplementedException();
+        return await Task.Run<IEnumerable<TProjection>>(() => _context.GetAll.AsQueryable().Select(query.Map()).ToArray());
     }
 
-    public Task<TEntity> FindByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+    public async Task<IEnumerable<TProjection>> AllByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        throw new NotImplementedException();
+        return await Task.Run<IEnumerable<TProjection>>(() => _context.GetAll.AsQueryable().Where(predicate).Select(query.Map()).ToArray());
     }
 
-    public Task<bool> IsUniqueAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> AllByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        throw new NotImplementedException();
+        return await Task.Run<IEnumerable<TEntity>>(() => _context.GetAll.AsQueryable().Where(predicate).ToArray());
+    }
+
+    public async Task<TProjection> FindByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await Task.Run<TProjection>(() => _context.GetAll.AsQueryable().Where(predicate).Select(query.Map()).SingleOrDefault());
+    }
+
+    public async Task<TEntity> FindByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+    {
+        return await Task.Run<TEntity>(() => _context.GetAll.AsQueryable().Where(predicate).SingleOrDefault());
+    }
+
+    public async Task<bool> IsUniqueAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return !await Task.Run(() => _context.GetAll.AsQueryable().Any(predicate));
     }
 
     public int SaveChanges()
     {
-        throw new NotImplementedException();
-    }
-
-    public void Update(TEntity entity)
-    {
-        _entities.Add(new(entity, States.Update));
+        if (_entities.Any(x => x.State == States.Unknown))
+            throw new Exception("Entity in unknown state.");
+        _context.Add(_entities.Where(x => x.State == States.Add).Select(x => x.Entity));
+        _context.Add(_entities.Where(x => x.State == States.Update).Select(x => x.Entity));
+        _context.Add(_entities.Where(x => x.State == States.Remove).Select(x => x.Entity));
+        int amount = _entities.Count;
+        _entities.Clear();
+        return amount;
     }
 
     public class EntityState<T>

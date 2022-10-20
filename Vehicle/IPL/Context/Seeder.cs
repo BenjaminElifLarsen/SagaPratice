@@ -1,4 +1,6 @@
-﻿using Vehicle.DL.Models;
+﻿using Vehicle.DL.Models.LicenseTypes;
+using Vehicle.DL.Models.People;
+using Vehicle.DL.Models.VehicleInformation;
 
 namespace Vehicle.IPL.Context;
 internal static class Seeder
@@ -27,8 +29,8 @@ internal static class Seeder
             vehicleContext.VehicleInformation.Add(busInfo1);
         }
 
-        DL.Models.Vehicle veh1 = new(1, new(200, 5, 21), new(carInfo1.VehicleInformationId), 5);
-        DL.Models.Vehicle veh2 = new(2, DateTime.Now, new(busInfo1.VehicleInformationId));
+        DL.Models.Vehicle.Vehicle veh1 = new(1, new(200, 5, 21), new(carInfo1.VehicleInformationId), 5);
+        DL.Models.Vehicle.Vehicle veh2 = new(2, DateTime.Now, new(busInfo1.VehicleInformationId));
         if (!vehicleContext.Vehicles.Any())
         {
             vehicleContext.Vehicles.Add(veh1);

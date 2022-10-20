@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models;
+namespace Vehicle.DL.Models.Vehicles;
 internal class Vehicle : IAggregateRoot
 {
     private int _vehicleId;

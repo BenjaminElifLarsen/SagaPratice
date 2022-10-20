@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models;
+namespace Vehicle.DL.Models.LicenseTypes;
 internal class LicenseType : IAggregateRoot
 {
     private int _licenseTypeId;

@@ -17,4 +17,9 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     {
         throw new NotImplementedException();
     }
+
+    public Result Handle(AddLicenseToPerson command)
+    {
+        throw new NotImplementedException();
+    }
 }

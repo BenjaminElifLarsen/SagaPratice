@@ -12,12 +12,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1FD2E69-0AA9-4117-B849-BD0420F6A5A4}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Observations.txt = Observations.txt
 		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "People", "People\People.csproj", "{40F940D2-3CEC-4328-868C-414341E6AEC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "People", "People\People.csproj", "{40F940D2-3CEC-4328-868C-414341E6AEC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vehicle", "Vehicle\Vehicle.csproj", "{36655E0D-F3E4-472A-A886-80310B502BE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vehicle", "Vehicle\Vehicle.csproj", "{36655E0D-F3E4-472A-A886-80310B502BE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

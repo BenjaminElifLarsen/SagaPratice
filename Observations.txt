@@ -1,0 +1,5 @@
+If a specification class contain multiple specification for different data types, the composite extensions requires giving the generic type.
+	Not sure, yet, why they are unable to recognise the correct generic version (IsSatisfiedBy) that they should run.
+	After all, both sides use the same generic type.
+However, since it is possible to compsite the specification it will allow for some more 'complex' error types, e.g. age above one threshold and below another one and if this fail can cast to a specific error.
+

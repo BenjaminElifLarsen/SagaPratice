@@ -1,10 +1,8 @@
-﻿
-
-namespace VehicleDomain.DL.Models.People;
+﻿namespace VehicleDomain.DL.Models.People;
 internal class License
 {
     private int _licenseId;
-    private Person _owner;
+    private Person _owner; //ORMs like EF Core would use and set this variable
     private IdReference _type;
     private DateTime _arquired;
     private DateTime? _lastRenewed;
@@ -22,7 +20,7 @@ internal class License
 
     internal License(IdReference type, DateTime arquired)
     {
-        _licenseId = new Random(int.MaxValue).Next();
+        _licenseId = new Random(int.MaxValue).Next(); //mock up id generation.
         _type = type;
         _arquired = arquired;
         _lastRenewed = null;
@@ -48,12 +46,4 @@ internal class License
     {
         return _lastRenewed is not null ? _lastRenewed.Value : _arquired;
     }
-
-    //internal bool AddOwner(Person owner)
-    //{
-    //    if (_owner is not null)
-    //        return false;
-    //    _owner = owner;
-    //    return true;
-    //}
 }

@@ -1,5 +1,6 @@
 ﻿using Common.ResultPattern;
 using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.LicenseTypes;
 
 namespace VehicleDomain.DL.Models.People;
 internal interface IPersonFactory
@@ -9,10 +10,10 @@ internal interface IPersonFactory
 }
 
 
-internal class LicenseValidationData
+internal class LicenseValidationData //used by a validator, either move it or crate a new model for the valdiator
 {
-    public IEnumerable<int> LicenseTypes { get; private set; }
-    public LicenseValidationData(IEnumerable<int> licenseTypes)
+    public IEnumerable<LicenseType> LicenseTypes { get; private set; } //change type
+    public LicenseValidationData(IEnumerable<LicenseType> licenseTypes)
     {
         LicenseTypes = licenseTypes;
     }

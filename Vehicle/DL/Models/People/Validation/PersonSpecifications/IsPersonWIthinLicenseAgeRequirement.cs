@@ -4,9 +4,9 @@ using VehicleDomain.DL.CQRS.Commands;
 namespace VehicleDomain.DL.Models.People.Validation.PersonSpecifications;
 internal class IsPersonWIthinLicenseAgeRequirement : ISpecification<AddPersonWithLicenseFromUser>
 {
-    private readonly IEnumerable<int> _ageRequirements;
+    private readonly IEnumerable<byte> _ageRequirements;
 
-    public IsPersonWIthinLicenseAgeRequirement(IEnumerable<int> LicenseAgeRequirements)
+    public IsPersonWIthinLicenseAgeRequirement(IEnumerable<byte> LicenseAgeRequirements)
     {
         _ageRequirements = LicenseAgeRequirements;
     }
@@ -21,7 +21,7 @@ internal class IsPersonWIthinLicenseAgeRequirement : ISpecification<AddPersonWit
         var now = DateTime.Now;
         if(birth > now)
         {
-            throw new Exception("Birth is after current moment");
+            throw new Exception("Birth is after current moment.");
         }
 
         var age = (now.Year - birth.Year - 1) +

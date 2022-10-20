@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models;
+namespace VehicleDomain.DL.Models;
 /// <summary>
 /// Used to prevent accessing one aggregate root via another aggregate root.
 /// </summary>

@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models.VehicleInformations;
+namespace VehicleDomain.DL.Models.VehicleInformations;
 internal class VehicleInformation : IAggregateRoot
 {
     private int _vehicleInformationId;

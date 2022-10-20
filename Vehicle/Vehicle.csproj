@@ -4,13 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>VehicleDomain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="AL\API\" />
     <Folder Include="AL\CQRS\" />
     <Folder Include="AL\Services\" />
-    <Folder Include="DL\CQRS\Commands\Handlers\" />
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Enums\" />
     <Folder Include="DL\Factories\" />

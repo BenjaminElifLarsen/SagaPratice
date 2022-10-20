@@ -1,4 +1,4 @@
-﻿namespace Vehicle.DL.Errors;
+﻿namespace VehicleDomain.DL.Errors;
 internal enum VehicleErrors
 {
 }
@@ -23,4 +23,6 @@ internal enum LicenseErrors
 internal enum PersonErrors
 {
     IdNotSet = 0b1,
+    InvalidAgeForLicense = 0b10,
+    InvalidBirth = 0b100,
 }

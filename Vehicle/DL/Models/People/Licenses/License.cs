@@ -1,6 +1,6 @@
-﻿using Vehicle.DL.Models.People;
+﻿
 
-namespace Vehicle.DL.Models.People;
+namespace VehicleDomain.DL.Models.People;
 internal class License
 {
     private int _licenseId;

@@ -1,4 +1,5 @@
 ﻿using Common.RepositoryPattern;
+using People.DL.Model.People;
 using System.Linq.Expressions;
 
 namespace People.DL.Model.Genders;

@@ -1,15 +1,15 @@
 ﻿using BaseRepository;
 using System.Linq.Expressions;
-using Vehicle.DL.Models.LicenseTypes;
-using Vehicle.DL.Models.People;
-using Vehicle.DL.Models.VehicleInformations;
-using V = Vehicle.DL.Models.Vehicles;
+using VehicleDomain.DL.Models.LicenseTypes;
+using VehicleDomain.DL.Models.People;
+using VehicleDomain.DL.Models.VehicleInformations;
+using VehicleDomain.DL.Models.Vehicles;
 
-namespace Vehicle.IPL.Context;
-internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Person>
+namespace VehicleDomain.IPL.Context;
+internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Person>
 {
-    private HashSet<V.Vehicle> _vehicles;
-    public HashSet<V.Vehicle> Vehicles => _vehicles;
+    private HashSet<Vehicle> _vehicles;
+    public HashSet<Vehicle> Vehicles => _vehicles;
 
     private HashSet<LicenseType> _licenseTypes;
     public HashSet<LicenseType> LicenseTypes => _licenseTypes;
@@ -20,7 +20,7 @@ internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, 
     private HashSet<Person> _people;
     public HashSet<Person> People => _people;
 
-    IEnumerable<V.Vehicle> IContext<V.Vehicle>.GetAll => Vehicles;
+    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles;
 
     IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes;
 
@@ -36,12 +36,12 @@ internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, 
         _vehicleInformation = new();
     }
 
-    public void Add(IEnumerable<V.Vehicle> entities)
+    public void Add(IEnumerable<Vehicle> entities)
     {
         AddToCollection(_vehicles, entities, x => entities.Any(xx => x.VehicleId == xx.VehicleId));
     }
 
-    public void Update(IEnumerable<V.Vehicle> entities)
+    public void Update(IEnumerable<Vehicle> entities)
     {
         if(entities.Any(x => !_vehicles.Any(xx => x.VehicleId == xx.VehicleId)))
         {
@@ -54,7 +54,7 @@ internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, 
         }
     }
 
-    public void Remove(IEnumerable<V.Vehicle> entities)
+    public void Remove(IEnumerable<Vehicle> entities)
     {
         RemoveFromCollection(_vehicles, entities);
     }

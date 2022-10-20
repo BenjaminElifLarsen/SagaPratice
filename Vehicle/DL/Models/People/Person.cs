@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 
-namespace Vehicle.DL.Models.People;
+namespace VehicleDomain.DL.Models.People;
 
 internal class Person : IAggregateRoot
 {

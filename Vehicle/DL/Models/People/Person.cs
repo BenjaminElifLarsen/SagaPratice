@@ -9,6 +9,9 @@ internal class Person : IAggregateRoot
     private HashSet<License> _license;
     private HashSet<IdReference> _vehicles;
 
+    public int PersonId { get => _personId; private set => _personId = value; }
+    public DateTime Birth { get => _birth; private set => _birth = value; }
+
     public Person(int personId, DateTime birth)
     {
         _personId = personId;

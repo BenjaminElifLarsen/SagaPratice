@@ -1,7 +1,5 @@
 ﻿using BaseRepository;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 using Vehicle.DL.Models.LicenseTypes;
 using Vehicle.DL.Models.People;
 using Vehicle.DL.Models.VehicleInformations;
@@ -40,74 +38,94 @@ internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, 
 
     public void Add(IEnumerable<V.Vehicle> entities)
     {
-            AddToCollection(_vehicles, entities, x => entities.Any(xx => x.VehicleId == xx.VehicleId));
+        AddToCollection(_vehicles, entities, x => entities.Any(xx => x.VehicleId == xx.VehicleId));
     }
 
     public void Update(IEnumerable<V.Vehicle> entities)
     {
-        foreach(var entity in entities.Where(x => !_vehicles.Any(xx => x.VehicleId == xx.VehicleId)))
+        if(entities.Any(x => !_vehicles.Any(xx => x.VehicleId == xx.VehicleId)))
         {
-            _vehicles.Add(entity);
+            throw new Exception("Trying to add entity in update.");
         }
-        foreach (var entity in entities.Where(x => _vehicles.Any(xx => x.VehicleId == xx.VehicleId)))
+        foreach (var entity in entities)
         {
             _vehicles.RemoveWhere(x => x.VehicleId == entity.VehicleId);
             _vehicles.Add(entity);
         }
-        //UpdateCollection(_vehicles, entities, x => !_vehicles.Any(xx => x.VehicleId == xx.VehicleId), x => _vehicles.Any(xx => x.VehicleId == xx.VehicleId), x => Array.Find(_vehicles.ToArray(), xx => x.VehicleId == xx.VehicleId)
     }
 
     public void Remove(IEnumerable<V.Vehicle> entities)
     {
-        foreach(var entity in entities)
-        {
-            _vehicles.Remove(entity);
-        }
+        RemoveFromCollection(_vehicles, entities);
     }
 
     public void Add(IEnumerable<Person> entities)
     {
-        throw new NotImplementedException();
+        AddToCollection(_people, entities, x => entities.Any(xx => x.PersonId == xx.PersonId));
     }
 
     public void Update(IEnumerable<Person> entities)
     {
-        throw new NotImplementedException();
+        if (entities.Any(x => !_people.Any(xx => x.PersonId == xx.PersonId)))
+        {
+            throw new Exception("Trying to add entity in update.");
+        }
+        foreach (var entity in entities)
+        {
+            _people.RemoveWhere(x => x.PersonId == entity.PersonId);
+            _people.Add(entity);
+        }
     }
 
     public void Remove(IEnumerable<Person> entities)
     {
-        throw new NotImplementedException();
+        RemoveFromCollection(_people, entities);
     }
 
     public void Add(IEnumerable<VehicleInformation> entities)
     {
-        throw new NotImplementedException();
+        AddToCollection(_vehicleInformation,entities,x => entities.Any(xx => x.VehicleInformationId == xx.VehicleInformationId));
     }
 
     public void Update(IEnumerable<VehicleInformation> entities)
     {
-        throw new NotImplementedException();
+        if (entities.Any(x => !_vehicleInformation.Any(xx => x.VehicleInformationId == xx.VehicleInformationId)))
+        {
+            throw new Exception("Trying to add entity in update.");
+        }
+        foreach(var entity in entities)
+        {
+            _vehicleInformation.RemoveWhere(x => x.VehicleInformationId == entity.VehicleInformationId);
+            _vehicleInformation.Add(entity);
+        }
     }
 
     public void Remove(IEnumerable<VehicleInformation> entities)
     {
-        throw new NotImplementedException();
+        RemoveFromCollection(_vehicleInformation, entities);
     }
 
     public void Add(IEnumerable<LicenseType> entities)
     {
-        throw new NotImplementedException();
+        AddToCollection(_licenseTypes, entities, x => entities.Any(xx => x.LicenseTypeId == xx.LicenseTypeId));
     }
 
     public void Update(IEnumerable<LicenseType> entities)
     {
-        throw new NotImplementedException();
+        if (entities.Any(x => !_licenseTypes.Any(xx => x.LicenseTypeId == xx.LicenseTypeId)))
+        {
+            throw new Exception("Trying to add entity in update.");
+        }
+        foreach (var entity in entities)
+        {
+            _licenseTypes.RemoveWhere(x => x.LicenseTypeId == entity.LicenseTypeId);
+            _licenseTypes.Add(entity);
+        }
     }
 
     public void Remove(IEnumerable<LicenseType> entities)
     {
-        throw new NotImplementedException();
+        RemoveFromCollection(_licenseTypes, entities);
     }
 
 
@@ -123,16 +141,12 @@ internal class MockVehicleContext : IContext<V.Vehicle>, IContext<LicenseType>, 
         }
     }
 
-    //private static void UpdateCollection<T>(HashSet<T> collection, IEnumerable<T> entities, Expression<Func<T, bool>> predicateAdd, Expression<Func<T, bool>> predicateRemove, Predicate<T> removeWhere)
-    //{
-    //    foreach (var entity in entities.AsQueryable().Where(predicateAdd))
-    //    {
-    //        collection.Add(entity);
-    //    }
-    //    foreach (var entity in entities.AsQueryable().Where(predicateRemove))
-    //    {
-    //        collection.RemoveWhere(removeWhere);
-    //        collection.Add(entity);
-    //    }
-    //}
+    private static void RemoveFromCollection<T>(HashSet<T> collection, IEnumerable<T> entities)
+    {
+        foreach(var entity in entities)
+        {
+            collection.Remove(entity);
+        }
+    }
+
 }

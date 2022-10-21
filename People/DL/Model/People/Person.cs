@@ -7,7 +7,7 @@ internal class Person : IAggregateRoot
 {
     private int _personId;
     private string _firstName;
-    private string _lastName;
+    private string _lastName; 
     private DateTime _birth;
     private Gender _gender;
 

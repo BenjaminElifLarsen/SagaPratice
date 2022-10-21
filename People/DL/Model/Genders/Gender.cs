@@ -6,7 +6,7 @@ namespace People.DL.Model.Genders;
 internal class Gender : IAggregateRoot
 {
     private int _genderId;
-    private string _name;
+    private string _name; 
     private HashSet<Person> _people;
 
     public int GenderId { get => _genderId; private set => _genderId = value; }

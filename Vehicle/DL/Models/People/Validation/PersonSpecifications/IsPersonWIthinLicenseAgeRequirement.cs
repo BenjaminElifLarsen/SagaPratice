@@ -2,11 +2,11 @@
 using VehicleDomain.DL.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.People.Validation.PersonSpecifications;
-internal class IsPersonWIthinLicenseAgeRequirement : ISpecification<AddPersonWithLicenseFromUser>
+internal class IsPersonWithinLicenseAgeRequirement : ISpecification<AddPersonWithLicenseFromUser>
 {
-    private readonly IEnumerable<byte> _ageRequirements;
+    private readonly PersonValidationData _ageRequirements;
 
-    public IsPersonWIthinLicenseAgeRequirement(IEnumerable<byte> LicenseAgeRequirements)
+    public IsPersonWithinLicenseAgeRequirement(PersonValidationData LicenseAgeRequirements)
     {
         _ageRequirements = LicenseAgeRequirements;
     }
@@ -28,9 +28,9 @@ internal class IsPersonWIthinLicenseAgeRequirement : ISpecification<AddPersonWit
             (((now.Month > birth.Month) ||
             ((now.Month == birth.Month) && (now.Day >= birth.Day))) ? 1 : 0);
 
-        foreach(var requirement in _ageRequirements)
+        foreach(var requirement in _ageRequirements.LicenseTypes)
         {
-            if(age < requirement)
+            if(age < requirement.YearRequirement)
             {
                 return false;
             }

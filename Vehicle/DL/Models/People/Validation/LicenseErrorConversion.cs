@@ -1,7 +1,10 @@
-﻿namespace VehicleDomain.DL.Models.People.Validation;
-internal static class LicenseErrorConversion
+﻿using l = VehicleDomain.DL.CQRS.Commands.License;
+
+namespace VehicleDomain.DL.Models.People.Validation;
+
+internal class LicenseErrorConversion : IErrorConversion<l>
 {
-    public static IEnumerable<string> Convert(int binaryFlag)
+    public static IEnumerable<string> Convert(int binaryFlag, l license)
     {
         List<string> errors = new();
         return errors;
@@ -11,12 +14,12 @@ internal static class LicenseErrorConversion
 
 
 
-public interface ErrorConversion
+public interface IErrorConversion //when proper tested and they work, move them over to the Common project. 
 {
     public abstract static IEnumerable<string> Convert(int binaryFlag);
 }
 
-public interface ErrorConversion<T> where T : class
+public interface IErrorConversion<T> where T : class
 {
     public abstract static IEnumerable<string> Convert(int binaryFlag, T entity);
 }

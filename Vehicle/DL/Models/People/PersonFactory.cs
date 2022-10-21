@@ -30,24 +30,38 @@ internal class PersonFactory : IPersonFactory
         List<string> errors = new();
 
         //ensure there is not licenseTypeId duplicates 
-
+        bool licenseErrorFound = false;
         foreach(var licenseTypeId in person.Licenses)
         {
             LicenseValidationData valdation = licenseValidationData.LicenseTypes[licenseTypeId.LicenseTypeId];
             int lFlag = new PersonLicenseValidatorFromUser(licenseTypeId, valdation, licenseValidationData.PermittedLicenseTypeIds).Validate();
             if(lFlag != 0)
             {
-
-            }
-            else //no reason to create license if an earlier have failed
-            {
-
+                if(licenseErrorFound == false)
+                {
+                    licenseErrorFound = true;
+                }
+                errors.AddRange(LicenseErrorConversion.Convert(lFlag, licenseTypeId));
             }
         }
 
-
         int flag = new PersonValidatorFromUser(person, validationData, 80, 10).Validate();
+        if(flag != 0)
+        {
+            errors.AddRange(PersonErrorConversion.Convert(flag));
+        }
 
-        throw new NotImplementedException();
+        if (errors.Any())
+        {
+            return new InvalidResult<Person>(errors.ToArray());
+        }
+
+        Person entity = new(person.Id, person.Birth);
+        foreach(var licenseTypeId in person.Licenses)
+        {
+            entity.AddLicense(new(licenseTypeId.LicenseTypeId), licenseTypeId.Arquired);
+        }
+
+        return new SuccessResult<Person>(entity);
     }
 }

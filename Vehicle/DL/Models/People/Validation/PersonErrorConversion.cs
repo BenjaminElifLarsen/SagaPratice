@@ -1,7 +1,7 @@
 ﻿using VehicleDomain.DL.Errors;
 
 namespace VehicleDomain.DL.Models.People.Validation;
-internal static class PersonErrorConversion
+internal class PersonErrorConversion : IErrorConversion
 {
     public static IEnumerable<string> Convert(int binaryFlag)
     {

@@ -26,6 +26,7 @@
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Enums\" />
     <Folder Include="DL\Factories\" />
+    <Folder Include="DL\Models\LicenseTypes\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Validators\" />
     <Folder Include="IPL\Repositories\" />
   </ItemGroup>

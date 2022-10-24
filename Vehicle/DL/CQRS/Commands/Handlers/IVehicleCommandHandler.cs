@@ -5,6 +5,7 @@ internal interface IVehicleCommandHandler :
     ICommandHandler<ValidateDriverLicenseStatus>,
     ICommandHandler<AddPersonNoLicenseFromSystem>,
     ICommandHandler<AddPersonWithLicenseFromUser>,
-    ICommandHandler<AddLicenseToPerson>
+    ICommandHandler<AddLicenseToPerson>,
+    ICommandHandler<EstablishLicenseTypeFromUser>
 {
 }

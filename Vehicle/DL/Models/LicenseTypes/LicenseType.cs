@@ -8,21 +8,22 @@ internal class LicenseType : IAggregateRoot
     private byte _renewPeriodInYears;
     private byte _ageRequirementInYears;
 
-    public int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
-    public string Type { get => _type; private set => _type = value; }
-    public byte RenewPeriodInYears { get => _renewPeriodInYears; private set => _renewPeriodInYears = value; }
-    public byte AgeRequirementInYears { get => _ageRequirementInYears; private set => _ageRequirementInYears = value; }
+    internal int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
+    internal string Type { get => _type; private set => _type = value; }
+    internal byte RenewPeriodInYears { get => _renewPeriodInYears; private set => _renewPeriodInYears = value; }
+    internal byte AgeRequirementInYears { get => _ageRequirementInYears; private set => _ageRequirementInYears = value; }
 
     private LicenseType()
     {
 
     }
 
-    internal LicenseType(int licenseTypeId, string type, byte renewPeriodInYears, byte ageRequirementInYears)
+    internal LicenseType( string type, byte renewPeriodInYears, byte ageRequirementInYears)
     {
-        _licenseTypeId = licenseTypeId;
+        _licenseTypeId = new Random(int.MaxValue).Next(); //mock up id generation.
         _type = type;
         _renewPeriodInYears = renewPeriodInYears;
         _ageRequirementInYears = ageRequirementInYears;
     }
+
 }

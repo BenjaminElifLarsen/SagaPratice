@@ -1,25 +1,31 @@
-﻿using l = VehicleDomain.DL.CQRS.Commands.License;
+﻿using Common.Other;
+using Common.SpecificationPattern;
+using VehicleDomain.DL.Errors;
+using l = VehicleDomain.DL.CQRS.Commands.License;
 
 namespace VehicleDomain.DL.Models.People.Validation;
 
 internal class LicenseErrorConversion : IErrorConversion<l>
 {
-    public static IEnumerable<string> Convert(int binaryFlag, l license)
+    public static IEnumerable<string> Convert(BinaryFlag binaryFlag, l license)
     {
         List<string> errors = new();
+        if (binaryFlag.IsFlagPresent((int)LicenseErrors.LicenseTypeNotSat))
+        {
+            errors.Add($"License type not sat.");
+        }
+        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidLicenseType))
+        {
+            errors.Add($"License type, {license.LicenseTypeId}, is invalid.");
+        }
+        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidArquired))
+        {
+            errors.Add($"License, {license.LicenseTypeId}, arquired is invalid.");
+        }
+        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidLastRenewed))
+        {
+            errors.Add($"License, {license.LicenseTypeId}, last renew date is invalid.");
+        }
         return errors;
     }
-}
-
-
-
-
-public interface IErrorConversion //when proper tested and they work, move them over to the Common project. 
-{
-    public abstract static IEnumerable<string> Convert(int binaryFlag);
-}
-
-public interface IErrorConversion<T> where T : class
-{
-    public abstract static IEnumerable<string> Convert(int binaryFlag, T entity);
 }

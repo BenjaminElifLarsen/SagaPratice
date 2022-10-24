@@ -45,6 +45,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(AddPersonNoLicenseFromSystem command)
     { //will need to trigger an event, PersonCreated
+        if (!_personRepository.IsIdUniqueAsync(command.Id).Result)
+        {
+            return new InvalidResultNoData("Person already exist.");
+        }
         var result = _personFactory.CreatePerson(command);
         if(result is InvalidResult<Person>)
         {
@@ -57,6 +61,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(AddPersonWithLicenseFromUser command)
     {//will need to trigger an event, PersonCreated
+        if (!_personRepository.IsIdUniqueAsync(command.Id).Result)
+        {
+            return new InvalidResultNoData("Person already exist.");
+        }
         var licenseTypeAges = _licenseTypeRepository.AllAsync(new LicenseTypeAgeQuery()).Result;
         var licenseTypeIds = _licenseTypeRepository.AllAsync(new LicenseTypeIdQuery()).Result;
         PersonValidationData data = new(licenseTypeAges);

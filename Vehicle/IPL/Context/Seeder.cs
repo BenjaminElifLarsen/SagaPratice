@@ -8,10 +8,10 @@ internal static class Seeder
 {
     public static void MockSeedData(MockVehicleContext vehicleContext)
     {
-        LicenseType train = new(1, "Train", 4, 20);
-        LicenseType bus = new(2, "Bus", 2, 21);
-        LicenseType car = new(3, "Car", 10, 18);
-        LicenseType moterBike = new(4, "Moterbike", 1, 16);
+        LicenseType train = new("Train", 4, 20);
+        LicenseType bus = new("Bus", 2, 21);
+        LicenseType car = new("Car", 10, 18);
+        LicenseType moterBike = new("Moterbike", 1, 16);
         if (!vehicleContext.LicenseTypes.Any())
         {
             vehicleContext.LicenseTypes.Add(train);

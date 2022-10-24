@@ -7,6 +7,7 @@ using VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels;
 using l = VehicleDomain.DL.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 using lv = VehicleDomain.DL.Models.People.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
+using Common.Other;
 
 namespace VehicleDomain.DL.Models.People.Validation;
 internal class PersonValidatorFromSystem : IValidate
@@ -17,11 +18,13 @@ internal class PersonValidatorFromSystem : IValidate
         _person = person;
     }
 
-    public int Validate()
+    public BinaryFlag Validate()
     {
-        int flag = 0;
-        flag += new IsPersonIdSet().And<AddPersonNoLicenseFromSystem>(new IsPersonIdSet()).IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.IdNotSet;
-        flag += new IsPersonOfValidAge().IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.InvalidBirth;
+        BinaryFlag flag = new();
+        if (new IsPersonIdSet().And<AddPersonNoLicenseFromSystem>(new IsPersonIdSet()).IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.IdNotSet);
+        if (new IsPersonOfValidAge().IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.InvalidBirth);
         return flag;
     }
 }
@@ -40,13 +43,17 @@ internal class PersonValidatorFromUser : IValidate
         _minAge = minAge;
     }
 
-    public int Validate()
+    public BinaryFlag Validate()
     {
-        int flag = 0;
-        flag += new IsPersonIdSet().IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.IdNotSet;
-        flag += new IsPersonOfValidAge().IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.InvalidBirth;
-        flag += new IsPersonWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.InvalidAgeForLicense;
-        flag += new IsPersonToYoung(_minAge).And(new IsPersonToOld(_maxAge)).IsSatisfiedBy(_person) ? 0 : (int)PersonErrors.NotWithinAgeRange;
+        BinaryFlag flag = new();
+        if (new IsPersonIdSet().IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.IdNotSet);
+        if (new IsPersonOfValidAge().IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.InvalidBirth);
+        if (new IsPersonWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.InvalidAgeForLicense);
+        if (new IsPersonToYoung(_minAge).And(new IsPersonToOld(_maxAge)).IsSatisfiedBy(_person))
+            flag.AddFlag((int)PersonErrors.NotWithinAgeRange);
         return flag;
     }
 }
@@ -64,9 +71,9 @@ internal class PersonLicenseValidatorFromUser : IValidate
         _permittedLicenseTypeIds = permittedLicenseTypeIds;
     }
 
-    public int Validate()
+    public BinaryFlag Validate()
     {
-        int flag = 0;
+        BinaryFlag flag = new();
         flag += new IsLicenseArquiredValid(_validationData).IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.InvalidArquired;
         flag += new IsLicenseLicenseTypeSet().And(new IsLicenseLicenseTypeValid(_permittedLicenseTypeIds)).IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.InvalidLicenseType;
         return flag;

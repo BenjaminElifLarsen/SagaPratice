@@ -9,7 +9,7 @@ internal enum VehicleInformationErrors
 
 internal enum LicenseTypeErrors
 {
-    IdAlreadyInUse = 0b1,
+    InvalidAgeRequirement = 0b1,
     InvalidType = 0b10,
     InvalidRenewPeriod = 0b100,
 }

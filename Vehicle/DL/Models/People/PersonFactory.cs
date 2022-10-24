@@ -5,7 +5,7 @@ using LicenseValidationData = VehicleDomain.DL.Models.People.Validation.PersonCr
 
 namespace VehicleDomain.DL.Models.People;
 internal class PersonFactory : IPersonFactory
-{ //can a person at creation have a license?
+{ 
     public Result<Person> CreatePerson(AddPersonNoLicenseFromSystem person)
     {
         List<string> errors = new(); //need to check if id is in use, maybe do that outside the factory

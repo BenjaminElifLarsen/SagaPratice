@@ -3,7 +3,7 @@ using People.DL.Model.Genders;
 
 namespace People.DL.Model.People;
 
-internal class Person : IAggregateRoot
+public class Person : IAggregateRoot
 {
     private int _personId;
     private string _firstName;
@@ -11,11 +11,11 @@ internal class Person : IAggregateRoot
     private DateTime _birth;
     private Gender _gender;
 
-    public int PersonId { get => _personId; private set => _personId = value; }
-    public string FirstName { get => _firstName; private set => _firstName = value; }
-    public string LastName { get => _lastName; private set => _lastName = value; }
-    public DateTime Birth { get => _birth; private set => _birth = value; }
-    public Gender Gender { get => _gender; private set => _gender = value; }
+    internal int PersonId { get => _personId; private set => _personId = value; }
+    internal string FirstName { get => _firstName; private set => _firstName = value; }
+    internal string LastName { get => _lastName; private set => _lastName = value; }
+    internal DateTime Birth { get => _birth; private set => _birth = value; }
+    internal Gender Gender { get => _gender; private set => _gender = value; }
 
     private Person()
     {
@@ -31,22 +31,22 @@ internal class Person : IAggregateRoot
         _gender = gender;
     }
 
-    public void UpdateFistName(string firstName)
+    internal void UpdateFistName(string firstName)
     {
         _firstName = firstName;
     }
 
-    public void UpdateLastName(string lastName)
+    internal void UpdateLastName(string lastName)
     {
         _lastName = lastName;
     }
 
-    public void UpdateBirth(DateTime birth)
+    internal void UpdateBirth(DateTime birth)
     {
         _birth = birth;
     }
 
-    public void UpdateGender(Gender gender)
+    internal void UpdateGender(Gender gender)
     {
         _gender = gender;
     }

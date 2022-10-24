@@ -2,62 +2,69 @@
 
 namespace VehicleDomain.DL.Models.People;
 
-internal class Person : IAggregateRoot
+public class Person : IAggregateRoot
 {
     private int _personId;
     private DateTime _birth;
-    private HashSet<License> _license;
+    private HashSet<License> _licenses;
     private HashSet<IdReference> _vehicles;
 
-    public int PersonId { get => _personId; private set => _personId = value; }
-    public DateTime Birth { get => _birth; private set => _birth = value; }
+    internal int PersonId { get => _personId; private set => _personId = value; }
+    internal DateTime Birth { get => _birth; private set => _birth = value; }
 
-    public Person(int personId, DateTime birth)
+    private Person()
+    {
+
+    }
+
+    internal Person(int personId, DateTime birth)
     {
         _personId = personId;
         _birth = birth;
-        _license = new HashSet<License>();
+        _licenses = new HashSet<License>();
         _vehicles = new HashSet<IdReference>();
     }
 
-    public void UpdateBirth(DateTime birth)
+    internal void UpdateBirth(DateTime birth)
     {
         _birth = birth;
     }
 
-    public bool AddVehicle(IdReference vehicle)
+    internal bool AddVehicle(IdReference vehicle)
     {
         return _vehicles.Add(vehicle);
     }
 
-    public bool RemoveVehicle(IdReference vehicle)
+    internal bool RemoveVehicle(IdReference vehicle)
     {
         return _vehicles.Remove(vehicle);
     }
 
-    public IdReference GetVehicle(int id)
+    internal IdReference GetVehicle(int id)
     {
         return _vehicles.FirstOrDefault(x => x.Id == id);
     }
 
-    public bool AddLicense(IdReference type, DateTime arquired)
+    internal bool AddLicense(IdReference type, DateTime arquired)
     {
-        return _license.Add(new(type, arquired));
+        if (_licenses.Any(x => x.Type.Id == type.Id))
+            return false;
+        return _licenses.Add(new(type, arquired));
     }
 
-    public bool RemoveLicense(License license)
+    internal bool RemoveLicense(License license)
     {
-        return _license.Remove(license);
+        return _licenses.Remove(license);
     }
 
-    public License GetLicense(int id)
+    internal License GetLicense(int typeId)
     {
-        return _license.FirstOrDefault(x => x.LicenseId == id);
+        return _licenses.FirstOrDefault(x => x.Type.Id == typeId);
     }
 
-    public IEnumerable<License> GetValidLincenses()
+    internal IEnumerable<License> GetValidLincenses()
     {
-        return _license.Where(x => x.Expired == false);
+        return _licenses.Where(x => x.Expired == false);
     }
 
 }

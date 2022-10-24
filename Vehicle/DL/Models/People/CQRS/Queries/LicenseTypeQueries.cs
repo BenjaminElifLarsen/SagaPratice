@@ -8,11 +8,11 @@ internal class LicenseTypeAgeQuery : BaseQuery<LicenseType, LicenseTypeAgeValida
 {
     public override Expression<Func<LicenseType, LicenseTypeAgeValidation>> Map()
     {
-        return e => new(e.AgeRequirementInYears);
+        return e => new(e.AgeRequirementInYears, e.LicenseTypeId);
     }
 }
 
-internal class LincenseTypeIdQuery : BaseQuery<LicenseType, LicenseTypeIdValidation>
+internal class LicenseTypeIdQuery : BaseQuery<LicenseType, LicenseTypeIdValidation>
 {
     public override Expression<Func<LicenseType, LicenseTypeIdValidation>> Map()
     {

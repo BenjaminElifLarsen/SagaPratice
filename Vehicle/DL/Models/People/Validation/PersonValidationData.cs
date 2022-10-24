@@ -17,8 +17,10 @@ internal class PersonCreationLicenseValidationData
     public Dictionary<int, LicenseValidationData> LicenseTypes { get; private set; }
     public IEnumerable<LicenseTypeIdValidation> PermittedLicenseTypeIds { get; private set; }
 
-    public PersonCreationLicenseValidationData()
+    public PersonCreationLicenseValidationData(Dictionary<int, LicenseValidationData> licenseTypes, IEnumerable<LicenseTypeIdValidation> permittedIds)
     {
+        LicenseTypes = licenseTypes;
+        PermittedLicenseTypeIds = permittedIds;
 
     }
 
@@ -26,5 +28,9 @@ internal class PersonCreationLicenseValidationData
     {
         public LicenseTypeAgeValidation AgeRequirement { get; private set; }
 
+        public LicenseValidationData(LicenseTypeAgeValidation ageRequirement)
+        {
+            AgeRequirement = ageRequirement;
+        }
     }
 }

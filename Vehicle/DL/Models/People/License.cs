@@ -12,6 +12,7 @@ internal class License
     public DateTime Arquired { get => _arquired; private set => _arquired = value; }
     public DateTime? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
     public bool Expired { get => _expired; private set => _expired = value; }
+    public IdReference Type { get => _type; private set => _type = value; }
 
     private License()
     {
@@ -32,12 +33,17 @@ internal class License
         _arquired = arquired;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public bool CheckIfExpired()
     { //check if last renewed is set or not, subtract current date against arquired/lastrenewed date, get years and compare to RenewPeriodInYears in licenseType
         throw new NotImplementedException();
     }
 
-    public bool CheckIfAboutToExpire()
+    public bool CheckIfAboutToExpire() //the handler that call this one should tigger an event that could be used to create an email, sms, or similar
     {//check if there is less than half a year left
         throw new NotImplementedException();
     }
@@ -46,4 +52,5 @@ internal class License
     {
         return _lastRenewed is not null ? _lastRenewed.Value : _arquired;
     }
+
 }

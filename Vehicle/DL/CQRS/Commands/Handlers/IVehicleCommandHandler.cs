@@ -6,6 +6,10 @@ internal interface IVehicleCommandHandler :
     ICommandHandler<AddPersonNoLicenseFromSystem>,
     ICommandHandler<AddPersonWithLicenseFromUser>,
     ICommandHandler<AddLicenseToPerson>,
-    ICommandHandler<EstablishLicenseTypeFromUser>
+    ICommandHandler<EstablishLicenseTypeFromUser>,
+    ICommandHandler<RemovePersonFromSystem>,
+    ICommandHandler<RemovePersonFromUser>,
+    ICommandHandler<ObsoleteLicenseTypeFromUser>,
+    ICommandHandler<AlterLicenseType>
 {
 }

@@ -8,19 +8,19 @@ internal class PersonErrorConversion : IErrorConversion
     public static IEnumerable<string> Convert(BinaryFlag binaryFlag)
     {
         List<string> errors = new();
-        if((binaryFlag.IsFlagPresent((int)PersonErrors.IdNotSet)))
+        if((binaryFlag == (int)PersonErrors.IdNotSet))
         {
             errors.Add($"Person id not sat.");
         }
-        if ((binaryFlag.IsFlagPresent((int)PersonErrors.InvalidAgeForLicense)))
+        if ((binaryFlag == (int)PersonErrors.InvalidAgeForLicense))
         {
             errors.Add($"Invalid person age for license.");
         }
-        if ((binaryFlag.IsFlagPresent((int)PersonErrors.InvalidBirth)))
+        if ((binaryFlag == (int)PersonErrors.InvalidBirth))
         {
             errors.Add($"Invalid person birth.");
         }
-        if ((binaryFlag.IsFlagPresent((int)PersonErrors.NotWithinAgeRange)))
+        if ((binaryFlag == (int)PersonErrors.NotWithinAgeRange))
         {
             errors.Add($"Person not within license age requirements.");
         }

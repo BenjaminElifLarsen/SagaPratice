@@ -1,4 +1,5 @@
-﻿using Common.ResultPattern;
+﻿using Common.Other;
+using Common.ResultPattern;
 using VehicleDomain.DL.CQRS.Commands;
 using VehicleDomain.DL.Models.People.Validation;
 using LicenseValidationData = VehicleDomain.DL.Models.People.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
@@ -10,7 +11,7 @@ internal class PersonFactory : IPersonFactory
     {
         List<string> errors = new(); //need to check if id is in use, maybe do that outside the factory
 
-        int flag = new PersonValidatorFromSystem(person).Validate();
+        BinaryFlag flag = new PersonValidatorFromSystem(person).Validate();
         if(flag != 0)
         {
             errors.AddRange(PersonErrorConversion.Convert(flag));
@@ -30,11 +31,12 @@ internal class PersonFactory : IPersonFactory
         List<string> errors = new();
 
         //ensure there is not licenseTypeId duplicates 
+
         bool licenseErrorFound = false;
         foreach(var licenseTypeId in person.Licenses)
         {
             LicenseValidationData valdation = licenseValidationData.LicenseTypes[licenseTypeId.LicenseTypeId];
-            int lFlag = new PersonLicenseValidatorFromUser(licenseTypeId, valdation, licenseValidationData.PermittedLicenseTypeIds).Validate();
+            BinaryFlag lFlag = new PersonLicenseValidatorFromUser(licenseTypeId, valdation, licenseValidationData.PermittedLicenseTypeIds).Validate();
             if(lFlag != 0)
             {
                 if(licenseErrorFound == false)
@@ -45,7 +47,7 @@ internal class PersonFactory : IPersonFactory
             }
         }
 
-        int flag = new PersonValidatorFromUser(person, validationData, 80, 10).Validate();
+        BinaryFlag flag = new PersonValidatorFromUser(person, validationData, 80, 10).Validate();
         if(flag != 0)
         {
             errors.AddRange(PersonErrorConversion.Convert(flag));

@@ -4,6 +4,7 @@ namespace VehicleDomain.DL.Models.LicenseTypes;
 internal interface ILicenseTypeRepository
 {
     Task<bool> IsIdUniqueAsync(int id);
+    Task<bool> IsTypeUniqueAsync(string type);
     Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel;
     Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<LicenseType,TProjection> query) where TProjection: BaseReadModel;
     void Save();

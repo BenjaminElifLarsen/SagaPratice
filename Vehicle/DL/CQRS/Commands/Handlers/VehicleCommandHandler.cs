@@ -10,12 +10,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     private readonly IPersonRepository _personRepository;
     private readonly IPersonFactory _personFactory;
 
+    private readonly ILicenseTypeFactory _licenseTypeFactory;
     private readonly ILicenseTypeRepository _licenseTypeRepository;
 
-    public VehicleCommandHandler(IPersonFactory personFactory, IPersonRepository personRepository, ILicenseTypeRepository licenseTypeRepository)
+    public VehicleCommandHandler(IPersonFactory personFactory, IPersonRepository personRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository)
     {
         _personFactory = personFactory;
         _personRepository = personRepository;
+        _licenseTypeFactory = licenseTypeFactory;
         _licenseTypeRepository = licenseTypeRepository;
     }
 
@@ -102,5 +104,48 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _personRepository.Update(person);
         _personRepository.Save();
         return new SuccessResultNoData();
+    }
+
+    public Result Handle(EstablishLicenseTypeFromUser command)
+    {
+        if (!_licenseTypeRepository.IsTypeUniqueAsync(command.Type).Result)
+        {
+            return new InvalidResultNoData($"License type with of id {command.Type} already exist.");
+        }
+        var result = _licenseTypeFactory.CreateLicenseType(command);
+        if(result is InvalidResult<LicenseType>)
+        {
+            return new InvalidResultNoData(result.Errors);
+        }
+        _licenseTypeRepository.Create(result.Data);
+        _licenseTypeRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(RemovePersonFromSystem command)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(RemovePersonFromUser command)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(ObsoleteLicenseTypeFromUser command)
+    { //transmit event that trigger expiring driving licenses that people may have that use this specific type id.
+        var entity = _licenseTypeRepository.GetForOperationAsync(command.Id).Result;
+        if(entity is not null)
+        {
+            entity.Delete(command.MomentOfDeletion);
+            _licenseTypeRepository.Update(entity);
+            _licenseTypeRepository.Save();
+        }
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(AlterLicenseType command)
+    {
+        throw new NotImplementedException();
     }
 }

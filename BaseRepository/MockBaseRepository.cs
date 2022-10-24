@@ -68,8 +68,8 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
         if (_entities.Any(x => x.State == States.Unknown))
             throw new Exception("Entity in unknown state.");
         _context.Add(_entities.Where(x => x.State == States.Add).Select(x => x.Entity));
-        _context.Add(_entities.Where(x => x.State == States.Update).Select(x => x.Entity));
-        _context.Add(_entities.Where(x => x.State == States.Remove).Select(x => x.Entity));
+        _context.Update(_entities.Where(x => x.State == States.Update).Select(x => x.Entity));
+        _context.Remove(_entities.Where(x => x.State == States.Remove).Select(x => x.Entity));
         int amount = _entities.Count;
         _entities.Clear();
         return amount;

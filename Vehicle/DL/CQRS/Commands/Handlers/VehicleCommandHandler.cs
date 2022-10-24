@@ -133,7 +133,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(ObsoleteLicenseTypeFromUser command)
-    { //transmit event that trigger expiring driving licenses that people may have that use this specific type id.
+    { //transmit event, ObsoletedLicenseType, that trigger expiring driving licenses that people may have that use this specific type id.
         var entity = _licenseTypeRepository.GetForOperationAsync(command.Id).Result;
         if(entity is not null)
         {

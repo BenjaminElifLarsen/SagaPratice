@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace VehicleDomain.DL.CQRS.Commands;
+namespace VehicleDomain.DL.Models.People.CQRS.Commands;
 public class RemovePersonFromSystem : ICommand
 {
 }

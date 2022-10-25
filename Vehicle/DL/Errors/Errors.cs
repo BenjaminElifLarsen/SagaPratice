@@ -1,11 +1,4 @@
 ﻿namespace VehicleDomain.DL.Errors;
-internal enum VehicleErrors
-{
-}
-
-internal enum VehicleInformationErrors
-{
-}
 
 internal enum LicenseTypeErrors
 {

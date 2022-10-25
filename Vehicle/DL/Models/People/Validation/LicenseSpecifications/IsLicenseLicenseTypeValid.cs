@@ -1,6 +1,6 @@
 ﻿using Common.SpecificationPattern;
 using VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels;
-using l = VehicleDomain.DL.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
+using l = VehicleDomain.DL.Models.People.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 using lv = VehicleDomain.DL.Models.People.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 
 namespace VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;

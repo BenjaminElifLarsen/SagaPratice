@@ -1,6 +1,6 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
-using l = VehicleDomain.DL.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
+using VehicleDomain.DL.Models.People.CQRS.Commands;
+using l = VehicleDomain.DL.Models.People.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 
 namespace VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
 internal class IsLicenseLicenseTypeSet : ISpecification<AddLicenseToPerson>, ISpecification<l>

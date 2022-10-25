@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace VehicleDomain.DL.CQRS.Commands;
+namespace VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 public class AlterLicenseType : ICommand
 {
     public int Id { get; private set; }

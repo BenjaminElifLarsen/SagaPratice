@@ -1,4 +1,5 @@
 ﻿using VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries.ReadModels;
 
 namespace VehicleDomain.DL.Models.People.Validation;
 internal class LicenseValidationData

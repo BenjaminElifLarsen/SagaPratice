@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace VehicleDomain.DL.CQRS.Commands;
+namespace VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 internal class EstablishLicenseTypeFromUser : ICommand
 {
     public string Type { get; private set; }

@@ -20,9 +20,9 @@ internal static class Seeder
             vehicleContext.LicenseTypes.Add(moterBike);
         }
 
-        VehicleInformation carInfo1 = new(1, "Quick Car", new(car.LicenseTypeId));
-        VehicleInformation carInfo2 = new(2, "Slow Car", new(car.LicenseTypeId));
-        VehicleInformation busInfo1 = new(3, "City Bus", new(bus.LicenseTypeId));
+        VehicleInformation carInfo1 = new(1, "Quick Yellow Car", 3, new(car.LicenseTypeId));
+        VehicleInformation carInfo2 = new(2, "Slow Car", 4, new(car.LicenseTypeId));
+        VehicleInformation busInfo1 = new(3, "CO2 Generating City Bus", 13, new(bus.LicenseTypeId));
         if (!vehicleContext.VehicleInformations.Any())
         {
             vehicleContext.VehicleInformations.Add(carInfo1);

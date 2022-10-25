@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace VehicleDomain.DL.CQRS.Commands;
+namespace VehicleDomain.DL.Models.People.CQRS.Commands;
 internal class AddLicenseToPerson : ICommand
 {
     public int PersonId { get; private set; }

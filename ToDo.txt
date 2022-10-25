@@ -9,3 +9,4 @@ but code to work with the idea of no service can run all the time
 also look at Domain Services
 
 
+when updating, data should be validated before updating the entities and the entities should validate the data themsevles too and return an interger if data is invalid

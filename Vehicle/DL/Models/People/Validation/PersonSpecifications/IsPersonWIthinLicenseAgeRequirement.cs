@@ -1,5 +1,5 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.People.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.People.Validation.PersonSpecifications;
 internal class IsPersonWithinLicenseAgeRequirement : ISpecification<AddPersonWithLicenseFromUser>

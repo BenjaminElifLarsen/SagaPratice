@@ -1,6 +1,6 @@
 ﻿using Common.ResultPattern;
-using VehicleDomain.DL.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes;
+using VehicleDomain.DL.Models.People.CQRS.Commands;
 using VehicleDomain.DL.Models.People.Validation;
 
 namespace VehicleDomain.DL.Models.People;

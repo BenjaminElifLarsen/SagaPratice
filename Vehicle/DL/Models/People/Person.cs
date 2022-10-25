@@ -1,4 +1,6 @@
 ﻿using Common.RepositoryPattern;
+using VehicleDomain.DL.Errors;
+using VehicleDomain.DL.Models.People.Validation.PersonSpecifications;
 
 namespace VehicleDomain.DL.Models.People;
 
@@ -25,9 +27,14 @@ public class Person : IAggregateRoot
         _vehicles = new HashSet<IdReference>();
     }
 
-    internal void UpdateBirth(DateTime birth)
-    {
+    internal int UpdateBirth(DateTime birth)
+    { //if changing the birth, need to check if all licenses are still valid regarding their age requirements. Could also do the young/old specification
+        if (!new IsPersonOfValidAge().IsSatisfiedBy(birth))
+        {
+            return (int)PersonErrors.InvalidBirth;
+        }
         _birth = birth;
+        return 0;
     }
 
     internal bool AddVehicle(IdReference vehicle)

@@ -1,6 +1,6 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
 using VehicleDomain.DL.Errors;
+using VehicleDomain.DL.Models.People.CQRS.Commands;
 using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
 
 namespace VehicleDomain.DL.Models.People.Validation;

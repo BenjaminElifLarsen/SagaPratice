@@ -1,4 +1,5 @@
 ﻿using VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels;
+using LicenseTypeAgeValidation = VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels.LicenseTypeAgeValidation;
 
 namespace VehicleDomain.DL.Models.People.Validation;
 internal class PersonValidationData

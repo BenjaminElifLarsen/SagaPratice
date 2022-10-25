@@ -1,5 +1,5 @@
 ﻿using Common.ResultPattern;
-using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;
 internal interface ILicenseTypeFactory

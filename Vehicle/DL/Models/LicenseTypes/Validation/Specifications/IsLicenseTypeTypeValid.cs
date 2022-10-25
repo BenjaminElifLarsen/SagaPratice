@@ -1,5 +1,5 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Validation.Specifications;
 internal class IsLicenseTypeTypeValid : ISpecification<EstablishLicenseTypeFromUser>

@@ -1,6 +1,6 @@
 ﻿using Common.Other;
 using Common.ResultPattern;
-using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.People.CQRS.Commands;
 using VehicleDomain.DL.Models.People.Validation;
 using LicenseValidationData = VehicleDomain.DL.Models.People.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 

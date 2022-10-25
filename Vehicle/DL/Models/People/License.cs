@@ -1,4 +1,8 @@
-﻿namespace VehicleDomain.DL.Models.People;
+﻿using VehicleDomain.DL.Errors;
+using VehicleDomain.DL.Models.People.Validation;
+using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
+
+namespace VehicleDomain.DL.Models.People;
 internal class License
 {
     private int _licenseId;
@@ -28,9 +32,14 @@ internal class License
         _expired = false;
     }
 
-    public void UpdateArquired(DateTime arquired)
+    public int UpdateArquired(DateTime arquired, LicenseValidationData licenseTypeAgeValidation)
     {
+        if(!new IsLicenseArquiredValid(licenseTypeAgeValidation).IsSatisfiedBy(arquired))
+        {
+            return (int)LicenseErrors.InvalidArquired;
+        }
         _arquired = arquired;
+        return 0;
     }
 
     /// <summary>

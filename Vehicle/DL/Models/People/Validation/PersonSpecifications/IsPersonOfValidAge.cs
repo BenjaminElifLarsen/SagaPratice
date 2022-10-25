@@ -1,5 +1,5 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
+using VehicleDomain.DL.Models.People.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.People.Validation.PersonSpecifications;
 internal class IsPersonOfValidAge : ISpecification<AddPersonNoLicenseFromSystem>, ISpecification<AddPersonWithLicenseFromUser>
@@ -14,7 +14,7 @@ internal class IsPersonOfValidAge : ISpecification<AddPersonNoLicenseFromSystem>
         return IsSatisfiedBy(candidate.Birth);
     }
 
-    private bool IsSatisfiedBy(DateTime birth)
+    public bool IsSatisfiedBy(DateTime birth)
     {
         return birth <= DateTime.Now;
     }

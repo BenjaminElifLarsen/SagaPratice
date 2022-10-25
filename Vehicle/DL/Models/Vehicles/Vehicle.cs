@@ -3,6 +3,9 @@
 namespace VehicleDomain.DL.Models.Vehicles;
 internal class Vehicle : IAggregateRoot
 {
+    /*
+     * Could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
+     */
     private int _vehicleId;
     private DateTime _produced;
     private IdReference _vehicleInformation;
@@ -31,15 +34,17 @@ internal class Vehicle : IAggregateRoot
         _distanceDrivenKm = distanceDrivenKm;
     }
 
-    public void UpdateProductionDate(DateTime produced)
+    public int UpdateProductionDate(DateTime produced)
     {
         _produced = produced;
+        return 0;
     }
 
-    public void ReplaceVehicleInformation(IdReference vehicleInformation)
-    {
-        _vehicleInformation = vehicleInformation;
-    }
+    //public int ReplaceVehicleInformation(IdReference vehicleInformation)
+    //{
+    //    _vehicleInformation = vehicleInformation;
+    //    return 0;
+    //}
 
     public void OverwriteDistanceDriven(double newDistance)
     {

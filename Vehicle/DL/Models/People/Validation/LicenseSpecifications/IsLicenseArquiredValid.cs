@@ -1,6 +1,6 @@
 ﻿using Common.SpecificationPattern;
-using VehicleDomain.DL.CQRS.Commands;
-using l = VehicleDomain.DL.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
+using VehicleDomain.DL.Models.People.CQRS.Commands;
+using l = VehicleDomain.DL.Models.People.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 using lv = VehicleDomain.DL.Models.People.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 
 namespace VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
@@ -28,7 +28,7 @@ internal class IsLicenseArquiredValid : ISpecification<AddLicenseToPerson>, ISpe
 		return IsSatisfiedBy(candidate.Arquired);
 	}
 
-	private bool IsSatisfiedBy(DateTime candidate)
+	public bool IsSatisfiedBy(DateTime candidate)
 	{
         var now = DateTime.Now;
         var age = (now.Year - candidate.Year - 1) +

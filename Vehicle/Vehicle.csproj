@@ -24,8 +24,6 @@
     <Folder Include="AL\CQRS\" />
     <Folder Include="AL\Services\" />
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
-    <Folder Include="DL\Enums\" />
-    <Folder Include="DL\Factories\" />
     <Folder Include="DL\Models\LicenseTypes\CQRS\Queries\ReadModels\" />
     <Folder Include="IPL\Repositories\" />
   </ItemGroup>

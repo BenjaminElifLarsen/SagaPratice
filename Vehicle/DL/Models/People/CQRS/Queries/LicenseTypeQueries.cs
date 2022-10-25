@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.People.CQRS.Queries.ReadModels;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries.ReadModels;
 
 namespace VehicleDomain.DL.Models.People.CQRS.Queries;
 internal class LicenseTypeAgeQuery : BaseQuery<LicenseType, LicenseTypeAgeValidation>

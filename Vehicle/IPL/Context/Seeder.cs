@@ -1,5 +1,5 @@
 ﻿using VehicleDomain.DL.Models.LicenseTypes;
-using VehicleDomain.DL.Models.People;
+using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
@@ -38,7 +38,7 @@ internal static class Seeder
             vehicleContext.Vehicles.Add(veh2);
         }
 
-        Person owner = new(1, new(1956, 1, 2));
+        Operator owner = new(1, new(1956, 1, 2));
         if (!vehicleContext.People.Any())
         {
             owner.AddLicense(new(car.LicenseTypeId), new(2019, 5, 13));

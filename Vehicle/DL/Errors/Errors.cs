@@ -15,7 +15,7 @@ internal enum LicenseErrors
     InvalidLicenseType = 0b1000,
 }
 
-internal enum PersonErrors
+internal enum OperatorErrors
 {
     IdNotSet = 0b1,
     InvalidAgeForLicense = 0b10,

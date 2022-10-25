@@ -2,9 +2,9 @@
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.VehicleInformations.Validation.VehicleInformationSpecifications;
-internal class IsVehicleInformationWheelAmountSat : ISpecification<AddVehicleInformation>
+internal class IsVehicleInformationWheelAmountSat : ISpecification<AddVehicleInformationFromExternalSystem>
 {
-    public bool IsSatisfiedBy(AddVehicleInformation candidate)
+    public bool IsSatisfiedBy(AddVehicleInformationFromExternalSystem candidate)
     {
         throw new NotImplementedException();
     }

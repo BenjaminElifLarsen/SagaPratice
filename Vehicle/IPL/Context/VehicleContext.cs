@@ -1,12 +1,12 @@
 ﻿using BaseRepository;
 using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
-using VehicleDomain.DL.Models.People;
+using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.IPL.Context;
-internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Person>
+internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Operator>
 {
     private HashSet<Vehicle> _vehicles;
     public HashSet<Vehicle> Vehicles => _vehicles;
@@ -17,8 +17,8 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     private HashSet<VehicleInformation> _vehicleInformation;
     public HashSet<VehicleInformation> VehicleInformations => _vehicleInformation;
 
-    private HashSet<Person> _people;
-    public HashSet<Person> People => _people;
+    private HashSet<Operator> _people;
+    public HashSet<Operator> People => _people;
 
     IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles;
 
@@ -26,7 +26,7 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
 
     IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations;
 
-    IEnumerable<Person> IContext<Person>.GetAll => People;
+    IEnumerable<Operator> IContext<Operator>.GetAll => People;
 
     public MockVehicleContext()
     {
@@ -59,25 +59,25 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
         RemoveFromCollection(_vehicles, entities);
     }
 
-    public void Add(IEnumerable<Person> entities)
+    public void Add(IEnumerable<Operator> entities)
     {
-        AddToCollection(_people, entities, x => entities.Any(xx => x.PersonId == xx.PersonId));
+        AddToCollection(_people, entities, x => entities.Any(xx => x.OperatorId == xx.OperatorId));
     }
 
-    public void Update(IEnumerable<Person> entities)
+    public void Update(IEnumerable<Operator> entities)
     {
-        if (entities.Any(x => !_people.Any(xx => x.PersonId == xx.PersonId)))
+        if (entities.Any(x => !_people.Any(xx => x.OperatorId == xx.OperatorId)))
         {
             throw new Exception("Trying to add entity in update.");
         }
         foreach (var entity in entities)
         {
-            _people.RemoveWhere(x => x.PersonId == entity.PersonId);
+            _people.RemoveWhere(x => x.OperatorId == entity.OperatorId);
             _people.Add(entity);
         }
     }
 
-    public void Remove(IEnumerable<Person> entities)
+    public void Remove(IEnumerable<Operator> entities)
     {
         RemoveFromCollection(_people, entities);
     }

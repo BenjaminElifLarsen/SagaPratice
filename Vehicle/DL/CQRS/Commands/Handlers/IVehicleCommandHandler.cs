@@ -1,18 +1,20 @@
 ﻿using Common.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
-using VehicleDomain.DL.Models.People.CQRS.Commands;
+using VehicleDomain.DL.Models.Operators.CQRS.Commands;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 
 namespace VehicleDomain.DL.CQRS.Commands.Handlers;
 internal interface IVehicleCommandHandler :
     ICommandHandler<ValidateDriverLicenseStatus>,
     ICommandHandler<AddPersonNoLicenseFromSystem>,
     ICommandHandler<AddPersonWithLicenseFromUser>,
-    ICommandHandler<AddLicenseToPerson>,
+    ICommandHandler<AddLicenseToOperator>,
     ICommandHandler<EstablishLicenseTypeFromUser>,
-    ICommandHandler<RemovePersonFromSystem>,
-    ICommandHandler<RemovePersonFromUser>,
+    ICommandHandler<RemoveOperatorFromSystem>,
+    ICommandHandler<RemoveOperatorFromUser>,
     ICommandHandler<ObsoleteLicenseTypeFromUser>,
-    ICommandHandler<AlterLicenseType>
+    ICommandHandler<AlterLicenseType>,
+    ICommandHandler<AddVehicleInformationFromExternalSystem>
 {
 }
 /*

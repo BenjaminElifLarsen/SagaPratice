@@ -7,7 +7,7 @@ using VehicleDomain.DL.Models.VehicleInformations.Validation.Errors;
 namespace VehicleDomain.DL.Models.VehicleInformations;
 internal class VehicleInformationFactory : IVehicleInformationFactory
 {
-    public Result<VehicleInformation> CreateVehicleInformation(AddVehicleInformation vehicleInformation, VehicleInformationValidationData validationData)
+    public Result<VehicleInformation> CreateVehicleInformation(AddVehicleInformationFromExternalSystem vehicleInformation, VehicleInformationValidationData validationData)
     {
         List<string> errors = new();
 

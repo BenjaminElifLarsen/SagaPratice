@@ -1,26 +1,35 @@
 ﻿using Common.ResultPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
-using VehicleDomain.DL.Models.People;
-using VehicleDomain.DL.Models.People.CQRS.Commands;
+using VehicleDomain.DL.Models.Operators;
+using VehicleDomain.DL.Models.Operators.CQRS.Commands;
+using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.People.CQRS.Queries;
-using VehicleDomain.DL.Models.People.Validation;
+using VehicleDomain.DL.Models.VehicleInformations;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries;
+using VehicleDomain.DL.Models.VehicleInformations.Validation;
 
 namespace VehicleDomain.DL.CQRS.Commands.Handlers;
 internal class VehicleCommandHandler : IVehicleCommandHandler
 {
-    private readonly IPersonRepository _personRepository;
     private readonly IPersonFactory _personFactory;
+    private readonly IPersonRepository _personRepository;
 
     private readonly ILicenseTypeFactory _licenseTypeFactory;
     private readonly ILicenseTypeRepository _licenseTypeRepository;
 
-    public VehicleCommandHandler(IPersonFactory personFactory, IPersonRepository personRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository)
+    private readonly IVehicleInformationFactory _vehicleInformationFactory;
+    private readonly IVehicleInformationRepository _vehicleInformationRepository;
+
+    public VehicleCommandHandler(IPersonFactory personFactory, IPersonRepository personRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository)
     {
         _personFactory = personFactory;
         _personRepository = personRepository;
         _licenseTypeFactory = licenseTypeFactory;
         _licenseTypeRepository = licenseTypeRepository;
+        _vehicleInformationFactory = vehicleInformationFactory;
+        _vehicleInformationRepository = vehicleInformationRepository;
     }
 
 
@@ -54,7 +63,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData("Person already exist.");
         }
         var result = _personFactory.CreatePerson(command);
-        if(result is InvalidResult<Person>)
+        if(result is InvalidResult<Operator>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -71,7 +80,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         }
         var licenseTypeAges = _licenseTypeRepository.AllAsync(new LicenseTypeAgeQuery()).Result;
         var licenseTypeIds = _licenseTypeRepository.AllAsync(new LicenseTypeIdQuery()).Result;
-        PersonValidationData data = new(licenseTypeAges);
+        OperatorValidationData data = new(licenseTypeAges);
         var dictionary = new Dictionary<int, PersonCreationLicenseValidationData.LicenseValidationData>();
         foreach(var licenseType in licenseTypeAges)
         {
@@ -79,7 +88,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         }
         PersonCreationLicenseValidationData licenseData = new(dictionary, licenseTypeIds);
         var result = _personFactory.CreatePerson(command, data, licenseData);
-        if (result is InvalidResult<Person>)
+        if (result is InvalidResult<Operator>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -88,7 +97,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddLicenseToPerson command)
+    public Result Handle(AddLicenseToOperator command)
     {
         if (_licenseTypeRepository.IsIdUniqueAsync(command.LicenseType).Result)
         {
@@ -124,12 +133,12 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(RemovePersonFromSystem command)
+    public Result Handle(RemoveOperatorFromSystem command)
     {
         throw new NotImplementedException();
     }
 
-    public Result Handle(RemovePersonFromUser command)
+    public Result Handle(RemoveOperatorFromUser command)
     {
         throw new NotImplementedException();
     }
@@ -149,5 +158,23 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(AlterLicenseType command)
     {
         throw new NotImplementedException();
+    }
+
+    public Result Handle(AddVehicleInformationFromExternalSystem command)
+    {
+        if (!_vehicleInformationRepository.IsNameUniqueAsync(command.VehicleName).Result)
+        {
+            return new InvalidResultNoData("Vehicle information is not unique.");
+        }
+        var data = _licenseTypeRepository.AllAsync(new LicenseTypeForVehicleInformationValidationQuery()).Result;
+        var valdationData = new VehicleInformationValidationData(data);
+        var result = _vehicleInformationFactory.CreateVehicleInformation(command, valdationData);
+        if(result is InvalidResult<VehicleInformation>)
+        {
+            return new InvalidResultNoData(result.Errors);
+        }
+        _vehicleInformationRepository.Create(result.Data);
+        _vehicleInformationRepository.Save();
+        return new SuccessResultNoData();
     }
 }

@@ -2,11 +2,11 @@
 using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators;
-public class PersonRepository : IPersonRepository
+public class OperatorRepository : IOperatorRepository
 {
     private readonly IBaseRepository<Operator> _baseRepository;
 
-    public PersonRepository(IBaseRepository<Operator> baseRepository)
+    public OperatorRepository(IBaseRepository<Operator> baseRepository)
     {
         _baseRepository = baseRepository;
     }

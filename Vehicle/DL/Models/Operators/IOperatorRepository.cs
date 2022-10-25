@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.Operators;
-public interface IPersonRepository
+public interface IOperatorRepository
 {
     Task<bool> IsIdUniqueAsync(int id);
     Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel;

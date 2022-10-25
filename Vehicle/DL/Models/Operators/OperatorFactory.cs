@@ -5,9 +5,9 @@ using VehicleDomain.DL.Models.Operators.Validation;
 using LicenseValidationData = VehicleDomain.DL.Models.Operators.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 
 namespace VehicleDomain.DL.Models.Operators;
-internal class PersonFactory : IPersonFactory
+internal class OperatorFactory : IOperatorFactory
 {
-    public Result<Operator> CreatePerson(AddPersonNoLicenseFromSystem person)
+    public Result<Operator> CreateOperator(AddPersonNoLicenseFromSystem person)
     {
         List<string> errors = new(); //need to check if id is in use, maybe do that outside the factory
 
@@ -26,7 +26,7 @@ internal class PersonFactory : IPersonFactory
         return new SuccessResult<Operator>(entity);
     }
 
-    public Result<Operator> CreatePerson(AddPersonWithLicenseFromUser person, OperatorValidationData validationData, PersonCreationLicenseValidationData licenseValidationData)
+    public Result<Operator> CreateOperator(AddPersonWithLicenseFromUser person, OperatorValidationData validationData, PersonCreationLicenseValidationData licenseValidationData)
     {
         List<string> errors = new();
 

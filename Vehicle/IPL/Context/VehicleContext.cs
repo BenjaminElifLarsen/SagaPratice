@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.RepositoryPattern;
 using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
@@ -20,13 +21,29 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     private HashSet<Operator> _people;
     public HashSet<Operator> People => _people;
 
-    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles;
+    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(x => { 
+        if (x is ISoftDelete delete) return !delete.Deleted; 
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom < DateTime.Now; 
+        else return true; }
+    );
 
-    IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes;
+    IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes.Where(x => {
+        if (x is ISoftDelete delete) return !delete.Deleted;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom < DateTime.Now;
+        else return true; }
+    );
 
-    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations;
+    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations.Where(x => {
+        if (x is ISoftDelete delete) return !delete.Deleted;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom < DateTime.Now;
+        else return true; }
+    );
 
-    IEnumerable<Operator> IContext<Operator>.GetAll => People;
+    IEnumerable<Operator> IContext<Operator>.GetAll => People.Where(x => {
+        if (x is ISoftDelete delete) return !delete.Deleted;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom < DateTime.Now;
+        else return true; }
+    );
 
     public MockVehicleContext()
     {

@@ -148,12 +148,17 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(RemoveOperatorFromSystem command)
-    {
-        throw new NotImplementedException();
+    { //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
+        var entity = _operatorRepository.GetForOperationAsync(command.Id).Result;
+        if(entity is not null)
+        {
+
+        }
+        return new SuccessResultNoData();
     }
 
     public Result Handle(RemoveOperatorFromUser command)
-    {
+    { //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
         throw new NotImplementedException();
     }
 
@@ -256,8 +261,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(EstablishRelationBetweenOperatorAndVehicle command)
-    { //raise some event that is generate commands for the two handlers below
-        //check if the operator and vehicle exist
+    { //raise some event that generates commands for the two handlers below
         if (_operatorRepository.IsIdUniqueAsync(command.OperatorId).Result)
         {
             return new InvalidResultNoData($"");
@@ -281,7 +285,8 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         entity.AddOperator(new(command.OperatorId));
-        throw new NotImplementedException();
+        _vehicleRepository.Update(entity);
+        return new SuccessResultNoData();
     }
 
     public Result Handle(AddVehicleToOperator command)
@@ -296,6 +301,44 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         entity.AddVehicle(new(command.VehicleId));
+        _operatorRepository.Update(entity);
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(RemoveRelationBetweenOperatorAndVehicle command)
+    {
+        if (_operatorRepository.IsIdUniqueAsync(command.OperatorId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        if (!_vehicleRepository.DoesVehicleExist(command.VehicleId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(RemoveOperatorFromVehicle command)
+    { //should this save or should the handler for RemoveRelationBetweenOperatorAndVehicle?
+        var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        if (entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        entity.RemoveOperator(new(command.OperatorId));
+        _vehicleRepository.Update(entity);
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(RemoveVehicleFromOperator command)
+    { //should this save or should the handler for RemoveRelationBetweenOperatorAndVehicle?
+        var entity = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
+        if (entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        entity.RemoveVehicle(new(command.VehicleId));
+        _operatorRepository.Update(entity);
         throw new NotImplementedException();
     }
 }

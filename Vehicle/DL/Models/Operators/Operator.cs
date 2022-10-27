@@ -5,7 +5,7 @@ using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators;
 
-public class Operator : IAggregateRoot
+public class Operator : IAggregateRoot, ISoftDelete
 {
     private int _operatorId;
     private DateTime _birth;
@@ -14,6 +14,8 @@ public class Operator : IAggregateRoot
 
     internal int OperatorId { get => _operatorId; private set => _operatorId = value; }
     internal DateTime Birth { get => _birth; private set => _birth = value; }
+
+    public bool Deleted => throw new NotImplementedException();
 
     private Operator()
     {
@@ -78,4 +80,8 @@ public class Operator : IAggregateRoot
         return _licenses.Where(x => x.Expired == false);
     }
 
+    public void Delete()
+    {
+        throw new NotImplementedException();
+    }
 }

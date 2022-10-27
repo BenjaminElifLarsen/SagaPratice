@@ -22,7 +22,10 @@ internal interface IVehicleCommandHandler :
     ICommandHandler<ResetVehicleMovedDistance>,
     ICommandHandler<EstablishRelationBetweenOperatorAndVehicle>,
     ICommandHandler<AddOperatorToVehicle>,
-    ICommandHandler<AddVehicleToOperator>
+    ICommandHandler<AddVehicleToOperator>,
+    ICommandHandler<RemoveRelationBetweenOperatorAndVehicle>,
+    ICommandHandler<RemoveOperatorFromVehicle>,
+    ICommandHandler<RemoveVehicleFromOperator>
 {
 }
 /*

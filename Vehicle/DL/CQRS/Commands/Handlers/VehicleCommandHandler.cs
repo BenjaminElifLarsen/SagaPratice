@@ -13,8 +13,8 @@ using VehicleDomain.DL.Models.VehicleInformations.Validation;
 namespace VehicleDomain.DL.CQRS.Commands.Handlers;
 internal class VehicleCommandHandler : IVehicleCommandHandler
 {
-    private readonly IOperatorFactory _personFactory;
-    private readonly IOperatorRepository _personRepository;
+    private readonly IOperatorFactory _operatorFactory;
+    private readonly IOperatorRepository _operatorRepository;
 
     private readonly ILicenseTypeFactory _licenseTypeFactory;
     private readonly ILicenseTypeRepository _licenseTypeRepository;
@@ -22,10 +22,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     private readonly IVehicleInformationFactory _vehicleInformationFactory;
     private readonly IVehicleInformationRepository _vehicleInformationRepository;
 
-    public VehicleCommandHandler(IOperatorFactory personFactory, IOperatorRepository personRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository)
+    public VehicleCommandHandler(IOperatorFactory operatorFactory, IOperatorRepository operatorRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository)
     {
-        _personFactory = personFactory;
-        _personRepository = personRepository;
+        _operatorFactory = operatorFactory;
+        _operatorRepository = operatorRepository;
         _licenseTypeFactory = licenseTypeFactory;
         _licenseTypeRepository = licenseTypeRepository;
         _vehicleInformationFactory = vehicleInformationFactory;
@@ -36,7 +36,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(ValidateDriverLicenseStatus command)
     { //make a valdiation check, after this (if successfull) the user should use a query to get the result
         //this method could be called by a system designed to automatically ensure everyones licenses are up to date.
-        var @operator = _personRepository.GetForOperationAsync(command.OperatorId).Result;
+        var @operator = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if(@operator is null)
         {
             return new InvalidResultNoData("Operator was not found.");
@@ -50,31 +50,31 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         license.CheckIfExpired();
         if(oldValue != license.Expired)
         {
-            _personRepository.Update(@operator);
-            _personRepository.Save();
+            _operatorRepository.Update(@operator);
+            _operatorRepository.Save();
         }
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddPersonNoLicenseFromSystem command)
+    public Result Handle(AddOperatorNoLicenseFromSystem command)
     { //will need to trigger an event, PersonCreated
-        if (!_personRepository.IsIdUniqueAsync(command.Id).Result)
+        if (!_operatorRepository.IsIdUniqueAsync(command.Id).Result)
         {
             return new InvalidResultNoData("Operator already exist.");
         }
-        var result = _personFactory.CreateOperator(command);
+        var result = _operatorFactory.CreateOperator(command);
         if(result is InvalidResult<Operator>)
         {
             return new InvalidResultNoData(result.Errors);
         }
-        _personRepository.Create(result.Data);
-        _personRepository.Save();
+        _operatorRepository.Create(result.Data);
+        _operatorRepository.Save();
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddPersonWithLicenseFromUser command)
+    public Result Handle(AddOperatorWithLicenseFromUser command)
     {//will need to trigger an event, PersonCreated
-        if (!_personRepository.IsIdUniqueAsync(command.Id).Result)
+        if (!_operatorRepository.IsIdUniqueAsync(command.Id).Result)
         {
             return new InvalidResultNoData("Operator already exist.");
         }
@@ -87,13 +87,13 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             dictionary.Add(licenseType.Id, new PersonCreationLicenseValidationData.LicenseValidationData(licenseType));
         }
         PersonCreationLicenseValidationData licenseData = new(dictionary, licenseTypeIds);
-        var result = _personFactory.CreateOperator(command, data, licenseData);
+        var result = _operatorFactory.CreateOperator(command, data, licenseData);
         if (result is InvalidResult<Operator>)
         {
             return new InvalidResultNoData(result.Errors);
         }
-        _personRepository.Create(result.Data);
-        _personRepository.Save();
+        _operatorRepository.Create(result.Data);
+        _operatorRepository.Save();
         return new SuccessResultNoData();
     }
 
@@ -103,7 +103,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData($"LicenseType with id of {command.LicenseType} is invalid.");
         }
-        var @operator = _personRepository.GetForOperationAsync(command.PersonId).Result;
+        var @operator = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if(@operator is null)
         {
             return new InvalidResultNoData("Operator was not found.");
@@ -112,8 +112,8 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData($"A license with type of {command.LicenseType} is already present.");
         }
-        _personRepository.Update(@operator);
-        _personRepository.Save();
+        _operatorRepository.Update(@operator);
+        _operatorRepository.Save();
         return new SuccessResultNoData();
     }
 

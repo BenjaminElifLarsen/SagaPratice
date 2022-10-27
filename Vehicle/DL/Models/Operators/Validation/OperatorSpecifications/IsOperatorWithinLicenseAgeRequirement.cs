@@ -3,7 +3,7 @@ using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.People.Validation;
 
 namespace VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
-internal class IsOperatorWithinLicenseAgeRequirement : ISpecification<AddPersonWithLicenseFromUser>
+internal class IsOperatorWithinLicenseAgeRequirement : ISpecification<AddOperatorWithLicenseFromUser>
 {
     private readonly OperatorValidationData _ageRequirements;
 
@@ -12,7 +12,7 @@ internal class IsOperatorWithinLicenseAgeRequirement : ISpecification<AddPersonW
         _ageRequirements = LicenseAgeRequirements;
     }
 
-    public bool IsSatisfiedBy(AddPersonWithLicenseFromUser candidate)
+    public bool IsSatisfiedBy(AddOperatorWithLicenseFromUser candidate)
     {
         return IsSatisfiedBy(candidate.Birth);
     }

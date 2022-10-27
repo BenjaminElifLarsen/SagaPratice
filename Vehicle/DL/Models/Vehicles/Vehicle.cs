@@ -29,6 +29,7 @@ internal class Vehicle : IAggregateRoot
         _distanceMovedKm = 0;
         _productionDate = productionDate;
         _vehicleInformation = vehicleInformation;
+        _operators = new();
     }
 
     internal Vehicle(int vehicleId, DateTime productionDate, IdReference vehicleInformation) : this(productionDate, vehicleInformation)
@@ -63,5 +64,14 @@ internal class Vehicle : IAggregateRoot
         _distanceMovedKm += distanceToAdd;
     }
 
+    public bool AddOperator(IdReference @operator)
+    {
+        return _operators.Add(@operator);
+    }
+
+    public bool RemoveOperator(IdReference @operator)
+    {
+        return _operators.Remove(@operator);
+    }
 
 }

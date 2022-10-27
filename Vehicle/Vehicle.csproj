@@ -26,8 +26,6 @@
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Models\LicenseTypes\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Models\Vehicles\CQRS\Queries\ReadModels\" />
-    <Folder Include="DL\Models\Vehicles\Validation\Errors\" />
-    <Folder Include="DL\Models\Vehicles\Validation\VehicleSpecifications\" />
     <Folder Include="IPL\Repositories\" />
   </ItemGroup>
 

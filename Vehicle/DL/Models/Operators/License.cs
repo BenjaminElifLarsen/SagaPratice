@@ -1,12 +1,12 @@
 ﻿using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.Validation;
-using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
+using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators;
 internal class License
 {
     private int _licenseId;
-    private Operator _owner; //ORMs like EF Core would use and set this variable
+    private Operator _operator; //ORMs like EF Core would use and set this variable
     private IdReference _type;
     private DateTime _arquired;
     private DateTime? _lastRenewed;

@@ -1,13 +1,13 @@
 ﻿using Common.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Operators.CQRS.Commands;
-public class AddPersonNoLicenseFromSystem : ICommand
+public class AddOperatorNoLicenseFromSystem : ICommand
 {
     public int Id { get; private set; }
     public DateTime Birth { get; private set; }
 }
 
-public class AddPersonWithLicenseFromUser : ICommand
+public class AddOperatorWithLicenseFromUser : ICommand
 {
     public int Id { get; private set; }
     public DateTime Birth { get; private set; }

@@ -24,8 +24,8 @@ public class Operator : IAggregateRoot
     {
         _operatorId = operatorId;
         _birth = birth;
-        _licenses = new HashSet<License>();
-        _vehicles = new HashSet<IdReference>();
+        _licenses = new();
+        _vehicles = new();
     }
 
     internal int UpdateBirth(DateTime birth)

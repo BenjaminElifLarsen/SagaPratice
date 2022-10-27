@@ -12,8 +12,8 @@ using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 namespace VehicleDomain.DL.Models.Operators.Validation;
 internal class OperatorValidatorFromSystem : IValidate
 {
-    private readonly AddPersonNoLicenseFromSystem _operator;
-    public OperatorValidatorFromSystem(AddPersonNoLicenseFromSystem @operator)
+    private readonly AddOperatorNoLicenseFromSystem _operator;
+    public OperatorValidatorFromSystem(AddOperatorNoLicenseFromSystem @operator)
     {
         _operator = @operator;
     }
@@ -21,7 +21,7 @@ internal class OperatorValidatorFromSystem : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        if (new IsOperatorIdSet().And<AddPersonNoLicenseFromSystem>(new IsOperatorIdSet()).IsSatisfiedBy(_operator))
+        if (new IsOperatorIdSet().And<AddOperatorNoLicenseFromSystem>(new IsOperatorIdSet()).IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.IdNotSet);
         if (new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.InvalidBirth);
@@ -33,9 +33,9 @@ internal class OperatorValidatorFromUser : IValidate
 {
     private readonly byte _maxAge;
     private readonly byte _minAge;
-    private readonly AddPersonWithLicenseFromUser _operator;
+    private readonly AddOperatorWithLicenseFromUser _operator;
     private readonly OperatorValidationData _validationData;
-    public OperatorValidatorFromUser(AddPersonWithLicenseFromUser @operator, OperatorValidationData validationData, byte maxAge, byte minAge)
+    public OperatorValidatorFromUser(AddOperatorWithLicenseFromUser @operator, OperatorValidationData validationData, byte maxAge, byte minAge)
     {
         _operator = @operator;
         _validationData = validationData;

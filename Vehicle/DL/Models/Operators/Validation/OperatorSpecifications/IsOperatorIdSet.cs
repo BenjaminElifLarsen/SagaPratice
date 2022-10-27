@@ -2,14 +2,14 @@
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
-internal class IsOperatorIdSet : ISpecification<AddPersonNoLicenseFromSystem>, ISpecification<AddPersonWithLicenseFromUser>
+internal class IsOperatorIdSet : ISpecification<AddOperatorNoLicenseFromSystem>, ISpecification<AddOperatorWithLicenseFromUser>
 {
-    public bool IsSatisfiedBy(AddPersonWithLicenseFromUser candidate)
+    public bool IsSatisfiedBy(AddOperatorWithLicenseFromUser candidate)
     {
         return IsSatisfiedBy(candidate.Id);
     }
 
-    public bool IsSatisfiedBy(AddPersonNoLicenseFromSystem candidate)
+    public bool IsSatisfiedBy(AddOperatorNoLicenseFromSystem candidate)
     {
         return IsSatisfiedBy(candidate.Id);
     }

@@ -1,12 +1,13 @@
 ﻿using Common.SpecificationPattern;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
+using VehicleDomain.DL.Models.Vehicles.CQRS.Queries.ReadModels;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 internal class DoesVehicleOperatorExist : ISpecification<AddVehicleWithOperators>, ISpecification<AddOperatorToVehicle>
 {
-    private readonly IEnumerable<IdReference> _operators;
+    private readonly IEnumerable<OperatorIdValidation> _operators;
 
-    public DoesVehicleOperatorExist(VehicleValidationData validationData)
+    public DoesVehicleOperatorExist(VehicleValidationWithOperatorsData validationData)
     {
         _operators = validationData.Operators;
     }

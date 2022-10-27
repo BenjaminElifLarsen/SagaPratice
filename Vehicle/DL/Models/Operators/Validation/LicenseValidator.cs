@@ -1,7 +1,8 @@
-﻿using Common.SpecificationPattern;
+﻿using Common.Other;
+using Common.SpecificationPattern;
 using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
-using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
+using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators.Validation;
 internal class LicenseAddToPersonValidator : IValidate
@@ -14,9 +15,9 @@ internal class LicenseAddToPersonValidator : IValidate
         _validationData = validationData;
     }
 
-    public int Validate()
+    public BinaryFlag Validate()
     {
-        int flag = 0;
+        BinaryFlag flag = 0;
         flag += new IsLicenseLicenseTypeSet().IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.LicenseTypeNotSat;
         flag += new IsLicenseArquiredValid(_validationData).IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.InvalidArquired;
         return flag;

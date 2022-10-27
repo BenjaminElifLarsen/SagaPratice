@@ -2,6 +2,7 @@
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
+using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace VehicleDomain.DL.CQRS.Commands.Handlers;
 internal interface IVehicleCommandHandler :
@@ -14,7 +15,14 @@ internal interface IVehicleCommandHandler :
     ICommandHandler<RemoveOperatorFromUser>,
     ICommandHandler<ObsoleteLicenseTypeFromUser>,
     ICommandHandler<AlterLicenseType>,
-    ICommandHandler<AddVehicleInformationFromExternalSystem>
+    ICommandHandler<AddVehicleInformationFromExternalSystem>,
+    ICommandHandler<AddVehicleWithNoOperator>,
+    ICommandHandler<AddVehicleWithOperators>,
+    ICommandHandler<AddDistanceToVehicleDistance>,
+    ICommandHandler<ResetVehicleMovedDistance>,
+    ICommandHandler<EstablishRelationBetweenOperatorAndVehicle>,
+    ICommandHandler<AddOperatorToVehicle>,
+    ICommandHandler<AddVehicleToOperator>
 {
 }
 /*

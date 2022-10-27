@@ -33,6 +33,11 @@ internal class LicenseTypeRepository : ILicenseTypeRepository
         throw new NotImplementedException();
     }
 
+    public Task<bool> IsTypeUniqueAsync(string type)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Save()
     {
         throw new NotImplementedException();

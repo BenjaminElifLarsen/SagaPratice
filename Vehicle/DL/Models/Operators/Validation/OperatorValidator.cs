@@ -3,11 +3,11 @@ using VehicleDomain.DL.Errors;
 using Common.SpecificationPattern.Composite.Extensions;
 using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 using lv = VehicleDomain.DL.Models.Operators.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
-using VehicleDomain.DL.Models.People.Validation.LicenseSpecifications;
 using Common.Other;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
 using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
+using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators.Validation;
 internal class OperatorValidatorFromSystem : IValidate
@@ -52,7 +52,7 @@ internal class OperatorValidatorFromUser : IValidate
             flag.AddFlag((int)OperatorErrors.InvalidBirth);
         if (new IsOperatorWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.InvalidAgeForLicense);
-        if (new IsOperatorToYoung(_minAge).And(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator))
+        if (new IsOperatorToYoung(_minAge).And<AddOperatorWithLicenseFromUser>(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.NotWithinAgeRange);
         return flag;
     }

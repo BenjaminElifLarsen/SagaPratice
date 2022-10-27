@@ -9,8 +9,8 @@ namespace VehicleDomain.DL.Models.Vehicles.Validation;
 internal class VehicleWithOperatorsCreationValidator : IValidate
 {
     private AddVehicleWithOperators _vehicle;
-    private VehicleValidationData _validationData;
-    public VehicleWithOperatorsCreationValidator(AddVehicleWithOperators vehicle, VehicleValidationData validationData)
+    private VehicleValidationWithOperatorsData _validationData;
+    public VehicleWithOperatorsCreationValidator(AddVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
     {
         _vehicle = vehicle;
         _validationData = validationData;

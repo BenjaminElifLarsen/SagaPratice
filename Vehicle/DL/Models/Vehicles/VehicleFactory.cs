@@ -26,7 +26,7 @@ internal class VehicleFactory : IVehicleFactory
         return new SuccessResult<Vehicle>(entity);
     }
 
-    public Result<Vehicle> CreateVehicle(AddVehicleWithOperators vehicle, VehicleValidationData validationData)
+    public Result<Vehicle> CreateVehicle(AddVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
     {
         List<string> errors = new();
 
@@ -42,6 +42,10 @@ internal class VehicleFactory : IVehicleFactory
         }
 
         Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation));
+        foreach(var @operator in vehicle.Operators)
+        {
+            entity.AddOperator(new(@operator));
+        }        
         return new SuccessResult<Vehicle>(entity);
     }
 }

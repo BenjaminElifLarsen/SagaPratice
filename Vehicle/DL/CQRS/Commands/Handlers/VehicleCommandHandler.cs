@@ -1,4 +1,5 @@
-﻿using Common.ResultPattern;
+﻿using Common.Other;
+using Common.ResultPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators;
@@ -9,10 +10,18 @@ using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries;
 using VehicleDomain.DL.Models.VehicleInformations.Validation;
+using VehicleDomain.DL.Models.Vehicles;
+using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
+using VehicleDomain.DL.Models.Vehicles.CQRS.Queries;
+using VehicleDomain.DL.Models.Vehicles.Validation;
+using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 
 namespace VehicleDomain.DL.CQRS.Commands.Handlers;
 internal class VehicleCommandHandler : IVehicleCommandHandler
 {
+    private readonly IVehicleFactory _vehicleFactory;
+    private readonly IVehicleRepository _vehicleRepository;
+
     private readonly IOperatorFactory _operatorFactory;
     private readonly IOperatorRepository _operatorRepository;
 
@@ -22,8 +31,13 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     private readonly IVehicleInformationFactory _vehicleInformationFactory;
     private readonly IVehicleInformationRepository _vehicleInformationRepository;
 
-    public VehicleCommandHandler(IOperatorFactory operatorFactory, IOperatorRepository operatorRepository, ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository)
+    public VehicleCommandHandler(IOperatorFactory operatorFactory, IOperatorRepository operatorRepository, 
+        ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, 
+        IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository,
+        IVehicleFactory vehicleFactory, IVehicleRepository vehicleRepository)
     {
+        _vehicleFactory = vehicleFactory;
+        _vehicleRepository = vehicleRepository;
         _operatorFactory = operatorFactory;
         _operatorRepository = operatorRepository;
         _licenseTypeFactory = licenseTypeFactory;
@@ -176,5 +190,112 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _vehicleInformationRepository.Create(result.Data);
         _vehicleInformationRepository.Save();
         return new SuccessResultNoData();
+    }
+
+    public Result Handle(AddVehicleWithNoOperator command)
+    { //trigger event VehicleAdded
+        var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
+        var validationData = new VehicleValidationData(vehicleInformations);
+        var result = _vehicleFactory.CreateVehicle(command, validationData);
+        if (result is InvalidResult<Vehicle>)
+        {
+            return new InvalidResultNoData(result.Errors);
+        }
+        _vehicleRepository.Create(result.Data);
+        _vehicleRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(AddVehicleWithOperators command)
+    { //trigger event VehicleAdded
+        var operators = _operatorRepository.AllAsync(new OperatorIdQuery()).Result;
+        var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
+        var valiationData = new VehicleValidationWithOperatorsData(operators, vehicleInformations);
+        var result = _vehicleFactory.CreateVehicle(command, valiationData);
+        if(result is InvalidResult<Vehicle>)
+        {
+            return new InvalidResultNoData(result.Errors);
+        }
+        _vehicleRepository.Create(result.Data);
+        _vehicleRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(AddDistanceToVehicleDistance command)
+    {
+        var entity = _vehicleRepository.GetForOperationAsync(command.Id).Result;
+        if(entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        BinaryFlag flag = entity.AddToDistanceMoved(command.DistanceToAdd);
+        if (flag != 0)
+        {
+            return new InvalidResultNoData(VehicleErrorConversion.Convert(flag).ToArray());
+        }
+        _vehicleRepository.Update(entity);
+        _vehicleRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(ResetVehicleMovedDistance command)
+    {
+        var entity = _vehicleRepository.GetForOperationAsync(command.Id).Result;
+        if (entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        BinaryFlag flag = entity.OverwriteDistanceMoved(command.NewDistance);
+        if (flag != 0)
+        {
+            return new InvalidResultNoData(VehicleErrorConversion.Convert(flag).ToArray());
+        }
+        _vehicleRepository.Update(entity);
+        _vehicleRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(EstablishRelationBetweenOperatorAndVehicle command)
+    { //raise some event that is generate commands for the two handlers below
+        //check if the operator and vehicle exist
+        if (_operatorRepository.IsIdUniqueAsync(command.OperatorId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        if (!_vehicleRepository.DoesVehicleExist(command.VehicleId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(AddOperatorToVehicle command)
+    { //should this save or should the handler for EstablishRelationBetweenOperatorAndVehicle?
+        if (_operatorRepository.IsIdUniqueAsync(command.OperatorId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        if(entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        entity.AddOperator(new(command.OperatorId));
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(AddVehicleToOperator command)
+    { //should this save or should the handler for EstablishRelationBetweenOperatorAndVehicle?
+        if (!_vehicleRepository.DoesVehicleExist(command.VehicleId).Result)
+        {
+            return new InvalidResultNoData($"");
+        }
+        var entity = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
+        if(entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        entity.AddVehicle(new(command.VehicleId));
+        throw new NotImplementedException();
     }
 }

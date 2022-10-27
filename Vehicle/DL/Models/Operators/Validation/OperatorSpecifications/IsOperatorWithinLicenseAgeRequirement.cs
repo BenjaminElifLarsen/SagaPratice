@@ -1,6 +1,5 @@
 ﻿using Common.SpecificationPattern;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
-using VehicleDomain.DL.Models.People.Validation;
 
 namespace VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 internal class IsOperatorWithinLicenseAgeRequirement : ISpecification<AddOperatorWithLicenseFromUser>

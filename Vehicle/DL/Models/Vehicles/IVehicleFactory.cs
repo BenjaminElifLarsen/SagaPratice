@@ -6,5 +6,5 @@ namespace VehicleDomain.DL.Models.Vehicles;
 internal interface IVehicleFactory
 {
     public Result<Vehicle> CreateVehicle(AddVehicleWithNoOperator vehicle, VehicleValidationData validationData);
-    public Result<Vehicle> CreateVehicle(AddVehicleWithOperators vehicle, VehicleValidationData validationData);
+    public Result<Vehicle> CreateVehicle(AddVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData);
 }

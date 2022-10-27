@@ -14,7 +14,7 @@ internal class IsVehicleDistanceMovedPositiveOrZero : ISpecification<AddDistance
         return IsSatisfiedBy(candidate.DistanceToAdd);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    public bool IsSatisfiedBy(double candidate)
     {
         return candidate >= 0;
     }

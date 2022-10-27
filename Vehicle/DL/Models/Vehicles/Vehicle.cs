@@ -1,4 +1,6 @@
 ﻿using Common.RepositoryPattern;
+using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
+using VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 
 namespace VehicleDomain.DL.Models.Vehicles;
 internal class Vehicle : IAggregateRoot
@@ -54,14 +56,24 @@ internal class Vehicle : IAggregateRoot
     //    return 0;
     //}
 
-    public void OverwriteDistanceMoved(double newDistance)
+    public int OverwriteDistanceMoved(double newDistance)
     {
+        if(!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(newDistance))
+        {
+            return (int)VehicleErrors.InvalidDistance;
+        }
         _distanceMovedKm = newDistance;
+        return 0;
     }
 
-    public void AddToDistanceMoved(double distanceToAdd)
-    {
+    public int AddToDistanceMoved(double distanceToAdd)
+    { //check for overflow
+        if (!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(distanceToAdd))
+        {
+            return (int)VehicleErrors.InvalidDistance;
+        }
         _distanceMovedKm += distanceToAdd;
+        return 0;
     }
 
     public bool AddOperator(IdReference @operator)

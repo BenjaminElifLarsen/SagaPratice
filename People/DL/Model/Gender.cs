@@ -1,18 +1,20 @@
 ﻿using Common.RepositoryPattern;
-using People.DL.Model.People;
 using System.Linq.Expressions;
 
-namespace People.DL.Model.Genders;
+namespace PeopleDomain.DL.Model;
 internal class Gender : IAggregateRoot
 {
     private int _genderId;
-    private string _name; 
-    private HashSet<Person> _people;
+    private string _verbSubject;
+    private string _verbObject;
+    private readonly HashSet<Person> _people;
 
     public int GenderId { get => _genderId; private set => _genderId = value; }
-    public string Name { get => _name; private set => _name = value; }
+    public string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
+    public string VerbObject { get => _verbObject; private set => _verbObject = value; }
     public IEnumerable<Person> People { get => _people; }
     //what is the term for things like her/him/they and the term for she/him???
+
     private Gender()
     {
 
@@ -21,13 +23,13 @@ internal class Gender : IAggregateRoot
     internal Gender(int genderId, string name)
     {
         _genderId = genderId;
-        _name = name;
-        _people = new HashSet<Person>();
+        _verbSubject = name;
+        _people = new();
     }
 
     public void UpdateName(string name)
     {
-        _name = name;
+        _verbSubject = name;
     }
 
     public bool AddPerson(Person person)
@@ -36,9 +38,19 @@ internal class Gender : IAggregateRoot
     }
 
     public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)
-    {
+    { //if using IdReference this will not be useful 
         var query = _people.AsQueryable();
         query = predicates.Aggregate(query, (source, where) => source.Where(where));
         return query;
+    }
+
+    public static bool operator ==(Gender left, int right)
+    {
+        return left.GenderId == right;
+    }
+
+    public static bool operator !=(Gender left, int right)
+    {
+        return !(left == right);
     }
 }

@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>PeopleDomain</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,14 +15,15 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="AL\API\" />
     <Folder Include="AL\CQRS\" />
     <Folder Include="AL\Services\" />
-    <Folder Include="DL\CQRS\Commands\Handlers\" />
-    <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="IPL\Context\" />
-    <Folder Include="IPL\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

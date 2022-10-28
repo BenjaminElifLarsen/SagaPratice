@@ -19,5 +19,14 @@ https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice
 rename everything that use 'People' in the Vehicle domain to 'Operator'
 
 
+Consider how to best use ISpecification regarding entity update. If having e.g. a ISpecification<int>, the model can validate before changing value.
+	But if using e.g. ISpecification<Person> then it is locked to the model and ensure ISpecification cannot be used with 'any random' value, but it require updating the value first and then validate. This could put the entity in an invalid status.
+	Could recover to the pre-updated value by saving it as a temp in the update method, but not the prettist solution.
+	All cases return an int, 0 is valid else an enum int
+
+
+
+
+
 
 

@@ -67,7 +67,7 @@ internal class Vehicle : IAggregateRoot
     }
 
     public int AddToDistanceMoved(double distanceToAdd)
-    { //check for overflow
+    { //check for overflow. Maybe instead of having the public double, have a ISpecification<Vehicle>
         if (!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(distanceToAdd))
         {
             return (int)VehicleErrors.InvalidDistance;

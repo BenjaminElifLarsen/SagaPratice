@@ -21,6 +21,11 @@ internal class PersonRepository : IPersonRepository
         _baseRepository.Delete(entity);
     }
 
+    public async Task<Person> GetForOperationAsync(int id)
+    {
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.PersonId == id);
+    }
+
     public void Hire(Person entity)
     {
         _baseRepository.Create(entity);

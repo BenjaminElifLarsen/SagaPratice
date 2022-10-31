@@ -42,7 +42,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         if(entity is not null)
         {
             entity.Delete(command.FiredFrom);
-            _personRepository.UpdatePersonalInformation(entity);
+            _personRepository.Fire(entity);
             _personRepository.Save();
         }
         return new SuccessResultNoData();

@@ -25,7 +25,7 @@ Consider how to best use ISpecification regarding entity update. If having e.g. 
 	All cases return an int, 0 is valid else an enum int
 
 
-
+Handler ISoftDelete and ISoftDeleteDate in the 'context' files
 
 
 

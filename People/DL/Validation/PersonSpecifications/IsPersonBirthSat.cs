@@ -7,11 +7,16 @@ internal class IsPersonBirthSat : ISpecification<Person>, ISpecification<HirePer
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.Birth);
     }
 
     public bool IsSatisfiedBy(Person candidate)
     {
         throw new NotImplementedException();
+    }
+
+    private bool IsSatisfiedBy(DateOnly candidate)
+    {
+        return candidate != default;
     }
 }

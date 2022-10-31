@@ -20,7 +20,7 @@ internal class PersonValidator : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        flag += new IsPersonBirthSat().And<HirePersonFromUser>(new IsPersonBirthToLate()).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidBirth;
+        flag += new IsPersonBirthSat().And<HirePersonFromUser>(new IsPersonBirthNotToLate()).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidBirth;
         flag += new IsPersonFirstNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidFirstName;
         flag += new IsPersonLastNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidLastName;
         flag += new IsPersonGenderSat().And<HirePersonFromUser>(new IsPersonGenderValid(_validationData)).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidGender;

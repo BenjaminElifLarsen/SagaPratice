@@ -7,11 +7,16 @@ internal class IsPersonGenderSat : ISpecification<Person>, ISpecification<HirePe
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.Gender);
     }
 
     public bool IsSatisfiedBy(Person candidate)
     {
         throw new NotImplementedException();
+    }
+
+    private bool IsSatisfiedBy(int candidate)
+    {
+        return candidate != 0;
     }
 }

@@ -3,15 +3,21 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
-internal class IsPersonBirthToLate : ISpecification<Person>, ISpecification<HirePersonFromUser>
+internal class IsPersonBirthNotToLate : ISpecification<Person>, ISpecification<HirePersonFromUser>
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.Birth);
     }
 
     public bool IsSatisfiedBy(Person candidate)
     {
         throw new NotImplementedException();
+    }
+
+    private bool IsSatisfiedBy(DateOnly candidate)
+    {
+        var now = DateTime.Now;
+        return candidate < new DateOnly(now.Year, now.Month, now.Day);
     }
 }

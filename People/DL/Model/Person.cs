@@ -1,4 +1,5 @@
 ﻿using Common.RepositoryPattern;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Model;
 
@@ -8,26 +9,30 @@ public class Person : IAggregateRoot
     private string _firstName;
     private string _lastName;
     private DateOnly _birth;
-    private Gender _gender;
+    private IdReference _gender;
 
     internal int PersonId { get => _personId; private set => _personId = value; }
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
-    internal Gender Gender { get => _gender; private set => _gender = value; }
+    internal IdReference Gender { get => _gender; private set => _gender = value; }
 
     private Person()
     {
 
     }
 
-    internal Person(int personId, string firstName, string lastName, DateOnly birth, Gender gender)
+    internal Person(string firstName, string lastName, DateOnly birth, IdReference gender)
     {
-        _personId = personId;
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
         _gender = gender;
+    }
+
+    internal Person(int personId, string firstName, string lastName, DateOnly birth, IdReference gender) : this(firstName, lastName, birth, gender)
+    {
+        _personId = personId;
     }
 
     internal void UpdateFistName(string firstName)
@@ -45,7 +50,7 @@ public class Person : IAggregateRoot
         _birth = birth;
     }
 
-    internal void UpdateGender(Gender gender)
+    internal void UpdateGender(IdReference gender)
     {
         _gender = gender;
     }

@@ -8,9 +8,9 @@ using PeopleDomain.DL.Validation.GenderSpecifications;
 namespace PeopleDomain.DL.Validation;
 internal class GenderValidator : IValidate
 {
-    private readonly PermitGender _gender;
+    private readonly RecogniseGender _gender;
     private readonly GenderValidationData _validationData;
-    public GenderValidator(PermitGender gender, GenderValidationData validationData)
+    public GenderValidator(RecogniseGender gender, GenderValidationData validationData)
     {
         _gender = gender;
         _validationData = validationData;

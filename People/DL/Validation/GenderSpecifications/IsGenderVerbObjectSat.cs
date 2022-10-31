@@ -3,9 +3,9 @@ using PeopleDomain.DL.CQRS.Commands;
 
 namespace PeopleDomain.DL.Validation.GenderSpecifications;
 
-internal class IsGenderVerbObjectSat : ISpecification<PermitGender>
+internal class IsGenderVerbObjectSat : ISpecification<RecogniseGender>
 {
-    public bool IsSatisfiedBy(PermitGender candidate)
+    public bool IsSatisfiedBy(RecogniseGender candidate)
     {
         return IsSatisfiedBy(candidate.VerbObject);
     }

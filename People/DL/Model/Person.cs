@@ -3,7 +3,7 @@ using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Model;
 
-public class Person : IAggregateRoot
+public class Person : IAggregateRoot, ISoftDeleteDate
 {
     private int _personId;
     private string _firstName;
@@ -17,6 +17,8 @@ public class Person : IAggregateRoot
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
     internal IdReference Gender { get => _gender; private set => _gender = value; }
 
+    public DateOnly? DeletedFrom => throw new NotImplementedException();
+
     private Person()
     {
 
@@ -24,15 +26,11 @@ public class Person : IAggregateRoot
 
     internal Person(string firstName, string lastName, DateOnly birth, IdReference gender)
     {
+        _personId = new Random(int.MaxValue).Next();
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
         _gender = gender;
-    }
-
-    internal Person(int personId, string firstName, string lastName, DateOnly birth, IdReference gender) : this(firstName, lastName, birth, gender)
-    {
-        _personId = personId;
     }
 
     internal void UpdateFistName(string firstName)
@@ -53,6 +51,11 @@ public class Person : IAggregateRoot
     internal void UpdateGender(IdReference gender)
     {
         _gender = gender;
+    }
+
+    public void Delete(DateOnly? dateTime)
+    {
+        throw new NotImplementedException();
     }
 
     public static bool operator ==(Person left, int right)

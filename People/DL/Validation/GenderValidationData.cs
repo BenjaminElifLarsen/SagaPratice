@@ -3,9 +3,9 @@
 namespace PeopleDomain.DL.Validation;
 internal class GenderValidationData
 {
-    public IEnumerable<GenderVerb> GenderVerbs { get; private set; }
+    public IEnumerable<GenderVerbValidation> GenderVerbs { get; private set; }
 
-	public GenderValidationData(IEnumerable<GenderVerb> genderVerbs)
+	public GenderValidationData(IEnumerable<GenderVerbValidation> genderVerbs)
 	{
 		GenderVerbs = genderVerbs;		
 	}

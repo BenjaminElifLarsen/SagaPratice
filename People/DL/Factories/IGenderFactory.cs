@@ -6,5 +6,5 @@ using PeopleDomain.DL.Validation;
 namespace PeopleDomain.DL.Factories;
 internal interface IGenderFactory
 {
-    Result<Gender> CreateGender(PermitGender gender, GenderValidationData validationData); //figure out a better name
+    Result<Gender> CreateGender(RecogniseGender gender, GenderValidationData validationData); //figure out a better name
 }

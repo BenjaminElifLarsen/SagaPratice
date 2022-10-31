@@ -7,7 +7,7 @@ using PeopleDomain.DL.Validation;
 namespace PeopleDomain.DL.Factories;
 internal class PersonFactory : IPersonFactory
 {
-    public Result<Person> HirePerson(HirePersonFromUser person, PersonValidationData validationData)
+    public Result<Person> CreatePerson(HirePersonFromUser person, PersonValidationData validationData)
     {
         List<string> errors = new();
 

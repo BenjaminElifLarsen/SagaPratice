@@ -3,15 +3,15 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.CQRS.Queries.ReadModels;
 
 namespace PeopleDomain.DL.Validation.GenderSpecifications;
-internal class IsGenderVerbObjectNotInUse : ISpecification<PermitGender>
+internal class IsGenderVerbObjectNotInUse : ISpecification<RecogniseGender>
 {
-    private IEnumerable<GenderVerb> _genderVerbs;
+    private IEnumerable<GenderVerbValidation> _genderVerbs;
     public IsGenderVerbObjectNotInUse(GenderValidationData validationData)
     {
         _genderVerbs = validationData.GenderVerbs;
     }
 
-    public bool IsSatisfiedBy(PermitGender candidate)
+    public bool IsSatisfiedBy(RecogniseGender candidate)
     {
         return IsSatisfiedBy(candidate.VerbObject);
     }

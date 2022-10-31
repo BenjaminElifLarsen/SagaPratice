@@ -20,11 +20,12 @@ internal class Gender : IAggregateRoot
 
     }
 
-    internal Gender(int genderId, string name)
+    internal Gender(string subject, string @object)
     {
-        _genderId = genderId;
-        _verbSubject = name;
+        _genderId = new Random(int.MaxValue).Next();
         _people = new();
+        _verbSubject = subject;
+        _verbObject = @object;
     }
 
     public void UpdateName(string name)

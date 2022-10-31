@@ -16,14 +16,14 @@ internal class PersonRepository : IPersonRepository
         return !await _baseRepository.IsUniqueAsync(x => x == id);
     }
 
-    public void Fire(Person person)
+    public void Fire(Person entity)
     {
-        _baseRepository.Delete(person);
+        _baseRepository.Delete(entity);
     }
 
-    public void Hire(Person person)
+    public void Hire(Person entity)
     {
-        _baseRepository.Create(person);
+        _baseRepository.Create(entity);
     }
 
     public void Save()
@@ -31,8 +31,8 @@ internal class PersonRepository : IPersonRepository
         _baseRepository.SaveChanges();
     }
 
-    public void UpdatePersonalInformation(Person person)
+    public void UpdatePersonalInformation(Person entity)
     {
-        _baseRepository.Update(person);
+        _baseRepository.Update(entity);
     }
 }

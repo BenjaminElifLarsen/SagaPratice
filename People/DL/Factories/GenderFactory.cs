@@ -7,7 +7,7 @@ using PeopleDomain.DL.Validation;
 namespace PeopleDomain.DL.Factories;
 internal class GenderFactory : IGenderFactory
 {
-    public Result<Gender> CreateGender(PermitGender gender, GenderValidationData validationData)
+    public Result<Gender> CreateGender(RecogniseGender gender, GenderValidationData validationData)
     { //consider better name
         List<string> errors = new();
 
@@ -16,6 +16,13 @@ internal class GenderFactory : IGenderFactory
         {
             errors.AddRange(GenderErrorConversion.Convert(flag));
         }
-        throw new NotImplementedException();
+
+        if (errors.Any())
+        {
+            return new InvalidResult<Gender>(errors.ToArray());
+        }
+
+        Gender entity = new(gender.VerbSubject, gender.VerbObject);
+        return new SuccessResult<Gender>(entity);
     }
 }

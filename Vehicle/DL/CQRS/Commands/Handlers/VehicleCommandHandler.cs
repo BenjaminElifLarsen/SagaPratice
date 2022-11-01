@@ -137,7 +137,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData($"License type with of id {command.Type} already exist.");
         }
-        var result = _licenseTypeFactory.CreateLicenseType(command);
+        var result = _licenseTypeFactory.CreateLicenseType(command); //consider moving all this stuff into a domain model (or multiple domain models)
         if(result is InvalidResult<LicenseType>)
         {
             return new InvalidResultNoData(result.Errors);

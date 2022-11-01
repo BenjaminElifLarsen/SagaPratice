@@ -4,7 +4,7 @@ namespace VehicleDomain.DL.Models;
 /// <summary>
 /// Used to prevent accessing one aggregate root via another aggregate.
 /// </summary>
-internal record IdReference : ValueObject
+public record IdReference : ValueObject
 {
 	/*
 	 * In ORMs like EF Core the domain models that usages this record,

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.VehicleInformations;
-internal interface IVehicleInformationRepository
+public interface IVehicleInformationRepository
 {
     Task<bool> IsNameUniqueAsync(string name);
     Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<VehicleInformation,TProjection> query) where TProjection : BaseReadModel;

@@ -1,7 +1,6 @@
 ﻿using API.Controllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PeopleDomain.DL.CQRS.Commands;
 using VehicleDomain.AL.Services.Operators;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 
@@ -20,7 +19,7 @@ public class OperatorController : ControllerBase
 
 	[AllowAnonymous]
 	[HttpGet]
-	[Route("OperatorList")]
+	[Route("List")]
 	public async Task<IActionResult> List()
 	{
 		var result = await _operatorService.GetOperatorListAsync();
@@ -29,7 +28,7 @@ public class OperatorController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    [Route("OperatorDetails")]
+    [Route("Details")]
     public async Task<IActionResult> Details([FromQuery] int id)
     {
         var result = await _operatorService.GetOperatorDetailsAsync(id);

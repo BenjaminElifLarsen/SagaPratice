@@ -1,7 +1,5 @@
-﻿using Common.Other.Converters;
-using Common.RepositoryPattern;
+﻿using Common.RepositoryPattern;
 using Common.SpecificationPattern.Composite.Extensions;
-using System.Text.Json.Serialization;
 using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 
@@ -11,8 +9,8 @@ public class Operator : IAggregateRoot, ISoftDelete
 {
     private int _operatorId;
     private DateOnly _birth;
-    private HashSet<License> _licenses;
-    private HashSet<IdReference> _vehicles;
+    private readonly HashSet<License> _licenses;
+    private readonly HashSet<IdReference> _vehicles;
     private bool _deleted; 
 
     internal int OperatorId { get => _operatorId; private set => _operatorId = value; }
@@ -42,7 +40,7 @@ public class Operator : IAggregateRoot, ISoftDelete
         if (!new IsOperatorOfValidAge().IsSatisfiedBy(birth)) //if a license is invalid, what to do? Revoke the license or fail the update and inform the caller of the problem?
         {
             return (int)OperatorErrors.InvalidBirth;
-        }
+        } //hard coded ages, not the best
         if(!new IsOperatorToYoung(10).And<DateTime>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
             return (int)OperatorErrors.NotWithinAgeRange;
         }

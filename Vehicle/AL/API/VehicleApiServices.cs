@@ -2,6 +2,7 @@
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
 using VehicleDomain.AL.Services;
+using VehicleDomain.AL.Services.Operators;
 using VehicleDomain.DL.CQRS.Commands.Handlers;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
@@ -25,7 +26,7 @@ public class VehicleApiServices
         services.AddScoped<ILicenseTypeRepository, LicenseTypeRepository>();
         services.AddScoped<IVehicleInformationRepository, VehicleInformationRepository>();
         services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
-        services.AddScoped<IVehicleService, VehicleService>();
+        services.AddScoped<IOperatorService, OperatorService>();
         services.AddScoped<IOperatorFactory, OperatorFactory>();
         services.AddScoped<IVehicleFactory, VehicleFactory>();
         services.AddScoped<ILicenseTypeFactory, LicenseTypeFactory>();

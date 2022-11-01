@@ -21,9 +21,9 @@ internal class OperatorValidatorFromSystem : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        if (new IsOperatorIdSet().And<AddOperatorNoLicenseFromSystem>(new IsOperatorIdSet()).IsSatisfiedBy(_operator))
+        if (!new IsOperatorIdSet().IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.IdNotSet);
-        if (new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
+        if (!new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.InvalidBirth);
         return flag;
     }
@@ -46,13 +46,13 @@ internal class OperatorValidatorFromUser : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        if (new IsOperatorIdSet().IsSatisfiedBy(_operator))
+        if (!new IsOperatorIdSet().IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.IdNotSet);
-        if (new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
+        if (!new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.InvalidBirth);
-        if (new IsOperatorWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_operator))
+        if (!new IsOperatorWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.InvalidAgeForLicense);
-        if (new IsOperatorToYoung(_minAge).And<AddOperatorWithLicenseFromUser>(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator))
+        if (!new IsOperatorToYoung(_minAge).And<AddOperatorWithLicenseFromUser>(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator))
             flag.AddFlag((int)OperatorErrors.NotWithinAgeRange);
         return flag;
     }

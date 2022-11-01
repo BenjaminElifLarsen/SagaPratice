@@ -22,7 +22,7 @@ internal class OperatorFactory : IOperatorFactory
             return new InvalidResult<Operator>(errors.ToArray());
         }
 
-        Operator entity = new(@operator.Id, @operator.Birth);
+        Operator entity = new(@operator.Id, new(@operator.Birth.Year, @operator.Birth.Month, @operator.Birth.Day));
         return new SuccessResult<Operator>(entity);
     }
 
@@ -58,10 +58,10 @@ internal class OperatorFactory : IOperatorFactory
             return new InvalidResult<Operator>(errors.ToArray());
         }
 
-        Operator entity = new(@operator.Id, @operator.Birth);
+        Operator entity = new(@operator.Id, new(@operator.Birth.Year, @operator.Birth.Month, @operator.Birth.Day));
         foreach (var licenseTypeId in @operator.Licenses)
         {
-            entity.AddLicense(new(licenseTypeId.LicenseTypeId), licenseTypeId.Arquired);
+            entity.AddLicense(new(licenseTypeId.LicenseTypeId), new(licenseTypeId.Arquired.Year, licenseTypeId.Arquired.Month, licenseTypeId.Arquired.Day));
         }
 
         return new SuccessResult<Operator>(entity);

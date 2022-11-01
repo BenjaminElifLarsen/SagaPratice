@@ -19,3 +19,4 @@ internal class LicenseTypeIdQuery : BaseQuery<LicenseType, LicenseTypeIdValidati
         return e => new(e.LicenseTypeId);
     }
 }
+

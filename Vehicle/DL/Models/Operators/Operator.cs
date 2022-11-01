@@ -37,16 +37,16 @@ public class Operator : IAggregateRoot, ISoftDelete
         _vehicles = new();
     }
 
-    internal int UpdateBirth(DateOnly birth)
+    internal int UpdateBirth(DateTime birth)
     { //if changing the birth, need to check if all licenses are still valid regarding their age requirements. Could also do the young/old specification
         if (!new IsOperatorOfValidAge().IsSatisfiedBy(birth)) //if a license is invalid, what to do? Revoke the license or fail the update and inform the caller of the problem?
         {
             return (int)OperatorErrors.InvalidBirth;
         }
-        if(!new IsOperatorToYoung(10).And<DateOnly>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
+        if(!new IsOperatorToYoung(10).And<DateTime>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
             return (int)OperatorErrors.NotWithinAgeRange;
         }
-        _birth = birth;
+        _birth = new(birth.Year, birth.Month, birth.Day);
         return 0;
     }
 
@@ -65,11 +65,11 @@ public class Operator : IAggregateRoot, ISoftDelete
         return _vehicles.FirstOrDefault(x => x.Id == id);
     }
 
-    internal bool AddLicense(IdReference type, DateOnly arquired)
+    internal bool AddLicense(IdReference type, DateTime arquired)
     {
         if (_licenses.Any(x => x.Type.Id == type.Id))
             return false;
-        return _licenses.Add(new(type, arquired));
+        return _licenses.Add(new(type, new(arquired.Year, arquired.Month, arquired.Day)));
     }
 
     internal bool RemoveLicense(License license)
@@ -89,6 +89,6 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     public void Delete()
     {
-        throw new NotImplementedException();
+        _deleted = true;
     }
 }

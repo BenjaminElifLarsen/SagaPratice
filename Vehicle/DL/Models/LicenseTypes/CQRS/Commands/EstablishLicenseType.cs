@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
-internal class EstablishLicenseTypeFromUser : ICommand
+public class EstablishLicenseTypeFromUser : ICommand
 {
     public string Type { get; private set; }
     public byte RenewPeriod { get; private set; }

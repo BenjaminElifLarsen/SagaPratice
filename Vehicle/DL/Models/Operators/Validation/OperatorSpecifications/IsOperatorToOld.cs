@@ -2,7 +2,7 @@
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
-internal class IsOperatorToOld : ISpecification<AddOperatorWithLicenseFromUser>, ISpecification<DateOnly>
+internal class IsOperatorToOld : ISpecification<AddOperatorWithLicenseFromUser>, ISpecification<DateTime>
 {
     private readonly byte _age;
     public IsOperatorToOld(byte age)
@@ -15,7 +15,7 @@ internal class IsOperatorToOld : ISpecification<AddOperatorWithLicenseFromUser>,
         return IsSatisfiedBy(candidate.Birth);
     }
 
-    public bool IsSatisfiedBy(DateOnly candidate)
+    public bool IsSatisfiedBy(DateTime candidate)
     {
         var now = DateTime.Now;
         var personAge = now.Year - candidate.Year - 1 +

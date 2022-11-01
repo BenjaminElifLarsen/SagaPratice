@@ -14,9 +14,9 @@ internal class IsOperatorOfValidAge : ISpecification<AddOperatorNoLicenseFromSys
         return IsSatisfiedBy(candidate.Birth);
     }
 
-    public bool IsSatisfiedBy(DateOnly birth)
+    public bool IsSatisfiedBy(DateTime birth)
     {
         var now = DateTime.Now;
-        return birth <= new DateOnly(now.Year, now.Month, now.Day);
+        return birth <= new DateTime(now.Year, now.Month, now.Day);
     }
 }

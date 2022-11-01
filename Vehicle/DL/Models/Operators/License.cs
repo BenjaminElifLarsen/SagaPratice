@@ -26,20 +26,20 @@ internal class License
 
     internal License(IdReference type, DateOnly arquired)
     {
-        _licenseId = new Random(int.MaxValue).Next(); //mock up id generation.
+        _licenseId = RandomValue.GetValue;
         _type = type;
         _arquired = arquired;
         _lastRenewed = null;
         _expired = false;
     }
 
-    public int UpdateArquired(DateOnly arquired, LicenseValidationData licenseTypeAgeValidation)
+    public int UpdateArquired(DateTime arquired, LicenseValidationData licenseTypeAgeValidation)
     {
         if (!new IsLicenseArquiredValid(licenseTypeAgeValidation).IsSatisfiedBy(arquired)) //not happy with having the validatio data here, bad for purity
         {
             return (int)LicenseErrors.InvalidArquired;
         }
-        _arquired = arquired;
+        _arquired = new(arquired.Year, arquired.Month, arquired.Day);
         return 0;
     }
 

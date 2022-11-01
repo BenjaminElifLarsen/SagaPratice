@@ -1,6 +1,5 @@
 ﻿using Common.CQRS.Queries;
 using Common.RepositoryPattern;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace BaseRepository;
@@ -9,9 +8,8 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 {
     /// <summary>
     /// The collection hold data not yet to be added to the context.
-    /// If the id already exist over in the context it will be overwitten (a kind of 'update')
     /// </summary>
-    private static IList<EntityState<TEntity>> _entities = new List<EntityState<TEntity>>();
+    private static readonly IList<EntityState<TEntity>> _entities = new List<EntityState<TEntity>>();
     private readonly TContext _context;
     public MockBaseRepository(TContext context)
     {

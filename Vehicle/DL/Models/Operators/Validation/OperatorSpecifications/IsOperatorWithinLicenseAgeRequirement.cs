@@ -16,10 +16,10 @@ internal class IsOperatorWithinLicenseAgeRequirement : ISpecification<AddOperato
         return IsSatisfiedBy(candidate.Birth);
     }
 
-    private bool IsSatisfiedBy(DateOnly birth)
+    private bool IsSatisfiedBy(DateTime birth)
     {
         var now = DateTime.Now;
-        if (birth > new DateOnly(now.Year, now.Month, now.Day))
+        if (birth > new DateTime(now.Year, now.Month, now.Day))
         {
             throw new Exception("Birth is after current moment.");
         }

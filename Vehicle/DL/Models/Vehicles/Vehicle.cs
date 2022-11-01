@@ -27,19 +27,14 @@ internal class Vehicle : IAggregateRoot
 
     internal Vehicle(DateTime productionDate, IdReference vehicleInformation)
     {
-        _vehicleId = new Random(int.MaxValue).Next();
+        _vehicleId = RandomValue.GetValue;
         _distanceMovedKm = 0;
         _productionDate = productionDate;
         _vehicleInformation = vehicleInformation;
         _operators = new();
     }
 
-    internal Vehicle(int vehicleId, DateTime productionDate, IdReference vehicleInformation) : this(productionDate, vehicleInformation)
-    {
-        _vehicleId = vehicleId;
-    }
-
-    internal Vehicle(int vehicleId, DateTime productionDate, IdReference vehicleInformation, double distanceMovedKm) : this(vehicleId, productionDate, vehicleInformation)
+    internal Vehicle( DateTime productionDate, IdReference vehicleInformation, double distanceMovedKm) : this(productionDate, vehicleInformation)
     {
         _distanceMovedKm = distanceMovedKm;
     }

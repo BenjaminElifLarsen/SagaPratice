@@ -21,7 +21,7 @@ internal class VehicleInformation : IAggregateRoot
 
     internal VehicleInformation( string name, byte maxWheelAmount, IdReference licenseTypeRequired)
     {
-        _vehicleInformationId = new Random(int.MaxValue).Next();
+        _vehicleInformationId = RandomValue.GetValue;
         _name = name;
         _licenseTypeRequired = licenseTypeRequired;
         _maxWheelAmount = maxWheelAmount;

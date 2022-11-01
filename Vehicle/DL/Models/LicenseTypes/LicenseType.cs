@@ -24,7 +24,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
 
     internal LicenseType( string type, byte renewPeriodInYears, byte ageRequirementInYears)
     {
-        _licenseTypeId = new Random(int.MaxValue).Next(); //mock up id generation.
+        _licenseTypeId = RandomValue.GetValue;
         _type = type;
         _renewPeriodInYears = renewPeriodInYears;
         _ageRequirementInYears = ageRequirementInYears;

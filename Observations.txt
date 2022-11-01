@@ -6,7 +6,9 @@ However, since it is possible to compsite the specifications it will allow for s
 An interesting difference between this project and the api backend project. In the api backend the dependency injection did not work if it tried to to create instance of an internal class/interface. They had to be public. 
 	Yet, here the same approach is working while the interfaces and classes are internal for some reason. Both solutions use the {domain}ApiServices to help lower the amount of code in Program in the api project.
 	The only difference between the two solutions, that could causse this, is the api backend is C Sharp Dotnet 6, while the projects in this solution is using the preview for Dotnet 7.
+	From some testing, it needs everything in {domain}Service's ctor to be public, the implementations do not need to be public. The reason {domain}Service is that it is called from outside the project its belong too.
 
+DateOnly json converter does not work, it seems like, when reading and so different methods have been changed back to DateTime, while trying to fix the json converter.
 
 
 

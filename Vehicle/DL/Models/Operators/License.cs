@@ -8,14 +8,14 @@ internal class License
     private int _licenseId;
     private Operator _operator; //ORMs like EF Core would use and set this variable
     private IdReference _type;
-    private DateTime _arquired;
-    private DateTime? _lastRenewed;
+    private DateOnly _arquired;
+    private DateOnly? _lastRenewed;
     private bool _expired;
     //soft delete, need to deal with license type soft delete, could give either ISoftDelete or ISfotDeleteDate.
     //If going with ISoftDelete, the system needs to validate at n timeperiod if date is or has passed the ISoftDeleteDate over in the specific license type.
     public int LicenseId { get => _licenseId; private set => _licenseId = value; }
-    public DateTime Arquired { get => _arquired; private set => _arquired = value; }
-    public DateTime? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
+    public DateOnly Arquired { get => _arquired; private set => _arquired = value; }
+    public DateOnly? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
     public bool Expired { get => _expired; private set => _expired = value; }
     public IdReference Type { get => _type; private set => _type = value; }
 
@@ -24,7 +24,7 @@ internal class License
 
     }
 
-    internal License(IdReference type, DateTime arquired)
+    internal License(IdReference type, DateOnly arquired)
     {
         _licenseId = new Random(int.MaxValue).Next(); //mock up id generation.
         _type = type;
@@ -33,9 +33,9 @@ internal class License
         _expired = false;
     }
 
-    public int UpdateArquired(DateTime arquired, LicenseValidationData licenseTypeAgeValidation)
+    public int UpdateArquired(DateOnly arquired, LicenseValidationData licenseTypeAgeValidation)
     {
-        if (!new IsLicenseArquiredValid(licenseTypeAgeValidation).IsSatisfiedBy(arquired))
+        if (!new IsLicenseArquiredValid(licenseTypeAgeValidation).IsSatisfiedBy(arquired)) //not happy with having the validatio data here, bad for purity
         {
             return (int)LicenseErrors.InvalidArquired;
         }
@@ -58,7 +58,7 @@ internal class License
         throw new NotImplementedException();
     }
 
-    private DateTime GetCompareDate()
+    private DateOnly GetCompareDate()
     {
         return _lastRenewed is not null ? _lastRenewed.Value : _arquired;
     }

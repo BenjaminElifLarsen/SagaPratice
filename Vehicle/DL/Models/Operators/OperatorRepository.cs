@@ -2,7 +2,7 @@
 using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators;
-public class OperatorRepository : IOperatorRepository
+internal class OperatorRepository : IOperatorRepository
 {
     private readonly IBaseRepository<Operator> _baseRepository;
 

@@ -28,7 +28,7 @@ internal class IsLicenseArquiredValid : ISpecification<AddLicenseToOperator>, IS
         return IsSatisfiedBy(candidate.Arquired);
     }
 
-    public bool IsSatisfiedBy(DateTime candidate)
+    public bool IsSatisfiedBy(DateOnly candidate)
     {
         var now = DateTime.Now;
         var age = now.Year - candidate.Year - 1 +

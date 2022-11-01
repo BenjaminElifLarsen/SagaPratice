@@ -1,5 +1,14 @@
 If a specification class contain multiple specification for different data types, the composite extensions requires giving the generic type.
 	Not sure, yet, why they are unable to recognise the correct generic version (IsSatisfiedBy) that they should run.
 	After all, both sides use the same generic type.
-However, since it is possible to compsite the specification it will allow for some more 'complex' error types, e.g. age above one threshold and below another one and if this fail can cast to a specific error.
+However, since it is possible to compsite the specifications it will allow for some more 'complex' error types, e.g. age above one threshold and below another one and if this fail can cast to a specific error.
+
+An interesting difference between this project and the api backend project. In the api backend the dependency injection did not work if it tried to to create instance of an internal class/interface. They had to be public. 
+	Yet, here the same approach is working while the interfaces and classes are internal for some reason. Both solutions use the {domain}ApiServices to help lower the amount of code in Program in the api project.
+	The only difference between the two solutions, that could causse this, is the api backend is C Sharp Dotnet 6, while the projects in this solution is using the preview for Dotnet 7.
+
+
+
+
+
 

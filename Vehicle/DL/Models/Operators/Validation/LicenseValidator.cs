@@ -18,8 +18,8 @@ internal class LicenseAddToPersonValidator : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = 0;
-        flag += new IsLicenseLicenseTypeSet().IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.LicenseTypeNotSat;
-        flag += new IsLicenseArquiredValid(_validationData).IsSatisfiedBy(_license) ? 0 : (int)LicenseErrors.InvalidArquired;
+        flag += new IsLicenseLicenseTypeSet().IsSatisfiedBy(_license) ? 0 : LicenseErrors.LicenseTypeNotSat;
+        flag += new IsLicenseArquiredValid(_validationData).IsSatisfiedBy(_license) ? 0 : LicenseErrors.InvalidArquired;
         return flag;
     }
 }

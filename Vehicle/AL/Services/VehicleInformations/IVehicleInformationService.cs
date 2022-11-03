@@ -1,5 +1,6 @@
 ﻿using Common.ResultPattern;
-using VehicleDomain.AL.CQRS.Queries.ReadModels;
+using VehicleDomain.AL.Services.VehicleInformations.Queries.GetDetails;
+using VehicleDomain.AL.Services.VehicleInformations.Queries.GetList;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 
 namespace VehicleDomain.AL.Services.VehicleInformations;

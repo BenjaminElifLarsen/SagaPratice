@@ -14,7 +14,7 @@ Regarding the command names the ...From{Value} is used to help to distint who/wh
 ## Some Comments
 
 All models are using int for their ids, which is fine for most models. The Person and operator models should be using GUIDs. 
-The reason for this is to make it harder to quess the id of them and trying to access their information.
+The reason for this is to make it harder to guess the id of them and trying to access their information.
 
 Regarding the trilemma of domain model purity, application performance, and domain model completeness, it was decided to focus on domain model purity by placing all external reads and writes outside the domain models.
 Do note that the id generation code could be considered to break the domain model purity, but it is only there because of the mock storage and not wanting to write code, yet, that used reflection to find the id fields and fill them out when 'saving' a created entity to the context.

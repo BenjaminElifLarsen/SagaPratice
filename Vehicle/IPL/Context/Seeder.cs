@@ -54,7 +54,6 @@ internal static class Seeder
             vehicleContext.People.Add(op);
             veh1.AddOperator(new(op.OperatorId));
             veh2.AddOperator(new(op.OperatorId));
-            car.AddLicense(new(op.GetLicense(car.LicenseTypeId).LicenseId));
         }
 
 

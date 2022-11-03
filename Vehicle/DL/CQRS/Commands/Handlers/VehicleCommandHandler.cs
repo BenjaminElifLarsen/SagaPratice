@@ -350,7 +350,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         throw new NotImplementedException();
     }
 
-    public Result Handle(UseVehicleFromUser command)
+    public Result Handle(StartOperatingVehicle command)
     {
         var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         if(entity is null)
@@ -362,6 +362,23 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"The operator with id {command.OperatorId} is not permitted to operate vehicle.");
         }
         entity.StartOperating(new(command.OperatorId));
+        _vehicleRepository.Update(entity);
+        _vehicleRepository.Save();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(StopOperatingVehicle command)
+    {
+        var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        if (entity is null)
+        {
+            return new InvalidResultNoData($"");
+        }
+        if (!entity.IsOperatorPermitted(new(command.OperatorId)))
+        {
+            return new InvalidResultNoData($"The operator with id {command.OperatorId} is not permitted to operate vehicle.");
+        }
+        entity.StopOperating(new(command.OperatorId));
         _vehicleRepository.Update(entity);
         _vehicleRepository.Save();
         return new SuccessResultNoData();

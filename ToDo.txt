@@ -26,6 +26,7 @@ Consider how to best use ISpecification regarding entity update. If having e.g. 
 Handler ISoftDelete and ISoftDeleteDate in the 'context' files
 
 throw in jwt
+two users, one with permission for everything, the other only for some aggregate roots / domains / commands / queries.
 
 
 split up some classes/interfaces to better follow the single responsibility principle.

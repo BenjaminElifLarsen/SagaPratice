@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Queries;
 
-namespace VehicleDomain.AL.CQRS.Queries.ReadModels;
+namespace VehicleDomain.AL.Services.VehicleInformations.Queries.GetDetails;
 public class VehicleInformationDetails : BaseReadModel
 {
     public int Id { get; private set; }

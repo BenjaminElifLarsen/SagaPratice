@@ -6,12 +6,12 @@ namespace VehicleDomain.DL.Models.Vehicles;
 public class Vehicle : IAggregateRoot
 {
     /*
-     * Could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
+     * could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
      */
     private int _vehicleId;
     private DateTime _productionDate;
     private IdReference _vehicleInformation;
-    private double _distanceMovedKm;
+    private double _distanceMovedKm; //this could make use of event sourcing
     private readonly HashSet<IdReference> _operators;
     private bool _inUse;
     private SerielNumber _serielNumber; //add to vehicle validation, factory and so on.

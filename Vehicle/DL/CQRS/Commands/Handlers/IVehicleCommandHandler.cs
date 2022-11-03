@@ -26,7 +26,8 @@ public interface IVehicleCommandHandler :
     ICommandHandler<RemoveRelationBetweenOperatorAndVehicle>,
     ICommandHandler<RemoveOperatorFromVehicle>,
     ICommandHandler<RemoveVehicleFromOperator>,
-    ICommandHandler<UseVehicleFromUser>
+    ICommandHandler<StartOperatingVehicle>,
+    ICommandHandler<StopOperatingVehicle>
 {
 }
 /*

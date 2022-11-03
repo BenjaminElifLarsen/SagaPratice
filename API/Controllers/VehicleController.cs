@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleDomain.AL.Services.Vehicles;
+using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace API.Controllers;
 
@@ -27,10 +28,37 @@ public class VehicleController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
+    [Route("List/Active")]
+    public async Task<IActionResult> ListActive()
+    {
+        var result = await _vehicleService.GetVehicleInUseListAsync();
+        return this.FromResult(result);
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
     [Route("Details")]
     public async Task<IActionResult> Details([FromQuery] int id)
     {
         var result = await _vehicleService.GetVehicleDetailsAsync(id);
+        return this.FromResult(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("Operate/Start")]
+    public async Task<IActionResult> StartOperating([FromBody]StartOperatingVehicle command)
+    {
+        var result = await _vehicleService.StartOperatingVehicle(command);
+        return this.FromResult(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("Operate/Stop")]
+    public async Task<IActionResult> StopOperating([FromBody] StopOperatingVehicle command)
+    {
+        var result = await _vehicleService.StopOperatingVehicle(command);
         return this.FromResult(result);
     }
 }

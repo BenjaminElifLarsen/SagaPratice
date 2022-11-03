@@ -3,7 +3,7 @@ using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 
 namespace VehicleDomain.DL.Models.Vehicles;
-internal class Vehicle : IAggregateRoot
+public class Vehicle : IAggregateRoot
 {
     /*
      * Could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
@@ -14,34 +14,37 @@ internal class Vehicle : IAggregateRoot
     private double _distanceMovedKm;
     private readonly HashSet<IdReference> _operators;
     private bool _inUse;
+    private SerielNumber _serielNumber; //add to vehicle validation, factory and so on.
 
-    public int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
-    public DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
-    public IdReference VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
-    public double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
-    public IEnumerable<IdReference> Operators => _operators;
-    public bool InUse { get => _inUse; private set => _inUse = value; }
+    internal int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
+    internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
+    internal IdReference VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
+    internal double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
+    internal IEnumerable<IdReference> Operators => _operators;
+    internal bool InUse { get => _inUse; private set => _inUse = value; }
+    internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
     private Vehicle()
     {
 
     }
 
-    internal Vehicle(DateTime productionDate, IdReference vehicleInformation)
+    internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber)
     {
         _vehicleId = RandomValue.GetValue;
         _distanceMovedKm = 0;
         _productionDate = productionDate;
         _vehicleInformation = vehicleInformation;
         _operators = new();
+        SerielNumber = serielNumber;
     }
 
-    internal Vehicle( DateTime productionDate, IdReference vehicleInformation, double distanceMovedKm) : this(productionDate, vehicleInformation)
+    internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
     {
         _distanceMovedKm = distanceMovedKm;
     }
 
-    public int UpdateProductionDate(DateTime produced)
+    internal int UpdateProductionDate(DateTime produced)
     {
         _productionDate = produced;
         return 0;
@@ -53,7 +56,7 @@ internal class Vehicle : IAggregateRoot
     //    return 0;
     //}
 
-    public int OverwriteDistanceMoved(double newDistance)
+    internal int OverwriteDistanceMoved(double newDistance)
     {
         if(!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(newDistance))
         {
@@ -63,7 +66,7 @@ internal class Vehicle : IAggregateRoot
         return 0;
     }
 
-    public int AddToDistanceMoved(double distanceToAdd)
+    internal int AddToDistanceMoved(double distanceToAdd)
     { //check for overflow. Maybe instead of having the public double, have a ISpecification<Vehicle>
         if (!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(distanceToAdd))
         {
@@ -73,24 +76,39 @@ internal class Vehicle : IAggregateRoot
         return 0;
     }
 
-    public bool AddOperator(IdReference @operator)
+    internal bool AddOperator(IdReference @operator)
     {
         return _operators.Add(@operator);
     }
 
-    public bool RemoveOperator(IdReference @operator)
+    internal bool RemoveOperator(IdReference @operator)
     {
         return _operators.Remove(@operator);
     }
 
-    public void IsInUse()
+    internal bool IsOperatorPermitted(IdReference @operator)
     {
-        _inUse = true;
+        return _operators.Any(x => x == @operator);
     }
 
-    public void NoLongerInUse()
+    internal void StartOperating(IdReference @operator)
     {
-        _inUse = false;
+        if (Operators.Any(x => x.Id == @operator.Id))
+        {
+            _inUse = true;
+        }
     }
 
+    internal void StopOperating(IdReference @operator)
+    {
+        if (Operators.Any(x => x.Id == @operator.Id))
+        { 
+            _inUse = false;
+        }
+    }
+
+    internal void ReplaceSerielNumber(SerielNumber serielNumber)
+    {
+        _serielNumber = serielNumber;
+    }
 }

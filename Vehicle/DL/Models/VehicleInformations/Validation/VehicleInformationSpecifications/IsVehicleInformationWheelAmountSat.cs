@@ -6,6 +6,11 @@ internal class IsVehicleInformationWheelAmountSat : ISpecification<AddVehicleInf
 {
     public bool IsSatisfiedBy(AddVehicleInformationFromSystem candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.MaxNumberOfWheel);
+    }
+
+    private bool IsSatisfiedBy(byte candidate)
+    {
+        return candidate != 0;
     }
 }

@@ -5,7 +5,12 @@ namespace VehicleDomain.DL.Models.VehicleInformations.Validation.VehicleInformat
 internal class IsVehicleInformationNameValid : ISpecification<AddVehicleInformationFromSystem> 
 { 
     public bool IsSatisfiedBy(AddVehicleInformationFromSystem candidate)
-    { 
-        throw new NotImplementedException();
+    {
+        return IsSatisfiedBy(candidate.VehicleName);
+    }
+
+    private bool IsSatisfiedBy(string candidate)
+    {
+        return !string.IsNullOrWhiteSpace(candidate);
     }
 }

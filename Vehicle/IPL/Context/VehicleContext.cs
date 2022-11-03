@@ -26,25 +26,25 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
 
     IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(x => { 
         if (x is ISoftDelete delete) return !delete.Deleted; 
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom < _date; 
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date; 
         else return true; }
     );
 
     IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes.Where(x => {
         if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom < _date;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
         else return true; }
     );
 
     IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations.Where(x => {
         if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom < _date;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
         else return true; }
     );
 
     IEnumerable<Operator> IContext<Operator>.GetAll => People.Where(x => {
         if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom < _date;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
         else return true; }
     );
 

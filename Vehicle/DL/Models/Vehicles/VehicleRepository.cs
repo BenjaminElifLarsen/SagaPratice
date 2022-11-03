@@ -21,6 +21,11 @@ internal class VehicleRepository : IVehicleRepository
         _baseRepository.Create(entity);
     }
 
+    public async Task<IEnumerable<TProjection>> CurrentlyOperating<TProjection>(BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.AllByPredicateAsync(x => x.InUse == true, query);
+    }
+
     public void Delete(Vehicle entity)
     {
         _baseRepository.Delete(entity);

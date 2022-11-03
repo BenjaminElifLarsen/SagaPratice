@@ -6,6 +6,11 @@ internal class IsVehicleInformationLicenseTypeSat : ISpecification<AddVehicleInf
 {
     public bool IsSatisfiedBy(AddVehicleInformationFromSystem candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.LicenseTypeId);
+    }
+
+    private bool IsSatisfiedBy(int candidate)
+    {
+        return candidate > 0;
     }
 }

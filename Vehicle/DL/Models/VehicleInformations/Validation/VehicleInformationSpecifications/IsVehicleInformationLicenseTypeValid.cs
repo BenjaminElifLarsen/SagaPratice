@@ -4,13 +4,19 @@ using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 namespace VehicleDomain.DL.Models.VehicleInformations.Validation.VehicleInformationSpecifications;
 internal class IsVehicleInformationLicenseTypeValid : ISpecification<AddVehicleInformationFromSystem>
 {
+    private readonly IEnumerable<int> _licenseTypeIds;
     public IsVehicleInformationLicenseTypeValid(VehicleInformationValidationData validationData)
     {
-
+        _licenseTypeIds = validationData.LicenseTypes.Select(x => x.Id);
     }
 
     public bool IsSatisfiedBy(AddVehicleInformationFromSystem candidate)
     {
-        throw new NotImplementedException();
+        return IsSatisfiedBy(candidate.LicenseTypeId);
+    }
+
+    private bool IsSatisfiedBy(int candidate)
+    {
+        return _licenseTypeIds.Any(x => x == candidate);
     }
 }

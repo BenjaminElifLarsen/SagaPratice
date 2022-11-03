@@ -1,50 +1,58 @@
 ﻿using Common.CQRS.Queries;
+using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;
 internal class LicenseTypeRepository : ILicenseTypeRepository
 {
-    public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
+    private readonly IBaseRepository<LicenseType> _baseRepository;
+
+    public LicenseTypeRepository(IBaseRepository<LicenseType> baseRepository)
     {
-        throw new NotImplementedException();
+        _baseRepository = baseRepository;
+    }
+
+    public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.AllAsync(query);
     }
 
     public void Create(LicenseType entity)
     {
-        throw new NotImplementedException();
+        _baseRepository.Create(entity);
     }
 
     public void Delete(LicenseType entity)
     {
-        throw new NotImplementedException();
+        _baseRepository.Delete(entity);
     }
 
-    public Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
     {
-        throw new NotImplementedException();
+        return await _baseRepository.FindByPredicateAsync(x => x.LicenseTypeId == id, query);
     }
 
-    public Task<LicenseType> GetForOperationAsync(int id)
+    public async Task<LicenseType> GetForOperationAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.LicenseTypeId == id);
     }
 
-    public Task<bool> IsIdUniqueAsync(int id)
+    public async Task<bool> IsIdUniqueAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _baseRepository.IsUniqueAsync(x => x.LicenseTypeId == id);
     }
 
-    public Task<bool> IsTypeUniqueAsync(string type)
+    public async Task<bool> IsTypeUniqueAsync(string type)
     {
-        throw new NotImplementedException();
+        return await _baseRepository.IsUniqueAsync(x => x.Type == type);
     }
 
     public void Save()
     {
-        throw new NotImplementedException();
+        _baseRepository.SaveChanges();
     }
 
     public void Update(LicenseType entity)
     {
-        throw new NotImplementedException();
+        _baseRepository.Update(entity);
     }
 }

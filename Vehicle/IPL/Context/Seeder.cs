@@ -33,8 +33,8 @@ internal static class Seeder
             bus.AddVehicleInformation(new(busInfo1.VehicleInformationId));
         }
 
-        Vehicle veh1 = new(new(200, 5, 21), new(carInfo1.VehicleInformationId), 5);
-        Vehicle veh2 = new(DateTime.Now, new(busInfo1.VehicleInformationId));
+        Vehicle veh1 = new(new(200, 5, 21), new(carInfo1.VehicleInformationId), new("XM71"), 5);
+        Vehicle veh2 = new(DateTime.Now, new(busInfo1.VehicleInformationId), new("???2G3"));
         if (!vehicleContext.Vehicles.Any())
         {
             vehicleContext.Vehicles.Add(veh1);

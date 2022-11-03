@@ -1,8 +1,11 @@
 ﻿using Common.ResultPattern;
 using VehicleDomain.AL.CQRS.Queries.ReadModels;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 
 namespace VehicleDomain.AL.Services.VehicleInformations;
 public interface IVehicleInformationService
 {//put the read models and queries into the CQRS folder under AL
-    Task<Result<IEnumerable<VehicleInformationListItem>>> GetVehicleInformationList();
+    Task<Result<IEnumerable<VehicleInformationListItem>>> GetVehicleInformationListAsync();
+    Task<Result<VehicleInformationDetails>> GetVehicleInformationDetailsAsync(int id);
+    Task<Result> SetupVehicleInformation(AddVehicleInformationFromSystem command);
 }

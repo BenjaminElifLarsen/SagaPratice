@@ -9,16 +9,16 @@ using VehicleDomain.DL.Models.Vehicles;
 namespace VehicleDomain.IPL.Context;
 internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Operator>
 {
-    private HashSet<Vehicle> _vehicles;
+    private readonly HashSet<Vehicle> _vehicles;
     public HashSet<Vehicle> Vehicles => _vehicles;
 
-    private HashSet<LicenseType> _licenseTypes;
+    private readonly HashSet<LicenseType> _licenseTypes;
     public HashSet<LicenseType> LicenseTypes => _licenseTypes;
 
-    private HashSet<VehicleInformation> _vehicleInformation;
+    private readonly HashSet<VehicleInformation> _vehicleInformation;
     public HashSet<VehicleInformation> VehicleInformations => _vehicleInformation;
 
-    private HashSet<Operator> _people;
+    private readonly HashSet<Operator> _people;
     public HashSet<Operator> People => _people;
 
     private DateOnly _date;
@@ -50,7 +50,7 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
 
     public MockVehicleContext()
     {
-        var dateTime = DateTime.Now;
+        var dateTime = DateTime.Now; //would be better to have a method that calculates and returns the current date as this could cause a problem if operated around midnight. 
         _date = new(dateTime.Year, dateTime.Month, dateTime.Day);
         _vehicles = new();
         _people = new();

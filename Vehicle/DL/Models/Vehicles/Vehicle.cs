@@ -12,13 +12,15 @@ internal class Vehicle : IAggregateRoot
     private DateTime _productionDate;
     private IdReference _vehicleInformation;
     private double _distanceMovedKm;
-    private HashSet<IdReference> _operators;
+    private readonly HashSet<IdReference> _operators;
+    private bool _inUse;
 
     public int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
     public DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
     public IdReference VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
     public double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
     public IEnumerable<IdReference> Operators => _operators;
+    public bool InUse { get => _inUse; private set => _inUse = value; }
 
     private Vehicle()
     {
@@ -79,6 +81,16 @@ internal class Vehicle : IAggregateRoot
     public bool RemoveOperator(IdReference @operator)
     {
         return _operators.Remove(@operator);
+    }
+
+    public void IsInUse()
+    {
+        _inUse = true;
+    }
+
+    public void NoLongerInUse()
+    {
+        _inUse = false;
     }
 
 }

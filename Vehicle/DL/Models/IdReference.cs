@@ -20,7 +20,7 @@ public record IdReference : ValueObject
 }
 
 
-internal static class RandomValue // Just here for the mock data generation.
+internal static class RandomValue // Just here for the mock id generation.
 {
 	private static readonly Random _random = new(int.MaxValue);
 

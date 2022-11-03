@@ -37,7 +37,7 @@ public class OperatorController : ControllerBase
 
 	[AllowAnonymous] //change later
 	[HttpPost]
-	[Route("/System/Add")] //consider better name
+	[Route("System/Add")] //consider better name
 	public async Task<IActionResult> Add([FromBody] AddOperatorNoLicenseFromSystem command)
 	{
 		var result = await _operatorService.AddOperatorFromSystemAsync(command);
@@ -46,7 +46,7 @@ public class OperatorController : ControllerBase
 
 	[AllowAnonymous]
 	[HttpPost]
-	[Route("/System/Delete")]
+	[Route("System/Delete")]
 	public async Task<IActionResult> Remove([FromBody] RemoveOperatorFromSystem command)
 	{
 		var result = await _operatorService.RemoveOperatorFromSystemAsync(command);

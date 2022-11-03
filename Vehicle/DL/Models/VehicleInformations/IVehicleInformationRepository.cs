@@ -10,4 +10,5 @@ public interface IVehicleInformationRepository
     void Update(VehicleInformation entity);
     void Delete(VehicleInformation entity);
     Task<VehicleInformation> GetForOperationAsync(int id);
+    Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel;
 }

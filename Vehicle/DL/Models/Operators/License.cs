@@ -43,6 +43,14 @@ internal class License
         return 0;
     }
 
+    public bool Review(DateOnly date)
+    {
+        if (date <= _arquired)
+            return false;
+        _lastRenewed = date;
+        return true;
+    }
+
     /// <summary>
     /// 
     /// </summary>

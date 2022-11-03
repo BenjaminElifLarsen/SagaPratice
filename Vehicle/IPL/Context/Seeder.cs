@@ -28,6 +28,9 @@ internal static class Seeder
             vehicleContext.VehicleInformations.Add(carInfo1);
             vehicleContext.VehicleInformations.Add(carInfo2);
             vehicleContext.VehicleInformations.Add(busInfo1);
+            car.AddVehicleInformation(new(carInfo1.VehicleInformationId));
+            car.AddVehicleInformation(new(carInfo2.VehicleInformationId));
+            bus.AddVehicleInformation(new(busInfo1.VehicleInformationId));
         }
 
         Vehicle veh1 = new(new(200, 5, 21), new(carInfo1.VehicleInformationId), 5);
@@ -36,16 +39,26 @@ internal static class Seeder
         {
             vehicleContext.Vehicles.Add(veh1);
             vehicleContext.Vehicles.Add(veh2);
+            carInfo1.RegistrateVehicle(new(veh1.VehicleId));
+            busInfo1.RegistrateVehicle(new(veh2.VehicleId));
         }
 
-        Operator owner = new(1, new(1956, 1, 2));
+        Operator op = new(1, new(1956, 1, 2));
         if (!vehicleContext.People.Any())
         {
-            owner.AddLicense(new(car.LicenseTypeId), new(2019, 5, 13));
-            owner.AddVehicle(new(veh1.VehicleId));
-            owner.AddVehicle(new(veh2.VehicleId));
-            vehicleContext.People.Add(owner);
+            op.AddLicense(new(car.LicenseTypeId), new(2019, 5, 13));
+            op.AddLicense(new(train.LicenseTypeId), new(2000, 3, 24));
+            op.RenewLicense(train.LicenseTypeId, new(2006, 2, 1));
+            op.AddVehicle(new(veh1.VehicleId));
+            op.AddVehicle(new(veh2.VehicleId));
+            vehicleContext.People.Add(op);
+            veh1.AddOperator(new(op.OperatorId));
+            veh2.AddOperator(new(op.OperatorId));
+            car.AddLicense(new(op.GetLicense(car.LicenseTypeId).LicenseId));
         }
+
+
+
 
     }
 }

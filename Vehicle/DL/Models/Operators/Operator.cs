@@ -49,7 +49,7 @@ public class Operator : IAggregateRoot, ISoftDelete
     }
 
     internal bool AddVehicle(IdReference vehicle)
-    {
+    { //check if they got the correct license first
         return _vehicles.Add(vehicle);
     }
 
@@ -85,8 +85,18 @@ public class Operator : IAggregateRoot, ISoftDelete
         return _licenses.Where(x => x.Expired == false);
     }
 
+    public bool RenewLicense(int LicenseTypeId, DateOnly renewDate)
+    {
+        var license = GetLicense(LicenseTypeId);
+        if (license is null)
+            return false;
+        return license.Review(renewDate);
+    }
+
     public void Delete()
     {
         _deleted = true;
     }
+
+
 }

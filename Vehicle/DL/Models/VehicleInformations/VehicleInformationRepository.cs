@@ -10,9 +10,9 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
         _baseRepository = baseRepository;
     }
 
-    public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
+    public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
     {
-        return _baseRepository.AllAsync(query);
+        return await _baseRepository.AllAsync(query);
     }
 
     public void Create(VehicleInformation entity)
@@ -23,6 +23,11 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
     public void Delete(VehicleInformation entity)
     {
         _baseRepository.Delete(entity);
+    }
+
+    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.FindByPredicateAsync(x => x.VehicleInformationId == id, query);
     }
 
     public async Task<VehicleInformation> GetForOperationAsync(int id)

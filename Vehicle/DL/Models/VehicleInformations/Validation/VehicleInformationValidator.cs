@@ -8,9 +8,9 @@ using VehicleDomain.DL.Models.VehicleInformations.Validation.VehicleInformationS
 namespace VehicleDomain.DL.Models.VehicleInformations.Validation;
 internal class VehicleInformationValidator : IValidate
 {
-    private readonly AddVehicleInformationFromExternalSystem _vehicleInformation;
+    private readonly AddVehicleInformationFromSystem _vehicleInformation;
     private readonly VehicleInformationValidationData _validationData;
-    public VehicleInformationValidator(AddVehicleInformationFromExternalSystem vehicleInformation, VehicleInformationValidationData validationData)
+    public VehicleInformationValidator(AddVehicleInformationFromSystem vehicleInformation, VehicleInformationValidationData validationData)
     {
         _vehicleInformation = vehicleInformation;
         _validationData = validationData;

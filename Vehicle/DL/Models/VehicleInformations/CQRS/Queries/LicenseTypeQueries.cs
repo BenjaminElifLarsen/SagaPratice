@@ -1,5 +1,4 @@
-﻿
-using Common.CQRS.Queries;
+﻿using Common.CQRS.Queries;
 using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries.ReadModels;

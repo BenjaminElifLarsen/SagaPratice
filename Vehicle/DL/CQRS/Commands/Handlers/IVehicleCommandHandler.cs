@@ -15,7 +15,7 @@ public interface IVehicleCommandHandler :
     ICommandHandler<RemoveOperatorFromUser>,
     ICommandHandler<ObsoleteLicenseTypeFromUser>,
     ICommandHandler<AlterLicenseType>,
-    ICommandHandler<AddVehicleInformationFromExternalSystem>,
+    ICommandHandler<AddVehicleInformationFromSystem>,
     ICommandHandler<AddVehicleWithNoOperator>,
     ICommandHandler<AddVehicleWithOperators>,
     ICommandHandler<AddDistanceToVehicleDistance>,

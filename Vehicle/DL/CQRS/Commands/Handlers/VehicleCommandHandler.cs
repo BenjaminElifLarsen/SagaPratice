@@ -205,7 +205,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddVehicleWithNoOperator command)
+    public Result Handle(BuyVehicleWithNoOperator command)
     { //trigger event VehicleAdded
         var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
         var validationData = new VehicleValidationData(vehicleInformations);
@@ -219,7 +219,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddVehicleWithOperators command)
+    public Result Handle(BuyVehicleWithOperators command)
     { //trigger event VehicleAdded
         var operators = _operatorRepository.AllAsync(new OperatorIdQuery()).Result;
         var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;

@@ -23,7 +23,7 @@ internal class PersonRepository : IPersonRepository
 
     public async Task<Person> GetForOperationAsync(int id)
     {
-        return await _baseRepository.FindByPredicateForOperationAsync(x => x.PersonId == id);
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }
 
     public void Hire(Person entity)

@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class EstablishRelationBetweenOperatorAndVehicle : ICommand
 {
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    public int VehicleId { get; set; }
+    public int OperatorId { get; set; }
 }
 
 /// <summary>
@@ -12,8 +12,8 @@ public class EstablishRelationBetweenOperatorAndVehicle : ICommand
 /// </summary>
 public class AddOperatorToVehicle : ICommand
 { //need in all cases to validate that the operator got the needed license for the vehicle
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    internal int VehicleId { get; private set; }
+    internal int OperatorId { get; private set; }
 }
 
 /// <summary>
@@ -21,6 +21,6 @@ public class AddOperatorToVehicle : ICommand
 /// </summary>
 public class AddVehicleToOperator : ICommand
 {
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    internal int VehicleId { get; private set; }
+    internal int OperatorId { get; private set; }
 }

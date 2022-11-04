@@ -14,7 +14,7 @@ public class Vehicle : IAggregateRoot
     private double _distanceMovedKm; //this could make use of event sourcing
     private readonly HashSet<IdReference> _operators;
     private bool _inUse;
-    private SerielNumber _serielNumber; //add to vehicle validation, factory and so on.
+    private SerielNumber _serielNumber; //ensure uniqueness
 
     internal int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
     internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
@@ -66,10 +66,10 @@ public class Vehicle : IAggregateRoot
         return 0;
     }
 
-    internal int AddToDistanceMoved(double distanceToAdd)
-    { //check for overflow. Maybe instead of having the public double, have a ISpecification<Vehicle>
+    internal int AddToDistanceMoved(double distanceToAdd) //this code would be triggered by an automated system that gets the actually distance from the vehicle automatic.
+    { //should check for overflow.
         if (!new IsVehicleDistanceMovedPositiveOrZero().IsSatisfiedBy(distanceToAdd))
-        {
+        { //this code could cause problems with the model purity. 
             return (int)VehicleErrors.InvalidDistance;
         }
         _distanceMovedKm += distanceToAdd;

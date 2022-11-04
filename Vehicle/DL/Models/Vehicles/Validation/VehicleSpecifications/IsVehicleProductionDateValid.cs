@@ -2,14 +2,14 @@
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
-internal class IsVehicleProductionDateValid : ISpecification<AddVehicleWithOperators>, ISpecification<AddVehicleWithNoOperator>
+internal class IsVehicleProductionDateValid : ISpecification<BuyVehicleWithOperators>, ISpecification<BuyVehicleWithNoOperator>
 { //should also check that it is not default datetime
-    public bool IsSatisfiedBy(AddVehicleWithNoOperator candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithNoOperator candidate)
     {
         return IsSatisfiedBy(candidate.Produced);
     }
 
-    public bool IsSatisfiedBy(AddVehicleWithOperators candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithOperators candidate)
     {
         return IsSatisfiedBy(candidate.Produced);
     }

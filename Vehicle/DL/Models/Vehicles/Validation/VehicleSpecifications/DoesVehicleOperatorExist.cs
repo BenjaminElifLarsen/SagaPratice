@@ -3,7 +3,7 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Queries.ReadModels;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
-internal class DoesVehicleOperatorExist : ISpecification<AddVehicleWithOperators>, ISpecification<AddOperatorToVehicle>
+internal class DoesVehicleOperatorExist : ISpecification<BuyVehicleWithOperators>, ISpecification<AddOperatorToVehicle>
 {
     private readonly IEnumerable<OperatorIdValidation> _operators;
 
@@ -17,7 +17,7 @@ internal class DoesVehicleOperatorExist : ISpecification<AddVehicleWithOperators
         return IsSatisfiedBy(candidate.OperatorId);
     }
 
-    public bool IsSatisfiedBy(AddVehicleWithOperators candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithOperators candidate)
     {
         return candidate.Operators.All(IsSatisfiedBy);
     }

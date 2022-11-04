@@ -1,6 +1,8 @@
 ﻿using BaseRepository;
 using Common.RepositoryPattern;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
@@ -24,29 +26,24 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     private DateOnly _date;
 
 
-    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(x => { 
-        if (x is ISoftDelete delete) return !delete.Deleted; 
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date; 
-        else return true; }
-    );
+    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes.Where(x => {
-        if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
-        else return true; }
-    );
+    IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
 
-    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations.Where(x => {
-        if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
-        else return true; }
-    );
+    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations.Where(Filtering<VehicleInformation>());
 
-    IEnumerable<Operator> IContext<Operator>.GetAll => People.Where(x => {
-        if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || date.DeletedFrom < _date;
-        else return true; }
-    );
+    IEnumerable<Operator> IContext<Operator>.GetAll => People.Where(Filtering<Operator>());
+
+    private Func<TEntity,bool> Filtering<TEntity>() 
+    {
+        return x => {
+        if (!Filter) return true;
+        else if (x is ISoftDelete delete) return !delete.Deleted;
+        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || _date<date.DeletedFrom;
+        else return true; };
+    }
+
+    public bool Filter { get; set; }
 
     public MockVehicleContext()
     {
@@ -56,6 +53,7 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
         _people = new();
         _licenseTypes = new();
         _vehicleInformation = new();
+        Filter = true;
     }
 
     public void Add(IEnumerable<Vehicle> entities)

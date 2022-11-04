@@ -67,4 +67,14 @@ public class Person : IAggregateRoot, ISoftDeleteDate
     {
         return !(left == right);
     }
+
+    public static bool operator ==(Person left, Person right)
+    {
+        return left.PersonId == right.PersonId;
+    }
+
+    public static bool operator !=(Person left, Person right)
+    {
+        return !(left == right);
+    }
 }

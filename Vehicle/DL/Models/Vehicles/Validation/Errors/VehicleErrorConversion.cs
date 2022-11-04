@@ -27,6 +27,10 @@ internal class VehicleErrorConversion : IErrorConversion
         {
             errors.Add($"Invalid vehicle production date.");
         }
+        if(binaryFlag == VehicleErrors.InvalidSerialNumber)
+        {
+            errors.Add($"Invalid vehicle serial number.");
+        }
         return errors;
     }
 }

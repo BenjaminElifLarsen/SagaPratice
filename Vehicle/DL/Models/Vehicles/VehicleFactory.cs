@@ -7,7 +7,7 @@ using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 namespace VehicleDomain.DL.Models.Vehicles;
 internal class VehicleFactory : IVehicleFactory
 {
-    public Result<Vehicle> CreateVehicle(AddVehicleWithNoOperator vehicle, VehicleValidationData validationData)
+    public Result<Vehicle> CreateVehicle(BuyVehicleWithNoOperator vehicle, VehicleValidationData validationData)
     {
         List<string> errors = new();
 
@@ -22,11 +22,11 @@ internal class VehicleFactory : IVehicleFactory
             return new InvalidResult<Vehicle>(errors.ToArray());
         }
 
-        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(""));
+        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(vehicle.SerialNumber));
         return new SuccessResult<Vehicle>(entity);
     }
 
-    public Result<Vehicle> CreateVehicle(AddVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
+    public Result<Vehicle> CreateVehicle(BuyVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
     {
         List<string> errors = new();
 
@@ -41,7 +41,7 @@ internal class VehicleFactory : IVehicleFactory
             return new InvalidResult<Vehicle>(errors.ToArray());
         }
 
-        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(""));
+        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(vehicle.SerialNumber));
         foreach(var @operator in vehicle.Operators)
         {
             entity.AddOperator(new(@operator));

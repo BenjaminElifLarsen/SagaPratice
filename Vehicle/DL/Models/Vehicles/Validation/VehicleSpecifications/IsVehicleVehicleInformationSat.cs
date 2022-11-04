@@ -2,14 +2,14 @@
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
-internal class IsVehicleVehicleInformationSat : ISpecification<AddVehicleWithOperators>, ISpecification<AddVehicleWithNoOperator>
+internal class IsVehicleVehicleInformationSat : ISpecification<BuyVehicleWithOperators>, ISpecification<BuyVehicleWithNoOperator>
 {
-    public bool IsSatisfiedBy(AddVehicleWithNoOperator candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithNoOperator candidate)
     {
         return IsSatisfiedBy(candidate.VehicleInformation);
     }
 
-    public bool IsSatisfiedBy(AddVehicleWithOperators candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithOperators candidate)
     {
         return IsSatisfiedBy(candidate.VehicleInformation);
     }

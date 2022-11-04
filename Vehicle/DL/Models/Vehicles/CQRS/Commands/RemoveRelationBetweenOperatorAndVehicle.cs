@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class RemoveRelationBetweenOperatorAndVehicle : ICommand
 {
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    public int VehicleId { get; set; }
+    public int OperatorId { get; set; }
 }
 
 /// <summary>
@@ -12,8 +12,8 @@ public class RemoveRelationBetweenOperatorAndVehicle : ICommand
 /// </summary>
 public class RemoveOperatorFromVehicle : ICommand
 {
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    internal int VehicleId { get; private set; }
+    internal int OperatorId { get; private set; }
 }
 
 /// <summary>
@@ -21,6 +21,6 @@ public class RemoveOperatorFromVehicle : ICommand
 /// </summary>
 public class RemoveVehicleFromOperator : ICommand
 {
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    internal int VehicleId { get; private set; }
+    internal int OperatorId { get; private set; }
 }

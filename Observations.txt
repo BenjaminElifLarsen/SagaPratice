@@ -8,7 +8,7 @@ An interesting difference between this project and the api backend project. In t
 	The only difference between the two solutions, that could causse this, is the api backend is C Sharp Dotnet 6, while the projects in this solution is using the preview for Dotnet 7.
 	From some testing, it needs everything in {domain}Service's ctor to be public, the implementations do not need to be public. The reason {domain}Service is that it is called from outside the project its belong too.
 	Domain models also need to be public.
-	Seems like the DI is less restrictive than what was first assumed. Expected everything in {domain}ApiServices had to be public too.
+	Seems like the DI is less restrictive than what was first assumed. Expected everything in {domain}ApiServices had to be public too, since it was rquired in the backend.
 
 DateOnly json converter does not work, it seems like, when reading and so different methods have been changed back to DateTime, while trying to fix the json converter.
 

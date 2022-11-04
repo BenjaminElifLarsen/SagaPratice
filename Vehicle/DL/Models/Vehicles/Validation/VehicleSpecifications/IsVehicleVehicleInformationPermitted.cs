@@ -3,7 +3,7 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Queries.ReadModels;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
-internal class IsVehicleVehicleInformationPermitted : ISpecification<AddVehicleWithOperators>, ISpecification<AddVehicleWithNoOperator>
+internal class IsVehicleVehicleInformationPermitted : ISpecification<BuyVehicleWithOperators>, ISpecification<BuyVehicleWithNoOperator>
 {
     private readonly IEnumerable<VehicleInformationIdValidation> _vehicleInformations;
 
@@ -17,12 +17,12 @@ internal class IsVehicleVehicleInformationPermitted : ISpecification<AddVehicleW
         _vehicleInformations = validationData.VehicleInformations;
     }
 
-    public bool IsSatisfiedBy(AddVehicleWithNoOperator candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithNoOperator candidate)
     {
         return IsSatisfiedBy(candidate.VehicleInformation);
     }
 
-    public bool IsSatisfiedBy(AddVehicleWithOperators candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithOperators candidate)
     {
         return IsSatisfiedBy(candidate.VehicleInformation);
     }

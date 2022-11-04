@@ -6,4 +6,5 @@ internal enum VehicleErrors
     InvalidVehicleInformation = 0b100,
     InvalidDistance = 0b1000,
     InvalidProductionDate = 0b10000,
+    InvalidSerialNumber = 0b100000,
 }

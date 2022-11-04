@@ -11,4 +11,6 @@ public interface IVehicleService
     Task<Result<VehicleDetails>> GetVehicleDetailsAsync(int id);
     Task<Result> StartOperatingVehicle(StartOperatingVehicle command);
     Task<Result> StopOperatingVehicle(StopOperatingVehicle command);
+    Task<Result> BuyVehicleNoOperator(BuyVehicleWithNoOperator command);
+    Task<Result> BuyVehicleWithOperator(BuyVehicleWithOperators command);
 }

@@ -5,4 +5,5 @@ public interface IContext<TEntity>
     public void Update(IEnumerable<TEntity> entities);
     public void Remove(IEnumerable<TEntity> entities);
     public IEnumerable<TEntity> GetAll { get; }
+    public bool Filter { get; set; } //ensure there is one for each aggregate root
 }

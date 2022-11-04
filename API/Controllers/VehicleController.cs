@@ -61,4 +61,22 @@ public class VehicleController : ControllerBase
         var result = await _vehicleService.StopOperatingVehicle(command);
         return this.FromResult(result);
     }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("Buy/NoOperator")]
+    public async Task<IActionResult> BuyVehicleNoOperator([FromBody]BuyVehicleWithNoOperator command)
+    {
+        var result = await _vehicleService.BuyVehicleNoOperator(command);
+        return this.FromResult(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("Buy/WithOperator")]
+    public async Task<IActionResult> BuyVehicleWithOperator([FromBody] BuyVehicleWithOperators command)
+    {
+        var result = await _vehicleService.BuyVehicleWithOperator(command);
+        return this.FromResult(result);
+    }
 }

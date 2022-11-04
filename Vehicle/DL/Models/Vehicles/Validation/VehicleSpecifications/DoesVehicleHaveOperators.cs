@@ -2,9 +2,9 @@
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
-internal class DoesVehicleHaveOperators : ISpecification<AddVehicleWithOperators>, ISpecification<IEnumerable<IdReference>>
+internal class DoesVehicleHaveOperators : ISpecification<BuyVehicleWithOperators>, ISpecification<IEnumerable<IdReference>>
 {
-    public bool IsSatisfiedBy(AddVehicleWithOperators candidate)
+    public bool IsSatisfiedBy(BuyVehicleWithOperators candidate)
     {
         return IsSatisfiedBy(candidate.Operators);
     }

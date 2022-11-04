@@ -8,9 +8,9 @@ using VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 namespace VehicleDomain.DL.Models.Vehicles.Validation;
 internal class VehicleWithOperatorsCreationValidator : IValidate
 {
-    private AddVehicleWithOperators _vehicle;
+    private BuyVehicleWithOperators _vehicle;
     private VehicleValidationWithOperatorsData _validationData;
-    public VehicleWithOperatorsCreationValidator(AddVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
+    public VehicleWithOperatorsCreationValidator(BuyVehicleWithOperators vehicle, VehicleValidationWithOperatorsData validationData)
     {
         _vehicle = vehicle;
         _validationData = validationData;
@@ -19,20 +19,21 @@ internal class VehicleWithOperatorsCreationValidator : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        flag += new IsVehicleVehicleInformationSat().And<AddVehicleWithOperators>(new IsVehicleVehicleInformationPermitted(_validationData)).IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidVehicleInformation;
+        flag += new IsVehicleVehicleInformationSat().And<BuyVehicleWithOperators>(new IsVehicleVehicleInformationPermitted(_validationData)).IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidVehicleInformation;
         flag += new DoesVehicleOperatorExist(_validationData).IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidOperator;
         flag += new DoesVehicleHaveOperators().IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidAmountOfOperator;
         flag += new IsVehicleProductionDateValid().IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidProductionDate;
+        flag += new IsVehicleSerialNumberValid().IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidSerialNumber;
         return flag;
     }
 }
 
 internal class VehicleWithNoOperatorCreationValidator : IValidate
 {
-    private AddVehicleWithNoOperator _vehicle;
+    private BuyVehicleWithNoOperator _vehicle;
     private VehicleValidationData _validationData;
 
-    public VehicleWithNoOperatorCreationValidator(AddVehicleWithNoOperator vehicle, VehicleValidationData validationData)
+    public VehicleWithNoOperatorCreationValidator(BuyVehicleWithNoOperator vehicle, VehicleValidationData validationData)
     {
         _vehicle = vehicle;
         _validationData = validationData;
@@ -41,8 +42,9 @@ internal class VehicleWithNoOperatorCreationValidator : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        flag += new IsVehicleVehicleInformationSat().And<AddVehicleWithNoOperator>(new IsVehicleVehicleInformationPermitted(_validationData)).IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidVehicleInformation;
+        flag += new IsVehicleVehicleInformationSat().And<BuyVehicleWithNoOperator>(new IsVehicleVehicleInformationPermitted(_validationData)).IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidVehicleInformation;
         flag += new IsVehicleProductionDateValid().IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidProductionDate;
+        flag += new IsVehicleSerialNumberValid().IsSatisfiedBy(_vehicle) ? 0 : VehicleErrors.InvalidSerialNumber;
         return flag;
     }
 }

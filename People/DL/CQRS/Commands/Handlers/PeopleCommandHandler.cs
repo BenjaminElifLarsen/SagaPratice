@@ -41,7 +41,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _personRepository.GetForOperationAsync(command.Id).Result;
         if(entity is not null)
         {
-            entity.Delete(command.FiredFrom);
+            entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
             _personRepository.Fire(entity);
             _personRepository.Save();
         }

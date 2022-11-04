@@ -29,10 +29,10 @@ internal class Gender : IAggregateRoot
         _verbObject = @object;
     }
 
-    public void UpdateName(string name)
-    {
-        _verbSubject = name;
-    }
+    //public void UpdateName(string name)
+    //{ //does not make sense to change subject or object
+    //    _verbSubject = name;
+    //}
 
     public bool AddPerson(IdReference person)
     {

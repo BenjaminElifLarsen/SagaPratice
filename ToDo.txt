@@ -27,9 +27,14 @@ Handler ISoftDelete and ISoftDeleteDate in the 'context' files
 
 throw in jwt
 two users, one with permission for everything, the other only for some aggregate roots / domains / commands / queries.
-
+set up hasher and salter in security project. Project should have an user model (not all people are users), with id, password (hashed and salted) and username/email.
 
 split up some classes/interfaces to better follow the single responsibility principle.
+
+
+vehicle event sourcing: Could event source when the vehicle was in use and stopped be in use (operator id, time, bool started, distance moved)
+
+
 
 
 

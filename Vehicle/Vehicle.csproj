@@ -24,7 +24,6 @@
     <Folder Include="AL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\CQRS\Queries\ReadModels\" />
     <Folder Include="DL\Models\LicenseTypes\CQRS\Queries\ReadModels\" />
-    <Folder Include="IPL\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

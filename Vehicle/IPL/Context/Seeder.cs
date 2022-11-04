@@ -55,9 +55,5 @@ internal static class Seeder
             veh1.AddOperator(new(op.OperatorId));
             veh2.AddOperator(new(op.OperatorId));
         }
-
-
-
-
     }
 }

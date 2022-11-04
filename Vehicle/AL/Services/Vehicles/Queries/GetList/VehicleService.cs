@@ -6,7 +6,7 @@ public partial class VehicleService
 {
     public async Task<Result<IEnumerable<VehicleListItem>>> GetVehicleInUseListAsync()
     {
-        var list = await _vehicleRepository.CurrentlyOperating(new VehicleListItemQuery());
+        var list = await _vehicleRepository.CurrentlyOperatingAsync(new VehicleListItemQuery());
         return new SuccessResult<IEnumerable<VehicleListItem>>(list);
     }
 

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries.ReadModels;
-internal class LicenseTypeValidation : BaseReadModel
+internal record LicenseTypeValidation : BaseReadModel
 {
     public int Id { get; private set; }
 

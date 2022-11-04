@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
-public class OperatorListItem : BaseReadModel
+public record OperatorListItem : BaseReadModel
 {
     public int Id { get; private set; }
     public DateOnly Birth { get; private set; }

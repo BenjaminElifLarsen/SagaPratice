@@ -10,6 +10,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
     private string _lastName;
     private DateOnly _birth;
     private IdReference _gender;
+    private DateOnly? _deletedFrom;
 
     internal int PersonId { get => _personId; private set => _personId = value; }
     internal string FirstName { get => _firstName; private set => _firstName = value; }
@@ -17,7 +18,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
     internal IdReference Gender { get => _gender; private set => _gender = value; }
 
-    public DateOnly? DeletedFrom => throw new NotImplementedException();
+    public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
     private Person()
     {
@@ -33,12 +34,17 @@ public class Person : IAggregateRoot, ISoftDeleteDate
         _gender = gender;
     }
 
-    internal void UpdateFistName(string firstName)
+    internal Person(int id, string firstName, string lastName, DateOnly birth, IdReference gender) : this(firstName, lastName, birth, gender)
+    {
+        _personId = id;
+    }
+
+    internal void ReplaceFistName(string firstName)
     {
         _firstName = firstName;
     }
 
-    internal void UpdateLastName(string lastName)
+    internal void ReplaceLastName(string lastName)
     {
         _lastName = lastName;
     }
@@ -48,14 +54,14 @@ public class Person : IAggregateRoot, ISoftDeleteDate
         _birth = birth;
     }
 
-    internal void UpdateGender(IdReference gender)
+    internal void UpdateGenderIdentification(IdReference gender)
     {
         _gender = gender;
     }
 
     public void Delete(DateOnly? dateTime)
     {
-        throw new NotImplementedException();
+        _deletedFrom = dateTime;
     }
 
     public static bool operator ==(Person left, int right)

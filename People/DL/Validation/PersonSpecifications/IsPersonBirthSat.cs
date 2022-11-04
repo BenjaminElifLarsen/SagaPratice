@@ -15,6 +15,11 @@ internal class IsPersonBirthSat : ISpecification<Person>, ISpecification<HirePer
         throw new NotImplementedException();
     }
 
+    private bool IsSatisfiedBy(DateTime candidate)
+    {
+        return IsSatisfiedBy(new DateOnly(candidate.Year, candidate.Month, candidate.Day));
+    }
+
     private bool IsSatisfiedBy(DateOnly candidate)
     {
         return candidate != default;

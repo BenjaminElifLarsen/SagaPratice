@@ -1,8 +1,6 @@
 using Common.Other.Converters;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using PeopleDomain.AL.API;
 using VehicleDomain.AL.API;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +18,7 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 VehicleApiServices.Add(builder.Services);
+PeopleApiServices.Add(builder.Services);
 
 var app = builder.Build();
 
@@ -29,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     VehicleApiServices.Seed(app.Services);
+    PeopleApiServices.Seed(app.Services);
 }
 
 app.UseHttpsRedirection();

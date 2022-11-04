@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace PeopleDomain.DL.CQRS.Queries.ReadModels;
-internal class GenderIdValidation : BaseReadModel
+internal record GenderIdValidation : BaseReadModel
 {
     public int Id { get; private set; }
 

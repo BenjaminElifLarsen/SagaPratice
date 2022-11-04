@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.AL.Services.VehicleInformations.Queries.GetDetails;
-public class VehicleInformationDetails : BaseReadModel
+public record VehicleInformationDetails : BaseReadModel
 {
     public int Id { get; private set; }
     public string Name { get; private set; }

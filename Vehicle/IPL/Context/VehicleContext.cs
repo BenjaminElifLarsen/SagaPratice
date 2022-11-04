@@ -1,8 +1,6 @@
 ﻿using BaseRepository;
 using Common.RepositoryPattern;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
@@ -24,7 +22,6 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     public HashSet<Operator> People => _people;
 
     private DateOnly _date;
-
 
     IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
@@ -147,7 +144,6 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     {
         RemoveFromCollection(_licenseTypes, entities);
     }
-
 
     private static void AddToCollection<T>(HashSet<T> collection, IEnumerable<T> entities, Expression<Func<T,bool>> predicate)
     {

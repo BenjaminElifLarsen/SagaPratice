@@ -15,6 +15,11 @@ internal class IsPersonBirthNotToLate : ISpecification<Person>, ISpecification<H
         throw new NotImplementedException();
     }
 
+    private bool IsSatisfiedBy(DateTime candidate)
+    {
+        return IsSatisfiedBy(new DateOnly(candidate.Year, candidate.Month, candidate.Day));
+    }
+
     private bool IsSatisfiedBy(DateOnly candidate)
     {
         var now = DateTime.Now;

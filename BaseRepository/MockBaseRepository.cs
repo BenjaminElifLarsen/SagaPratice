@@ -67,13 +67,13 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
         {
             throw new Exception("Entity in unknown state.");
         }
-        foreach(var entity in _entities.Where(x => x.State == States.Remove && x is ISoftDeleteDate e && e.DeletedFrom is not null))
-        {
-            entity.State = States.Update;
-        }
-        if (_entities.Where(x => x.State == States.Remove && x is ISoftDeleteDate e && e.DeletedFrom is null).Any())
+        if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
         {
             throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
+        }
+        foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
+        {
+            entity.State = States.Update;
         }
         _context.Add(_entities.Where(x => x.State == States.Add).Select(x => x.Entity));
         _context.Update(_entities.Where(x => x.State == States.Update).Select(x => x.Entity));

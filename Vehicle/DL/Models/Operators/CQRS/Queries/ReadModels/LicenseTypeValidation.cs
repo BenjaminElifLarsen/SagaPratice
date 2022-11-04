@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
-internal class LicenseTypeAgeValidation : BaseReadModel
+internal record LicenseTypeAgeValidation : BaseReadModel
 {
     public int Id { get; private set; }
     public byte YearRequirement { get; private set; }

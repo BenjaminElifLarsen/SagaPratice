@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.AL.Services.Vehicles.Queries.GetList;
-public class VehicleListItem : BaseReadModel
+public record VehicleListItem : BaseReadModel
 {
     public int Id { get; private set; }
     public string SerialNumber { get; private set; }

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
-public class OperatorDetails : BaseReadModel
+public record OperatorDetails : BaseReadModel
 {
     public int Id { get; private set; }
     public DateOnly Birthday { get; private set; }
@@ -17,7 +17,7 @@ public class OperatorDetails : BaseReadModel
     }
 }
 
-public class OperatorLicenseDetails : BaseReadModel
+public record OperatorLicenseDetails : BaseReadModel
 {
     public DateOnly Arquired { get; private set; }
     public DateOnly? LastRenewed { get; private set; }

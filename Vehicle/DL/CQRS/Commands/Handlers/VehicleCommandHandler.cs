@@ -82,7 +82,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData(result.Errors);
         }
         _operatorRepository.Create(result.Data);
-        _operatorRepository.Save();
+        try
+        {
+            _operatorRepository.Save();
+        }
+        catch (Exception e)
+        {
+            return new InvalidResultNoData(e.Message);
+        }
         return new SuccessResultNoData();
     }
 
@@ -107,7 +114,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData(result.Errors);
         }
         _operatorRepository.Create(result.Data);
-        _operatorRepository.Save();
+        try
+        {
+            _operatorRepository.Save();
+        }
+        catch (Exception e)
+        {
+            return new InvalidResultNoData(e.Message);
+        }
         return new SuccessResultNoData();
     }
 

@@ -32,7 +32,14 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             return new InvalidResultNoData(result.Errors);
         }
         _personRepository.Hire(result.Data);
-        _personRepository.Save();
+        try
+        {
+            _personRepository.Save();
+        }
+        catch (Exception e)
+        {
+            return new InvalidResultNoData(e.Message);
+        }
         return new SuccessResultNoData();
     } //maybe move all of the handler implementation code into domain services, one for each aggregate roots
 

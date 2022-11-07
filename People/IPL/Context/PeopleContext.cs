@@ -89,7 +89,7 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
     {
         if (collection.AsQueryable().Any(predicate))
         {
-            throw new Exception("Entity already present.");
+            throw new Exception("Entity could not be added.");
         }
         foreach (var entity in entities)
         {

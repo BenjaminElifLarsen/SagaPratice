@@ -171,7 +171,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             /*
              * how to handle soft delete regarding vehicles and licensetypes
              * after all the operator id should be 'removed' as the operator has been softdeleted, but if the operator is restored should the ids in licensetypes and vehicles do that too?
-             * Could remove the operator id from licenseType and vehicle and if operator is restored recreate the relations. Then again, should a restored operator still have the same access?
+             * Could remove the operator id from licenseType and vehicle and if operator is restored recreate the relations. Then again, should a restored operator still have the same access? What if a vehicle has been removed in the between time?
              */
             _operatorRepository.Update(entity);
             _operatorRepository.Save();

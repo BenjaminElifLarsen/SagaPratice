@@ -58,7 +58,7 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 
     public async Task<bool> IsUniqueAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return !await Task.Run(() => _context.GetAll.AsQueryable().Any(predicate));
+        return await Task.Run(() => !_context.GetAll.AsQueryable().Any(predicate));
     }
 
     public int SaveChanges()

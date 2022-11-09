@@ -234,7 +234,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(BuyVehicleWithOperators command)
-    { //trigger event VehicleAdded
+    { //trigger event VehicleAdded. Need to information operator that they can use this vehicle.
         var operators = _operatorRepository.AllAsync(new OperatorIdQuery()).Result;
         var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
         var valiationData = new VehicleValidationWithOperatorsData(operators, vehicleInformations);

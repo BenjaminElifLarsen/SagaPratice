@@ -1,19 +1,18 @@
 ﻿using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
-using System.Linq.Expressions;
 
 namespace PeopleDomain.DL.Model;
-internal class Gender : IAggregateRoot
+public class Gender : IAggregateRoot
 {
     private int _genderId;
     private string _verbSubject;
     private string _verbObject;
     private readonly HashSet<IdReference> _people;
 
-    public int GenderId { get => _genderId; private set => _genderId = value; }
-    public string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
-    public string VerbObject { get => _verbObject; private set => _verbObject = value; }
-    public IEnumerable<IdReference> People { get => _people; }
+    internal int GenderId { get => _genderId; private set => _genderId = value; }
+    internal string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
+    internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
+    internal IEnumerable<IdReference> People { get => _people; }
     //what is the term for things like her/him/they and the term for she/him???
 
     private Gender()
@@ -23,7 +22,7 @@ internal class Gender : IAggregateRoot
 
     internal Gender(string subject, string @object)
     {
-        _genderId = new Random(int.MaxValue).Next();
+        _genderId = RandomValue.GetValue;
         _people = new();
         _verbSubject = subject;
         _verbObject = @object;
@@ -34,7 +33,7 @@ internal class Gender : IAggregateRoot
     //    _verbSubject = name;
     //}
 
-    public bool AddPerson(IdReference person)
+    internal bool AddPerson(IdReference person)
     {
         return _people.Add(person);
     }

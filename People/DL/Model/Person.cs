@@ -27,7 +27,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
 
     internal Person(string firstName, string lastName, DateOnly birth, IdReference gender)
     {
-        _personId = new Random(int.MaxValue).Next();
+        _personId = RandomValue.GetValue;
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;

@@ -1,5 +1,7 @@
-﻿namespace BaseRepository;
-public interface IContext<TEntity>
+﻿using Common.RepositoryPattern;
+
+namespace BaseRepository;
+public interface IContext<TEntity> where TEntity : IAggregateRoot
 {
     public void Add(IEnumerable<TEntity> entities);
     public void Update(IEnumerable<TEntity> entities);

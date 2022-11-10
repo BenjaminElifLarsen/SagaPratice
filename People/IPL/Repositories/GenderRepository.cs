@@ -31,4 +31,9 @@ internal class GenderRepository : IGenderRepository
     {
         _baseRepository.SaveChanges();
     }
+
+    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.FindByPredicateAsync(x => x.GenderId == id, query);
+    }
 }

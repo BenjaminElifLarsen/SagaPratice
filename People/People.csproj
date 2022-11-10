@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Folder Include="AL\CQRS\" />
-    <Folder Include="AL\Services\Genders\Commands\" />
+    <Folder Include="DL\Events\Integration\" />
   </ItemGroup>
 
   <ItemGroup>

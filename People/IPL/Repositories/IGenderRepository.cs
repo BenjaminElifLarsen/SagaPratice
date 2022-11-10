@@ -2,10 +2,11 @@
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.IPL.Repositories;
-internal interface IGenderRepository
+public interface IGenderRepository
 {
     void Recognise(Gender entity);
     void Unrecognise(Gender entity);
     void Save();
     Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel;
+    Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel;
 }

@@ -34,6 +34,16 @@ internal class GenderRepository : IGenderRepository
 
     public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.FindByPredicateAsync(x => x.GenderId == id, query);
+        return await _baseRepository.FindByPredicateAsync(x => x == id, query);
+    }
+
+    public void Update(Gender entity)
+    {
+        _baseRepository.Update(entity);
+    }
+
+    public async Task<Gender> GetForOperationAsync(int id)
+    {
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }
 }

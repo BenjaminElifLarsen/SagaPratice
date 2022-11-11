@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonHired : IDomainEvent<PersonData>
+public class PersonHired : IDomainEvent<PersonHiredData>
 {
     public string AggregateType { get; private set; }
 
@@ -14,7 +14,7 @@ public class PersonHired : IDomainEvent<PersonData>
 
     public long TimeStampRecorded { get; private set; }
 
-    public PersonData Data { get; private set; }
+    public PersonHiredData Data { get; private set; }
 
     internal PersonHired(Person aggregate)
     { //instead of PersonData data, could just create an instance out of Person.
@@ -22,21 +22,22 @@ public class PersonHired : IDomainEvent<PersonData>
         //mayhaps factory or handler should assign an id and validate it against the context?
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
-        EventType = "Person-Hired";
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggregate.PersonId,aggregate.Gender.Id);
+        Data = new(aggregate.PersonId, aggregate.Gender.Id);
     }
 }
 
 /// <summary>
 /// Model used to transmit important data for use inside of the domain. Not all receivers may use all data.
 /// </summary>
-public class PersonData
+public class PersonHiredData
 {
-    public int PersonId { get; set; }
-    public int GenderId { get; set; }
+    public int PersonId { get; private set; }
+    public int GenderId { get; private set; }
 
-    public PersonData(int personId, int genderId)
+    public PersonHiredData(int personId, int genderId)
     {
         PersonId = personId;
         GenderId = genderId;

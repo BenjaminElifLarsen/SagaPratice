@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1FD2E69-0AA9-4117-B849-BD0420F6A5A4}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		DomainLayers.txt = DomainLayers.txt
 		Observations.txt = Observations.txt
 		README.md = README.md
 		ToDo.txt = ToDo.txt
@@ -23,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vehicle", "Vehicle\Vehicle.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{3E0770EE-A475-4C9E-82F2-77A83B5F5E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security", "Security\Security.csproj", "{AF818DB5-98B8-4FCC-A6AD-D3C7FED05457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security", "Security\Security.csproj", "{AF818DB5-98B8-4FCC-A6AD-D3C7FED05457}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;
 internal class LicenseType : IAggregateRoot, ISoftDeleteDate
@@ -11,7 +12,8 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     private DateOnly _canBeIssuedFrom; //need to be put into ctor and validation, allow update as long time current date is not same or later as its value.
     private readonly HashSet<IdReference> _vehicleInformations;
     //cannot contain a collection of licenses, since License is not an aggregate root, could hold a collection of operators who got the required license.
-    
+    private HashSet<IDomainEvent> _events;
+
     internal int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
     internal string Type { get => _type; private set => _type = value; }
     internal byte RenewPeriodInYears { get => _renewPeriodInYears; private set => _renewPeriodInYears = value; }
@@ -20,9 +22,11 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     public DateOnly CanBeIssuedFrom { get => _canBeIssuedFrom; private set => _canBeIssuedFrom = value; } //can only be updated if there is no licenses that use it.
     public IEnumerable<IdReference> VehicleInformations => _vehicleInformations;
 
+    public IEnumerable<IDomainEvent> Evnets => _events;
+
     private LicenseType()
     {
-
+        _events = new();
     }
 
     internal LicenseType( string type, byte renewPeriodInYears, byte ageRequirementInYears)
@@ -32,6 +36,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
         _renewPeriodInYears = renewPeriodInYears;
         _ageRequirementInYears = ageRequirementInYears;
         _vehicleInformations = new();
+        _events = new();
     }
 
     public void Delete(DateOnly? dateTime)
@@ -42,5 +47,17 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     public bool AddVehicleInformation(IdReference vehicleInformation)
     {
         return _vehicleInformations.Add(vehicleInformation);
+    }
+
+    public void AddDomainEvent(IDomainEvent eventItem)
+    {
+        if (_licenseTypeId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Add(eventItem);
+    }
+
+    public void RemoveDomainEvent(IDomainEvent eventItem)
+    {
+        if (_licenseTypeId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Remove(eventItem);
     }
 }

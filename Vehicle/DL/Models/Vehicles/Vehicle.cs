@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 
@@ -15,6 +16,7 @@ public class Vehicle : IAggregateRoot
     private readonly HashSet<IdReference> _operators;
     private bool _inUse;
     private SerielNumber _serielNumber; //ensure uniqueness
+    private readonly HashSet<IDomainEvent> _events;
 
     internal int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
     internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
@@ -24,9 +26,11 @@ public class Vehicle : IAggregateRoot
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
+    public IEnumerable<IDomainEvent> Evnets => _events;
+
     private Vehicle()
     {
-
+        _events = new();
     }
 
     internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber)
@@ -37,6 +41,7 @@ public class Vehicle : IAggregateRoot
         _vehicleInformation = vehicleInformation;
         _operators = new();
         SerielNumber = serielNumber;
+        _events = new();
     }
 
     internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
@@ -110,5 +115,17 @@ public class Vehicle : IAggregateRoot
     internal void ReplaceSerielNumber(SerielNumber serielNumber)
     {
         _serielNumber = serielNumber;
+    }
+
+    public void AddDomainEvent(IDomainEvent eventItem)
+    {
+        if (_vehicleId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Add(eventItem);
+    }
+
+    public void RemoveDomainEvent(IDomainEvent eventItem)
+    {
+        if (_vehicleId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Remove(eventItem);
     }
 }

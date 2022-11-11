@@ -4,12 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using VehicleDomain.AL.Services.Operators;
 using VehicleDomain.AL.Services.Vehicles;
 using VehicleDomain.AL.Services.VehicleInformations;
-using VehicleDomain.DL.CQRS.Commands.Handlers;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.IPL.Context;
+using VehicleDomain.AL.CQRS.Commands.Handlers;
 
 namespace VehicleDomain.AL.API;
 

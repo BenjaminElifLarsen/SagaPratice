@@ -1,7 +1,8 @@
 ﻿using Common.CQRS.Commands;
+using PeopleDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.DL.CQRS.Commands.Handlers;
-public interface IPeopleCommandHandler : 
+namespace PeopleDomain.AL.CQRS.Commands.Handlers;
+public interface IPeopleCommandHandler :
     ICommandHandler<HirePersonFromUser>,
     ICommandHandler<FirePersonFromUser>,
     ICommandHandler<ChangePersonalInformationFromUser>,

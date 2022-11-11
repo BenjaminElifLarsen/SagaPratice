@@ -16,7 +16,7 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Queries;
 using VehicleDomain.DL.Models.Vehicles.Validation;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 
-namespace VehicleDomain.DL.CQRS.Commands.Handlers;
+namespace VehicleDomain.AL.CQRS.Commands.Handlers;
 internal class VehicleCommandHandler : IVehicleCommandHandler
 {
     private readonly IVehicleFactory _vehicleFactory;
@@ -31,8 +31,8 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     private readonly IVehicleInformationFactory _vehicleInformationFactory;
     private readonly IVehicleInformationRepository _vehicleInformationRepository;
 
-    public VehicleCommandHandler(IOperatorFactory operatorFactory, IOperatorRepository operatorRepository, 
-        ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository, 
+    public VehicleCommandHandler(IOperatorFactory operatorFactory, IOperatorRepository operatorRepository,
+        ILicenseTypeFactory licenseTypeFactory, ILicenseTypeRepository licenseTypeRepository,
         IVehicleInformationFactory vehicleInformationFactory, IVehicleInformationRepository vehicleInformationRepository,
         IVehicleFactory vehicleFactory, IVehicleRepository vehicleRepository)
     {
@@ -51,18 +51,18 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     { //make a valdiation check, after this (if successfull) the user should use a query to get the result
         //this method could be called by a system designed to automatically ensure everyones licenses are up to date.
         var @operator = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
-        if(@operator is null)
+        if (@operator is null)
         {
             return new InvalidResultNoData("Operator was not found.");
         }
         var license = @operator.GetLicense(command.TypeId);
-        if(license is null)
+        if (license is null)
         {
             return new InvalidResultNoData($"No license with type of {command.TypeId} was found.");
         }
         var oldValue = license.Expired;
         license.CheckIfExpired();
-        if(oldValue != license.Expired)
+        if (oldValue != license.Expired)
         {
             _operatorRepository.Update(@operator);
             _operatorRepository.Save();
@@ -77,7 +77,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData("Operator already exist.");
         }
         var result = _operatorFactory.CreateOperator(command);
-        if(result is InvalidResult<Operator>)
+        if (result is InvalidResult<Operator>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -103,7 +103,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var licenseTypeIds = _licenseTypeRepository.AllAsync(new LicenseTypeIdQuery()).Result;
         OperatorValidationData data = new(licenseTypeAges);
         var dictionary = new Dictionary<int, PersonCreationLicenseValidationData.LicenseValidationData>();
-        foreach(var licenseType in licenseTypeAges)
+        foreach (var licenseType in licenseTypeAges)
         {
             dictionary.Add(licenseType.Id, new PersonCreationLicenseValidationData.LicenseValidationData(licenseType));
         }
@@ -132,11 +132,11 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"LicenseType with id of {command.LicenseType} is invalid.");
         }
         var @operator = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
-        if(@operator is null)
+        if (@operator is null)
         {
             return new InvalidResultNoData("Operator was not found.");
         }
-        if(@operator.AddLicense(new(command.LicenseType), command.Arquired))
+        if (@operator.AddLicense(new(command.LicenseType), command.Arquired))
         {
             return new InvalidResultNoData($"A license with type of {command.LicenseType} is already present.");
         }
@@ -152,7 +152,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"License type with of id {command.Type} already exist.");
         }
         var result = _licenseTypeFactory.CreateLicenseType(command); //consider moving all this stuff into a domain model (or multiple domain models)
-        if(result is InvalidResult<LicenseType>)
+        if (result is InvalidResult<LicenseType>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -164,7 +164,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(RemoveOperatorFromSystem command)
     { //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
         var entity = _operatorRepository.GetForOperationAsync(command.Id).Result;
-        if(entity is not null)
+        if (entity is not null)
         {
             //trigger event
             entity.Delete();
@@ -187,7 +187,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(ObsoleteLicenseTypeFromUser command)
     { //transmit event, ObsoletedLicenseType, that trigger expiring driving licenses that people may have that use this specific type id.
         var entity = _licenseTypeRepository.GetForOperationAsync(command.Id).Result;
-        if(entity is not null)
+        if (entity is not null)
         {
             entity.Delete(command.MomentOfDeletion);
             _licenseTypeRepository.Update(entity);
@@ -210,7 +210,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var data = _licenseTypeRepository.AllAsync(new LicenseTypeForVehicleInformationValidationQuery()).Result;
         var valdationData = new VehicleInformationValidationData(data);
         var result = _vehicleInformationFactory.CreateVehicleInformation(command, valdationData);
-        if(result is InvalidResult<VehicleInformation>)
+        if (result is InvalidResult<VehicleInformation>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -239,7 +239,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var vehicleInformations = _vehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
         var valiationData = new VehicleValidationWithOperatorsData(operators, vehicleInformations);
         var result = _vehicleFactory.CreateVehicle(command, valiationData);
-        if(result is InvalidResult<Vehicle>)
+        if (result is InvalidResult<Vehicle>)
         {
             return new InvalidResultNoData(result.Errors);
         }
@@ -251,7 +251,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(AddDistanceToVehicleDistance command)
     {
         var entity = _vehicleRepository.GetForOperationAsync(command.Id).Result;
-        if(entity is null)
+        if (entity is null)
         {
             return new InvalidResultNoData($"");
         }
@@ -302,7 +302,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
-        if(entity is null)
+        if (entity is null)
         {
             return new InvalidResultNoData($"");
         }
@@ -318,7 +318,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         var entity = _operatorRepository.GetForOperationAsync(command.OperatorId).Result;
-        if(entity is null)
+        if (entity is null)
         {
             return new InvalidResultNoData($"");
         }
@@ -367,7 +367,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(StartOperatingVehicle command)
     {
         var entity = _vehicleRepository.GetForOperationAsync(command.VehicleId).Result;
-        if(entity is null)
+        if (entity is null)
         {
             return new InvalidResultNoData($"");
         }

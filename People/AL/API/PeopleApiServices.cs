@@ -1,9 +1,10 @@
 ﻿using BaseRepository;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
+using PeopleDomain.AL.CQRS.Commands.Handlers;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
-using PeopleDomain.DL.CQRS.Commands.Handlers;
+using PeopleDomain.DL.Events.Domain;
 using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Model;
 using PeopleDomain.IPL.Context;
@@ -24,6 +25,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
         services.AddScoped<IPeopleService, PeopleService>();
         services.AddScoped<IGenderService, GenderService>();
+        services.AddScoped<IPersonEventPublisher, PersonEventPublisher>();
     }
 
     public static void Seed(IServiceProvider provider)

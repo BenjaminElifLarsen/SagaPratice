@@ -4,7 +4,7 @@ using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
-namespace VehicleDomain.DL.CQRS.Commands.Handlers;
+namespace VehicleDomain.AL.CQRS.Commands.Handlers;
 public interface IVehicleCommandHandler :
     ICommandHandler<ValidateDriverLicenseStatus>,
     ICommandHandler<AddOperatorNoLicenseFromSystem>,

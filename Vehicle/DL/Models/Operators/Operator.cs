@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 using Common.SpecificationPattern.Composite.Extensions;
 using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
@@ -11,7 +12,8 @@ public class Operator : IAggregateRoot, ISoftDelete
     private DateOnly _birth;
     private readonly HashSet<License> _licenses;
     private readonly HashSet<IdReference> _vehicles;
-    private bool _deleted; 
+    private bool _deleted;
+    private readonly HashSet<IDomainEvent> _events;
 
     internal int OperatorId { get => _operatorId; private set => _operatorId = value; }
 
@@ -22,9 +24,11 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
+    public IEnumerable<IDomainEvent> Evnets => _events;
+
     private Operator()
     {
-
+        _events = new();
     }
 
     internal Operator(int operatorId, DateOnly birth)
@@ -33,6 +37,7 @@ public class Operator : IAggregateRoot, ISoftDelete
         _birth = birth;
         _licenses = new();
         _vehicles = new();
+        _events = new();
     }
 
     internal int UpdateBirth(DateTime birth)
@@ -98,5 +103,15 @@ public class Operator : IAggregateRoot, ISoftDelete
         _deleted = true;
     }
 
+    public void AddDomainEvent(IDomainEvent eventItem)
+    {
+        if (_operatorId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Add(eventItem);
+    }
 
+    public void RemoveDomainEvent(IDomainEvent eventItem)
+    {
+        if (_operatorId == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Remove(eventItem);
+    }
 }

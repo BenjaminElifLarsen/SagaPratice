@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Model;
@@ -8,16 +9,20 @@ public class Gender : IAggregateRoot
     private string _verbSubject;
     private string _verbObject;
     private readonly HashSet<IdReference> _people;
+    private readonly HashSet<IDomainEvent> _events;
 
     internal int GenderId { get => _genderId; private set => _genderId = value; }
     internal string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
     internal IEnumerable<IdReference> People { get => _people; }
+
+    public IEnumerable<IDomainEvent> Evnets => _events;
+
     //what is the term for things like her/him/they and the term for she/him???
 
     private Gender()
     {
-
+        _events = new();
     }
 
     internal Gender(string subject, string @object)
@@ -26,6 +31,7 @@ public class Gender : IAggregateRoot
         _people = new();
         _verbSubject = subject;
         _verbObject = @object;
+        _events = new();
     }
 
     //public void UpdateName(string name)
@@ -36,6 +42,18 @@ public class Gender : IAggregateRoot
     internal bool AddPerson(IdReference person)
     {
         return _people.Add(person);
+    }
+
+    public void AddDomainEvent(IDomainEvent eventItem)
+    {
+        if (this == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Add(eventItem);
+    }
+
+    public void RemoveDomainEvent(IDomainEvent eventItem)
+    {
+        if (this == eventItem.AggregateId) //should cause an expection if this fails
+            _events.Add(eventItem);
     }
 
     //public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)

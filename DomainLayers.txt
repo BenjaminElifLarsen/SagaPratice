@@ -1,0 +1,12 @@
+AL Services    
+^            ^
+Domain Layer |
+v            |
+IPL
+
+
+Domain layer does not references any other layer.
+IPL does only reference the application layer.
+AL references both Domain Layer and IPL.
+
+Command handler currently references the IPL, move it into the AL 

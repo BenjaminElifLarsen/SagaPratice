@@ -1,4 +1,4 @@
-﻿using VehicleDomain.DL.CQRS.Commands.Handlers;
+﻿using VehicleDomain.AL.CQRS.Commands.Handlers;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.AL.Services.Vehicles;

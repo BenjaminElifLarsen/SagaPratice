@@ -1,4 +1,4 @@
-﻿using PeopleDomain.DL.Events.Domain;
+﻿using Common.Events.Domain;
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.AL.Events.DomainEventHandlers;

@@ -8,4 +8,4 @@ public interface IPeopleCommandHandler :
     ICommandHandler<ChangePersonalInformationFromUser>,
     ICommandHandler<RecogniseGender>
 {
-} //maybe move this and its implementation into AL
+}

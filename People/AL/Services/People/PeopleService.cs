@@ -1,5 +1,5 @@
-﻿using PeopleDomain.AL.CQRS.Commands.Handlers;
-using PeopleDomain.DL.Events.Domain;
+﻿using Common.Events.Domain;
+using PeopleDomain.AL.CQRS.Commands.Handlers;
 using PeopleDomain.IPL.Repositories;
 
 namespace PeopleDomain.AL.Services.People;

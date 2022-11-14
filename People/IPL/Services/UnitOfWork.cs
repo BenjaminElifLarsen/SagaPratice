@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 using PeopleDomain.DL.Events.Domain;
 using PeopleDomain.IPL.Repositories;
 
@@ -8,16 +9,18 @@ internal class UnitOfWork : IUnitOfWork
     private readonly IGenderRepository _genderRepository;
     private readonly IPersonRepository _personRepository;
     private readonly IDomainEventBus _personEventPublisher;
+    private readonly DomainEventRegistry _domainEventRegistry;
 
     public IGenderRepository GenderRepository => _genderRepository;
 
     public IPersonRepository PersonRepository => _personRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IDomainEventBus personEventPublisher)
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IDomainEventBus personEventPublisher, DomainEventRegistry domainEventRegistry)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;
         _personEventPublisher = personEventPublisher;
+        _domainEventRegistry = domainEventRegistry;
     }
 
     public void Save() //does not work by having variables of each context<T> as they are different than those in the repositories
@@ -34,5 +37,6 @@ internal class UnitOfWork : IUnitOfWork
             }
         }
         _personRepository.Save(); //this will save for the entire context, change how this is done.
+        _domainEventRegistry.UnregistrateEventHandlers();
     }
 }

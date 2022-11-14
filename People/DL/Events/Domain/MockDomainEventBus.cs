@@ -2,7 +2,8 @@
 
 namespace PeopleDomain.DL.Events.Domain;
 internal class MockDomainEventBus : IDomainEventBus //when moving the interface to Common rename to IBaseBus or something like that
-{ //works kind as a bus currently, a fake bus, but kind of following the pricipels.
+{ //works kind as a bus currently, a fake bus, but kind of following the pricipels, but does not permit comminucation between different modules.
+	//the integration event bus would be closer to an actually bus as it would handle communication over different modules.
     private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routes;
 
 	public MockDomainEventBus()
@@ -20,7 +21,7 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
 			_routes.Add(typeof(T), handlers);
 		}
 
-		handlers.Add(x => handler((T)x));
+		handlers.Add(x => handler((T)x)); //should check if the handler is already present before adding.
 	}
 
 	public void Publish<T>(T @event) where T : IDomainEvent

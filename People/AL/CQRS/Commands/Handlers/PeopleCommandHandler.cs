@@ -1,4 +1,5 @@
-﻿using Common.ResultPattern;
+﻿using Common.Events.Domain;
+using Common.ResultPattern;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.CQRS.Queries;
 using PeopleDomain.DL.Events.Domain;
@@ -12,14 +13,13 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
 {
     private readonly IPersonFactory _personFactory;
     private readonly IGenderFactory _genderFactory;
-    private readonly IDomainEventBus _personEventPublisher;
+    //private readonly IDomainEventBus _personEventPublisher;
     private readonly IUnitOfWork _unitOfWork;
 
-    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IDomainEventBus personEventPublisher, IUnitOfWork unitOfWork)
+    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IDomainEventBus domainEventBus, IUnitOfWork unitOfWork)
     {
         _personFactory = personFactory;
         _genderFactory = genderFactory;
-        _personEventPublisher = personEventPublisher;
         _unitOfWork = unitOfWork;
     }
 
@@ -35,7 +35,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         _unitOfWork.PersonRepository.Hire(result.Data);
         try
         { //this method knows what would be observing the event, which does not make sense.
-            _personEventPublisher.RegisterHandler<PersonHired>(AddPersonToGender);
+            //_personEventPublisher.RegisterHandler<PersonHired>(AddPersonToGender);
             result.Data.AddDomainEvent(new PersonHired(result.Data));
            // _personEventPublisher.Hire(result.Data);
             //result.Data.AddDomainEvent(new PersonHired(result.Data));
@@ -47,7 +47,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         }
         finally
         {
-            _personEventPublisher.UnregisterHandler<PersonHired>(AddPersonToGender); //if given PersonFired no error occur, look into how to solve this.
+            //_personEventPublisher.UnregisterHandler<PersonHired>(AddPersonToGender); 
         }
         return new SuccessResultNoData();
     } //maybe move all of the handler implementation code into domain services, one for each aggregate roots
@@ -58,11 +58,11 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         if (entity is not null)
         {
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
-            _personEventPublisher.RegisterHandler<PersonFired>(RemovePersomFromGender); //figure out a better way to (un)registrate handlers
+            //_personEventPublisher.RegisterHandler<PersonFired>(RemovePersomFromGender); //figure out a better way to (un)registrate handlers
             entity.AddDomainEvent(new PersonFired(entity)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity);
             _unitOfWork.Save();
-            _personEventPublisher.UnregisterHandler<PersonFired>(RemovePersomFromGender);
+            //_personEventPublisher.UnregisterHandler<PersonFired>(RemovePersomFromGender);
         }
         return new SuccessResultNoData();
     }
@@ -90,42 +90,5 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         _unitOfWork.GenderRepository.Recognise(result.Data);
         _unitOfWork.Save();
         return new SuccessResultNoData();
-    }
-
-    private void AddPersonToGender(PersonHired e)
-    {
-        Handle(new AddPersonToGender(e.Data.PersonId, e.Data.GenderId));
-    }
-
-    private Result Handle(AddPersonToGender command)
-    { //cannot send result back this way, this code should not fail, but not to happy about this design as it currently stand, here, AddPersonToGender, and Handle(HirePersonFromUser command). 
-        //consider having adding a unit of work for saving in all repository in the bounded context at ones. Would require rewritting how the mock context work (then again it is only for testing, so if it is not fullly correct is fine enough).
-        //there should not be any erros anyway given the simplicity of the domain models and validation.
-        //maybe move the event creation and raising over to the ipl save as plenty of sources states that the save() could trigger any events before actually saving the data. This save would be the one in the unit of work.
-        var gender = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result;
-        if(gender is null)
-        {
-            //cause an error that will prevent the saving of person. Could modify the event args to have a collection of responses
-        }
-        gender.AddPerson(new(command.PersonId));
-        _unitOfWork.GenderRepository.Update(gender);
-        return new SuccessResultNoData();
-    }
-
-    private void RemovePersomFromGender(PersonFired e)
-    {
-        Handle(new RemovePersonFromGender(e.Data.PersonId, e.Data.GenderId));
-    }
-
-    private Result Handle(RemovePersonFromGender command)
-    {
-        var gender = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result;
-        if (gender is null)
-        {
-            //cause an error that will prevent the saving of person. Could modify the event args to have a collection of responses
-        }
-        gender.RemovePerson(new(command.PersonId));
-        _unitOfWork.GenderRepository.Update(gender);
-        return new SuccessResultNoData();
-    }
+    }    
 }

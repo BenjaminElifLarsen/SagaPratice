@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.Events.Domain;
 using Common.Other;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ public class PeopleApiServices
         services.AddScoped<IGenderService, GenderService>();
         services.AddScoped<IDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<DomainEventRegistry>();
     }
 
     public static void Seed(IServiceProvider provider)

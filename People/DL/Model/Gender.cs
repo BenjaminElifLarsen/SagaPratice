@@ -44,6 +44,11 @@ public class Gender : IAggregateRoot
         return _people.Add(person);
     }
 
+    internal bool RemovePerson(IdReference person)
+    {
+        return _people.Remove(person);
+    }
+
     public void AddDomainEvent(IDomainEvent eventItem)
     {
         if (this == eventItem.AggregateId) //should cause an expection if this fails

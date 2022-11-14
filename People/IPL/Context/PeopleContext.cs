@@ -1,8 +1,7 @@
 ﻿using BaseRepository;
+using Common.Events.Domain;
 using Common.RepositoryPattern;
 using PeopleDomain.DL.Model;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace PeopleDomain.IPL.Context;
 internal class MockPeopleContext : IContext<Person>, IContext<Gender>
@@ -36,9 +35,14 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
 
     public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
 
-    IEnumerable<Gender> IContext<Gender>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Gender).Select(x => x as Gender).Where(Filtering<Gender>());
+    IEnumerable<Gender> IContext<Gender>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Gender).Select(x => x as Gender);//.Where(Filtering<Gender>());
 
-    IEnumerable<Person> IContext<Person>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Person).Select(x => x as Person).Where(Filtering<Person>());
+    IEnumerable<Person> IContext<Person>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Person).Select(x => x as Person);//.Where(Filtering<Person>());
+
+    public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
+
+
+    public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
 
     public MockPeopleContext()
     {
@@ -55,14 +59,27 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
 
     public void Update(IAggregateRoot root)
     {
-        _contextData.Add(new(root, States.Update));
+        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        if (entity is not null)
+        {
+            entity.State = States.Update;
+        }
+        //_contextData.Add(new(root, States.Update));
     }
 
     public void Remove(IAggregateRoot root)
     {
-        _contextData.Add(new(root,States.Remove));
+        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        if(entity is not null)
+        {
+            entity.State = States.Remove;
+        }
+        //_contextData.Add(new(root,States.Remove));
     }
 
+    public int SaveChanges() { 
+        return Save();
+    }
 
     public int Save()
     {
@@ -78,7 +95,7 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
         var entitiesToUpdate = _contextData.Where(x => x.State == States.Update).ToArray();
         for(int i = 0; i < entitiesToUpdate.Count(); i++)
         {
-            _contextData.RemoveWhere(x => x.Entity == entitiesToUpdate[i].Entity);
+            //_contextData.RemoveWhere(x => x.Entity == entitiesToUpdate[i].Entity && x.State == States.Tracked);
             entitiesToUpdate[i].State = States.Tracked;
         }
     }
@@ -97,7 +114,9 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
         var entitiesToRemove = _contextData.Where(x => x.State == States.Remove).Where(x => _contextData.Any(y => x.Entity == y.Entity)).ToArray();
         for(int i = 0; i < entitiesToRemove.Count(); i++)
         {
+            //_contextData.RemoveWhere(x => x.Entity == entitiesToRemove[i].Entity && x.State == States.Tracked);
             entitiesToRemove[i].State = States.Tracked;
         }
     }
+
 }

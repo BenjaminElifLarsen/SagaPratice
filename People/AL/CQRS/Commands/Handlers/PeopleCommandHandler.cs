@@ -12,10 +12,10 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
 {
     private readonly IPersonFactory _personFactory;
     private readonly IGenderFactory _genderFactory;
-    private readonly IPersonEventPublisher _personEventPublisher;
+    private readonly IDomainEventBus _personEventPublisher;
     private readonly IUnitOfWork _unitOfWork;
 
-    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IPersonEventPublisher personEventPublisher, IUnitOfWork unitOfWork)
+    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IDomainEventBus personEventPublisher, IUnitOfWork unitOfWork)
     {
         _personFactory = personFactory;
         _genderFactory = genderFactory;
@@ -58,8 +58,11 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         if (entity is not null)
         {
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
+            _personEventPublisher.RegisterHandler<PersonFired>(RemovePersomFromGender); //figure out a better way to (un)registrate handlers
+            entity.AddDomainEvent(new PersonFired(entity)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity);
             _unitOfWork.Save();
+            _personEventPublisher.UnregisterHandler<PersonFired>(RemovePersomFromGender);
         }
         return new SuccessResultNoData();
     }
@@ -105,6 +108,23 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             //cause an error that will prevent the saving of person. Could modify the event args to have a collection of responses
         }
         gender.AddPerson(new(command.PersonId));
+        _unitOfWork.GenderRepository.Update(gender);
+        return new SuccessResultNoData();
+    }
+
+    private void RemovePersomFromGender(PersonFired e)
+    {
+        Handle(new RemovePersonFromGender(e.Data.PersonId, e.Data.GenderId));
+    }
+
+    private Result Handle(RemovePersonFromGender command)
+    {
+        var gender = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result;
+        if (gender is null)
+        {
+            //cause an error that will prevent the saving of person. Could modify the event args to have a collection of responses
+        }
+        gender.RemovePerson(new(command.PersonId));
         _unitOfWork.GenderRepository.Update(gender);
         return new SuccessResultNoData();
     }

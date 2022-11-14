@@ -7,9 +7,9 @@ public partial class PeopleService : IPeopleService
 {
 	private readonly IPeopleCommandHandler _peopleCommandHandler;
 	private readonly IPersonRepository _personRepository;
-	private readonly IPersonEventPublisher _personEventPublisher;
+	private readonly IDomainEventBus _personEventPublisher;
 
-	public PeopleService(IPersonRepository personRepository, IPeopleCommandHandler peopleCommandHandler, IPersonEventPublisher personEventPublisher)
+	public PeopleService(IPersonRepository personRepository, IPeopleCommandHandler peopleCommandHandler, IDomainEventBus personEventPublisher)
 	{
 		_personRepository = personRepository;
 		_peopleCommandHandler = peopleCommandHandler;

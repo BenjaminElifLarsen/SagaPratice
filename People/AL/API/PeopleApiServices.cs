@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.Other;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
 using PeopleDomain.AL.CQRS.Commands.Handlers;
@@ -26,7 +27,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
         services.AddScoped<IPeopleService, PeopleService>();
         services.AddScoped<IGenderService, GenderService>();
-        services.AddScoped<IPersonEventPublisher, PersonEventPublisher>();
+        services.AddScoped<IDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 

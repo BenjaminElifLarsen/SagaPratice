@@ -1,11 +1,11 @@
 ﻿using Common.Events.Domain;
 
 namespace PeopleDomain.DL.Events.Domain;
-internal class PersonEventPublisher : IPersonEventPublisher //when moving the interface to Common rename to IBaseBus or something like that
+internal class MockDomainEventBus : IDomainEventBus //when moving the interface to Common rename to IBaseBus or something like that
 { //works kind as a bus currently, a fake bus, but kind of following the pricipels.
     private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routes;
 
-	public PersonEventPublisher()
+	public MockDomainEventBus()
 	{
 		_routes = new();
 	}
@@ -40,7 +40,14 @@ internal class PersonEventPublisher : IPersonEventPublisher //when moving the in
         List<Action<IDomainEvent>> handlers;
 
 		if (!_routes.TryGetValue(typeof(T), out handlers)) return;
-
-        handlers.Remove(x => handler((T)x));
+		var toRemove = handlers.SingleOrDefault(x => handler((T)x));
+		if(toRemove is not null)
+		{
+            handlers.Remove(toRemove);
+        }
     }
+
+	//~PersonEventPublisher(){
+	//	System.Diagnostics.Debug.WriteLine("test");
+	//}
 }

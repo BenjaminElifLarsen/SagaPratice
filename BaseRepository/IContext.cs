@@ -1,4 +1,5 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.Other;
+using Common.RepositoryPattern;
 
 namespace BaseRepository;
 public interface IContext<TEntity> where TEntity : IAggregateRoot

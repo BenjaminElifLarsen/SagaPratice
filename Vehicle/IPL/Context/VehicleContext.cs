@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.Events.Domain;
 using Common.RepositoryPattern;
 using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
@@ -51,6 +52,10 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAllTracked => throw new NotImplementedException();
 
     IEnumerable<Operator> IContext<Operator>.GetAllTracked => throw new NotImplementedException();
+
+    public IEnumerable<IAggregateRoot> AllTrackedEntities => throw new NotImplementedException();
+
+    public IEnumerable<IDomainEvent> AllTrackedEvents => throw new NotImplementedException();
 
     public MockVehicleContext()
     {
@@ -191,6 +196,11 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
     }
 
     public void Remove(IAggregateRoot root)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int SaveChanges()
     {
         throw new NotImplementedException();
     }

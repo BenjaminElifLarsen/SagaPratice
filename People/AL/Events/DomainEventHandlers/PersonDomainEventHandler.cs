@@ -4,9 +4,9 @@ using PeopleDomain.DL.Model;
 namespace PeopleDomain.AL.Events.DomainEventHandlers;
 internal class PersonDomainEventHandler : IPersonDomainEventHandler
 {
-    private readonly IPersonEventPublisher _personEventPublisher;
+    private readonly IDomainEventBus _personEventPublisher;
 
-    public PersonDomainEventHandler(IPersonEventPublisher personEventPublisher)
+    public PersonDomainEventHandler(IDomainEventBus personEventPublisher)
     {
         _personEventPublisher = personEventPublisher;
     }

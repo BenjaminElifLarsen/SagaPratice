@@ -17,9 +17,9 @@ internal class PersonRepository : IPersonRepository
         return await _baseRepository.AllAsync(query);
     }
 
-    public async Task<IEnumerable<Person>> AllForOperationsAsync()
+    public async Task<IEnumerable<Person>> GetTrackedAsync()
     {
-        return await _baseRepository.AllByPredicateForOperationAsync(x => true);
+        return await _baseRepository.AllTrackedEntities();
     }
 
     public async Task<bool> DoesPersonExist(int id)

@@ -24,7 +24,7 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     private Operator()
     {

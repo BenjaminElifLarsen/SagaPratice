@@ -22,7 +22,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     private Person()
     {

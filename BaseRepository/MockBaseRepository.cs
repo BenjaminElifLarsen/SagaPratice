@@ -6,10 +6,6 @@ namespace BaseRepository;
 
 public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot where TContext : IContext<TEntity>
 {
-    /// <summary>
-    /// The collection hold data not yet to be added to the context.
-    /// </summary>
-    private static readonly IList<EntityState<TEntity>> _entities = new List<EntityState<TEntity>>();
     private readonly TContext _context;
     public MockBaseRepository(TContext context)
     {
@@ -18,17 +14,17 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 
     public void Create(TEntity entity)
     {
-        _entities.Add(new(entity, States.Add));
+        _context.Add(entity);
     }
 
     public void Update(TEntity entity)
     {
-        _entities.Add(new(entity, States.Update));
+       _context.Update(entity);
     }
 
     public void Delete(TEntity entity)
     {
-        _entities.Add(new(entity, States.Remove)); //need to check if it is already in another state, same for the other methods. Also need to deal with children. In cases of 1/m-m references can permit the 'deleted' entity to be found.
+        _context.Remove(entity); //need to check if it is already in another state, same for the other methods. Also need to deal with children. In cases of 1/m-m references can permit the 'deleted' entity to be found.
     }
 
     public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
@@ -63,43 +59,44 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 
     public int SaveChanges()
     {
-        if (_entities.Any(x => x.State == States.Unknown))
-        {
-            throw new Exception("Entity in unknown state.");
-        }
-        if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
-        {
-            throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
-        }
-        foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
-        {
-            entity.State = States.Update;
-        }
-        _context.Add(_entities.Where(x => x.State == States.Add).Select(x => x.Entity));
-        _context.Update(_entities.Where(x => x.State == States.Update).Select(x => x.Entity));
-        _context.Remove(_entities.Where(x => x.State == States.Remove).Select(x => x.Entity));
-        int amount = _entities.Count;
-        _entities.Clear();
-        return amount;
+        //if (_entities.Any(x => x.State == States.Unknown))
+        //{
+        //    throw new Exception("Entity in unknown state.");
+        //}
+        //if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
+        //{
+        //    throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
+        //}
+        //foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
+        //{
+        //    entity.State = States.Update;
+        //}
+        return _context.Save();
     }
 
-    public record EntityState<T>
+    public Task<IEnumerable<TEntity>> AllTrackedEntities()
     {
-        public States State { get; set; }
-        public T Entity { get; set; }
-        public EntityState(T entity, States state)
-        {
-            Entity = entity;
-            State = state;
-        }
+        return Task.Run(() => _context.GetAllTracked);
     }
+}
 
-    public enum States
+public record EntityState<T>
+{
+    public States State { get; set; }
+    public T Entity { get; set; }
+    public EntityState(T entity, States state)
     {
-        Add = 1,
-        Update = 2,
-        Remove = 3,
-
-        Unknown = 0
+        Entity = entity;
+        State = state;
     }
+}
+
+public enum States
+{
+    Add = 1,
+    Update = 2,
+    Remove = 3,
+    Tracked = 4,
+
+    Unknown = 0
 }

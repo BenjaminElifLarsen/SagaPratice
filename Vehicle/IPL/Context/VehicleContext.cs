@@ -42,6 +42,16 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
 
     public bool Filter { get; set; }
 
+    public IEnumerable<IAggregateRoot> GetAllTrackedEntities => throw new NotImplementedException();
+
+    public IEnumerable<Vehicle> GetAllTracked => throw new NotImplementedException();
+
+    IEnumerable<LicenseType> IContext<LicenseType>.GetAllTracked => throw new NotImplementedException();
+
+    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAllTracked => throw new NotImplementedException();
+
+    IEnumerable<Operator> IContext<Operator>.GetAllTracked => throw new NotImplementedException();
+
     public MockVehicleContext()
     {
         var dateTime = DateTime.Now; //would be better to have a method that calculates and returns the current date as this could cause a problem if operated around midnight. 
@@ -165,4 +175,23 @@ internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IC
         }
     }
 
+    public int Save()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Add(IAggregateRoot root)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Update(IAggregateRoot root)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Remove(IAggregateRoot root)
+    {
+        throw new NotImplementedException();
+    }
 }

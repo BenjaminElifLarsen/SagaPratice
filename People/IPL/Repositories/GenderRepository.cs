@@ -47,8 +47,8 @@ internal class GenderRepository : IGenderRepository
         return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }
 
-    public async Task<IEnumerable<Gender>> AllForOperationsAsync()
+    public async Task<IEnumerable<Gender>> GetTrackedAsync()
     {
-        return await _baseRepository.AllByPredicateForOperationAsync(x => true);
+        return await _baseRepository.AllTrackedEntities();
     }
 }

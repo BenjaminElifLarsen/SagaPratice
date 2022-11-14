@@ -10,15 +10,17 @@ internal static class Seeder
 
         if (!peopleContext.Genders.Any())
         {
-            peopleContext.Genders.Add(g1);
-            peopleContext.Genders.Add(g2);
+            peopleContext.Add(g1);
+            peopleContext.Add(g2);
         }
 
         Person p1 = new(1,"Triss", "Nib", new(1956, 1, 2), new(g1.GenderId));
         if (!peopleContext.People.Any())
         {
-            peopleContext.People.Add(p1);
+            peopleContext.Add(p1);
             g1.AddPerson(new(p1.PersonId));
         }
+
+        peopleContext.Save();
     }
 }

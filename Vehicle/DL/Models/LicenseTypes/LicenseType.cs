@@ -22,7 +22,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     public DateOnly CanBeIssuedFrom { get => _canBeIssuedFrom; private set => _canBeIssuedFrom = value; } //can only be updated if there is no licenses that use it.
     public IEnumerable<IdReference> VehicleInformations => _vehicleInformations;
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     private LicenseType()
     {

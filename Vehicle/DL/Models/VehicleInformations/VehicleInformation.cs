@@ -17,7 +17,7 @@ public class VehicleInformation : IAggregateRoot
     internal byte MaxWheelAmount { get => _maxWheelAmount; private set => _maxWheelAmount = value; }
     internal IEnumerable<IdReference> Vehicles => _vehicles;
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     private VehicleInformation()
     { //it does not make sense to be able to update amount of wheeels after adding the entity, but what about name?

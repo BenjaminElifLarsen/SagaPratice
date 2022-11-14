@@ -26,7 +26,7 @@ public class Vehicle : IAggregateRoot
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     private Vehicle()
     {

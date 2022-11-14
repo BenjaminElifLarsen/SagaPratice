@@ -1,5 +1,8 @@
-﻿using Common.RepositoryPattern;
+﻿using BaseRepository;
+using Common.RepositoryPattern;
 using PeopleDomain.DL.Events.Domain;
+using PeopleDomain.DL.Model;
+using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
 
 namespace PeopleDomain.IPL.Services;
@@ -20,18 +23,18 @@ internal class UnitOfWork : IUnitOfWork
         _personEventPublisher = personEventPublisher;
     }
 
-    public void Save()
+    public void Save() //does not work by having variables of each context<T> as they are different than those in the repositories
     {
-        //trigger events and remove them
-        var roots = (_genderRepository.AllForOperationsAsync().Result as IEnumerable<IAggregateRoot>).Concat(_personRepository.AllForOperationsAsync().Result as IEnumerable<IAggregateRoot>);
-        foreach(var root in roots) //code above does not get the entities not yet saved. Will have to modify mock context and mock repository implementations
-        { //perhaps get this data from the context and yet to save via the context classes rather than each repository
-            foreach(var @event in root.Evnets) //in context class have a IAggregateRoot collection that all data are contained it. Methods to get specific doamin models, T, returns all instances that are of T
-            { 
-                _personEventPublisher.Publish(@event);
+        //would prefer to get the data via the context rather than this.
+        var roots = (_genderRepository.GetTrackedAsync().Result as IEnumerable<IAggregateRoot>).Concat(_personRepository.GetTrackedAsync().Result as IEnumerable<IAggregateRoot>).ToArray();
+        for(int i = 0; i < roots.Count(); i++)
+        { 
+            for(int n = 0; n < roots[i].Events.Count(); n++)
+            {
+                _personEventPublisher.Publish(roots[i].Events.ToArray()[n]);
+                roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
             }
         }
-        _genderRepository.Save(); //could change it to save over all repository, but it would require to rewrite the context and mock base repository
-        _personRepository.Save(); //e.g. moving the collection of unsaved entities over to the context. 
+        _personRepository.Save(); //this will save for the entire context, change how this is done.
     }
 }

@@ -16,7 +16,7 @@ public class Gender : IAggregateRoot
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
     internal IEnumerable<IdReference> People { get => _people; }
 
-    public IEnumerable<IDomainEvent> Evnets => _events;
+    public IEnumerable<IDomainEvent> Events => _events;
 
     //what is the term for things like her/him/they and the term for she/him???
 

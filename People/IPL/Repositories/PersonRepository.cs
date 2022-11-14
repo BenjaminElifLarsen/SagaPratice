@@ -17,6 +17,11 @@ internal class PersonRepository : IPersonRepository
         return await _baseRepository.AllAsync(query);
     }
 
+    public async Task<IEnumerable<Person>> AllForOperationsAsync()
+    {
+        return await _baseRepository.AllByPredicateForOperationAsync(x => true);
+    }
+
     public async Task<bool> DoesPersonExist(int id)
     {
         return !await _baseRepository.IsUniqueAsync(x => x == id);

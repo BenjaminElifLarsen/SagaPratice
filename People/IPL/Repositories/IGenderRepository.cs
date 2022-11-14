@@ -11,4 +11,5 @@ public interface IGenderRepository
     Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel;
     Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel;
     Task<Gender> GetForOperationAsync(int id);
+    Task<IEnumerable<Gender>> AllForOperationsAsync();
 }

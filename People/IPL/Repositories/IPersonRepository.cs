@@ -12,4 +12,5 @@ public interface IPersonRepository
     Task<Person> GetForOperationAsync(int id);
     public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel;
     public Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel;
+    Task<IEnumerable<Person>> AllForOperationsAsync();
 }

@@ -9,6 +9,7 @@ using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Model;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
+using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.API;
 public class PeopleApiServices
@@ -26,6 +27,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleService, PeopleService>();
         services.AddScoped<IGenderService, GenderService>();
         services.AddScoped<IPersonEventPublisher, PersonEventPublisher>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     public static void Seed(IServiceProvider provider)

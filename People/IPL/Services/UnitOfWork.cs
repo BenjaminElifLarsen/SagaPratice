@@ -25,8 +25,8 @@ internal class UnitOfWork : IUnitOfWork
         //trigger events and remove them
         var roots = (_genderRepository.AllForOperationsAsync().Result as IEnumerable<IAggregateRoot>).Concat(_personRepository.AllForOperationsAsync().Result as IEnumerable<IAggregateRoot>);
         foreach(var root in roots) //code above does not get the entities not yet saved. Will have to modify mock context and mock repository implementations
-        {
-            foreach(var @event in root.Evnets)
+        { //perhaps get this data from the context and yet to save via the context classes rather than each repository
+            foreach(var @event in root.Evnets) //in context class have a IAggregateRoot collection that all data are contained it. Methods to get specific doamin models, T, returns all instances that are of T
             { 
                 _personEventPublisher.Publish(@event);
             }

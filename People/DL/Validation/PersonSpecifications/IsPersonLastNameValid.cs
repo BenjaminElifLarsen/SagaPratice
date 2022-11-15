@@ -17,7 +17,7 @@ internal class IsPersonLastNameValid : ISpecification<Person>, ISpecification<Hi
 
     public bool IsSatisfiedBy(ChangePersonalInformationFromUser candidate)
     {
-        return candidate.LastName is not null && IsSatisfiedBy(candidate.LastName.LastName);
+        return candidate.LastName is null || IsSatisfiedBy(candidate.LastName.LastName);
     }
 
     private static bool IsSatisfiedBy(string candidate)

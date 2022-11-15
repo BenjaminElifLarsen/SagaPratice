@@ -30,7 +30,6 @@ public class PeopleApiServices
         services.AddScoped<IGenderService, GenderService>();
         services.AddScoped<IDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<DomainEventRegistry>();
     }
 
     public static void Seed(IServiceProvider provider)

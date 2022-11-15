@@ -1,34 +1,35 @@
-﻿namespace PeopleDomain.DL.CQRS.Commands;
-internal class AddPersonToGender //consider a better name
+﻿using Common.CQRS.Commands;
+
+namespace PeopleDomain.DL.CQRS.Commands;
+public class AddPersonToGender : ICommand //consider a better name
 {
-    public int PersonId { get; set; }
-    public int GenderId { get; set; }
-    public AddPersonToGender(int personId, int genderId)
+    public int PersonId { get; private set; }
+    public int GenderId { get; private set; }
+    internal AddPersonToGender(int personId, int genderId)
     {
         PersonId = personId;
         GenderId = genderId;
     }
 }
 
-internal class RemovePersonFromGender
+public class RemovePersonFromGender : ICommand
 {
-    public int PersonId { get; set; }
-    public int GenderId { get; set; }
-    public RemovePersonFromGender(int personId, int genderId)
+    public int PersonId { get; private set; }
+    public int GenderId { get; private set; }
+    internal RemovePersonFromGender(int personId, int genderId)
     {
         PersonId = personId;
         GenderId = genderId;
     }
 }
 
-internal class ChangePersonGender
+public class ChangePersonGender : ICommand
 {
+    public int PersonId { get; private set; }
+    public int NewGenderId { get; private set; }
+    public int OldGenderId { get; private set; }
 
-    public int PersonId { get; set; }
-    public int NewGenderId { get; set; }
-    public int OldGenderId { get; set; }
-
-    public ChangePersonGender(int personId, int newGenderId, int oldGenderId)
+    internal ChangePersonGender(int personId, int newGenderId, int oldGenderId)
     {
         PersonId = personId;
         NewGenderId = newGenderId;

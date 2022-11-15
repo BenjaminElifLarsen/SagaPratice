@@ -3,7 +3,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
-internal class IsPersonBirthSat : ISpecification<Person>, ISpecification<HirePersonFromUser>
+internal class IsPersonBirthSat : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)
     {
@@ -13,6 +13,11 @@ internal class IsPersonBirthSat : ISpecification<Person>, ISpecification<HirePer
     public bool IsSatisfiedBy(Person candidate)
     {
         throw new NotImplementedException();
+    }
+
+    public bool IsSatisfiedBy(ChangePersonalInformationFromUser candidate)
+    {
+        return candidate.Brith is null || IsSatisfiedBy(candidate.Brith.Birth);
     }
 
     private bool IsSatisfiedBy(DateTime candidate)

@@ -53,5 +53,13 @@ public class PersonController : ControllerBase
         return this.FromResult(result);
     }
 
+    [AllowAnonymous]
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> ChangePersonalInformation([FromBody] ChangePersonalInformationFromUser command)
+    {
+        var result = await _peopleService.ChangePersonalInformationAsync(command);
+        return this.FromResult(result);
+    }
 
 }

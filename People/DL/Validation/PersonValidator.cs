@@ -6,12 +6,12 @@ using PeopleDomain.DL.Errrors;
 using PeopleDomain.DL.Validation.PersonSpecifications;
 
 namespace PeopleDomain.DL.Validation;
-internal class PersonValidator : IValidate
+internal class PersonHireValidator : IValidate
 {
     private readonly HirePersonFromUser _person;
     private readonly PersonValidationData _validationData;
 
-    public PersonValidator(HirePersonFromUser person, PersonValidationData validationData)
+    public PersonHireValidator(HirePersonFromUser person, PersonValidationData validationData)
     {
         _person = person;
         _validationData = validationData;
@@ -24,6 +24,28 @@ internal class PersonValidator : IValidate
         flag += new IsPersonFirstNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidFirstName;
         flag += new IsPersonLastNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidLastName;
         flag += new IsPersonGenderSat().And<HirePersonFromUser>(new IsPersonGenderValid(_validationData)).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidGender;
+        return flag;
+    }
+}
+
+internal class PersonChangePersonalInformationValidator : IValidate
+{
+    private readonly ChangePersonalInformationFromUser _person;
+    private readonly PersonValidationData _validationData;
+
+    public PersonChangePersonalInformationValidator(ChangePersonalInformationFromUser person, PersonValidationData validationData)
+    {
+        _person = person;
+        _validationData = validationData;            
+    }
+
+    public BinaryFlag Validate()
+    {
+        BinaryFlag flag = new();
+        flag += new IsPersonBirthSat().And<ChangePersonalInformationFromUser>(new IsPersonBirthNotToLate()).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidBirth;
+        flag += new IsPersonFirstNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidFirstName;
+        flag += new IsPersonLastNameValid().IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidLastName;
+        flag += new IsPersonGenderSat().And<ChangePersonalInformationFromUser>(new IsPersonGenderValid(_validationData)).IsSatisfiedBy(_person) ? 0 : PersonErrors.InvalidGender;
         return flag;
     }
 }

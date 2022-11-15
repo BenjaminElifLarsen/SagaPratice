@@ -11,7 +11,7 @@ internal class PersonFactory : IPersonFactory
     {
         List<string> errors = new();
 
-        var flag = new PersonValidator(person, validationData).Validate();
+        var flag = new PersonHireValidator(person, validationData).Validate();
         if(!flag)
         {
             errors.AddRange(PersonErrorConversion.Convert(flag));

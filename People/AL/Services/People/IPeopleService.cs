@@ -10,4 +10,5 @@ public interface IPeopleService
     Task<Result<PersonDetails>> GetPersonDetailsAsync(int id);
     Task<Result> HirePersonAsync(HirePersonFromUser command);
     Task<Result> FirePersonAsync(FirePersonFromUser command);
+    Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command);
 }

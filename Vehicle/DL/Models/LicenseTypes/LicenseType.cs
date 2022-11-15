@@ -29,7 +29,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
         _events = new();
     }
 
-    internal LicenseType( string type, byte renewPeriodInYears, byte ageRequirementInYears)
+    internal LicenseType(string type, byte renewPeriodInYears, byte ageRequirementInYears)
     {
         _licenseTypeId = RandomValue.GetValue;
         _type = type;

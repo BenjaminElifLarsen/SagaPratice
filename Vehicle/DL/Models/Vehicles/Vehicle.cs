@@ -11,18 +11,18 @@ public class Vehicle : IAggregateRoot
      */
     private int _vehicleId;
     private DateTime _productionDate;
-    private IdReference _vehicleInformation;
+    private IdReference<int> _vehicleInformation;
     private double _distanceMovedKm; //this could make use of event sourcing
-    private readonly HashSet<IdReference> _operators;
+    private readonly HashSet<IdReference<int>> _operators;
     private bool _inUse;
     private SerielNumber _serielNumber; //ensure uniqueness
     private readonly HashSet<IDomainEvent> _events;
 
     internal int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
     internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
-    internal IdReference VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
+    internal IdReference<int> VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
     internal double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
-    internal IEnumerable<IdReference> Operators => _operators;
+    internal IEnumerable<IdReference<int>> Operators => _operators;
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
@@ -33,7 +33,7 @@ public class Vehicle : IAggregateRoot
         _events = new();
     }
 
-    internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber)
+    internal Vehicle(DateTime productionDate, IdReference<int> vehicleInformation, SerielNumber serielNumber)
     {
         _vehicleId = RandomValue.GetValue;
         _distanceMovedKm = 0;
@@ -44,7 +44,7 @@ public class Vehicle : IAggregateRoot
         _events = new();
     }
 
-    internal Vehicle(DateTime productionDate, IdReference vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
+    internal Vehicle(DateTime productionDate, IdReference<int> vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
     {
         _distanceMovedKm = distanceMovedKm;
     }
@@ -81,22 +81,22 @@ public class Vehicle : IAggregateRoot
         return 0;
     }
 
-    internal bool AddOperator(IdReference @operator)
+    internal bool AddOperator(IdReference<int> @operator)
     {
         return _operators.Add(@operator);
     }
 
-    internal bool RemoveOperator(IdReference @operator)
+    internal bool RemoveOperator(IdReference<int> @operator)
     {
         return _operators.Remove(@operator);
     }
 
-    internal bool IsOperatorPermitted(IdReference @operator)
+    internal bool IsOperatorPermitted(IdReference<int> @operator)
     {
         return _operators.Any(x => x == @operator);
     }
 
-    internal void StartOperating(IdReference @operator)
+    internal void StartOperating(IdReference<int> @operator)
     {
         if (Operators.Any(x => x.Id == @operator.Id))
         {
@@ -104,7 +104,7 @@ public class Vehicle : IAggregateRoot
         }
     }
 
-    internal void StopOperating(IdReference @operator)
+    internal void StopOperating(IdReference<int> @operator)
     {
         if (Operators.Any(x => x.Id == @operator.Id))
         { 

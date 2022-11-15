@@ -10,7 +10,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     private byte _ageRequirementInYears; //or would it make more sense that an incorrect, but not invalid, entity would be removed from the system and a new inserted?
     private DateOnly? _deletedFrom;
     private DateOnly _canBeIssuedFrom; //need to be put into ctor and validation, allow update as long time current date is not same or later as its value.
-    private readonly HashSet<IdReference> _vehicleInformations;
+    private readonly HashSet<IdReference<int>> _vehicleInformations;
     //cannot contain a collection of licenses, since License is not an aggregate root, could hold a collection of operators who got the required license.
     private HashSet<IDomainEvent> _events;
 
@@ -20,7 +20,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
     internal byte AgeRequirementInYears { get => _ageRequirementInYears; private set => _ageRequirementInYears = value; }
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
     public DateOnly CanBeIssuedFrom { get => _canBeIssuedFrom; private set => _canBeIssuedFrom = value; } //can only be updated if there is no licenses that use it.
-    public IEnumerable<IdReference> VehicleInformations => _vehicleInformations;
+    public IEnumerable<IdReference<int>> VehicleInformations => _vehicleInformations;
 
     public IEnumerable<IDomainEvent> Events => _events;
 
@@ -44,7 +44,7 @@ internal class LicenseType : IAggregateRoot, ISoftDeleteDate
         _deletedFrom = dateTime;
     }
 
-    public bool AddVehicleInformation(IdReference vehicleInformation)
+    public bool AddVehicleInformation(IdReference<int> vehicleInformation)
     {
         return _vehicleInformations.Add(vehicleInformation);
     }

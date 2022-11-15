@@ -10,7 +10,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
     private string _firstName;
     private string _lastName;
     private DateOnly _birth;
-    private IdReference _gender;
+    private IdReference<int> _gender;
     private DateOnly? _deletedFrom;
     private readonly HashSet<IDomainEvent> _events;
 
@@ -18,7 +18,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
-    internal IdReference Gender { get => _gender; private set => _gender = value; }
+    internal IdReference<int> Gender { get => _gender; private set => _gender = value; }
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
@@ -29,7 +29,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
         _events = new();
     }
 
-    internal Person(string firstName, string lastName, DateOnly birth, IdReference gender)
+    internal Person(string firstName, string lastName, DateOnly birth, IdReference<int> gender)
     {
         _personId = RandomValue.GetValue;
         _firstName = firstName;
@@ -39,7 +39,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
         _events = new();
     }
 
-    internal Person(int id, string firstName, string lastName, DateOnly birth, IdReference gender) : this(firstName, lastName, birth, gender)
+    internal Person(int id, string firstName, string lastName, DateOnly birth, IdReference<int> gender) : this(firstName, lastName, birth, gender)
     {
         _personId = id;
     }
@@ -59,7 +59,7 @@ public class Person : IAggregateRoot, ISoftDeleteDate
         _birth = birth;
     }
 
-    internal void UpdateGenderIdentification(IdReference gender)
+    internal void UpdateGenderIdentification(IdReference<int> gender)
     {
         _gender = gender;
     }

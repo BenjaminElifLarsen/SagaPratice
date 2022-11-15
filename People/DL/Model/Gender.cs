@@ -8,13 +8,13 @@ public class Gender : IAggregateRoot
     private int _genderId;
     private string _verbSubject;
     private string _verbObject;
-    private readonly HashSet<IdReference> _people;
+    private readonly HashSet<IdReference<int>> _people;
     private readonly HashSet<IDomainEvent> _events;
 
     internal int GenderId { get => _genderId; private set => _genderId = value; }
     internal string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
-    internal IEnumerable<IdReference> People { get => _people; }
+    internal IEnumerable<IdReference<int>> People { get => _people; }
 
     public IEnumerable<IDomainEvent> Events => _events;
 
@@ -39,12 +39,12 @@ public class Gender : IAggregateRoot
     //    _verbSubject = name;
     //}
 
-    internal bool AddPerson(IdReference person)
+    internal bool AddPerson(IdReference<int> person)
     {
         return _people.Add(person);
     }
 
-    internal bool RemovePerson(IdReference person)
+    internal bool RemovePerson(IdReference<int> person)
     {
         return _people.Remove(person);
     }

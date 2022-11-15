@@ -1,4 +1,5 @@
-﻿using VehicleDomain.DL.Errors;
+﻿using Common.RepositoryPattern;
+using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
 
@@ -7,7 +8,7 @@ internal class License
 {
     private int _licenseId;
     private Operator _operator; //ORMs like EF Core would use and set this variable
-    private IdReference _type;
+    private IdReference<int> _type;
     private DateOnly _arquired;
     private DateOnly? _lastRenewed;
     private bool _expired;
@@ -17,14 +18,14 @@ internal class License
     public DateOnly Arquired { get => _arquired; private set => _arquired = value; }
     public DateOnly? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
     public bool Expired { get => _expired; private set => _expired = value; }
-    public IdReference Type { get => _type; private set => _type = value; }
+    public IdReference<int> Type { get => _type; private set => _type = value; }
 
     private License()
     {
 
     }
 
-    internal License(IdReference type, DateOnly arquired)
+    internal License(IdReference<int> type, DateOnly arquired)
     {
         _licenseId = RandomValue.GetValue;
         _type = type;

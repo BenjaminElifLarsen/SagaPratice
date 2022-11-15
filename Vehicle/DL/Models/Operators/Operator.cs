@@ -11,7 +11,7 @@ public class Operator : IAggregateRoot, ISoftDelete
     private int _operatorId;
     private DateOnly _birth;
     private readonly HashSet<License> _licenses;
-    private readonly HashSet<IdReference> _vehicles;
+    private readonly HashSet<IdReference<int>> _vehicles;
     private bool _deleted;
     private readonly HashSet<IDomainEvent> _events;
 
@@ -20,7 +20,7 @@ public class Operator : IAggregateRoot, ISoftDelete
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
 
     internal IEnumerable<License> Licenses => _licenses;
-    internal IEnumerable<IdReference> Vehicles => _vehicles;
+    internal IEnumerable<IdReference<int>> Vehicles => _vehicles;
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
@@ -53,22 +53,22 @@ public class Operator : IAggregateRoot, ISoftDelete
         return 0;
     }
 
-    internal bool AddVehicle(IdReference vehicle)
+    internal bool AddVehicle(IdReference<int> vehicle)
     { //check if they got the correct license first
         return _vehicles.Add(vehicle);
     }
 
-    internal bool RemoveVehicle(IdReference vehicle)
+    internal bool RemoveVehicle(IdReference<int> vehicle)
     {
         return _vehicles.Remove(vehicle);
     }
 
-    internal IdReference GetVehicle(int id)
+    internal IdReference<int> GetVehicle(int id)
     {
         return _vehicles.FirstOrDefault(x => x.Id == id);
     }
 
-    internal bool AddLicense(IdReference type, DateTime arquired)
+    internal bool AddLicense(IdReference<int> type, DateTime arquired)
     {
         if (_licenses.Any(x => x.Type.Id == type.Id))
             return false;

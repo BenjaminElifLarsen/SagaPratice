@@ -89,6 +89,21 @@ public record EntityState<T>
         Entity = entity;
         State = state;
     }
+
+    //public override bool Equals(object obj)
+    //{
+    //    if(obj is not EntityState<T>) return false;
+
+    //    EntityState<T> o = obj as EntityState<T>;
+
+    //    return Entity.Equals(o.Entity);
+    //}
+
+    public override int GetHashCode()
+    { // Overwritten to ensure HashSet work as changing states would change the hash code.
+        return Entity is not null ? Entity.GetHashCode() : base.GetHashCode();
+    }
+
 }
 
 public enum States

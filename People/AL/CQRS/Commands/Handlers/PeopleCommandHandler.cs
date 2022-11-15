@@ -172,4 +172,20 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         _unitOfWork.GenderRepository.Update(entityToRemoveFrom);
         return new SuccessResultNoData();
     }
+
+    public Result Handle(UnrecogniseGender command)
+    {
+        var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.Id).Result;
+        if (entity is null)
+        {
+            return new SuccessResultNoData();
+        }
+        if (entity.People.Any())
+        {
+            return new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
+        }
+        _unitOfWork.GenderRepository.Unrecognise(entity);
+        _unitOfWork.Save();
+        return new SuccessResultNoData();
+    }
 }

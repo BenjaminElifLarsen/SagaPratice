@@ -8,6 +8,7 @@ public interface IPeopleCommandHandler :
     ICommandHandler<FirePersonFromUser>,
     ICommandHandler<ChangePersonalInformationFromUser>,
     ICommandHandler<RecogniseGender>,
+    ICommandHandler<UnrecogniseGender>,
     ICommandHandler<AddPersonToGender, PersonHired>,
     ICommandHandler<RemovePersonFromGender, PersonFired>,
     ICommandHandler<ChangePersonGender, PersonChangedGender>

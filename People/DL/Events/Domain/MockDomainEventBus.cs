@@ -28,7 +28,8 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
 	{
 		List<Action<IDomainEvent>> handlers;
 		
-		if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
+		if (!_routes.TryGetValue(@event.GetType(), out handlers)) 
+			return;
 
 		foreach(var handler in handlers)
 		{
@@ -40,15 +41,13 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
 	{
         List<Action<IDomainEvent>> handlers;
 
-		if (!_routes.TryGetValue(typeof(T), out handlers)) return;
+		if (!_routes.TryGetValue(typeof(T), out handlers)) 
+			return;
+
 		var toRemove = handlers.SingleOrDefault(x => handler((T)x));
 		if(toRemove is not null)
 		{
             handlers.Remove(toRemove);
         }
     }
-
-	//~PersonEventPublisher(){
-	//	System.Diagnostics.Debug.WriteLine("test");
-	//}
 }

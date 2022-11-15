@@ -40,7 +40,8 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
 
     public void Add(IAggregateRoot root)
     { //check if the entity is already present
-        _contextData.Add(new(root,States.Add));
+        if (!_contextData.Any(x => x.Entity == root))
+            _contextData.Add(new(root,States.Add));
     }
 
     public void Update(IAggregateRoot root)
@@ -94,7 +95,7 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
 
     public void Remove()
     {
-        var entitiesToRemove = _contextData.Where(x => x.State == States.Remove).Where(x => _contextData.Any(y => x.Entity == y.Entity)).ToArray();
+        var entitiesToRemove = _contextData.Where(x => x.State == States.Remove).ToArray();
         for(int i = 0; i < entitiesToRemove.Length; i++)
         {
             entitiesToRemove[i].State = States.Tracked;

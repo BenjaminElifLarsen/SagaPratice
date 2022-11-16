@@ -35,5 +35,7 @@ vehicle event sourcing: Could event source when the vehicle was in use and stopp
 Consider how events with data can best be stored in a context, like a mssql database, given each event got their own Data type.
 Could store them as a json string.
 
+consider moving the repos in Vehicle.DL into the IPL 
 
-
+have a command bus (kind of like the event bus) that takes in commands and transmit them to the command handlers
+	the handlers, when done with the command, remove it from the command bus. 

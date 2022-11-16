@@ -22,7 +22,9 @@ Do note that the id generation code could be considered to break the domain mode
 The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough.
 
 Regarding comments in the code, there are two types; permanents and temporals. 
+
 A permanent follows this pattern // Sentence.
+
 A temporal follows this pattern //sentence(.|?)
 
 The temporal comments are just ideas and thoughts and are only present, because I work alone on this project. If working with others such comments would be placed in the task/backlogs on the devops board until they could be resolved.

@@ -1,14 +1,13 @@
 ﻿using BaseRepository;
 using Common.Events.Domain;
 using Common.RepositoryPattern;
-using System.Linq.Expressions;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.IPL.Context;
-internal class MockVehicleContext : IContextData<Vehicle>, IContextData<LicenseType>, IContextData<VehicleInformation>, IContextData<Operator>
+internal class MockVehicleContext : IVehicleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private DateOnly _date;
@@ -33,14 +32,9 @@ internal class MockVehicleContext : IContextData<Vehicle>, IContextData<LicenseT
     IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
     IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    //IEnumerable<Operator> IContext<Operator>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Operator).Select(x => x as Operator);
-    //IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAllTracked => GetAllTrackedEntities.Where(x => x is VehicleInformation).Select(x => x as VehicleInformation);
-    //IEnumerable<LicenseType> IContext<LicenseType>.GetAllTracked => GetAllTrackedEntities.Where(x => x is LicenseType).Select(x => x as LicenseType);
-    //IEnumerable<Vehicle> IContext<Vehicle>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Vehicle).Select(x => x as Vehicle);
+    public IEnumerable<IDomainEvent> Events => _contextData.SelectMany(x => x.Entity.Events);
 
-    public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
-    public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
-    public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
+    public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
 
     public MockVehicleContext()
     {
@@ -51,7 +45,7 @@ internal class MockVehicleContext : IContextData<Vehicle>, IContextData<LicenseT
     }
 
     public void Add(IAggregateRoot root)
-    { //check if the entity is already present
+    {
         if (!_contextData.Any(x => x.Entity == root))
             _contextData.Add(new(root, States.Add));
     }

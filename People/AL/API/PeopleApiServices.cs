@@ -1,6 +1,5 @@
 ﻿using BaseRepository;
 using Common.Events.Domain;
-using Common.Other;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
 using PeopleDomain.AL.CQRS.Commands.Handlers;

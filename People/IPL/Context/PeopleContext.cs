@@ -4,7 +4,7 @@ using Common.RepositoryPattern;
 using PeopleDomain.DL.Model;
 
 namespace PeopleDomain.IPL.Context;
-internal class MockPeopleContext : IContext<Person>, IContext<Gender>
+internal class MockPeopleContext : IPeopleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private DateOnly _date;
@@ -22,13 +22,15 @@ internal class MockPeopleContext : IContext<Person>, IContext<Gender>
 
     public IEnumerable<Gender> Genders => _contextData.Where(x => x.Entity is Gender).Select(x => x.Entity as Gender);
     public IEnumerable<Person> People => _contextData.Where(x => x.Entity is Person).Select(x => x.Entity as Person);
-    IEnumerable<Gender> IContext<Gender>.GetAll => Genders.Where(Filtering<Gender>());
-    IEnumerable<Person> IContext<Person>.GetAll => People.Where(x => x is Person).Where(Filtering<Person>());
+    IEnumerable<Gender> IContextData<Gender>.GetAll => Genders.Where(Filtering<Gender>());
+    IEnumerable<Person> IContextData<Person>.GetAll => People.Where(Filtering<Person>());
     public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
-    IEnumerable<Gender> IContext<Gender>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Gender).Select(x => x as Gender);//.Where(Filtering<Gender>());
-    IEnumerable<Person> IContext<Person>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Person).Select(x => x as Person);//.Where(Filtering<Person>());
     public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
+
+    public IEnumerable<IDomainEvent> Events => _contextData.SelectMany(x => x.Entity.Events);
+
+    public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
 
     public MockPeopleContext()
     {

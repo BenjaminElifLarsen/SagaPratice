@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;
-internal interface ILicenseTypeRepository
+public interface ILicenseTypeRepository
 {
     Task<bool> IsIdUniqueAsync(int id);
     Task<bool> IsTypeUniqueAsync(string type);

@@ -17,11 +17,6 @@ internal class PersonRepository : IPersonRepository
         return await _baseRepository.AllAsync(query);
     }
 
-    public async Task<IEnumerable<Person>> GetTrackedAsync()
-    {
-        return await _baseRepository.AllTrackedEntities();
-    }
-
     public async Task<bool> DoesPersonExist(int id)
     {
         return !await _baseRepository.IsUniqueAsync(x => x == id);
@@ -45,11 +40,6 @@ internal class PersonRepository : IPersonRepository
     public void Hire(Person entity)
     {
         _baseRepository.Create(entity);
-    }
-
-    public void Save()
-    {
-        _baseRepository.SaveChanges();
     }
 
     public void UpdatePersonalInformation(Person entity)

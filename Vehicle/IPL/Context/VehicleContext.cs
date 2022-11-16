@@ -8,200 +8,123 @@ using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.IPL.Context;
-internal class MockVehicleContext : IContext<Vehicle>, IContext<LicenseType>, IContext<VehicleInformation>, IContext<Operator>
+internal class MockVehicleContext : IContextData<Vehicle>, IContextData<LicenseType>, IContextData<VehicleInformation>, IContextData<Operator>
 {
-    private readonly HashSet<Vehicle> _vehicles;
-    public HashSet<Vehicle> Vehicles => _vehicles;
-
-    private readonly HashSet<LicenseType> _licenseTypes;
-    public HashSet<LicenseType> LicenseTypes => _licenseTypes;
-
-    private readonly HashSet<VehicleInformation> _vehicleInformation;
-    public HashSet<VehicleInformation> VehicleInformations => _vehicleInformation;
-
-    private readonly HashSet<Operator> _people;
-    public HashSet<Operator> People => _people;
-
+    private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private DateOnly _date;
-
-    IEnumerable<Vehicle> IContext<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
-
-    IEnumerable<LicenseType> IContext<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
-
-    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAll => VehicleInformations.Where(Filtering<VehicleInformation>());
-
-    IEnumerable<Operator> IContext<Operator>.GetAll => People.Where(Filtering<Operator>());
-
-    private Func<TEntity,bool> Filtering<TEntity>() 
-    {
-        return x => {
-        if (!Filter) return true;
-        else if (x is ISoftDelete delete) return !delete.Deleted;
-        else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || _date<date.DeletedFrom;
-        else return true; };
-    }
-
     public bool Filter { get; set; }
 
-    public IEnumerable<IAggregateRoot> GetAllTrackedEntities => throw new NotImplementedException();
+    private Func<TEntity, bool> Filtering<TEntity>()
+    {
+        return x => {
+            if (!Filter) return true;
+            else if (x is ISoftDelete delete) return !delete.Deleted;
+            else if (x is ISoftDeleteDate date) return date.DeletedFrom is null || _date < date.DeletedFrom;
+            else return true;
+        };
+    }
+    public IEnumerable<Operator> Operators => _contextData.Where(x => x.Entity is Operator).Select(x => x.Entity as Operator);
+    public IEnumerable<VehicleInformation> VehicleInformations => _contextData.Where(x => x.Entity is VehicleInformation).Select(x => x.Entity as VehicleInformation);
+    public IEnumerable<LicenseType> LicenseTypes => _contextData.Where(x => x.Entity is LicenseType).Select(x => x.Entity as LicenseType);
+    public IEnumerable<Vehicle> Vehicles => _contextData.Where(x => x.Entity is Vehicle).Select(x => x.Entity as Vehicle);
 
-    public IEnumerable<Vehicle> GetAllTracked => throw new NotImplementedException();
+    IEnumerable<Operator> IContextData<Operator>.GetAll => Operators.Where(Filtering<Operator>());
+    IEnumerable<VehicleInformation> IContextData<VehicleInformation>.GetAll => VehicleInformations.Where(Filtering<VehicleInformation>());
+    IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
+    IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    IEnumerable<LicenseType> IContext<LicenseType>.GetAllTracked => throw new NotImplementedException();
+    //IEnumerable<Operator> IContext<Operator>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Operator).Select(x => x as Operator);
+    //IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAllTracked => GetAllTrackedEntities.Where(x => x is VehicleInformation).Select(x => x as VehicleInformation);
+    //IEnumerable<LicenseType> IContext<LicenseType>.GetAllTracked => GetAllTrackedEntities.Where(x => x is LicenseType).Select(x => x as LicenseType);
+    //IEnumerable<Vehicle> IContext<Vehicle>.GetAllTracked => GetAllTrackedEntities.Where(x => x is Vehicle).Select(x => x as Vehicle);
 
-    IEnumerable<VehicleInformation> IContext<VehicleInformation>.GetAllTracked => throw new NotImplementedException();
-
-    IEnumerable<Operator> IContext<Operator>.GetAllTracked => throw new NotImplementedException();
-
-    public IEnumerable<IAggregateRoot> AllTrackedEntities => throw new NotImplementedException();
-
-    public IEnumerable<IDomainEvent> AllTrackedEvents => throw new NotImplementedException();
+    public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
+    public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
+    public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
 
     public MockVehicleContext()
     {
         var dateTime = DateTime.Now; //would be better to have a method that calculates and returns the current date as this could cause a problem if operated around midnight. 
         _date = new(dateTime.Year, dateTime.Month, dateTime.Day);
-        _vehicles = new();
-        _people = new();
-        _licenseTypes = new();
-        _vehicleInformation = new();
+        _contextData = new();
         Filter = true;
     }
 
-    public void Add(IEnumerable<Vehicle> entities)
-    {
-        AddToCollection(_vehicles, entities, x => entities.Any(xx => x.VehicleId == xx.VehicleId));
-    }
-
-    public void Update(IEnumerable<Vehicle> entities)
-    {
-        if(entities.Any(x => !_vehicles.Any(xx => x.VehicleId == xx.VehicleId)))
-        {
-            throw new Exception("Trying to add entity in update.");
-        }
-        foreach (var entity in entities)
-        {
-            _vehicles.RemoveWhere(x => x.VehicleId == entity.VehicleId);
-            _vehicles.Add(entity);
-        }
-    }
-
-    public void Remove(IEnumerable<Vehicle> entities)
-    {
-        RemoveFromCollection(_vehicles, entities);
-    }
-
-    public void Add(IEnumerable<Operator> entities)
-    {
-        AddToCollection(_people, entities, x => entities.Any(xx => x.OperatorId == xx.OperatorId));
-    }
-
-    public void Update(IEnumerable<Operator> entities)
-    {
-        if (entities.Any(x => !_people.Any(xx => x.OperatorId == xx.OperatorId)))
-        {
-            throw new Exception("Trying to add entity in update.");
-        }
-        foreach (var entity in entities)
-        {
-            _people.RemoveWhere(x => x.OperatorId == entity.OperatorId);
-            _people.Add(entity);
-        }
-    }
-
-    public void Remove(IEnumerable<Operator> entities)
-    {
-        RemoveFromCollection(_people, entities);
-    }
-
-    public void Add(IEnumerable<VehicleInformation> entities)
-    {
-        AddToCollection(_vehicleInformation,entities,x => entities.Any(xx => x.VehicleInformationId == xx.VehicleInformationId));
-    }
-
-    public void Update(IEnumerable<VehicleInformation> entities)
-    {
-        if (entities.Any(x => !_vehicleInformation.Any(xx => x.VehicleInformationId == xx.VehicleInformationId)))
-        {
-            throw new Exception("Trying to add entity in update.");
-        }
-        foreach(var entity in entities)
-        {
-            _vehicleInformation.RemoveWhere(x => x.VehicleInformationId == entity.VehicleInformationId);
-            _vehicleInformation.Add(entity);
-        }
-    }
-
-    public void Remove(IEnumerable<VehicleInformation> entities)
-    {
-        RemoveFromCollection(_vehicleInformation, entities);
-    }
-
-    public void Add(IEnumerable<LicenseType> entities)
-    {
-        AddToCollection(_licenseTypes, entities, x => entities.Any(xx => x.LicenseTypeId == xx.LicenseTypeId));
-    }
-
-    public void Update(IEnumerable<LicenseType> entities)
-    {
-        if (entities.Any(x => !_licenseTypes.Any(xx => x.LicenseTypeId == xx.LicenseTypeId)))
-        {
-            throw new Exception("Trying to add entity in update.");
-        }
-        foreach (var entity in entities)
-        {
-            _licenseTypes.RemoveWhere(x => x.LicenseTypeId == entity.LicenseTypeId);
-            _licenseTypes.Add(entity);
-        }
-    }
-
-    public void Remove(IEnumerable<LicenseType> entities)
-    {
-        RemoveFromCollection(_licenseTypes, entities);
-    }
-
-    private static void AddToCollection<T>(HashSet<T> collection, IEnumerable<T> entities, Expression<Func<T,bool>> predicate)
-    {
-        if (collection.AsQueryable().Any(predicate))
-        {
-            throw new Exception("Entity could not be added.");
-        }
-        foreach(var entity in entities)
-        {
-            collection.Add(entity);
-        }
-    }
-
-    private static void RemoveFromCollection<T>(HashSet<T> collection, IEnumerable<T> entities)
-    {
-        foreach(var entity in entities)
-        {
-            collection.Remove(entity);
-        }
-    }
-
-    public int Save()
-    {
-        throw new NotImplementedException();
-    }
-
     public void Add(IAggregateRoot root)
-    {
-        throw new NotImplementedException();
+    { //check if the entity is already present
+        if (!_contextData.Any(x => x.Entity == root))
+            _contextData.Add(new(root, States.Add));
     }
 
     public void Update(IAggregateRoot root)
     {
-        throw new NotImplementedException();
+        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        if (entity is not null)
+        {
+            entity.State = States.Update;
+        }
     }
 
     public void Remove(IAggregateRoot root)
     {
-        throw new NotImplementedException();
+        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        if (entity is not null)
+        {
+            entity.State = States.Remove;
+        }
     }
 
     public int SaveChanges()
     {
-        throw new NotImplementedException();
+        return Save();
+    }
+
+    public int Save()
+    {
+        int amount = _contextData.Count(x => x.State != States.Tracked);
+        Update();
+        Add();
+        Remove();
+        return amount;
+    }
+
+    public void Update()
+    {
+        var entitiesToUpdate = _contextData.Where(x => x.State == States.Update).ToArray();
+        for (int i = 0; i < entitiesToUpdate.Length; i++)
+        {
+            entitiesToUpdate[i].State = States.Tracked;
+        }
+    }
+
+    public void Add()
+    {
+        var entitesToAdd = _contextData.Where(x => x.State == States.Add).ToArray();
+        for (int i = 0; i < entitesToAdd.Length; i++)
+        {
+            entitesToAdd[i].State = States.Tracked;
+        }
+    }
+
+    public void Remove()
+    {
+        var entitiesToRemove = _contextData.Where(x => x.State == States.Remove).ToArray();
+        for (int i = 0; i < entitiesToRemove.Length; i++)
+        {
+            entitiesToRemove[i].State = States.Tracked;
+            if (entitiesToRemove[i].Entity is ISoftDelete s)
+            {
+                s.Delete();
+            }
+            else if (entitiesToRemove[i].Entity is ISoftDeleteDate sd)
+            {
+                if (sd.DeletedFrom is null)
+                    sd.Delete(_date);
+            }
+            else
+            {
+                _contextData.Remove(entitiesToRemove[i]);
+            }
+        }
     }
 }

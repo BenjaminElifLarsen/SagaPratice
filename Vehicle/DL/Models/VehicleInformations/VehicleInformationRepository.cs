@@ -42,7 +42,7 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
 
     public void Save()
     {
-        _baseRepository.SaveChanges();
+        throw new NotImplementedException();//_baseRepository.SaveChanges();
     }
 
     public void Update(VehicleInformation entity)

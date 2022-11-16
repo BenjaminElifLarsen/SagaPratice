@@ -17,27 +17,27 @@ public class VehicleApiServices
 {
     public static void Add(IServiceCollection services)
     {
-        services.AddSingleton<MockVehicleContext>();
-        services.AddScoped<IBaseRepository<Operator>, MockBaseRepository<Operator, MockVehicleContext>>();
-        services.AddScoped<IBaseRepository<Vehicle>, MockBaseRepository<Vehicle, MockVehicleContext>>();
-        services.AddScoped<IBaseRepository<LicenseType>, MockBaseRepository<LicenseType, MockVehicleContext>>();
-        services.AddScoped<IBaseRepository<VehicleInformation>, MockBaseRepository<VehicleInformation, MockVehicleContext>>();
-        services.AddScoped<IOperatorRepository, OperatorRepository>();
-        services.AddScoped<IVehicleRepository, VehicleRepository>();
-        services.AddScoped<ILicenseTypeRepository, LicenseTypeRepository>();
-        services.AddScoped<IVehicleInformationRepository, VehicleInformationRepository>();
-        services.AddScoped<IOperatorFactory, OperatorFactory>();
-        services.AddScoped<IVehicleFactory, VehicleFactory>();
-        services.AddScoped<ILicenseTypeFactory, LicenseTypeFactory>();
-        services.AddScoped<IVehicleInformationFactory, VehicleInformationFactory>();
-        services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
-        services.AddScoped<IOperatorService, OperatorService>();
-        services.AddScoped<IVehicleInformationService, VehicleInformationService>();
-        services.AddScoped<IVehicleService, VehicleService>();
+        //services.AddSingleton<MockVehicleContext>();
+        //services.AddScoped<IBaseRepository<Operator>, MockBaseRepository<Operator, MockVehicleContext>>();
+        //services.AddScoped<IBaseRepository<Vehicle>, MockBaseRepository<Vehicle, MockVehicleContext>>();
+        //services.AddScoped<IBaseRepository<LicenseType>, MockBaseRepository<LicenseType, MockVehicleContext>>();
+        //services.AddScoped<IBaseRepository<VehicleInformation>, MockBaseRepository<VehicleInformation, MockVehicleContext>>();
+        //services.AddScoped<IOperatorRepository, OperatorRepository>();
+        //services.AddScoped<IVehicleRepository, VehicleRepository>();
+        //services.AddScoped<ILicenseTypeRepository, LicenseTypeRepository>();
+        //services.AddScoped<IVehicleInformationRepository, VehicleInformationRepository>();
+        //services.AddScoped<IOperatorFactory, OperatorFactory>();
+        //services.AddScoped<IVehicleFactory, VehicleFactory>();
+        //services.AddScoped<ILicenseTypeFactory, LicenseTypeFactory>();
+        //services.AddScoped<IVehicleInformationFactory, VehicleInformationFactory>();
+        //services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
+        //services.AddScoped<IOperatorService, OperatorService>();
+        //services.AddScoped<IVehicleInformationService, VehicleInformationService>();
+        //services.AddScoped<IVehicleService, VehicleService>();
     }
 
     public static void Seed(IServiceProvider provider)
     {
-        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<MockVehicleContext>());
+        //Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<MockVehicleContext>());
     }
 }

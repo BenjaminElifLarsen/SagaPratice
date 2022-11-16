@@ -4,11 +4,13 @@ using System.Linq.Expressions;
 
 namespace BaseRepository;
 
-public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot where TContext : IContext<TEntity>
+public class MockBaseRepository<TEntity, TContext, TBaseContext> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot where TContext : IContextData<TEntity> where TBaseContext : IBaseContext
 {
-    private readonly TContext _context;
-    public MockBaseRepository(TContext context)
+    private readonly TContext _dataContext;
+    private readonly TBaseContext _context;
+    public MockBaseRepository(TContext dataContext, TBaseContext context)
     {
+        _dataContext = dataContext;
         _context = context;
     }
 
@@ -19,7 +21,7 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 
     public void Update(TEntity entity)
     {
-       _context.Update(entity);
+        _context.Update(entity);
     }
 
     public void Delete(TEntity entity)
@@ -29,55 +31,60 @@ public class MockBaseRepository<TEntity, TContext> : IBaseRepository<TEntity> wh
 
     public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<IEnumerable<TProjection>>(() => _context.GetAll.AsQueryable().Select(query.Map()).ToArray());
+        return await Task.Run<IEnumerable<TProjection>>(() => _dataContext.GetAll.AsQueryable().Select(query.Map()).ToArray());
     }
 
     public async Task<IEnumerable<TProjection>> AllByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<IEnumerable<TProjection>>(() => _context.GetAll.AsQueryable().Where(predicate).Select(query.Map()).ToArray());
+        return await Task.Run<IEnumerable<TProjection>>(() => _dataContext.GetAll.AsQueryable().Where(predicate).Select(query.Map()).ToArray());
     }
 
     public async Task<IEnumerable<TEntity>> AllByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await Task.Run<IEnumerable<TEntity>>(() => _context.GetAll.AsQueryable().Where(predicate).ToArray());
+        return await Task.Run<IEnumerable<TEntity>>(() => _dataContext.GetAll.AsQueryable().Where(predicate).ToArray());
     }
 
     public async Task<TProjection> FindByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<TProjection>(() => _context.GetAll.AsQueryable().Where(predicate).Select(query.Map()).SingleOrDefault());
+        return await Task.Run<TProjection>(() => _dataContext.GetAll.AsQueryable().Where(predicate).Select(query.Map()).SingleOrDefault());
     }
 
     public async Task<TEntity> FindByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await Task.Run<TEntity>(() => _context.GetAll.AsQueryable().Where(predicate).SingleOrDefault());
+        return await Task.Run<TEntity>(() => _dataContext.GetAll.AsQueryable().Where(predicate).SingleOrDefault());
     }
 
     public async Task<bool> IsUniqueAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return await Task.Run(() => !_context.GetAll.AsQueryable().Any(predicate));
+        return await Task.Run(() => !_dataContext.GetAll.AsQueryable().Any(predicate));
     }
 
-    public int SaveChanges()
-    {
-        //if (_entities.Any(x => x.State == States.Unknown))
-        //{
-        //    throw new Exception("Entity in unknown state.");
-        //}
-        //if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
-        //{
-        //    throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
-        //}
-        //foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
-        //{
-        //    entity.State = States.Update;
-        //}
-        return _context.Save();
-    }
+    //public int SaveChanges()
+    //{
+    //    //if (_entities.Any(x => x.State == States.Unknown))
+    //    //{
+    //    //    throw new Exception("Entity in unknown state.");
+    //    //}
+    //    //if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
+    //    //{
+    //    //    throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
+    //    //}
+    //    //foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
+    //    //{
+    //    //    entity.State = States.Update;
+    //    //}
+    //    return _context.Save();
+    //}
 
-    public Task<IEnumerable<TEntity>> AllTrackedEntities()
-    {
-        return Task.Run(() => _context.GetAllTracked);
-    }
+    //public async Task<IEnumerable<TEntity>> AllTrackedEntitiesAsync()
+    //{
+    //    return await Task.Run(() => _context.GetAllTracked);
+    //}
+
+    //public async Task<IEnumerable<IDomainEvent>> AllEventsAsync()
+    //{
+    //    return await Task.Run(() => _context.AllTrackedEvents);
+    //}
 }
 
 public record EntityState<T>

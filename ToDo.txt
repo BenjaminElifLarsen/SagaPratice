@@ -23,8 +23,6 @@ Consider how to best use ISpecification regarding entity update. If having e.g. 
 	All cases return an int, 0 is valid else an enum int
 
 
-Handler ISoftDelete and ISoftDeleteDate in the 'context' files
-
 throw in jwt
 two users, one with permission for everything, the other only for some aggregate roots / domains / commands / queries.
 set up hasher and salter in security project. Project should have an user model (not all people are users), with id, password (hashed and salted) and username/email.
@@ -34,7 +32,8 @@ split up some classes/interfaces to better follow the single responsibility prin
 
 vehicle event sourcing: Could event source when the vehicle was in use and stopped be in use (operator id, time, bool started, distance moved)
 
-
+Consider how events with data can best be stored in a context, like a mssql database, given each event got their own Data type.
+Could store them as a json string.
 
 
 

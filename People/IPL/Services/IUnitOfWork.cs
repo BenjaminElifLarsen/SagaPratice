@@ -1,9 +1,9 @@
-﻿using PeopleDomain.IPL.Repositories;
+﻿using Common.RepositoryPattern;
+using PeopleDomain.IPL.Repositories;
 
 namespace PeopleDomain.IPL.Services;
-public interface IUnitOfWork
+public interface IUnitOfWork : IBaseUnitOfWork
 {
     public IGenderRepository GenderRepository { get; }
     public IPersonRepository PersonRepository { get; }
-    public void Save();
 }

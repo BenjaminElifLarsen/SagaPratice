@@ -74,7 +74,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
             entity.AddDomainEvent(new PersonFired(entity)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity); //could store the event in the context and let a process run through events at times to see which needs processing
-            _unitOfWork.Save();
+            _unitOfWork.Save(); //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
         }
         return new SuccessResultNoData();
     }

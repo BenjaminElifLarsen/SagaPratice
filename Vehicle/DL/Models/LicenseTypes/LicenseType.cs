@@ -2,7 +2,7 @@
 using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;
-internal class LicenseType : IAggregateRoot, ISoftDeleteDate
+public class LicenseType : IAggregateRoot, ISoftDeleteDate
 {
     private int _licenseTypeId;
     private string _type; //type can only be updated if there is no license that use the entity, need a query that look if any people got license with the specifc license type id

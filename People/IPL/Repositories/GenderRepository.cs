@@ -27,11 +27,6 @@ internal class GenderRepository : IGenderRepository
         _baseRepository.Delete(entity);
     }
 
-    public void Save()
-    {
-        _baseRepository.SaveChanges();
-    }
-
     public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel
     {
         return await _baseRepository.FindByPredicateAsync(x => x == id, query);
@@ -47,8 +42,4 @@ internal class GenderRepository : IGenderRepository
         return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }
 
-    public async Task<IEnumerable<Gender>> GetTrackedAsync()
-    {
-        return await _baseRepository.AllTrackedEntities();
-    }
 }

@@ -18,9 +18,9 @@ public class PeopleApiServices
 {
     public static void Add(IServiceCollection services)
     {
-        services.AddSingleton<MockPeopleContext>();
-        services.AddScoped<IBaseRepository<Gender>, MockBaseRepository<Gender, MockPeopleContext>>();
-        services.AddScoped<IBaseRepository<Person>, MockBaseRepository<Person, MockPeopleContext>>();
+        services.AddSingleton<IPeopleContext, MockPeopleContext>();
+        services.AddScoped<IBaseRepository<Gender>, MockBaseRepository<Gender, IPeopleContext, IPeopleContext>>();
+        services.AddScoped<IBaseRepository<Person>, MockBaseRepository<Person, IPeopleContext, IPeopleContext>>();
         services.AddScoped<IGenderRepository, GenderRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGenderFactory, GenderFactory>();
@@ -34,6 +34,6 @@ public class PeopleApiServices
 
     public static void Seed(IServiceProvider provider)
     {
-        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<MockPeopleContext>());
+        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPeopleContext>());
     }
 }

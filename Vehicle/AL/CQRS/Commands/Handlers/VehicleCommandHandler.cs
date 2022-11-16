@@ -5,6 +5,7 @@ using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries;
+using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
@@ -13,6 +14,7 @@ using VehicleDomain.DL.Models.VehicleInformations.Validation;
 using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Queries;
+using VehicleDomain.DL.Models.Vehicles.Events;
 using VehicleDomain.DL.Models.Vehicles.Validation;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.IPL.Services;
@@ -39,6 +41,30 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _unitOfWork = unitOfWork;
     }
 
+    public void EventAction(VehicleOperatorRelationshipEstablished e)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EventAction(VehicleOperatorRelationshipDisbanded e)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EventAction(OperatorRemoved e)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EventAction(OperatorLicenseRetracted e)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EventAction(OperatorLicenseExpired e)
+    {
+        throw new NotImplementedException();
+    }
 
     public Result Handle(ValidateDriverLicenseStatus command)
     { //make a valdiation check, after this (if successfull) the user should use a query to get the result
@@ -249,7 +275,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         BinaryFlag flag = entity.AddToDistanceMoved(command.DistanceToAdd);
-        if (flag != 0)
+        if (!flag)
         {
             return new InvalidResultNoData(VehicleErrorConversion.Convert(flag).ToArray());
         }
@@ -266,7 +292,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             return new InvalidResultNoData($"");
         }
         BinaryFlag flag = entity.OverwriteDistanceMoved(command.NewDistance);
-        if (flag != 0)
+        if (!flag)
         {
             return new InvalidResultNoData(VehicleErrorConversion.Convert(flag).ToArray());
         }

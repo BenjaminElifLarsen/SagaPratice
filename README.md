@@ -30,7 +30,9 @@ A temporal follows this pattern //sentence(.|?)
 The temporal comments are just ideas and thoughts and are only present, because I work alone on this project. If working with others such comments would be placed in the task/backlogs on the devops board until they could be resolved.
 The permanent comments are there to help explain why code is done in the way it is done, what it does or why it is present. 
 
-
+Currently the {Domain}CommandHandlers do not only handle commands, but also handle events. This will be changed when {Domain}EventHandlers are set up.
+At the same time busses for commands also need to be implemeneted. 
+The current design is caused by reading and praticing and thus the designs are not always the most correct at a specific implementation time. At the same taking one step, ensuring it is understod and working before taking the next.
 
 
 

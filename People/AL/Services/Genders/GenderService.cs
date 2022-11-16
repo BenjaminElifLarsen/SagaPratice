@@ -1,4 +1,4 @@
-﻿using PeopleDomain.AL.CQRS.Commands.Handlers;
+﻿using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.IPL.Repositories;
 
 namespace PeopleDomain.AL.Services.Genders;

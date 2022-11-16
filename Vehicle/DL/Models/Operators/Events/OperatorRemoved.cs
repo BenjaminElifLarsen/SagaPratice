@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorRemoved : IDomainEvent<OperatorRemovedData>
+public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
 {
     public string AggregateType { get; private set; }
 
@@ -25,11 +25,11 @@ internal class OperatorRemoved : IDomainEvent<OperatorRemovedData>
     }
 }
 
-internal class OperatorRemovedData
+public class OperatorRemovedData
 {
     public int Id { get; private set; }
 
-    public OperatorRemovedData(int id)
+    internal OperatorRemovedData(int id)
     {
         Id = id;
     }

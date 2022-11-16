@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
-namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorLicenseExpired : IDomainEvent
+namespace VehicleDomain.DL.Models.Vehicles.Events;
+public class VehicleOperatorRelationshipDisbanded : IDomainEvent
 {
     public string AggregateType => throw new NotImplementedException();
 

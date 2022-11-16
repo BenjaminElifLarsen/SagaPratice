@@ -10,7 +10,7 @@ using PeopleDomain.DL.Model;
 using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
 
-namespace PeopleDomain.AL.CQRS.Commands.Handlers;
+namespace PeopleDomain.AL.Handlers.Command;
 internal class PeopleCommandHandler : IPeopleCommandHandler
 {
     private readonly IPersonFactory _personFactory;
@@ -89,25 +89,25 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
 
         var genderIds = _unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result;
         var validationData = new PersonValidationData(genderIds);
-        BinaryFlag flag = new PersonChangePersonalInformationValidator(command,validationData).Validate();
+        BinaryFlag flag = new PersonChangePersonalInformationValidator(command, validationData).Validate();
         if (!flag)
         {
             return new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
         }
 
-        if(command.FirstName is not null)
+        if (command.FirstName is not null)
         {
             entity.ReplaceFistName(command.FirstName.FirstName);
         }
-        if(command.LastName is not null)
+        if (command.LastName is not null)
         {
             entity.ReplaceLastName(command.LastName.LastName);
         }
-        if(command.Brith is not null)
+        if (command.Brith is not null)
         { //integration event
             entity.UpdateBirth(command.Brith.Birth);
         }
-        if(command.Gender is not null)
+        if (command.Gender is not null)
         {
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(new(command.Gender.Gender));
@@ -162,7 +162,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
     { //would need to validate if the person is valid, so has set value and exist in the context.
         var entityToAddToo = _unitOfWork.GenderRepository.GetForOperationAsync(command.NewGenderId).Result;
         var entityToRemoveFrom = _unitOfWork.GenderRepository.GetForOperationAsync(command.OldGenderId).Result;
-        if(entityToAddToo is null || entityToRemoveFrom is null)
+        if (entityToAddToo is null || entityToRemoveFrom is null)
         {
             return new InvalidResultNoData(); //create event for saga
         }

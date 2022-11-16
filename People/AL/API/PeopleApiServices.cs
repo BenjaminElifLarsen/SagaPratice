@@ -1,11 +1,14 @@
 ﻿using BaseRepository;
+using Common.CQRS.Commands;
 using Common.Events.Domain;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
-using PeopleDomain.AL.CQRS.Commands.Handlers;
+using PeopleDomain.AL.Busses.Command;
+using PeopleDomain.AL.Busses.Event;
+using PeopleDomain.AL.Handlers.Command;
+using PeopleDomain.AL.Handlers.Event;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
-using PeopleDomain.DL.Events.Domain;
 using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Model;
 using PeopleDomain.IPL.Context;
@@ -29,6 +32,8 @@ public class PeopleApiServices
         services.AddScoped<IGenderService, GenderService>();
         services.AddScoped<IDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IPeopleEventHandler, PeopleEventHandler>();
+        services.AddScoped<ICommandBus, MockCommandBus>();
     }
 
     public static void Seed(IServiceProvider provider)

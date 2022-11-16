@@ -46,11 +46,6 @@ internal class VehicleRepository : IVehicleRepository
         return await _baseRepository.FindByPredicateForOperationAsync(x => x.VehicleId == id);
     }
 
-    public void Save()
-    {
-        throw new NotImplementedException();//_baseRepository.SaveChanges();
-    }
-
     public void Update(Vehicle entity)
     {
         _baseRepository.Update(entity);

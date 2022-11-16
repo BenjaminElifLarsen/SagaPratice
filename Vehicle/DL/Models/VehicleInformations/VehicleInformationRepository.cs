@@ -40,11 +40,6 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
         return _baseRepository.IsUniqueAsync(x => x.Name == name);
     }
 
-    public void Save()
-    {
-        throw new NotImplementedException();//_baseRepository.SaveChanges();
-    }
-
     public void Update(VehicleInformation entity)
     {
         _baseRepository.Update(entity);

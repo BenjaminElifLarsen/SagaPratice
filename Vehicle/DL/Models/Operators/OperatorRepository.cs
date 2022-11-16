@@ -41,11 +41,6 @@ internal class OperatorRepository : IOperatorRepository
         return await _baseRepository.IsUniqueAsync(x => x.OperatorId == id);
     }
 
-    public void Save()
-    {
-        throw new NotImplementedException();//_baseRepository.SaveChanges();
-    }
-
     public void Update(Operator entity)
     {
         _baseRepository.Update(entity);

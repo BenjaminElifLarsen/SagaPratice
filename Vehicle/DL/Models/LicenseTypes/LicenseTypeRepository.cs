@@ -46,11 +46,6 @@ internal class LicenseTypeRepository : ILicenseTypeRepository
         return await _baseRepository.IsUniqueAsync(x => x.Type == type);
     }
 
-    public void Save()
-    {
-        throw new NotImplementedException();//_baseRepository.SaveChanges();
-    }
-
     public void Update(LicenseType entity)
     {
         _baseRepository.Update(entity);

@@ -1,12 +1,10 @@
 ﻿using Common.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
-using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
-using VehicleDomain.DL.Models.Vehicles.Events;
 
-namespace VehicleDomain.AL.CQRS.Commands.Handlers;
+namespace VehicleDomain.AL.Handlers.Command;
 public interface IVehicleCommandHandler :
     ICommandHandler<ValidateDriverLicenseStatus>,
     ICommandHandler<AddOperatorNoLicenseFromSystem>,
@@ -23,14 +21,14 @@ public interface IVehicleCommandHandler :
     ICommandHandler<AddDistanceToVehicleDistance>,
     ICommandHandler<ResetVehicleMovedDistance>,
     ICommandHandler<EstablishRelationBetweenOperatorAndVehicle>,
-    ICommandHandler<AddVehicleToOperator, VehicleOperatorRelationshipEstablished>,
-    ICommandHandler<AddOperatorToVehicle, VehicleOperatorRelationshipEstablished>,
+    ICommandHandler<AddVehicleToOperator/*, VehicleOperatorRelationshipEstablished*/>,
+    ICommandHandler<AddOperatorToVehicle/*, VehicleOperatorRelationshipEstablished*/>,
     ICommandHandler<RemoveRelationBetweenOperatorAndVehicle>,
-    ICommandHandler<RemoveVehicleFromOperator, VehicleOperatorRelationshipDisbanded>,
-    ICommandHandler<RemoveOperatorFromVehicle, VehicleOperatorRelationshipDisbanded>,
-    ICommandHandler<RemoveOperatorFromVehicle, OperatorRemoved>, //should data contain a collection over all vehicle ids? Or would it be better to create an event for each combination of operatorId and vehicleId?
-    ICommandHandler<RemoveOperatorFromVehicle, OperatorLicenseRetracted>, //same, but here the command handler should check if the vehicle require the speicific license type id
-    ICommandHandler<RemoveOperatorFromVehicle, OperatorLicenseExpired>, // ^ 
+    ICommandHandler<RemoveVehicleFromOperator/*, VehicleOperatorRelationshipDisbanded*/>,
+    ICommandHandler<RemoveOperatorFromVehicle/*, VehicleOperatorRelationshipDisbanded*/>,
+    //ICommandHandler<RemoveOperatorFromVehicle/*, OperatorRemoved*/>, //should data contain a collection over all vehicle ids? Or would it be better to create an event for each combination of operatorId and vehicleId?
+    //ICommandHandler<RemoveOperatorFromVehicle/*, OperatorLicenseRetracted*/>, //same, but here the command handler should check if the vehicle require the speicific license type id
+    //ICommandHandler<RemoveOperatorFromVehicle/*, OperatorLicenseExpired*/>, // ^ 
     ICommandHandler<StartOperatingVehicle>,
     ICommandHandler<StopOperatingVehicle>
 {

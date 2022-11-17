@@ -19,7 +19,7 @@ using VehicleDomain.DL.Models.Vehicles.Validation;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.IPL.Services;
 
-namespace VehicleDomain.AL.CQRS.Commands.Handlers;
+namespace VehicleDomain.AL.Handlers.Command;
 internal class VehicleCommandHandler : IVehicleCommandHandler
 {
     private readonly IVehicleFactory _vehicleFactory;
@@ -39,31 +39,6 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _licenseTypeFactory = licenseTypeFactory;
         _vehicleInformationFactory = vehicleInformationFactory;
         _unitOfWork = unitOfWork;
-    }
-
-    public void EventAction(VehicleOperatorRelationshipEstablished e)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void EventAction(VehicleOperatorRelationshipDisbanded e)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void EventAction(OperatorRemoved e)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void EventAction(OperatorLicenseRetracted e)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void EventAction(OperatorLicenseExpired e)
-    {
-        throw new NotImplementedException();
     }
 
     public Result Handle(ValidateDriverLicenseStatus command)
@@ -360,7 +335,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(RemoveOperatorFromVehicle command)
-    { //should this save or should the handler for RemoveRelationBetweenOperatorAndVehicle?
+    { 
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         if (entity is null)
         {
@@ -372,7 +347,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(RemoveVehicleFromOperator command)
-    { //should this save or should the handler for RemoveRelationBetweenOperatorAndVehicle?
+    {
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if (entity is null)
         {

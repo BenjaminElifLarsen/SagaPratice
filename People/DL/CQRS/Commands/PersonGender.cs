@@ -5,6 +5,7 @@ public class AddPersonToGender : ICommand //consider a better name
 {
     public int PersonId { get; private set; }
     public int GenderId { get; private set; }
+
     internal AddPersonToGender(int personId, int genderId)
     {
         PersonId = personId;
@@ -16,6 +17,7 @@ public class RemovePersonFromGender : ICommand
 {
     public int PersonId { get; private set; }
     public int GenderId { get; private set; }
+
     internal RemovePersonFromGender(int personId, int genderId)
     {
         PersonId = personId;

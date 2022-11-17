@@ -28,12 +28,12 @@ public class OperatorLicenseRetracted : IDomainEvent<OperatorLicenseRetractedDat
 
 public class OperatorLicenseRetractedData
 { //consider moving these into the class above them. Tried and not to happy with the design
-    public int PersonId { get; private set; }
+    public int OperatorId { get; private set; }
     public int LicenseTypeId { get; private set; } //license type id of the retracted license
 
-    internal OperatorLicenseRetractedData(int personId, int licenseTypeId)
+    internal OperatorLicenseRetractedData(int operatorId, int licenseTypeId)
     {
-        PersonId = personId;
+        OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;
     }
 }

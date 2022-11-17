@@ -14,6 +14,12 @@ public class AddOperatorToVehicle : ICommand
 { //need in all cases to validate that the operator got the needed license for the vehicle
     internal int VehicleId { get; private set; }
     internal int OperatorId { get; private set; }
+
+    public AddOperatorToVehicle(int vehicleId, int operatorId)
+    {
+        VehicleId = vehicleId;
+        OperatorId = operatorId;
+    }
 }
 
 /// <summary>
@@ -23,4 +29,10 @@ public class AddVehicleToOperator : ICommand
 {
     internal int VehicleId { get; private set; }
     internal int OperatorId { get; private set; }
+
+    public AddVehicleToOperator(int vehicleId, int operatorId)
+    {
+        VehicleId = vehicleId;
+        OperatorId = operatorId;
+    }
 }

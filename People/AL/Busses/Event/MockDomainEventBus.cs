@@ -21,7 +21,10 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
             _routes.Add(typeof(T), handlers);
         }
 
-        handlers.Add(x => handler((T)x)); //should check if the handler is already present before adding.
+        var test = handlers.SingleOrDefault(x => handler((T)x));
+        if (!handlers.Any(x => x == test))
+            handlers.Add(x => handler((T)x));
+
     }
 
     public void Publish<T>(T @event) where T : IDomainEvent

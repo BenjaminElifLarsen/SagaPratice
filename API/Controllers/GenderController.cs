@@ -1,7 +1,7 @@
 ﻿using API.Controllers.Extensions;
+using Common.Other;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PeopleDomain.AL;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.DL.CQRS.Commands;
 
@@ -12,10 +12,11 @@ public class GenderController : ControllerBase
 {
 	private IGenderService _genderService;
 
-	public GenderController(IGenderService genderService, PeopleRegistry registry)
+	public GenderController(IGenderService genderService, IRoutingRegistry registry)
 	{
 		_genderService = genderService;
-	}
+        registry.SetUpRouting();
+    }
 
     [AllowAnonymous]
     [HttpGet]

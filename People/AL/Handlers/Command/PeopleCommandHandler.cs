@@ -15,33 +15,13 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
 {
     private readonly IPersonFactory _personFactory;
     private readonly IGenderFactory _genderFactory;
-    //private readonly IDomainEventBus _domainEventBus;
     private readonly IUnitOfWork _unitOfWork;
 
-    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, /*IDomainEventBus domainEventBus,*/ IUnitOfWork unitOfWork)
+    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IUnitOfWork unitOfWork)
     {
         _personFactory = personFactory;
         _genderFactory = genderFactory;
         _unitOfWork = unitOfWork;
-        //_domainEventBus = domainEventBus;
-        //_domainEventBus.RegisterHandler<PersonHired>(EventAction);
-        //_domainEventBus.RegisterHandler<PersonFired>(EventAction);
-        //_domainEventBus.RegisterHandler<PersonChangedGender>(EventAction);
-    }
-
-    public void EventAction(PersonHired e)
-    {
-        Handle(new AddPersonToGender(e.Data.PersonId, e.Data.GenderId));
-    }
-
-    public void EventAction(PersonFired e)
-    {
-        Handle(new RemovePersonFromGender(e.Data.PersonId, e.Data.GenderId));
-    }
-
-    public void EventAction(PersonChangedGender e)
-    {
-        Handle(new ChangePersonGender(e.Data.PersonId, e.Data.NewGenderId, e.Data.OldGenderId));
     }
 
     public Result Handle(HirePersonFromUser command)

@@ -14,6 +14,12 @@ public class RemoveOperatorFromVehicle : ICommand
 {
     internal int VehicleId { get; private set; }
     internal int OperatorId { get; private set; }
+
+    public RemoveOperatorFromVehicle(int vehicleId, int operatorId)
+    {
+        VehicleId = vehicleId;
+        OperatorId = operatorId;
+    }
 }
 
 /// <summary>
@@ -23,4 +29,10 @@ public class RemoveVehicleFromOperator : ICommand
 {
     internal int VehicleId { get; private set; }
     internal int OperatorId { get; private set; }
+
+    public RemoveVehicleFromOperator(int vehicleId, int operatorId)
+    {
+        VehicleId = vehicleId;
+        OperatorId = operatorId;
+    }
 }

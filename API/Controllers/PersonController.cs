@@ -1,7 +1,7 @@
 ﻿using API.Controllers.Extensions;
+using Common.Other;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PeopleDomain.AL;
 using PeopleDomain.AL.Services.People;
 using PeopleDomain.DL.CQRS.Commands;
 
@@ -12,10 +12,11 @@ public class PersonController : ControllerBase
 {
     private readonly IPeopleService _peopleService;
 
-	public PersonController(IPeopleService peopleService, PeopleRegistry registry)
+	public PersonController(IPeopleService peopleService, IRoutingRegistry registry)
 	{
 		_peopleService = peopleService;
-	}
+        registry.SetUpRouting();
+    }
 
 
     [AllowAnonymous]

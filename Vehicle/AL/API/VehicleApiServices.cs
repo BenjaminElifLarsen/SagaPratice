@@ -9,8 +9,8 @@ using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.IPL.Context;
-using VehicleDomain.AL.CQRS.Commands.Handlers;
 using VehicleDomain.IPL.Services;
+using VehicleDomain.AL.Handlers.Command;
 
 namespace VehicleDomain.AL.API;
 

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class VehicleSold : IDomainEvent<VehicleSoldData>
+public class VehicleSold : IDomainEvent<VehicleSoldData>
 {
     public string AggregateType { get; private set; }
 
@@ -22,16 +22,18 @@ internal class VehicleSold : IDomainEvent<VehicleSoldData>
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggregate.VehicleId);
+        Data = new(aggregate.VehicleId, aggregate.Operators.Select(x => x.Id));
     }
 }
 
-internal class VehicleSoldData
+public class VehicleSoldData
 {
     public int Id { get; private set; }
+    public IEnumerable<int> OperatorIds { get; private set; }
 
-	public VehicleSoldData(int id)
+	public VehicleSoldData(int id, IEnumerable<int> operatorIds)
 	{
 		Id = id;
+        OperatorIds = operatorIds;
 	}
 }

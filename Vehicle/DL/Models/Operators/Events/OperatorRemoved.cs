@@ -27,10 +27,14 @@ public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
 
 public class OperatorRemovedData
 {
-    public int Id { get; private set; }
+    public int Id { get; private set; } //maybe have a collection of vehicle ids and licesne type ids
+    public IEnumerable<int> VehicleIds { get; private set; }
+    public IEnumerable<int> LicenseTypeIds { get; private set; }
 
-    internal OperatorRemovedData(int id)
+    internal OperatorRemovedData(int id, IEnumerable<int> vehicleIds, IEnumerable<int> licenseTypeIds)
     {
         Id = id;
+        VehicleIds = vehicleIds;
+        LicenseTypeIds = licenseTypeIds;
     }
 }

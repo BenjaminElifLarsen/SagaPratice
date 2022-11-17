@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorLicenseRenewed : IDomainEvent<OperatorLicenseRenewedData>
+public class OperatorLicenseRenewed : IDomainEvent<OperatorLicenseRenewedData>
 {
     public string AggregateType { get; private set; }
 
@@ -21,7 +21,7 @@ internal class OperatorLicenseRenewed : IDomainEvent<OperatorLicenseRenewedData>
     }
 }
 
-internal class OperatorLicenseRenewedData
+public class OperatorLicenseRenewedData
 {
 
 }

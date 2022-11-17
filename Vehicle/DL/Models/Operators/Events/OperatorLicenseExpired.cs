@@ -1,15 +1,35 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorLicenseExpired : IDomainEvent
+public class OperatorLicenseExpired : IDomainEvent<OperatorLicenseExpiredData>
 {
-    public string AggregateType => throw new NotImplementedException();
+    public string AggregateType { get; private set; }
 
-    public int AggregateId => throw new NotImplementedException();
+    public int AggregateId { get; private set; }
 
-    public string EventType => throw new NotImplementedException();
+    public string EventType { get; private set; }
 
-    public Guid EventId => throw new NotImplementedException();
+    public Guid EventId { get; private set; }
 
-    public long TimeStampRecorded => throw new NotImplementedException();
+    public long TimeStampRecorded { get; private set; }
+
+    public OperatorLicenseExpiredData Data { get; private set; }
+
+    public OperatorLicenseExpired(Operator aggregate, int licenseTypeId)
+    {
+
+        Data = new(aggregate.OperatorId, licenseTypeId);
+    }
+}
+
+public class OperatorLicenseExpiredData
+{
+    public int OperatorId { get; private set; }
+    public int LicenseTypeId { get; private set; }
+
+    public OperatorLicenseExpiredData(int operatorId, int licenseTypeId)
+    {
+        OperatorId = operatorId;
+        LicenseTypeId = licenseTypeId;
+    }
 }

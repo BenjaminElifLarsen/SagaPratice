@@ -1,6 +1,7 @@
 ﻿using BaseRepository;
 using Common.CQRS.Commands;
 using Common.Events.Domain;
+using Common.Other;
 using Common.RepositoryPattern;
 using Microsoft.Extensions.DependencyInjection;
 using PeopleDomain.AL.Busses.Command;
@@ -34,7 +35,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleEventHandler, PeopleEventHandler>();
         services.AddScoped<ICommandBus, MockCommandBus>();
         services.AddScoped<IDomainEventBus, MockDomainEventBus>();
-        services.AddScoped<PeopleRegistry>();
+        services.AddScoped<IRoutingRegistry, PeopleRegistry>();
     }
 
     public static void Seed(IServiceProvider provider)

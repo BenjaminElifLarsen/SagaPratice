@@ -1,12 +1,13 @@
 ﻿using Common.CQRS.Commands;
 using Common.Events.Domain;
+using Common.Other;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL;
-public class PeopleRegistry
+public class PeopleRegistry : IRoutingRegistry
 {
 	private readonly ICommandBus _commandBus;
 	private readonly IDomainEventBus _eventBus;
@@ -19,14 +20,18 @@ public class PeopleRegistry
 		_eventBus = eventBus;
 		_commandHandler = commandHandler;
 		_eventHandler = eventHandler;
-		RoutingEvent();
+	}
+
+	public void SetUpRouting()
+	{
 		RoutingCommand();
+		RoutingEvent();
 	}
 
 	private void RoutingEvent()
     {
         _eventBus.RegisterHandler<PersonHired>(_eventHandler.Handle); 
-        _eventBus.RegisterHandler<PersonFired>(_eventHandler.Handle); 
+        _eventBus.RegisterHandler<PersonFired>(_eventHandler.Handle);
         _eventBus.RegisterHandler<PersonChangedGender>(_eventHandler.Handle);
     }
 

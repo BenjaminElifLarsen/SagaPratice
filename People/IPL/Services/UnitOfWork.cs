@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using PeopleDomain.AL;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
 
@@ -14,7 +15,7 @@ internal class UnitOfWork : IUnitOfWork
 
     public IPersonRepository PersonRepository => _personRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IDomainEventBus eventBus, IPeopleContext context)
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IDomainEventBus eventBus, IPeopleContext context/*, Registry registry*/)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;

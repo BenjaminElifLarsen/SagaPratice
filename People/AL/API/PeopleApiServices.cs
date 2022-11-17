@@ -20,20 +20,21 @@ public class PeopleApiServices
 {
     public static void Add(IServiceCollection services)
     {
-        services.AddSingleton<IPeopleContext, MockPeopleContext>();
+        services.AddSingleton<IPeopleContext, MockPeopleContext>(); // Singleton because the data is stored in-memory.
         services.AddScoped<IBaseRepository<Gender>, MockBaseRepository<Gender, IPeopleContext, IPeopleContext>>();
         services.AddScoped<IBaseRepository<Person>, MockBaseRepository<Person, IPeopleContext, IPeopleContext>>();
         services.AddScoped<IGenderRepository, GenderRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGenderFactory, GenderFactory>();
         services.AddScoped<IPersonFactory, PersonFactory>();
-        services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
         services.AddScoped<IPeopleService, PeopleService>();
         services.AddScoped<IGenderService, GenderService>();
-        services.AddScoped<IDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
         services.AddScoped<IPeopleEventHandler, PeopleEventHandler>();
         services.AddScoped<ICommandBus, MockCommandBus>();
+        services.AddScoped<IDomainEventBus, MockDomainEventBus>();
+        services.AddScoped<PeopleRegistry>();
     }
 
     public static void Seed(IServiceProvider provider)

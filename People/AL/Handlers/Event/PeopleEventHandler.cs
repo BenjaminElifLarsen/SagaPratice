@@ -12,17 +12,17 @@ internal class PeopleEventHandler : IPeopleEventHandler
     }
 
     public void Handle(PersonHired @event)
-    {
-        _commandBus.Publish(new AddPersonToGender(@event.Data.PersonId, @event.Data.PersonId));
+    { //event class should not return any data
+        _commandBus.Publish(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId));
     }
 
     public void Handle(PersonFired @event)
     {
-        throw new NotImplementedException();
+        _commandBus.Publish(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId));
     }
 
     public void Handle(PersonChangedGender @event)
     {
-        throw new NotImplementedException();
+        _commandBus.Publish(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId));
     }
 }

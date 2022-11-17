@@ -78,7 +78,15 @@ a command:
 an event:
 	has one sender (the publisher), but zero or many receivers
 
-
+have a class that is called in program that registrate the routes to do on specific events and commands. So it takes in instances of the busses and handlers and registrate. 
+	done in a similar way to seedData
+	maybe different classes for the command part and event part.
+	since it will rely on specific instances, not sure that approach will work out. 
+	tested by calling it from program, ran, but the data not present in unit of work
+	calling it currently from controllers
+	might it make sense to make the busses and handlers singletons? They don't rely on anything that is 'required' to be scoped.
+		this would permit to call Registry from program
+	singleton attempt did not work as the command handler depends on scoped instances. 
 
 
 

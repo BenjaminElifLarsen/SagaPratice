@@ -14,7 +14,6 @@ internal class VehicleEventHandler : IVehicleEventHandler
     public VehicleEventHandler(ICommandBus commandBus)
     {
         _commandBus = commandBus;
-
     }
 
     public void Handle(LicenseTypeAgeRequirementChanged @event)

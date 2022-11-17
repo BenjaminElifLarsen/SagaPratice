@@ -17,7 +17,11 @@ public class OperatorLicenseExpired : IDomainEvent<OperatorLicenseExpiredData>
 
     public OperatorLicenseExpired(Operator aggregate, int licenseTypeId)
     {
-
+        AggregateType = aggregate.GetType().Name;
+        AggregateId = aggregate.OperatorId;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
         Data = new(aggregate.OperatorId, licenseTypeId);
     }
 }

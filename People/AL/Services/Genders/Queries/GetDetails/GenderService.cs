@@ -7,7 +7,7 @@ public partial class GenderService
 {
     public async Task<Result<GenderDetails>> GetGenderDetailsAsync(int id)
     {
-        var details = await _genderRepository.GetAsync(id, new GenderDetailsQuery());
+        var details = await _unitOfWork.GenderRepository.GetAsync(id, new GenderDetailsQuery());
         if(details is null)
         {
             return new NotFoundResult<GenderDetails>("Not found.");

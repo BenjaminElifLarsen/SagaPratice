@@ -7,7 +7,7 @@ internal class IsPersonFirstNameValid : ISpecification<Person>, ISpecification<H
 {
     public bool IsSatisfiedBy(ChangePersonalInformationFromUser candidate)
     {
-        return candidate.FirstName is not null && IsSatisfiedBy(candidate.FirstName.FirstName);
+        return candidate.FirstName is null || IsSatisfiedBy(candidate.FirstName.FirstName);
     }
 
     public bool IsSatisfiedBy(HirePersonFromUser candidate)

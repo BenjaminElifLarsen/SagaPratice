@@ -5,7 +5,6 @@ using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries;
-using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
@@ -14,7 +13,6 @@ using VehicleDomain.DL.Models.VehicleInformations.Validation;
 using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Queries;
-using VehicleDomain.DL.Models.Vehicles.Events;
 using VehicleDomain.DL.Models.Vehicles.Validation;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.IPL.Services;
@@ -65,7 +63,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(AddOperatorNoLicenseFromSystem command)
-    { //will need to trigger an event, PersonCreated
+    {
         if (!_unitOfWork.OperatorRepository.IsIdUniqueAsync(command.Id).Result)
         {
             return new InvalidResultNoData("Operator already exist.");
@@ -390,5 +388,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _unitOfWork.VehicleRepository.Update(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
+    }
+
+    public Result Handle(RemoveOperatorFromLicenseType command)
+    {
+        throw new NotImplementedException();
     }
 }

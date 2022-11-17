@@ -6,6 +6,6 @@ public partial class GenderService
 {
     public async Task<Result> RecogniseGenderAsync(RecogniseGender command)
     {
-        return await Task.Run(() => _peopleCommandHandler.Handle(command));
+        return await Task.Run(() => _commandBus.Publish(command));
     }
 }

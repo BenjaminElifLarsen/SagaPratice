@@ -1,18 +1,15 @@
-﻿using Common.Events.Domain;
-using PeopleDomain.AL.Handlers.Command;
-using PeopleDomain.IPL.Repositories;
+﻿using Common.CQRS.Commands;
+using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Services.People;
 public partial class PeopleService : IPeopleService
 {
-	private readonly IPeopleCommandHandler _peopleCommandHandler;
-	private readonly IPersonRepository _personRepository;
-	private readonly IDomainEventBus _personEventPublisher;
+	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICommandBus _commandBus;
 
-	public PeopleService(IPersonRepository personRepository, IPeopleCommandHandler peopleCommandHandler, IDomainEventBus personEventPublisher)
+	public PeopleService(IUnitOfWork unitOfWork, ICommandBus commandBus)
 	{
-		_personRepository = personRepository;
-		_peopleCommandHandler = peopleCommandHandler;
-		_personEventPublisher = personEventPublisher;
+        _unitOfWork = unitOfWork;
+		_commandBus = commandBus;
 	}
 }

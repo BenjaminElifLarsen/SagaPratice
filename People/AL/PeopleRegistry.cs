@@ -40,5 +40,10 @@ public class PeopleRegistry : IRoutingRegistry
 		_commandBus.RegisterHandler<AddPersonToGender>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemovePersonFromGender>(_commandHandler.Handle);
         _commandBus.RegisterHandler<ChangePersonGender>(_commandHandler.Handle);
+		_commandBus.RegisterHandler<HirePersonFromUser>(_commandHandler.Handle);
+		_commandBus.RegisterHandler<FirePersonFromUser>(_commandHandler.Handle);
+		_commandBus.RegisterHandler<ChangePersonalInformationFromUser>(_commandHandler.Handle);
+		_commandBus.RegisterHandler<RecogniseGender>(_commandHandler.Handle);
+		_commandBus.RegisterHandler<UnrecogniseGender>(_commandHandler.Handle);
 	}
 }

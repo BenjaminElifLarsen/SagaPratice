@@ -1,15 +1,15 @@
-﻿using PeopleDomain.AL.Handlers.Command;
-using PeopleDomain.IPL.Repositories;
+﻿using Common.CQRS.Commands;
+using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Services.Genders;
 public partial class GenderService : IGenderService
 {
-    private readonly IPeopleCommandHandler _peopleCommandHandler;
-    private readonly IGenderRepository _genderRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ICommandBus _commandBus;
 
-    public GenderService(IPeopleCommandHandler peopleCommandHandler, IGenderRepository genderRepository)
+    public GenderService(IUnitOfWork unitOfWork, ICommandBus commandBus)
     {
-        _peopleCommandHandler = peopleCommandHandler;
-        _genderRepository = genderRepository;
+        _unitOfWork = unitOfWork;
+        _commandBus = commandBus;
     }
 }

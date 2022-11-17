@@ -7,7 +7,7 @@ public partial class PeopleService
 {
     public async Task<Result<PersonDetails>> GetPersonDetailsAsync(int id)
     {
-        var details = await _personRepository.GetAsync(id, new PersonDetailsQuery());
+        var details = await _unitOfWork.PersonRepository.GetAsync(id, new PersonDetailsQuery());
         if(details is null)
         {
             return new NotFoundResult<PersonDetails>("Not found.");

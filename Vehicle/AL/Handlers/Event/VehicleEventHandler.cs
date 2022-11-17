@@ -1,4 +1,5 @@
 ﻿using Common.CQRS.Commands;
+using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.VehicleInformations.Events;
@@ -68,7 +69,7 @@ internal class VehicleEventHandler : IVehicleEventHandler
         }
         foreach(var licenseType in @event.Data.LicenseTypeIds)
         {
-            //needs command
+            _commandBus.Publish(new RemoveOperatorFromLicenseType(@event.Data.Id, licenseType)); //needs command handler
         }
     }
 

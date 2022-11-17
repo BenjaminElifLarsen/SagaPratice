@@ -7,7 +7,8 @@ namespace PeopleDomain.IPL.Context;
 internal class MockPeopleContext : IPeopleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
-    private DateOnly _date;
+    private DateOnly _date; //mayhaps move the data out into its own class that can be set as singleton. EF Core context is scoped and it could be nice if this context was slightly more similar to it on that point.
+    
     public bool Filter { get; set; }
 
     private Func<TEntity, bool> Filtering<TEntity>()

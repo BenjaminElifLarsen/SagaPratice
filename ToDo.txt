@@ -68,10 +68,10 @@ figure out what layer would be best for the busses.
 		The busses needs to talk with the handlers. At least the command handler depends on DL and IPL, because of the DL dependency it cannot be placed there.
 		Thus the handlers are either in the AL or IPL. Since they have nothing to do with the context or persisting of data, IPL does not make sense.
 		Thus the handlers are placed in AL.
-		The busses depends on the handlers and are thus also stored in the AL. Wrong, they do not depend on the handlers and can thus be placed in the DL.
+		The busses depends on the handlers and are thus also stored in the AL. Wrong, they do not depend on the handlers, the handlers depend on them, and can thus be placed in the DL.
 		(The AL is considered a layer above IPL.)
-Need to figuere out how to registrate event and commands in the busses
-Remember that the controllers also need to talk with the command busses, but this is not important.
+Need to figuere out how to registrate event and commands in the busses. Done via the {Domain}Registry
+Remember that the controllers also need to talk with the command busses, but this is not important. Done by applying the command bus and unit of work as parameters to the services.
 
 a command:
 	can have many senders, but only one receiver
@@ -82,11 +82,11 @@ have a class that is called in program that registrate the routes to do on speci
 	done in a similar way to seedData
 	maybe different classes for the command part and event part.
 	since it will rely on specific instances, not sure that approach will work out. 
-	tested by calling it from program, ran, but the data not present in unit of work
+	tested by calling it from program, ran, but the routes not present in unit of work event bus instance.
 	calling it currently from controllers
-	might it make sense to make the busses and handlers singletons? They don't rely on anything that is 'required' to be scoped.
+	might it make sense to make the busses and handlers singletons? 
 		this would permit to call Registry from program
-	singleton attempt did not work as the command handler depends on scoped instances. 
+		singleton attempt did not work as the command handler depends on scoped instances. 
 
 
 

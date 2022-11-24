@@ -1,5 +1,4 @@
-﻿using Common.CQRS.Commands;
-using PeopleDomain.AL.Busses.Command;
+﻿using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Services.Genders;

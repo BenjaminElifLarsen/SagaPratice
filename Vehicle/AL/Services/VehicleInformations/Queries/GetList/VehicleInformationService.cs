@@ -7,7 +7,7 @@ public partial class VehicleInformationService
 {
     public async Task<Result<IEnumerable<VehicleInformationListItem>>> GetVehicleInformationListAsync()
     {
-        var list = await Task.Run(() => _vehicleInformationRepository.AllAsync(new VehicleInformationListItemQuery()));
+        var list = await Task.Run(() => _unitOfWork.VehicleInformationRepository.AllAsync(new VehicleInformationListItemQuery()));
         return new SuccessResult<IEnumerable<VehicleInformationListItem>>(list);
     }
 }

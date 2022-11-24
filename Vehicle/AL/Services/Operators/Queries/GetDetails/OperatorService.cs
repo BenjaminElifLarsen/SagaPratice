@@ -7,7 +7,7 @@ public partial class OperatorService
 {
     public async Task<Result<OperatorDetails>> GetOperatorDetailsAsync(int id)
     {
-        var details = await Task.Run(() => _operatorRepository.GetAsync(id, new OperatorDetailsQuery()));
+        var details = await Task.Run(() => _unitOfWork.OperatorRepository.GetAsync(id, new OperatorDetailsQuery()));
         if(details is null)
         {
             return new NotFoundResult<OperatorDetails>("No operator found with the given id.");

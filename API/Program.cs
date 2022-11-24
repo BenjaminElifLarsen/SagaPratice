@@ -1,4 +1,5 @@
 using API.Controllers;
+using API.Middleware;
 using Common.Other;
 using Common.Other.Converters;
 using Microsoft.AspNetCore.Mvc;
@@ -40,46 +41,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseMiddleware<TestMiddleware>();
+app.UseMiddleware<RegistryMiddleware>();
 
 app.MapControllers();
 
 app.Run();
-
-public class TestMiddleware //move when working
-{
-    private readonly RequestDelegate _next;
-    private readonly IServiceProvider _provider;
-
-    public TestMiddleware(RequestDelegate next, IServiceProvider provider)
-    {
-        _next = next;
-        _provider = provider;
-    }
-
-    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries)
-    {
-        var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
-        var vehicleDomain = new string[] { nameof(OperatorController) };
-        var peopleDomain = new string[] { nameof(GenderController), nameof(PersonController) };
-
-        var controllerActionDescriptor = context.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>();
-        var controllerName = controllerActionDescriptor.ControllerTypeInfo.Name;
-        var method = context.Request.Method;
-
-        if(vehicleDomain.Any(x => string.Equals(x,controllerName)) && methodsToRunOn.Any(x => string.Equals(x, method)))
-        {
-            var selected = registries.SingleOrDefault(x => x.GetType() == typeof(VehicleRegistry)); //could have an domain interface for registry
-            selected.SetUpRouting();
-        }
-        else if (peopleDomain.Any(x => string.Equals(x, controllerName)) && methodsToRunOn.Any(x => string.Equals(x, method)))
-        {
-            var selected = registries.SingleOrDefault(x => x.GetType() == typeof(PeopleRegistry));
-            selected.SetUpRouting();
-        }
-        {
-
-        }
-        await _next(context);
-    }
-}

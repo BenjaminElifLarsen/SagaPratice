@@ -1,0 +1,40 @@
+﻿using API.Controllers;
+using Common.Other;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using PeopleDomain.AL;
+using VehicleDomain.AL;
+
+namespace API.Middleware;
+
+public class RegistryMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public RegistryMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries)
+    {
+        var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
+        var vehicleDomain = new string[] { nameof(OperatorController), nameof(VehicleController), nameof(VehicleInformationController) };
+        var peopleDomain = new string[] { nameof(GenderController), nameof(PersonController) };
+
+        var controllerActionDescriptor = context.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>();
+        var controllerName = controllerActionDescriptor.ControllerTypeInfo.Name;
+        var method = context.Request.Method;
+
+        if (vehicleDomain.Any(x => string.Equals(x, controllerName)) && methodsToRunOn.Any(x => string.Equals(x, method)))
+        {
+            var selected = registries.SingleOrDefault(x => x.GetType() == typeof(VehicleRegistry)); //could have an domain interface for each domain registry instead of relying on a concrete type
+            selected.SetUpRouting();
+        }
+        else if (peopleDomain.Any(x => string.Equals(x, controllerName)) && methodsToRunOn.Any(x => string.Equals(x, method)))
+        {
+            var selected = registries.SingleOrDefault(x => x.GetType() == typeof(PeopleRegistry));
+            selected.SetUpRouting();
+        }
+        await _next(context);
+    }
+}

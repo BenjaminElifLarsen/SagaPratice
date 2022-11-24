@@ -6,6 +6,6 @@ public partial class VehicleInformationService
 {
     public async Task<Result> SetupVehicleInformation(AddVehicleInformationFromSystem command)
     {
-        return await Task.Run(() =>_vehicleCommandHandler.Handle(command));
+        return await Task.Run(() =>_commandBus.Publish(command));
     }
 }

@@ -1,14 +1,14 @@
-﻿using VehicleDomain.AL.Handlers.Command;
-using VehicleDomain.DL.Models.Operators;
+﻿using VehicleDomain.AL.Busses.Command;
+using VehicleDomain.IPL.Services;
 
 namespace VehicleDomain.AL.Services.Operators;
 public partial class OperatorService : IOperatorService
 {
-    private readonly IOperatorRepository _operatorRepository; //maybe call a domain service that contains the repository as this service is an application service
-    private readonly IVehicleCommandHandler _vehicleCommandHandler;
-    public OperatorService(IOperatorRepository operatorRepository, IVehicleCommandHandler vehicleCommandHandler)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVehicleCommandBus _commandBus;
+    public OperatorService(IUnitOfWork unitOfWork, IVehicleCommandBus commandBus)
     {
-        _operatorRepository = operatorRepository;
-        _vehicleCommandHandler = vehicleCommandHandler;
+        _unitOfWork = unitOfWork;
+        _commandBus = commandBus;
     }
 }

@@ -4,7 +4,7 @@ using VehicleDomain.AL.Services.Vehicles.Queries.GetDetails;
 using VehicleDomain.AL.Services.Vehicles.Queries.GetList;
 using VehicleDomain.DL.Models.Vehicles;
 
-namespace VehicleDomain.AL.Services.Vehicles;
+namespace VehicleDomain.AL.Services.Vehicles.Queries;
 internal class VehicleListItemQuery : BaseQuery<Vehicle, VehicleListItem>
 {
     public override Expression<Func<Vehicle, VehicleListItem>> Map()

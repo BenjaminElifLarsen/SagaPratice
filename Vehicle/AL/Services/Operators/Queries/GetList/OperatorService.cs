@@ -7,7 +7,7 @@ public partial class OperatorService
 {
     public async Task<Result<IEnumerable<OperatorListItem>>> GetOperatorListAsync()
     {
-        var list = await Task.Run(() => _operatorRepository.AllAsync(new OperatorListItemQuery()));
+        var list = await Task.Run(() => _unitOfWork.OperatorRepository.AllAsync(new OperatorListItemQuery()));
         return new SuccessResult<IEnumerable<OperatorListItem>>(list);
     }
 }

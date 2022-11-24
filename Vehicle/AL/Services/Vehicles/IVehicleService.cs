@@ -12,5 +12,5 @@ public interface IVehicleService
     Task<Result> StartOperatingVehicle(StartOperatingVehicle command);
     Task<Result> StopOperatingVehicle(StopOperatingVehicle command);
     Task<Result> BuyVehicleNoOperator(BuyVehicleWithNoOperator command);
-    Task<Result> BuyVehicleWithOperator(BuyVehicleWithOperators command);
+    //Task<Result> BuyVehicleWithOperator(BuyVehicleWithOperators command);
 }

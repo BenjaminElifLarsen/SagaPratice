@@ -6,6 +6,6 @@ public partial class OperatorService
 {
     public async Task<Result> RemoveOperatorFromSystemAsync(RemoveOperatorFromSystem command)
     {
-        return await Task.Run(() => _vehicleCommandHandler.Handle(command));
+        return await Task.Run(() => _commandBus.Publish(command));
     }
 }

@@ -12,10 +12,9 @@ public class PersonController : ControllerBase
 {
     private readonly IPeopleService _peopleService;
 
-	public PersonController(IPeopleService peopleService, IRoutingRegistry registry)
+	public PersonController(IPeopleService peopleService)
 	{
 		_peopleService = peopleService;
-        registry.SetUpRouting();
     }
 
 

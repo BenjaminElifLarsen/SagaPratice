@@ -22,6 +22,7 @@ public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
+        Data = new(aggregate.OperatorId, aggregate.Vehicles.Select(x => x.Id), aggregate.Licenses.Select(x => x.Type.Id));
     }
 }
 

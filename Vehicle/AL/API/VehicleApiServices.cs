@@ -11,6 +11,12 @@ using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.IPL.Context;
 using VehicleDomain.IPL.Services;
 using VehicleDomain.AL.Handlers.Command;
+using Common.Other;
+using Common.CQRS.Commands;
+using VehicleDomain.AL.Busses.Command;
+using Common.Events.Domain;
+using VehicleDomain.AL.Busses.Event;
+using VehicleDomain.AL.Handlers.Event;
 
 namespace VehicleDomain.AL.API;
 
@@ -31,11 +37,16 @@ public class VehicleApiServices
         services.AddScoped<IVehicleFactory, VehicleFactory>();
         services.AddScoped<ILicenseTypeFactory, LicenseTypeFactory>();
         services.AddScoped<IVehicleInformationFactory, VehicleInformationFactory>();
-        services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
         services.AddScoped<IOperatorService, OperatorService>();
         services.AddScoped<IVehicleInformationService, VehicleInformationService>();
         services.AddScoped<IVehicleService, VehicleService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
+        services.AddScoped<IVehicleEventHandler, VehicleEventHandler>();
+        services.AddScoped<IVehicleCommandBus, MockCommandBus>();
+        services.AddScoped<IVehicleDomainEventBus, MockDomainEventBus>();
+        services.AddScoped<IRoutingRegistry, VehicleRegistry>(); //does not work in there are multiple of them, e.g. one for each domain. It will select the first one rather than the one of the domain.
+            //come back to the problem of placement of the registry.
     }
 
     public static void Seed(IServiceProvider provider)

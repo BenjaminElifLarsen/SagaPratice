@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.AL.Busses.Event;
-internal class MockDomainEventBus : IDomainEventBus
+internal class MockDomainEventBus : IVehicleDomainEventBus
 {
     private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routes;
 
@@ -21,7 +21,7 @@ internal class MockDomainEventBus : IDomainEventBus
         }
 
         var test = handlers.SingleOrDefault(x => handler((T)x));
-        if (!handlers.Any(x => x == test))
+        if (!handlers.Any(x => x == test)) //with the knowledge from testbed, this does not work correctly.
             handlers.Add(x => handler((T)x));
 
     }
@@ -51,5 +51,6 @@ internal class MockDomainEventBus : IDomainEventBus
         {
             handlers.Remove(toRemove);
         }
+        throw new NotImplementedException();
     }
 }

@@ -89,7 +89,7 @@ have a class that is called in program that registrate the routes to do on speci
 		singleton attempt did not work as the command handler depends on scoped instances. 
 
 
-
+update services to use busses in the VehicleDomain
 
 
 

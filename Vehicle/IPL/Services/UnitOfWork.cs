@@ -1,5 +1,5 @@
 ﻿using Common.Events.Domain;
-using Common.RepositoryPattern;
+using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
@@ -13,7 +13,7 @@ internal class UnitOfWork : IUnitOfWork
     private readonly IOperatorRepository _operatorRepository;
     private readonly IVehicleInformationRepository _vehicleInformationRepository;
     private readonly IVehicleRepository _vehicleRepository;
-    private readonly IDomainEventBus _eventBus;
+    private readonly IVehicleDomainEventBus _eventBus;
     private readonly IVehicleContext _context;
 
     public ILicenseTypeRepository LicenseTypeRepository => _licenseTypeRepository;
@@ -24,7 +24,7 @@ internal class UnitOfWork : IUnitOfWork
 
     public IVehicleRepository VehicleRepository => _vehicleRepository;
 
-    public UnitOfWork(ILicenseTypeRepository licenseTypeRepository, IOperatorRepository operatorRepository, IVehicleInformationRepository vehicleInformationRepository, IVehicleRepository vehicleRepository, IDomainEventBus eventBus, IVehicleContext context)
+    public UnitOfWork(ILicenseTypeRepository licenseTypeRepository, IOperatorRepository operatorRepository, IVehicleInformationRepository vehicleInformationRepository, IVehicleRepository vehicleRepository, IVehicleDomainEventBus eventBus, IVehicleContext context)
     {
         _licenseTypeRepository = licenseTypeRepository;
         _operatorRepository = operatorRepository;

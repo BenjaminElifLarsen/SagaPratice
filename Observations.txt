@@ -12,7 +12,10 @@ An interesting difference between this project and the api backend project. In t
 
 DateOnly json converter does not work, it seems like, when reading and so different methods have been changed back to DateTime, while trying to fix the json converter.
 
-
+If having multiple implications under the same service problems arise with the DI.
+	It is capiable of creating internal instances, in a domain, and give it DI internal services from another domain.
+	This will not trigger an error and seems to be running fine. 
+	This means that for contracts in the Common module it will require having a 'specialised' contract in each domain and this contract being used as a service instead of the one in Common.
 
 
 

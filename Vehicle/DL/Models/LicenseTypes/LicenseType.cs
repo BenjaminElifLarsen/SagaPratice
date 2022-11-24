@@ -12,6 +12,7 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     private DateOnly _canBeIssuedFrom; //need to be put into ctor and validation, allow update as long time current date is not same or later as its value.
     private readonly HashSet<IdReference<int>> _vehicleInformations;
     //cannot contain a collection of licenses, since License is not an aggregate root, could hold a collection of operators who got the required license.
+    private readonly HashSet<IdReference<int>> _operators;
     private HashSet<IDomainEvent> _events;
 
     internal int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
@@ -21,6 +22,7 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
     public DateOnly CanBeIssuedFrom { get => _canBeIssuedFrom; private set => _canBeIssuedFrom = value; } //can only be updated if there is no licenses that use it.
     public IEnumerable<IdReference<int>> VehicleInformations => _vehicleInformations;
+    public IEnumerable<IdReference<int>> Operators => _operators;
 
     public IEnumerable<IDomainEvent> Events => _events;
 
@@ -37,6 +39,7 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
         _ageRequirementInYears = ageRequirementInYears;
         _vehicleInformations = new();
         _events = new();
+        _operators = new();
     }
 
     public void Delete(DateOnly? dateTime)
@@ -47,6 +50,17 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     public bool AddVehicleInformation(IdReference<int> vehicleInformation)
     {
         return _vehicleInformations.Add(vehicleInformation);
+    }
+
+
+    public bool AddOperator(IdReference<int> @operator)
+    {
+        return _operators.Add(@operator);
+    }
+
+    public bool RemoveOperator(IdReference<int> @operator)
+    {
+        return _operators.Remove(@operator);
     }
 
     public void AddDomainEvent(IDomainEvent eventItem)

@@ -12,10 +12,9 @@ public class GenderController : ControllerBase
 {
 	private IGenderService _genderService;
 
-	public GenderController(IGenderService genderService, IRoutingRegistry registry)
+	public GenderController(IGenderService genderService)
 	{
 		_genderService = genderService;
-        registry.SetUpRouting();
     }
 
     [AllowAnonymous]

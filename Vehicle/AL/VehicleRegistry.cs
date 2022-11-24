@@ -1,6 +1,8 @@
 ﻿using Common.CQRS.Commands;
 using Common.Events.Domain;
 using Common.Other;
+using VehicleDomain.AL.Busses.Command;
+using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Command;
 using VehicleDomain.AL.Handlers.Event;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
@@ -13,14 +15,14 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.Events;
 
 namespace VehicleDomain.AL;
-internal class VehicleRegistry : IRoutingRegistry
+public class VehicleRegistry : IRoutingRegistry
 {
-    private readonly ICommandBus _commandBus;
-    private readonly IDomainEventBus _eventBus;
+    private readonly IVehicleCommandBus _commandBus;
+    private readonly IVehicleDomainEventBus _eventBus;
     private readonly IVehicleCommandHandler _commandHandler;
     private readonly IVehicleEventHandler _eventHandler;
 
-    public VehicleRegistry(ICommandBus commandBus, IDomainEventBus eventBus, IVehicleCommandHandler commandHandler, IVehicleEventHandler eventHandler)
+    public VehicleRegistry(IVehicleCommandBus commandBus, IVehicleDomainEventBus eventBus, IVehicleCommandHandler commandHandler, IVehicleEventHandler eventHandler)
     {
         _commandBus = commandBus;
         _eventBus = eventBus;

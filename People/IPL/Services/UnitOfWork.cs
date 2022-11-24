@@ -1,5 +1,7 @@
 ﻿using Common.Events.Domain;
 using PeopleDomain.AL;
+using PeopleDomain.AL.Busses.Command;
+using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
 
@@ -8,14 +10,14 @@ internal class UnitOfWork : IUnitOfWork
 {
     private readonly IGenderRepository _genderRepository;
     private readonly IPersonRepository _personRepository;
-    private readonly IDomainEventBus _eventBus;
+    private readonly IPeopleDomainEventBus _eventBus;
     private readonly IPeopleContext _context;
 
     public IGenderRepository GenderRepository => _genderRepository;
 
     public IPersonRepository PersonRepository => _personRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IDomainEventBus eventBus, IPeopleContext context/*, Registry registry*/)
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPeopleDomainEventBus eventBus, IPeopleContext context/*, Registry registry*/)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;

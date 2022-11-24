@@ -33,8 +33,8 @@ public class PeopleApiServices
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
         services.AddScoped<IPeopleEventHandler, PeopleEventHandler>();
-        services.AddScoped<ICommandBus, MockCommandBus>();
-        services.AddScoped<IDomainEventBus, MockDomainEventBus>();
+        services.AddScoped<IPeopleCommandBus, MockCommandBus>();
+        services.AddScoped<IPeopleDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IRoutingRegistry, PeopleRegistry>();
     }
 

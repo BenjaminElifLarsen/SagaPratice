@@ -71,13 +71,13 @@ public class Person : IAggregateRoot, ISoftDeleteDate
 
     public void AddDomainEvent(IDomainEvent eventItem)
     {
-        if (this == eventItem.AggregateId) //should cause an expection if this fails
+        if (this == eventItem.AggregateId) //could cause an expection if this fails
             _events.Add(eventItem);
     }
 
     public void RemoveDomainEvent(IDomainEvent eventItem)
     {
-        if (this == eventItem.AggregateId) //should cause an expection if this fails
+        if (this == eventItem.AggregateId) //could cause an expection if this fails
             _events.Remove(eventItem);
     }
 

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace PeopleDomain.AL.Busses.Event;
-internal class MockDomainEventBus : IDomainEventBus //when moving the interface to Common rename to IBaseBus or something like that
+internal class MockDomainEventBus : IPeopleDomainEventBus
 { //works kind as a bus currently, a fake bus, but kind of following the pricipels, but does not permit comminucation between different modules.
   //the integration event bus would be closer to an actually bus as it would handle communication over different modules.
     private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routes;
@@ -21,9 +21,9 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
             _routes.Add(typeof(T), handlers);
         }
 
-        var test = handlers.SingleOrDefault(x => handler((T)x));
-        if (!handlers.Any(x => x == test))
-            handlers.Add(x => handler((T)x));
+        //var test = handlers.SingleOrDefault(x => handler((T)x)); 
+        //if (!handlers.Any(x => x == test)) //from testing this approach does not work. It is true if any handler of T is present, it does not require to be the exactly same method
+        handlers.Add(x => handler((T)x));
 
     }
 
@@ -47,10 +47,11 @@ internal class MockDomainEventBus : IDomainEventBus //when moving the interface 
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;
 
-        var toRemove = handlers.SingleOrDefault(x => handler((T)x));
+        var toRemove = handlers.SingleOrDefault(x => handler((T)x)); //from the knowledge learned from testbed and register handler this approach will not work.
         if (toRemove is not null)
         {
             handlers.Remove(toRemove);
         }
+        throw new NotImplementedException();
     }
 }

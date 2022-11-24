@@ -5,6 +5,7 @@ using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries;
+using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
@@ -154,17 +155,12 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(RemoveOperatorFromSystem command)
-    { //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
+    {
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.Id).Result;
         if (entity is not null)
         {
-            //trigger event
             entity.Delete();
-            /*
-             * how to handle soft delete regarding vehicles and licensetypes
-             * after all the operator id should be 'removed' as the operator has been softdeleted, but if the operator is restored should the ids in licensetypes and vehicles do that too?
-             * Could remove the operator id from licenseType and vehicle and if operator is restored recreate the relations. Then again, should a restored operator still have the same access? What if a vehicle has been removed in the between time?
-             */
+            entity.AddDomainEvent(new OperatorRemoved(entity));
             _unitOfWork.OperatorRepository.Update(entity);
             _unitOfWork.Save();
         }
@@ -341,7 +337,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         }
         entity.RemoveOperator(new(command.OperatorId));
         _unitOfWork.VehicleRepository.Update(entity);
-        throw new NotImplementedException();
+        return new SuccessResultNoData();
     }
 
     public Result Handle(RemoveVehicleFromOperator command)
@@ -378,7 +374,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         if (entity is null)
         {
-            return new InvalidResultNoData($"");
+            return new InvalidResultNoData($"Not found.");
         }
         if (!entity.IsOperatorPermitted(new(command.OperatorId)))
         {
@@ -392,6 +388,13 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(RemoveOperatorFromLicenseType command)
     {
-        throw new NotImplementedException();
+        var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.LicenseTypeId).Result;
+        if (entity is null)
+        {
+            //error most likely as this should only be called by an evnet.
+        }
+        entity.RemoveOperator(new(command.OperatorId));
+        _unitOfWork.LicenseTypeRepository.Update(entity);
+        return new SuccessResultNoData();
     }
 }

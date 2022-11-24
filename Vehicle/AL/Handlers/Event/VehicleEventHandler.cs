@@ -1,4 +1,5 @@
 ﻿using Common.CQRS.Commands;
+using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.Events;
@@ -9,9 +10,9 @@ using VehicleDomain.DL.Models.Vehicles.Events;
 namespace VehicleDomain.AL.Handlers.Event;
 internal class VehicleEventHandler : IVehicleEventHandler
 {
-    private readonly ICommandBus _commandBus;
+    private readonly IVehicleCommandBus _commandBus;
 
-    public VehicleEventHandler(ICommandBus commandBus)
+    public VehicleEventHandler(IVehicleCommandBus commandBus)
     {
         _commandBus = commandBus;
     }
@@ -64,7 +65,7 @@ internal class VehicleEventHandler : IVehicleEventHandler
     {
         foreach(var vehicle in @event.Data.VehicleIds)
         {
-            _commandBus.Publish(new RemoveOperatorFromVehicle(@event.Data.Id, vehicle));
+            _commandBus.Publish(new RemoveOperatorFromVehicle(vehicle, @event.Data.Id));
         }
         foreach(var licenseType in @event.Data.LicenseTypeIds)
         {

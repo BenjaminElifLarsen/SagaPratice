@@ -2,7 +2,7 @@
 using Common.ResultPattern;
 
 namespace VehicleDomain.AL.Busses.Command;
-internal class MockCommandBus : ICommandBus
+internal class MockCommandBus : IVehicleCommandBus
 {
     private readonly Dictionary<Type, List<Func<ICommand, Result>>> _routes;
 

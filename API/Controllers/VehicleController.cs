@@ -49,7 +49,7 @@ public class VehicleController : ControllerBase
     [Route("Start")]
     public async Task<IActionResult> StartOperating([FromBody]StartOperatingVehicle command)
     {
-        var result = await _vehicleService.StartOperatingVehicle(command);
+        var result = await _vehicleService.StartOperatingVehicleAsync(command);
         return this.FromResult(result);
     }
 
@@ -58,7 +58,7 @@ public class VehicleController : ControllerBase
     [Route("Stop")]
     public async Task<IActionResult> StopOperating([FromBody] StopOperatingVehicle command)
     {
-        var result = await _vehicleService.StopOperatingVehicle(command);
+        var result = await _vehicleService.StopOperatingVehicleAsync(command);
         return this.FromResult(result);
     }
 
@@ -67,7 +67,7 @@ public class VehicleController : ControllerBase
     [Route("Buy")]
     public async Task<IActionResult> BuyVehicleNoOperator([FromBody]BuyVehicleWithNoOperator command)
     {
-        var result = await _vehicleService.BuyVehicleNoOperator(command);
+        var result = await _vehicleService.BuyVehicleNoOperatorAsync(command);
         return this.FromResult(result);
     }
 

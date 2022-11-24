@@ -9,8 +9,8 @@ public interface IVehicleService
     Task<Result<IEnumerable<VehicleListItem>>> GetVehicleListAsync();
     Task<Result<IEnumerable<VehicleListItem>>> GetVehicleInUseListAsync();
     Task<Result<VehicleDetails>> GetVehicleDetailsAsync(int id);
-    Task<Result> StartOperatingVehicle(StartOperatingVehicle command);
-    Task<Result> StopOperatingVehicle(StopOperatingVehicle command);
-    Task<Result> BuyVehicleNoOperator(BuyVehicleWithNoOperator command);
+    Task<Result> StartOperatingVehicleAsync(StartOperatingVehicle command);
+    Task<Result> StopOperatingVehicleAsync(StopOperatingVehicle command);
+    Task<Result> BuyVehicleNoOperatorAsync(BuyVehicleWithNoOperator command);
     //Task<Result> BuyVehicleWithOperator(BuyVehicleWithOperators command);
 }

@@ -14,7 +14,6 @@ public class OperatorListItemQuery : BaseQuery<Operator, OperatorListItem>
     }
 }
 
-
 public class OperatorDetailsQuery : BaseQuery<Operator, OperatorDetails>
 {
     public override Expression<Func<Operator, OperatorDetails>> Map()

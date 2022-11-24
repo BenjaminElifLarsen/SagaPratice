@@ -55,6 +55,8 @@ internal static class Seeder
             vehicleContext.Add(op);
             veh1.AddOperator(new(op.OperatorId));
             veh2.AddOperator(new(op.OperatorId));
+            car.AddOperator(new(1));
+            train.AddOperator(new(1));
         }
 
         vehicleContext.Save();

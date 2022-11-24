@@ -78,18 +78,15 @@ a command:
 an event:
 	has one sender (the publisher), but zero or many receivers
 
-have a class that is called in program that registrate the routes to do on specific events and commands. So it takes in instances of the busses and handlers and registrate. 
-	done in a similar way to seedData
-	maybe different classes for the command part and event part.
-	since it will rely on specific instances, not sure that approach will work out. 
-	tested by calling it from program, ran, but the routes not present in unit of work event bus instance.
-	calling it currently from controllers
-	might it make sense to make the busses and handlers singletons? 
-		this would permit to call Registry from program
-		singleton attempt did not work as the command handler depends on scoped instances. 
+move operator queries over to their service.
 
 
-update services to use busses in the VehicleDomain
+events to do
+	licenseType does not get updated when adding a vehicle information
+	vehicle information does not get updated when adding a vehicle.
+
+
+License Type need to deal with CanBeIssedFrom, update specifications, ctor, factory, and error(handling)
 
 
 

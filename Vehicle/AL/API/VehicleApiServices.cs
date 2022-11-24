@@ -17,6 +17,7 @@ using VehicleDomain.AL.Busses.Command;
 using Common.Events.Domain;
 using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Event;
+using VehicleDomain.AL.Services.LicenseTypes;
 
 namespace VehicleDomain.AL.API;
 
@@ -40,6 +41,7 @@ public class VehicleApiServices
         services.AddScoped<IOperatorService, OperatorService>();
         services.AddScoped<IVehicleInformationService, VehicleInformationService>();
         services.AddScoped<IVehicleService, VehicleService>();
+        services.AddScoped<ILicenseTypeService, LicenseTypeService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IVehicleCommandHandler, VehicleCommandHandler>();
         services.AddScoped<IVehicleEventHandler, VehicleEventHandler>();

@@ -15,13 +15,10 @@ internal class LicenseTypeValidator : IValidate
 
 	public BinaryFlag Validate()
 	{
-		BinaryFlag flag = new(); 
-		if(!new IsLicenseTypeAgeRequirementValid(10).IsSatisfiedBy(_licenseType))
-			flag.AddFlag((int)LicenseTypeErrors.InvalidAgeRequirement);
-		if (!new IsLicenseTypeTypeValid().IsSatisfiedBy(_licenseType))
-			flag.AddFlag((int)LicenseTypeErrors.InvalidType);
-		if (!new IsLicenseTypeRenewPeriodValid(2).IsSatisfiedBy(_licenseType))
-			flag.AddFlag((int)LicenseTypeErrors.InvalidRenewPeriod);
+		BinaryFlag flag = new();
+		flag += new IsLicenseTypeAgeRequirementValid(10).IsSatisfiedBy(_licenseType) ? 0 : LicenseTypeErrors.InvalidAgeRequirement;
+		flag += new IsLicenseTypeTypeValid().IsSatisfiedBy(_licenseType) ? 0 : LicenseTypeErrors.InvalidType;
+		flag += new IsLicenseTypeRenewPeriodValid(2).IsSatisfiedBy(_licenseType) ? 0 : LicenseTypeErrors.InvalidRenewPeriod;
 		return flag;
 	}
 }

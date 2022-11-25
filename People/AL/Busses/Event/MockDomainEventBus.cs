@@ -21,9 +21,8 @@ internal class MockDomainEventBus : IPeopleDomainEventBus
             _routes.Add(typeof(T), handlers);
         }
 
-        //var test = handlers.SingleOrDefault(x => handler((T)x)); 
-        //if (!handlers.Any(x => x == test)) //from testing this approach does not work. It is true if any handler of T is present, it does not require to be the exactly same method
-        handlers.Add(x => handler((T)x));
+        if (!handlers.Select(x => { dynamic d = x.Target; return d; }).Any(x => x.handler.Target == handler.Target && x.handler.Method == handler.Method))
+            handlers.Add(x => handler((T)x));
 
     }
 
@@ -47,11 +46,10 @@ internal class MockDomainEventBus : IPeopleDomainEventBus
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;
 
-        var toRemove = handlers.SingleOrDefault(x => handler((T)x)); //from the knowledge learned from testbed and register handler this approach will not work.
+        var toRemove = handlers.Select(hdlr => { dynamic d = hdlr.Target; return (d, hdlr); }).SingleOrDefault(x => x.d.handler.Target == handler.Target && x.d.handler.Method == handler.Method).hdlr;
         if (toRemove is not null)
         {
             handlers.Remove(toRemove);
         }
-        throw new NotImplementedException();
     }
 }

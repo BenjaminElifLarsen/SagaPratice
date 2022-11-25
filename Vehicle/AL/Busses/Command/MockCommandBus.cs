@@ -47,7 +47,7 @@ internal class MockCommandBus : IVehicleCommandBus
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;
 
-        var toRemove = handlers.SingleOrDefault(x => handler((T)x));
+        var toRemove = handlers.SingleOrDefault(x => handler((T)x)); //need to test if the fix to the event bus code would work here.
         if (toRemove is not null)
         {
             handlers.Remove(toRemove);

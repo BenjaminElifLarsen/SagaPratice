@@ -13,9 +13,7 @@ The person domain should use the other folder structure than the vehicle domain
 
 https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation
 
-
 rename everything that use 'People' in the Vehicle domain to 'Operator'
-
 
 Consider how to best use ISpecification regarding entity update. If having e.g. a ISpecification<int>, the model can validate before changing value.
 	But if using e.g. ISpecification<Person> then it is locked to the model and ensure ISpecification cannot be used with 'any random' value, but it require updating the value first and then validate. This could put the entity in an invalid status.
@@ -89,7 +87,7 @@ events to do
 License Type need to deal with CanBeIssedFrom, update specifications, ctor, factory, and error(handling)
 
 
-
+have something similar to the middleware to empty the registry
 
 
 

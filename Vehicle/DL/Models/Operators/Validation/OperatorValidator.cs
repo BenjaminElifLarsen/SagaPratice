@@ -1,7 +1,7 @@
 ﻿using Common.SpecificationPattern;
 using VehicleDomain.DL.Errors;
 using Common.SpecificationPattern.Composite.Extensions;
-using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
+using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License;
 using lv = VehicleDomain.DL.Models.Operators.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 using Common.Other;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
@@ -21,10 +21,8 @@ internal class OperatorValidatorFromSystem : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        if (!new IsOperatorIdSet().IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.IdNotSet);
-        if (!new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.InvalidBirth);
+        flag += new IsOperatorIdSet().IsSatisfiedBy(_operator) ? 0 : OperatorErrors.IdNotSet;
+        flag += new IsOperatorOfValidAge().IsSatisfiedBy(_operator) ? 0 : OperatorErrors.InvalidBirth;
         return flag;
     }
 }
@@ -46,14 +44,10 @@ internal class OperatorValidatorFromUser : IValidate
     public BinaryFlag Validate()
     {
         BinaryFlag flag = new();
-        if (!new IsOperatorIdSet().IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.IdNotSet);
-        if (!new IsOperatorOfValidAge().IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.InvalidBirth);
-        if (!new IsOperatorWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.InvalidAgeForLicense);
-        if (!new IsOperatorToYoung(_minAge).And<AddOperatorWithLicenseFromUser>(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator))
-            flag.AddFlag((int)OperatorErrors.NotWithinAgeRange);
+        flag += new IsOperatorIdSet().IsSatisfiedBy(_operator) ? 0 : OperatorErrors.IdNotSet;
+        flag += new IsOperatorOfValidAge().IsSatisfiedBy(_operator) ? 0 : OperatorErrors.InvalidBirth;
+        flag += new IsOperatorWithinLicenseAgeRequirement(_validationData).IsSatisfiedBy(_operator) ? 0 : OperatorErrors.InvalidAgeForLicense;
+        flag += new IsOperatorToYoung(_minAge).And<AddOperatorWithLicenseFromUser>(new IsOperatorToOld(_maxAge)).IsSatisfiedBy(_operator) ? 0 : OperatorErrors.NotWithinAgeRange;
         return flag;
     }
 }

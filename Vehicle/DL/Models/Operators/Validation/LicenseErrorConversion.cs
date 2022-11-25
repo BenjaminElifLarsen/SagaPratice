@@ -10,19 +10,19 @@ internal class LicenseErrorConversion : IErrorConversion<l>
     public static IEnumerable<string> Convert(BinaryFlag binaryFlag, l license)
     {
         List<string> errors = new();
-        if (binaryFlag.IsFlagPresent((int)LicenseErrors.LicenseTypeNotSat))
+        if (binaryFlag == LicenseErrors.LicenseTypeNotSat)
         {
             errors.Add($"License type not sat.");
         }
-        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidLicenseType))
+        if (binaryFlag == LicenseErrors.InvalidLicenseType)
         {
             errors.Add($"License type, {license.LicenseTypeId}, is invalid.");
         }
-        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidArquired))
+        if (binaryFlag == LicenseErrors.InvalidArquired)
         {
             errors.Add($"License, {license.LicenseTypeId}, arquired is invalid.");
         }
-        if (binaryFlag.IsFlagPresent((int)LicenseErrors.InvalidLastRenewed))
+        if (binaryFlag == LicenseErrors.InvalidLastRenewed)
         {
             errors.Add($"License, {license.LicenseTypeId}, last renew date is invalid.");
         }

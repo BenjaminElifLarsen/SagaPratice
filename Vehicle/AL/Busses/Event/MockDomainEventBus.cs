@@ -20,8 +20,7 @@ internal class MockDomainEventBus : IVehicleDomainEventBus
             _routes.Add(typeof(T), handlers);
         }
 
-        var test = handlers.SingleOrDefault(x => handler((T)x));
-        if (!handlers.Any(x => x == test)) //with the knowledge from testbed, this does not work correctly.
+        if (!handlers.Select(x => { dynamic d = x.Target; return d; }).Any(x => x.handler.Target == handler.Target && x.handler.Method == handler.Method))
             handlers.Add(x => handler((T)x));
 
     }
@@ -46,11 +45,10 @@ internal class MockDomainEventBus : IVehicleDomainEventBus
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;
 
-        var toRemove = handlers.SingleOrDefault(x => handler((T)x));
+        var toRemove = handlers.Select(hdlr => { dynamic d = hdlr.Target; return (d, hdlr); }).SingleOrDefault(x => x.d.handler.Target == handler.Target && x.d.handler.Method == handler.Method).hdlr;
         if (toRemove is not null)
         {
             handlers.Remove(toRemove);
         }
-        throw new NotImplementedException();
     }
 }

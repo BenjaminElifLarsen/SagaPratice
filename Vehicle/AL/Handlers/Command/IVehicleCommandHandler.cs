@@ -6,7 +6,7 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 
 namespace VehicleDomain.AL.Handlers.Command;
 public interface IVehicleCommandHandler :
-    ICommandHandler<ValidateDriverLicenseStatus>,
+    ICommandHandler<ValidateOperatorLicenseStatus>,
     ICommandHandler<AddOperatorNoLicenseFromSystem>,
     ICommandHandler<AddOperatorWithLicenseFromUser>,
     ICommandHandler<AddLicenseToOperator>,
@@ -28,6 +28,8 @@ public interface IVehicleCommandHandler :
     ICommandHandler<RemoveOperatorFromVehicle>,
     ICommandHandler<StartOperatingVehicle>,
     ICommandHandler<StopOperatingVehicle>,
-    ICommandHandler<RemoveOperatorFromLicenseType>
+    ICommandHandler<RemoveOperatorFromLicenseType>,
+    ICommandHandler<ValidateLicenseAgeRequirementBecauseChange>,
+    ICommandHandler<ValidateLicenseRenewPeriodBecauseChange>
 {
 }

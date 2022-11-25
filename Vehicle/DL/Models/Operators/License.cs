@@ -48,7 +48,7 @@ internal class License
     {
         if (date <= _arquired)
             return false;
-        _lastRenewed = date;
+        _lastRenewed = date; //need to check if date also is before _lastRenewed
         return true;
     }
 

@@ -2,6 +2,8 @@
 using Common.ResultPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
+using VehicleDomain.DL.Models.LicenseTypes.Events;
+using VehicleDomain.DL.Models.LicenseTypes.Validation;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries;
@@ -40,7 +42,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         _unitOfWork = unitOfWork;
     }
 
-    public Result Handle(ValidateDriverLicenseStatus command)
+    public Result Handle(ValidateOperatorLicenseStatus command)
     { //make a valdiation check, after this (if successfull) the user should use a query to get the result
         //this method could be called by a system designed to automatically ensure everyones licenses are up to date.
         var @operator = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
@@ -48,7 +50,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData("Operator was not found.");
         }
-        var license = @operator.GetLicense(command.TypeId);
+        var license = @operator.GetLicenseViaLicenseType(command.TypeId);
         if (license is null)
         {
             return new InvalidResultNoData($"No license with type of {command.TypeId} was found.");
@@ -186,7 +188,36 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(AlterLicenseType command)
     {
-        throw new NotImplementedException();
+        var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.Id).Result;
+        if(entity is null)
+        {
+            return new InvalidResultNoData("Not found.");
+        }
+
+        var flag = new LicenseTypeChangeInformationValidator(command).Validate();
+        if (!flag)
+        {
+            return new InvalidResultNoData(LicenseTypeErrorConversion.Convert(flag).ToArray());
+        }
+        
+        if(command.Type is not null) //should it be possible to change the type if the license type is in use? Could validate against it by having in the ctor a operator/vehicle amount and a specific specification for it.
+        {
+            entity.ReplaceType(command.Type.Type);
+        }
+        if(command.AgeRequirement is not null)
+        { //trigger event
+            entity.AddDomainEvent(new LicenseTypeAgeRequirementChanged(entity));
+            entity.ChangeAgeRequirement(command.AgeRequirement.AgeRequirement);
+        }
+        if(command.RenewPeriod is not null)
+        { //trigger event
+            entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity));
+            entity.ChangeRenewPeriod(command.RenewPeriod.RenewPeriod);
+        }
+
+        _unitOfWork.LicenseTypeRepository.Update(entity);
+        _unitOfWork.Save();
+        return new SuccessResultNoData();
     }
 
     public Result Handle(AddVehicleInformationFromSystem command)
@@ -221,8 +252,8 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(BuyVehicleWithOperators command)
-    { //trigger event VehicleAdded. Need to information operator that they can use this vehicle.
+    public Result Handle(BuyVehicleWithOperators command) //remove
+    { //trigger event VehicleAdded.
         var operators = _unitOfWork.OperatorRepository.AllAsync(new OperatorIdQuery()).Result;
         var vehicleInformations = _unitOfWork.VehicleInformationRepository.AllAsync(new VehicleInformationIdQuery()).Result;
         var valiationData = new VehicleValidationWithOperatorsData(operators, vehicleInformations);
@@ -241,7 +272,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         {
-            return new InvalidResultNoData($"");
+            return new InvalidResultNoData($"Not found.");
         }
         BinaryFlag flag = entity.AddToDistanceMoved(command.DistanceToAdd);
         if (!flag)
@@ -396,5 +427,39 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         entity.RemoveOperator(new(command.OperatorId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         return new SuccessResultNoData();
+    }
+
+    public Result Handle(ValidateLicenseAgeRequirementBecauseChange command)
+    {
+        foreach(var id in command.OperatorIds)
+        {
+            var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(id).Result;
+            if(entity is null)
+            {
+                continue;
+            }
+
+            //check if entity age is below the required age, if it is remove the specific license
+            if(entity.CalculateAge() < command.AgeRequirement)
+            { //implement age calculator
+                var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
+                entity.RemoveLicense(license); //need to remove them for any vehicle they may have access too with the license
+                //so more events. This might require changing how events are fetched from the context as it might not get new ones.
+                //when run through all currently known events, could make another check for events and publish any known ones. Continue until there are no more events.
+                //so some kind of recursive method (might not end up as a recursive method) that when event collection is empty make a check if there are new events. If there are run though them else return void.
+                //this will also move the evnet publish code in UnitOfWork.Save() out of that method.
+                _unitOfWork.OperatorRepository.Update(entity);
+                //the license type needs to know if a license is removed, so it can remove the operator
+            }           
+        }
+        throw new NotImplementedException();
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(ValidateLicenseRenewPeriodBecauseChange command)
+    {
+        //need a method on license to renew. Either that or on operator.
+        //currently CheckIfExpired might be possible to recycle for this purpose.
+        throw new NotImplementedException();
     }
 }

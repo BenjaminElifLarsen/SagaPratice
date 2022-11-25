@@ -2,6 +2,7 @@
 using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
+using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.VehicleInformations.Events;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
@@ -18,13 +19,13 @@ internal class VehicleEventHandler : IVehicleEventHandler
     }
 
     public void Handle(LicenseTypeAgeRequirementChanged @event)
-    {
-        throw new NotImplementedException(); //needs command
+    { //will needd to find all licenses that uese the given license type, via their operator, and validate them
+        _commandBus.Publish(new ValidateLicenseAgeRequirementBecauseChange(@event.Data.Id, @event.Data.NewAgeRequirement, @event.Data.OperatorIds)); //needs command handler
     }
 
-    public void Handle(LicenseTypeRenewPeriodChanged @event)
-    {
-        throw new NotImplementedException(); //needs command    
+    public void Handle(LicenseTypeRenewPeriodChanged @event) //license type do know of the operators that need to be contacted, consider transmitted that data (goes for above too)
+    { //will need to find all licenses that use the given license type, via their operator, and validate them
+        _commandBus.Publish(new ValidateLicenseRenewPeriodBecauseChange(@event.Data.Id, @event.Data.NewRenewPeriodInYears, @event.Data.OperatorIds)); //needs command license 
     }
 
     public void Handle(LicenseTypeRetracted @event)

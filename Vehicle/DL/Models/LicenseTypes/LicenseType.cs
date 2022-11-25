@@ -42,23 +42,38 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
         _operators = new();
     }
 
+    internal void ReplaceType(string type)
+    {
+        _type = type;
+    }
+
+    internal void ChangeRenewPeriod(byte renewPeriod)
+    {
+        _renewPeriodInYears = renewPeriod;
+    }
+
+    internal void ChangeAgeRequirement(byte ageRequirement)
+    {
+        _ageRequirementInYears = ageRequirement;
+    }
+
     public void Delete(DateOnly? dateTime)
     {
         _deletedFrom = dateTime;
     }
 
-    public bool AddVehicleInformation(IdReference<int> vehicleInformation)
+    internal bool AddVehicleInformation(IdReference<int> vehicleInformation)
     {
         return _vehicleInformations.Add(vehicleInformation);
     }
 
 
-    public bool AddOperator(IdReference<int> @operator)
+    internal bool AddOperator(IdReference<int> @operator)
     {
         return _operators.Add(@operator);
     }
 
-    public bool RemoveOperator(IdReference<int> @operator)
+    internal bool RemoveOperator(IdReference<int> @operator)
     {
         return _operators.Remove(@operator);
     }

@@ -57,7 +57,7 @@ public class VehicleRegistry : IRoutingRegistry
 
     private void RoutingCommand()
     {
-        _commandBus.RegisterHandler<ValidateDriverLicenseStatus>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<ValidateOperatorLicenseStatus>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddOperatorNoLicenseFromSystem>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddOperatorWithLicenseFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddLicenseToOperator>(_commandHandler.Handle);

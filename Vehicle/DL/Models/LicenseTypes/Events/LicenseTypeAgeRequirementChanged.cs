@@ -22,7 +22,7 @@ public class LicenseTypeAgeRequirementChanged : IDomainEvent<LicenseTypeAgeRequi
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggegate.LicenseTypeId, aggegate.AgeRequirementInYears);
+        Data = new(aggegate.LicenseTypeId, aggegate.AgeRequirementInYears, aggegate.Operators.Select(x => x.Id));
     }
 }
 
@@ -30,10 +30,12 @@ public class LicenseTypeAgeRequirementChangedData
 {
     public int Id { get; private set; }
     public byte NewAgeRequirement { get; private set; }
+    public IEnumerable<int> OperatorIds { get; private set; }
 
-    public LicenseTypeAgeRequirementChangedData(int id, byte newAgeRequirement)
+    public LicenseTypeAgeRequirementChangedData(int id, byte newAgeRequirement, IEnumerable<int> operatorIds)
     {
         Id = id;
         NewAgeRequirement = newAgeRequirement;
+        OperatorIds = operatorIds;
     }
 }

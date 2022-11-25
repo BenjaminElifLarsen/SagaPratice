@@ -41,4 +41,22 @@ public class LicenseTypeController : ControllerBase
 		var result = await _licenseTypeService.EstablishLicenseTypeAsync(command);
 		return this.FromResult(result);
 	}
+
+	[AllowAnonymous]
+	[HttpPost]
+	[Route("Obsolete")]
+	public async Task<IActionResult> Obsolete([FromBody] ObsoleteLicenseTypeFromUser command)
+	{
+		var result = await _licenseTypeService.ObsoleteLicenseTypeAsync(command);
+		return this.FromResult(result);
+	}
+
+	[AllowAnonymous]
+	[HttpPost]
+	[Route("Alter")]
+	public async Task<IActionResult> Alter([FromBody] AlterLicenseType command)
+	{
+		var result = await _licenseTypeService.AlterLicenseTypeAsync(command);
+		return this.FromResult(result);
+	}
 }

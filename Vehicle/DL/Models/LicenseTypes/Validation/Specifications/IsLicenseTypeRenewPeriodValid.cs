@@ -2,7 +2,7 @@
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Validation.Specifications;
-internal class IsLicenseTypeRenewPeriodValid : ISpecification<EstablishLicenseTypeFromUser>
+internal class IsLicenseTypeRenewPeriodValid : ISpecification<EstablishLicenseTypeFromUser>, ISpecification<AlterLicenseType>
 {
     private readonly byte _renewPeriod;
     public IsLicenseTypeRenewPeriodValid(byte minimumRenewPeriod)
@@ -12,6 +12,16 @@ internal class IsLicenseTypeRenewPeriodValid : ISpecification<EstablishLicenseTy
 
     public bool IsSatisfiedBy(EstablishLicenseTypeFromUser candidate)
     {
-        return candidate.RenewPeriod >= _renewPeriod;
+        return IsSatisfiedBy(candidate.RenewPeriod);
+    }
+
+    public bool IsSatisfiedBy(AlterLicenseType candidate)
+    {
+        return candidate.RenewPeriod is null || IsSatisfiedBy(candidate.RenewPeriod.RenewPeriod);
+    }
+
+    private bool IsSatisfiedBy(byte candidate)
+    {
+        return candidate >= _renewPeriod;
     }
 }

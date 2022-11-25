@@ -89,6 +89,6 @@ License Type need to deal with CanBeIssedFrom, update specifications, ctor, fact
 
 have something similar to the middleware to empty the registry
 
-
+instead of From{Thing} for commands, have By{Thing}
 
 

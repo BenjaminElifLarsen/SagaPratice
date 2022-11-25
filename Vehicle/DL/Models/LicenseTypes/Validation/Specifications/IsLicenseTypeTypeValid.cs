@@ -2,10 +2,20 @@
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Validation.Specifications;
-internal class IsLicenseTypeTypeValid : ISpecification<EstablishLicenseTypeFromUser>
+internal class IsLicenseTypeTypeValid : ISpecification<EstablishLicenseTypeFromUser>, ISpecification<AlterLicenseType>
 {
     public bool IsSatisfiedBy(EstablishLicenseTypeFromUser candidate)
     {
-        return !string.IsNullOrWhiteSpace(candidate.Type);
+        return IsSatisfiedBy(candidate.Type);
+    }
+
+    public bool IsSatisfiedBy(AlterLicenseType candidate)
+    {
+        return candidate.Type is null || IsSatisfiedBy(candidate.Type.Type);
+    }
+
+    private bool IsSatisfiedBy(string candidate)
+    {
+        return !string.IsNullOrWhiteSpace(candidate);
     }
 }

@@ -448,6 +448,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
                 //when run through all currently known events, could make another check for events and publish any known ones. Continue until there are no more events.
                 //so some kind of recursive method (might not end up as a recursive method) that when event collection is empty make a check if there are new events. If there are run though them else return void.
                 //this will also move the evnet publish code in UnitOfWork.Save() out of that method.
+                //consider process manager for dealing with this.
                 _unitOfWork.OperatorRepository.Update(entity);
                 //the license type needs to know if a license is removed, so it can remove the operator
             }           

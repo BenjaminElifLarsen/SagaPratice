@@ -92,3 +92,24 @@ have something similar to the middleware to empty the registry
 instead of From{Thing} for commands, have By{Thing}
 
 
+if a command fails it should trigger a failer event. Can also have 'partial' completed events, so a handler can transmit success and failer events at the same time, if the bl permits that.
+
+from reading some more on process manager, it would make sense to have a process manager for each task in the system.
+e.g. one for removing an user from the system, one for adding a vehicle and so on.
+process managers are for communication in a bounded context, while saga are for communication that span multiple bounded contexts.
+an aggregate sends the start event to the process manager, which then mediate command and events between the different aggregates in play. 
+	so instead of triggering the event(s) before saving in the unit of work the process manager handlers them as their arrive  
+	so aggregate creates an event on the event bus. When processed this start up one or more process managers. The process manager knows how to response to the event, e.g. which commands to place on the command bus and it listen to the events (via the event bus) that these commands place pn the event bus.
+	when it receives events it can trigger more commands and wait on their events and so on. Finally it itself places an event that goes back to the aggregate and how-/whatever transmitted the start command. So the process manager does not return any result directly.
+		each process manager should give a process manger unique id to their own commands and events should contain this id so the process manager knowns if it need to response to an event from the event bus.
+		currently an event is sent to the event bus which transmit it to the event handler which creates a command and transmit it to the command bus which transmit it to the command bus.
+		from reading and the current implementation (the read stuff did not mention busses/handlers [most likely because of focus]) the process manager should be placed between the event bus or event handler and the command bus.
+			the question is if the events should be transmitted directly to the process manager(s) or go through the event handler. The event handler could transmit the events to the process manager(s) and to the command bus (if needed). 
+			if using the event handler the process manager does not need to registrate with the event bus, but then the event handler needs to know how to handle process managers.
+			most likely best to place the process manager between event bus and command bus. Let it registates its handlers with the event bus. The process manager needs an instance of the command bus.
+
+
+
+
+
+

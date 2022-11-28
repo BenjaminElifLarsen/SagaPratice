@@ -1,10 +1,10 @@
 ﻿using Common.SpecificationPattern;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
-using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
+//using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License; // Without this one, License would point to the model in the People folder.
 using lv = VehicleDomain.DL.Models.Operators.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
 
 namespace VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
-internal class IsLicenseArquiredValid : ISpecification<AddLicenseToOperator>, ISpecification<l>
+internal class IsLicenseArquiredValid : ISpecification<AddLicenseToOperator>//, ISpecification<l>
 {
     private readonly byte _yearRequirement;
 
@@ -23,10 +23,10 @@ internal class IsLicenseArquiredValid : ISpecification<AddLicenseToOperator>, IS
         return IsSatisfiedBy(candidate.Arquired);
     }
 
-    public bool IsSatisfiedBy(l candidate)
-    {
-        return IsSatisfiedBy(candidate.Arquired);
-    }
+    //public bool IsSatisfiedBy(l candidate)
+    //{
+    //    return IsSatisfiedBy(candidate.Arquired);
+    //}
 
     public bool IsSatisfiedBy(DateTime candidate)
     {

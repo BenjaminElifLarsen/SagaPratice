@@ -15,7 +15,11 @@ public class LicenseTypeRenewPeriodChanged : IDomainEvent<LicenseTypeRenewPeriod
 
     public LicenseTypeRenewPeriodChangedData Data { get; private set; }
 
-    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.LicenseTypeId;
@@ -23,6 +27,8 @@ public class LicenseTypeRenewPeriodChanged : IDomainEvent<LicenseTypeRenewPeriod
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
         Data = new(aggregate.LicenseTypeId, aggregate.AgeRequirementInYears, aggregate.Operators.Select(x => x.Id));
+        CorrelationId = correlationId;
+        CausationId = causationId;
     }
 }
 

@@ -8,6 +8,17 @@ public class ChangePersonalInformationFromUser : ICommand
     public ChangeLastName? LastName { get; set; }
     public ChangeBrith? Brith { get; set; }
     public ChangeGender? Gender { get; set; }
+
+    public Guid CommandId { get; private set; }
+
+    public Guid CorrelationId => CommandId;
+
+    public Guid CausationId => CommandId;
+
+    public ChangePersonalInformationFromUser()
+    {
+        CommandId = Guid.NewGuid();
+    }
 }
 
 public record ChangeFirstName

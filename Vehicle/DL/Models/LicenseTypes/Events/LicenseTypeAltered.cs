@@ -1,8 +1,8 @@
 ﻿using Common.Events.Domain;
 
-namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorAdded : IDomainEvent
-{ //is this event needed? What would react to it in this domain?
+namespace VehicleDomain.DL.Models.LicenseTypes.Events;
+internal class LicenseTypeAltered : IDomainEvent
+{
     public string AggregateType => throw new NotImplementedException();
 
     public int AggregateId => throw new NotImplementedException();

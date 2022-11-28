@@ -8,11 +8,11 @@ namespace VehicleDomain.AL.Handlers.Command;
 public interface IVehicleCommandHandler :
     ICommandHandler<ValidateOperatorLicenseStatus>,
     ICommandHandler<AddOperatorNoLicenseFromSystem>,
-    ICommandHandler<AddOperatorWithLicenseFromUser>,
+    //ICommandHandler<AddOperatorWithLicenseFromUser>,
     ICommandHandler<AddLicenseToOperator>,
     ICommandHandler<EstablishLicenseTypeFromUser>,
     ICommandHandler<RemoveOperatorFromSystem>,
-    ICommandHandler<RemoveOperatorFromUser>,
+    //ICommandHandler<RemoveOperatorFromUser>,
     ICommandHandler<ObsoleteLicenseTypeFromUser>,
     ICommandHandler<AlterLicenseType>,
     ICommandHandler<AddVehicleInformationFromSystem>,

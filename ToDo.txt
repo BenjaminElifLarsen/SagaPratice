@@ -107,9 +107,10 @@ an aggregate sends the start event to the process manager, which then mediate co
 			the question is if the events should be transmitted directly to the process manager(s) or go through the event handler. The event handler could transmit the events to the process manager(s) and to the command bus (if needed). 
 			if using the event handler the process manager does not need to registrate with the event bus, but then the event handler needs to know how to handle process managers.
 			most likely best to place the process manager between event bus and command bus. Let it registates its handlers with the event bus. The process manager needs an instance of the command bus.
+	when should the events, caused by the command handler, be pushed to the event bus? The command handler does not know of the event bus
+	maybe keep the event triggering that is currently done in UnitOfWork.
 
 
-
-
+update command and events over in People domain to be done same way as Vehicle domain
 
 

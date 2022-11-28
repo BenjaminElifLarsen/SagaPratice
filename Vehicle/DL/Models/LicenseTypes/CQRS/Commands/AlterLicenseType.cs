@@ -7,6 +7,24 @@ public class AlterLicenseType : ICommand
     public ChangeType? Type { get; set; }
     public ChangeAgeRequirement? AgeRequirement { get; set; }
     public ChangeRenewPeriod? RenewPeriod { get; set; }
+
+    public Guid CommandId { get; private set; }
+
+    public Guid CorrelationId => CommandId;
+
+    public Guid CausationId => CommandId;
+
+    public AlterLicenseType()
+    {
+        CommandId = Guid.NewGuid();
+    }
+
+    //public AlterLicenseType(Guid correlationId, Guid causationId)
+    //{
+    //    CommandId = Guid.NewGuid();
+    //    CorrelationId = correlationId;
+    //    CausationId = causationId;
+    //}
 }
 
 public class ChangeType

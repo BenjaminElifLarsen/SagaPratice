@@ -88,37 +88,37 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(AddOperatorWithLicenseFromUser command)
-    {//will need to trigger an event, PersonCreated
-        if (!_unitOfWork.OperatorRepository.IsIdUniqueAsync(command.Id).Result)
-        {
-            return new InvalidResultNoData("Operator already exist.");
-        }
-        var licenseTypeAges = _unitOfWork.LicenseTypeRepository.AllAsync(new LicenseTypeAgeQuery()).Result;
-        var licenseTypeIds = _unitOfWork.LicenseTypeRepository.AllAsync(new LicenseTypeIdQuery()).Result;
-        OperatorValidationData data = new(licenseTypeAges);
-        var dictionary = new Dictionary<int, PersonCreationLicenseValidationData.LicenseValidationData>();
-        foreach (var licenseType in licenseTypeAges)
-        {
-            dictionary.Add(licenseType.Id, new PersonCreationLicenseValidationData.LicenseValidationData(licenseType));
-        }
-        PersonCreationLicenseValidationData licenseData = new(dictionary, licenseTypeIds);
-        var result = _operatorFactory.CreateOperator(command, data, licenseData);
-        if (result is InvalidResult<Operator>)
-        {
-            return new InvalidResultNoData(result.Errors);
-        }
-        _unitOfWork.OperatorRepository.Create(result.Data);
-        try
-        {
-            _unitOfWork.Save();
-        }
-        catch (Exception e)
-        {
-            return new InvalidResultNoData(e.Message);
-        }
-        return new SuccessResultNoData();
-    }
+    //public Result Handle(AddOperatorWithLicenseFromUser command)
+    //{//will need to trigger an event, PersonCreated
+    //    if (!_unitOfWork.OperatorRepository.IsIdUniqueAsync(command.Id).Result)
+    //    {
+    //        return new InvalidResultNoData("Operator already exist.");
+    //    }
+    //    var licenseTypeAges = _unitOfWork.LicenseTypeRepository.AllAsync(new LicenseTypeAgeQuery()).Result;
+    //    var licenseTypeIds = _unitOfWork.LicenseTypeRepository.AllAsync(new LicenseTypeIdQuery()).Result;
+    //    OperatorValidationData data = new(licenseTypeAges);
+    //    var dictionary = new Dictionary<int, PersonCreationLicenseValidationData.LicenseValidationData>();
+    //    foreach (var licenseType in licenseTypeAges)
+    //    {
+    //        dictionary.Add(licenseType.Id, new PersonCreationLicenseValidationData.LicenseValidationData(licenseType));
+    //    }
+    //    PersonCreationLicenseValidationData licenseData = new(dictionary, licenseTypeIds);
+    //    var result = _operatorFactory.CreateOperator(command, data, licenseData);
+    //    if (result is InvalidResult<Operator>)
+    //    {
+    //        return new InvalidResultNoData(result.Errors);
+    //    }
+    //    _unitOfWork.OperatorRepository.Create(result.Data);
+    //    try
+    //    {
+    //        _unitOfWork.Save();
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return new InvalidResultNoData(e.Message);
+    //    }
+    //    return new SuccessResultNoData();
+    //}
 
     public Result Handle(AddLicenseToOperator command)
     {
@@ -169,10 +169,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(RemoveOperatorFromUser command)
-    { //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
-        throw new NotImplementedException();
-    }
+    //public Result Handle(RemoveOperatorFromUser command)
+    //{ //trigger OperatorRemoved which removes them for all vehicles and their licenses from their respective license types
+    //    throw new NotImplementedException();
+    //}
 
     public Result Handle(ObsoleteLicenseTypeFromUser command)
     { //transmit event, ObsoletedLicenseType, that trigger expiring driving licenses that people may have that use this specific type id.

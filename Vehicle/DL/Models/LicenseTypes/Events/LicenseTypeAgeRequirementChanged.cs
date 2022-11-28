@@ -15,13 +15,19 @@ public class LicenseTypeAgeRequirementChanged : IDomainEvent<LicenseTypeAgeRequi
 
     public long TimeStampRecorded { get; private set; }
 
-    internal LicenseTypeAgeRequirementChanged(LicenseType aggegate)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    internal LicenseTypeAgeRequirementChanged(LicenseType aggegate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggegate.GetType().Name;
         AggregateId = aggegate.LicenseTypeId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
         Data = new(aggegate.LicenseTypeId, aggegate.AgeRequirementInYears, aggegate.Operators.Select(x => x.Id));
     }
 }

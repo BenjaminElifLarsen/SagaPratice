@@ -16,7 +16,11 @@ public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
 
     public long TimeStampRecorded { get; private set; }
 
-    internal PersonChangedGender(Person aggregate, int oldGenderId)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    internal PersonChangedGender(Person aggregate, int oldGenderId, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
@@ -24,6 +28,8 @@ public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
         Data = new(aggregate.PersonId, aggregate.Gender.Id, oldGenderId);
+        CorrelationId = correlationId;
+        CausationId = causationId;
     }
 }
 

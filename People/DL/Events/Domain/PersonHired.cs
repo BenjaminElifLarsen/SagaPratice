@@ -16,7 +16,11 @@ public class PersonHired : IDomainEvent<PersonHiredData>
 
     public PersonHiredData Data { get; private set; }
 
-    internal PersonHired(Person aggregate)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    internal PersonHired(Person aggregate, Guid correlationId, Guid causationId)
     { //instead of PersonData data, could just create an instance out of Person.
         //domain events are supposed to be triggered before saving, which means an ORM cannot assign an Id, so will need to do that 'manual'.
         //mayhaps factory or handler should assign an id and validate it against the context?
@@ -26,6 +30,8 @@ public class PersonHired : IDomainEvent<PersonHiredData>
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
         Data = new(aggregate.PersonId, aggregate.Gender.Id);
+        CorrelationId = correlationId;
+        CausationId = causationId;
     }
 }
 

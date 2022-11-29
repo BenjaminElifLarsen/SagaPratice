@@ -12,6 +12,8 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     
     public Guid ProcessManagerId { get; private set; }
 
+    public Guid CorrelationId => throw new NotImplementedException();
+
     public AlterLicenseTypeProcessManager()
     {
         ProcessManagerId = Guid.NewGuid();

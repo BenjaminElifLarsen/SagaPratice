@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonRemovedFromGender : IDomainEvent<PersonRemovedFromGenderData>
+public class PersonRemovedFromGenderSuccessed : IDomainEventSuccess<PersonRemovedFromGenderData>
 {
     public string AggregateType { get; private set; }
 
@@ -20,7 +20,7 @@ public class PersonRemovedFromGender : IDomainEvent<PersonRemovedFromGenderData>
 
     public Guid CausationId { get; private set; }
 
-    internal PersonRemovedFromGender(Gender aggregate, int personId, Guid correlationId, Guid causationId)
+    internal PersonRemovedFromGenderSuccessed(Gender aggregate, int personId, Guid correlationId, Guid causationId)
     { 
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.GenderId;

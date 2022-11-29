@@ -113,4 +113,4 @@ an aggregate sends the start event to the process manager, which then mediate co
 
 update command and events over in People domain to be done same way as Vehicle domain
 
-
+it seems like instead of waiting for Result coming back in the services they should wait for events.

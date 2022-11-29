@@ -26,12 +26,12 @@ internal class PeopleEventHandler : IPeopleEventHandler
         _commandBus.Publish(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
     }
 
-    public void Handle(PersonAddedToGender @event)
+    public void Handle(PersonAddedToGenderSuccessed @event)
     {
         //log all events and commands. Let the busses do the logging
     }
 
-    public void Handle(PersonRemovedFromGender @event)
+    public void Handle(PersonRemovedFromGenderSuccessed @event)
     {
         //log all events and commands
     }

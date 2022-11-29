@@ -62,7 +62,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
     {
         var entity = _unitOfWork.PersonRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
-        {
+        { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
             return new InvalidResultNoData("Not found");
         }
 
@@ -71,6 +71,8 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         BinaryFlag flag = new PersonChangePersonalInformationValidator(command, validationData).Validate();
         if (!flag)
         { //have event
+            entity.AddDomainEvent(new PersonPersonalInformationChangedFailed(entity, PersonErrorConversion.Convert(flag),  command.CorrelationId, command.CommandId));
+            _unitOfWork.Save(); //not really happy with this design. Mayhaps also have a call that permit publishing evnets. Then again if events is going to be saved, maybe it make sense??
             return new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
         }
 
@@ -96,6 +98,11 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         //if multiple 'update' events, not all may be used each time, it would need to know the command data
         //then again it would need to know which 'split'-commands succesed or failed and thus need to know which events, at that point, it should wait for as not all commands could be in use
         //so it would just move the problem to a different place. 
+        var firstNameChanged = command.FirstName is not null;
+        var lastNameChanged = command.LastName is not null;
+        var birthChanged = command.Brith is not null;
+        var genderChanged = command.Gender is not null;
+        entity.AddDomainEvent(new PersonPersonalInformationChangedSuccessed(entity, command.CorrelationId, command.CommandId, firstNameChanged, lastNameChanged, birthChanged, genderChanged));
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -124,7 +131,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
         entity.AddPerson(new(command.PersonId));
-        entity.AddDomainEvent(new PersonAddedToGender(entity, command.PersonId, command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new PersonAddedToGenderSuccessed(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return new SuccessResultNoData();
     }
@@ -138,7 +145,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             //cause an error that will prevent the saving of person.
         } //these handlers should, in theory, not fail as they rely on validated data.
         entity.RemovePerson(new(command.PersonId)); //no need for validating if the person exist or not as they are getting removed.
-        entity.AddDomainEvent(new PersonRemovedFromGender(entity, command.PersonId, command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new PersonRemovedFromGenderSuccessed(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return new SuccessResultNoData();
     }

@@ -2,10 +2,8 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
+public class PersonAddedToGender : IDomainEvent<PersonAddedToGenderData>
 {
-    public PersonChangedGenderData Data { get; private set; }
-
     public string AggregateType { get; private set; }
 
     public int AggregateId { get; private set; }
@@ -16,33 +14,33 @@ public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
 
     public long TimeStampRecorded { get; private set; }
 
+    public PersonAddedToGenderData Data { get; private set; }
+
     public Guid CorrelationId { get; private set; }
 
     public Guid CausationId { get; private set; }
 
-    internal PersonChangedGender(Person aggregate, int oldGenderId, Guid correlationId, Guid causationId)
-    {
+    internal PersonAddedToGender(Gender aggregate, int personId, Guid correlationId, Guid causationId)
+    { 
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.PersonId;
+        AggregateId = aggregate.GenderId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggregate.PersonId, aggregate.Gender.Id, oldGenderId);
         CorrelationId = correlationId;
         CausationId = causationId;
+        Data = new(personId, aggregate.GenderId);
     }
 }
 
-public class PersonChangedGenderData
+public class PersonAddedToGenderData
 {
     public int PersonId { get; private set; }
-    public int NewGenderId { get; private set; }
-    public int OldGenderId { get; private set; }
+    public int GenderId { get; private set; }
 
-    public PersonChangedGenderData(int personId, int newGenderId, int oldGenderId)
+    public PersonAddedToGenderData(int personId, int genderId)
     {
         PersonId = personId;
-        NewGenderId = newGenderId;
-        OldGenderId = oldGenderId;
+        GenderId = genderId;
     }
 }

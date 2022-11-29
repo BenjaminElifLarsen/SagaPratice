@@ -1,5 +1,5 @@
 ﻿using Common.SpecificationPattern;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Validation.GenderSpecifications;
 internal class CanGenderBeRemoved : ISpecification<Gender>

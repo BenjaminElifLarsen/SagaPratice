@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 using PeopleDomain.AL.Services.People.Queries.GetDetails;
 using PeopleDomain.AL.Services.People.Queries.GetList;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 using System.Linq.Expressions;
 
 namespace PeopleDomain.AL.Services.People.Queries;

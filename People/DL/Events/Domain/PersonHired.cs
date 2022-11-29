@@ -1,5 +1,5 @@
 ﻿using Common.Events.Domain;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
 public class PersonHired : IDomainEvent<PersonHiredData>

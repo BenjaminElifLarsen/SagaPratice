@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Queries;
 using PeopleDomain.DL.CQRS.Queries.ReadModels;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 using System.Linq.Expressions;
 
 namespace PeopleDomain.DL.CQRS.Queries;

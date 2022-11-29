@@ -1,5 +1,5 @@
 ﻿using Common.Events.Domain;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
 public class PersonFired : IDomainEvent<PersonFiredData>
@@ -29,9 +29,9 @@ public class PersonFired : IDomainEvent<PersonFiredData>
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggregate.PersonId, aggregate.Gender.Id);
         CorrelationId = correlationId;
         CausationId = causationId;
+        Data = new(aggregate.PersonId, aggregate.Gender.Id);
     }
 }
 

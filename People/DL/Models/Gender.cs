@@ -1,8 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.RepositoryPattern;
-using PeopleDomain.DL.Models;
 
-namespace PeopleDomain.DL.Model;
+namespace PeopleDomain.DL.Models;
 public class Gender : IAggregateRoot
 {
     private int _genderId;

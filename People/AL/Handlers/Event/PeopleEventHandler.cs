@@ -1,5 +1,4 @@
-﻿using Common.CQRS.Commands;
-using PeopleDomain.AL.Busses.Command;
+﻿using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
@@ -25,5 +24,25 @@ internal class PeopleEventHandler : IPeopleEventHandler
     public void Handle(PersonChangedGender @event)
     {
         _commandBus.Publish(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
+    }
+
+    public void Handle(PersonAddedToGender @event)
+    {
+        //log all events and commands. Let the busses do the logging
+    }
+
+    public void Handle(PersonRemovedFromGender @event)
+    {
+        //log all events and commands
+    }
+
+    public void Handle(GenderRecognised @event)
+    {
+        //log all events and commands
+    }
+
+    public void Handle(GenderUnrecognised @event)
+    {
+        //log all events and commands
     }
 }

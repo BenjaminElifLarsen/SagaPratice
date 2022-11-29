@@ -1,5 +1,5 @@
 ﻿using BaseRepository;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.IPL.Context;
 internal static class Seeder

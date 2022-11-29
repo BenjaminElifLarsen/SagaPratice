@@ -1,6 +1,6 @@
 ﻿using Common.ResultPattern;
 using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 
 namespace PeopleDomain.DL.Factories;

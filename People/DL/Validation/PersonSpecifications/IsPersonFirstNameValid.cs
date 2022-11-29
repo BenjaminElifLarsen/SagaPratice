@@ -1,6 +1,6 @@
 ﻿using Common.SpecificationPattern;
 using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
 internal class IsPersonFirstNameValid : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>

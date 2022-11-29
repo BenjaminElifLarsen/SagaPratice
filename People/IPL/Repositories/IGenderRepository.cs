@@ -1,5 +1,5 @@
 ﻿using Common.CQRS.Queries;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.IPL.Repositories;
 public interface IGenderRepository

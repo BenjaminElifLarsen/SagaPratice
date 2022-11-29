@@ -1,12 +1,11 @@
-﻿using Common.Events.Domain;
-using Common.Other;
+﻿using Common.Other;
 using Common.ResultPattern;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.CQRS.Queries;
 using PeopleDomain.DL.Errrors;
 using PeopleDomain.DL.Events.Domain;
 using PeopleDomain.DL.Factories;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
 
@@ -71,7 +70,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var validationData = new PersonValidationData(genderIds);
         BinaryFlag flag = new PersonChangePersonalInformationValidator(command, validationData).Validate();
         if (!flag)
-        {
+        { //have event
             return new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
         }
 
@@ -92,8 +91,11 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(new(command.Gender.Gender));
             entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, command.CorrelationId, command.CommandId));
-        }
-
+        } //maybe best to have a single event for all changes that have multiple handlers
+        //it would make it easier for the process manager as it should only care about what has done and need to do next
+        //if multiple 'update' events, not all may be used each time, it would need to know the command data
+        //then again it would need to know which 'split'-commands succesed or failed and thus need to know which events, at that point, it should wait for as not all commands could be in use
+        //so it would just move the problem to a different place. 
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -108,6 +110,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         {
             return new InvalidResultNoData(result.Errors);
         }
+        result.Data.AddDomainEvent(new GenderRecognised(result.Data, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Recognise(result.Data);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -121,6 +124,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
         entity.AddPerson(new(command.PersonId));
+        entity.AddDomainEvent(new PersonAddedToGender(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return new SuccessResultNoData();
     }
@@ -134,6 +138,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             //cause an error that will prevent the saving of person.
         } //these handlers should, in theory, not fail as they rely on validated data.
         entity.RemovePerson(new(command.PersonId)); //no need for validating if the person exist or not as they are getting removed.
+        entity.AddDomainEvent(new PersonRemovedFromGender(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return new SuccessResultNoData();
     }
@@ -149,7 +154,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         entityToAddToo.AddPerson(new(command.PersonId));
         entityToRemoveFrom.RemovePerson(new(command.PersonId));
         _unitOfWork.GenderRepository.Update(entityToAddToo);
-        _unitOfWork.GenderRepository.Update(entityToRemoveFrom);
+        _unitOfWork.GenderRepository.Update(entityToRemoveFrom); //have an event to indicate this is done, mayhaps similar name to the event but with Success at the end?
         return new SuccessResultNoData();
     }
 
@@ -164,6 +169,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         {
             return new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
         }
+        entity.AddDomainEvent(new GenderUnrecognised(entity, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Unrecognise(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();

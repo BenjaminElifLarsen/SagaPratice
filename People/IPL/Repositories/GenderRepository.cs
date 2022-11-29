@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Queries;
 using Common.RepositoryPattern;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.IPL.Repositories;
 internal class GenderRepository : IGenderRepository

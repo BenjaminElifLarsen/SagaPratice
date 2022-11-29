@@ -1,7 +1,7 @@
 ﻿using BaseRepository;
 using Common.Events.Domain;
 using Common.RepositoryPattern;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.IPL.Context;
 internal class MockPeopleContext : IPeopleContext

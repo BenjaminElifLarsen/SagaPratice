@@ -11,7 +11,7 @@ using PeopleDomain.AL.Handlers.Event;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
 using PeopleDomain.DL.Factories;
-using PeopleDomain.DL.Model;
+using PeopleDomain.DL.Models;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
 using PeopleDomain.IPL.Services;

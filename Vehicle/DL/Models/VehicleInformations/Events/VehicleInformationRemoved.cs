@@ -12,4 +12,8 @@ public class VehicleInformationRemoved : IDomainEvent //the code that triggers t
     public Guid EventId => throw new NotImplementedException();
 
     public long TimeStampRecorded => throw new NotImplementedException();
+
+    public Guid CorrelationId => throw new NotImplementedException();
+
+    public Guid CausationId => throw new NotImplementedException();
 }

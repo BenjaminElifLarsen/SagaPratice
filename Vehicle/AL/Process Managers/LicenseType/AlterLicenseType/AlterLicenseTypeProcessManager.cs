@@ -20,16 +20,16 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     public void Handler(LicenseTypeAltered @event)
     { //need to ensure that it cannot return the final event, that it is finished, until all 'paths' are done processing
         //could have enums, "not started", "waiting on", and "done" and then have a variable for each command that is going to be pushed. It goes from not started to waiting and can only go to done when an event is returned
-        if (true) //age requirement changed
-        {
+        //if (true) //age requirement changed
+        //{
 
-        }
-        var c1 = new ValidateLicenseAgeRequirementBecauseChange();
-        if (true) //renew period changed
-        {
+        //}
+        //var c1 = new ValidateLicenseAgeRequirementBecauseChange();
+        //if (true) //renew period changed
+        //{
 
-        }
-        var c2 = new ValidateLicenseRenewPeriodBecauseChange();
+        //}
+        //var c2 = new ValidateLicenseRenewPeriodBecauseChange();
 
         throw new NotImplementedException();
     }

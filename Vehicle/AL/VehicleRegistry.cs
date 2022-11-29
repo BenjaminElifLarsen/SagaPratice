@@ -59,11 +59,11 @@ public class VehicleRegistry : IRoutingRegistry
     {
         _commandBus.RegisterHandler<ValidateOperatorLicenseStatus>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddOperatorNoLicenseFromSystem>(_commandHandler.Handle);
-        _commandBus.RegisterHandler<AddOperatorWithLicenseFromUser>(_commandHandler.Handle);
+        //_commandBus.RegisterHandler<AddOperatorWithLicenseFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddLicenseToOperator>(_commandHandler.Handle);
         _commandBus.RegisterHandler<EstablishLicenseTypeFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveOperatorFromSystem>(_commandHandler.Handle);
-        _commandBus.RegisterHandler<RemoveOperatorFromUser>(_commandHandler.Handle);
+        //_commandBus.RegisterHandler<RemoveOperatorFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<ObsoleteLicenseTypeFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AlterLicenseType>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddVehicleInformationFromSystem>(_commandHandler.Handle);

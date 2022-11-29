@@ -8,12 +8,14 @@ public class RecogniseGender : ICommand
 
     public Guid CommandId { get; private set; }
 
-    public Guid CorrelationId => CommandId;
+    public Guid CorrelationId { get; private set; }
 
-    public Guid CausationId => CommandId;
+    public Guid CausationId { get; private set; }
 
     public RecogniseGender()
     {
         CommandId = Guid.NewGuid();
+        CorrelationId = CommandId;
+        CausationId = CommandId;
     }
 }

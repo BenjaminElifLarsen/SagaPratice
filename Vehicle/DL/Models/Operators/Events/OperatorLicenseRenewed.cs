@@ -15,6 +15,10 @@ public class OperatorLicenseRenewed : IDomainEvent<OperatorLicenseRenewedData>
 
     public OperatorLicenseRenewedData Data { get; private set; }
 
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
     internal OperatorLicenseRenewed()
     {
 

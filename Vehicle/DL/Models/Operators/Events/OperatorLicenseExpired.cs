@@ -15,13 +15,19 @@ public class OperatorLicenseExpired : IDomainEvent<OperatorLicenseExpiredData>
 
     public OperatorLicenseExpiredData Data { get; private set; }
 
-    public OperatorLicenseExpired(Operator aggregate, int licenseTypeId)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    public OperatorLicenseExpired(Operator aggregate, int licenseTypeId, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
         Data = new(aggregate.OperatorId, licenseTypeId);
     }
 }

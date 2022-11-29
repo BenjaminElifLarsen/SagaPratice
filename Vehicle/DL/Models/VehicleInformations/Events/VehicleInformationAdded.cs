@@ -12,4 +12,8 @@ public class VehicleInformationAdded : IDomainEvent
     public Guid EventId => throw new NotImplementedException();
 
     public long TimeStampRecorded => throw new NotImplementedException();
+
+    public Guid CorrelationId => throw new NotImplementedException();
+
+    public Guid CausationId => throw new NotImplementedException();
 }

@@ -15,13 +15,19 @@ public class VehicleSold : IDomainEvent<VehicleSoldData>
 
     public VehicleSoldData Data { get; private set; }
 
-    internal VehicleSold(Vehicle aggregate)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    internal VehicleSold(Vehicle aggregate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
         Data = new(aggregate.VehicleId, aggregate.Operators.Select(x => x.Id));
     }
 }

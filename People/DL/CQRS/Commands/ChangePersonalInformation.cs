@@ -11,13 +11,15 @@ public class ChangePersonalInformationFromUser : ICommand
 
     public Guid CommandId { get; private set; }
 
-    public Guid CorrelationId => CommandId;
+    public Guid CorrelationId { get; private set; }
 
-    public Guid CausationId => CommandId;
+    public Guid CausationId { get; private set; }
 
     public ChangePersonalInformationFromUser()
     {
         CommandId = Guid.NewGuid();
+        CorrelationId = CommandId;
+        CausationId = CommandId;
     }
 }
 

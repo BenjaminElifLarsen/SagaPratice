@@ -7,6 +7,19 @@ public class BuyVehicleWithOperators : ICommand
     public IEnumerable<int> Operators { get; set; }
     public DateTime Produced { get; set; }
     public string SerialNumber { get; set; }
+
+    public Guid CommandId { get; private set; }
+
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    public BuyVehicleWithOperators()
+    {
+        CommandId = Guid.NewGuid();
+        CorrelationId = CommandId;
+        CausationId = CommandId;
+    }
 }
 
 public class BuyVehicleWithNoOperator : ICommand
@@ -14,4 +27,17 @@ public class BuyVehicleWithNoOperator : ICommand
     public int VehicleInformation { get; set; }
     public DateTime Produced { get; set; }
     public string SerialNumber { get; set; }
+
+    public Guid CommandId { get; private set; }
+
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    public BuyVehicleWithNoOperator()
+    {
+        CommandId = Guid.NewGuid();
+        CorrelationId = CommandId;
+        CausationId = CommandId;
+    }
 }

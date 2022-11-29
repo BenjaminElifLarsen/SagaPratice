@@ -36,7 +36,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         _unitOfWork.PersonRepository.Hire(result.Data);
         try
         {
-            result.Data.AddDomainEvent(new PersonHired(result.Data));
+            result.Data.AddDomainEvent(new PersonHired(result.Data, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
         }
         catch (Exception e)
@@ -52,7 +52,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         if (entity is not null)
         {
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
-            entity.AddDomainEvent(new PersonFired(entity)); //the event should first be triggered when DeletedFrom is true
+            entity.AddDomainEvent(new PersonFired(entity, command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity); //could store the event in the context and let a process run through events at times to see which needs processing
             _unitOfWork.Save(); //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
         }
@@ -91,7 +91,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         {
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(new(command.Gender.Gender));
-            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id));
+            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, command.CorrelationId, command.CommandId));
         }
 
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);

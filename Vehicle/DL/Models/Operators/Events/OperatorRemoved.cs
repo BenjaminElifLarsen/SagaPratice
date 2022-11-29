@@ -15,13 +15,19 @@ public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
 
     public OperatorRemovedData Data { get; private set; }
 
-    public OperatorRemoved(Operator aggregate)
+    public Guid CorrelationId { get; private set; }
+
+    public Guid CausationId { get; private set; }
+
+    public OperatorRemoved(Operator aggregate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
         Data = new(aggregate.OperatorId, aggregate.Vehicles.Select(x => x.Id), aggregate.Licenses.Select(x => x.Type.Id));
     }
 }

@@ -14,16 +14,16 @@ internal class PeopleEventHandler : IPeopleEventHandler
 
     public void Handle(PersonHired @event)
     {
-        _commandBus.Publish(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId));
+        _commandBus.Publish(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(PersonFired @event)
     {
-        _commandBus.Publish(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId));
+        _commandBus.Publish(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(PersonChangedGender @event)
     {
-        _commandBus.Publish(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId));
+        _commandBus.Publish(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
     }
 }

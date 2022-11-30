@@ -19,7 +19,9 @@ public class VehicleOperatorRelationshipEstablished : IDomainEvent<VehicleOperat
 
     public Guid CausationId { get; private set; }
 
-    internal VehicleOperatorRelationshipEstablished(Vehicle aggregate, int operatorId, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal VehicleOperatorRelationshipEstablished(Vehicle aggregate, int operatorId, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
@@ -28,6 +30,7 @@ public class VehicleOperatorRelationshipEstablished : IDomainEvent<VehicleOperat
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(aggregate.VehicleId, operatorId);
     }
 }

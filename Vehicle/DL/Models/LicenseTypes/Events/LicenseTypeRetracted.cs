@@ -22,7 +22,9 @@ public class LicenseTypeRetracted : IDomainEvent<LicenseTypeRetractedData>
 
     public Guid CausationId { get; private set; }
 
-    internal LicenseTypeRetracted(LicenseType aggregate, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal LicenseTypeRetracted(LicenseType aggregate,  int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.LicenseTypeId;
@@ -32,6 +34,7 @@ public class LicenseTypeRetracted : IDomainEvent<LicenseTypeRetractedData>
         Data = new(aggregate.LicenseTypeId);
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
     }
 }
 

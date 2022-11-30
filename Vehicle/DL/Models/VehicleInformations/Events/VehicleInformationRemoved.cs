@@ -16,4 +16,6 @@ public class VehicleInformationRemoved : IDomainEvent //the code that triggers t
     public Guid CorrelationId => throw new NotImplementedException();
 
     public Guid CausationId => throw new NotImplementedException();
+
+    public int Version { get; private set; }
 }

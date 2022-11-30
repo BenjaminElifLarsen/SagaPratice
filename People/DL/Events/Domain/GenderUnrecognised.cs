@@ -18,7 +18,9 @@ public class GenderUnrecognised : IDomainEvent
 
     public Guid CausationId { get; private set; }
 
-    public GenderUnrecognised(Gender aggregate, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    public GenderUnrecognised(Gender aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.GenderId;
@@ -27,5 +29,6 @@ public class GenderUnrecognised : IDomainEvent
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
     }
 }

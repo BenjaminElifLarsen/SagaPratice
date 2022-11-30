@@ -18,9 +18,11 @@ public class PersonPersonalInformationChangedSuccessed : IDomainEventSuccess<Per
 
     public Guid CausationId { get; private set; }
 
+    public int Version { get; private set; }
+
     public PersonPersonalInformationChangedSuccessedData Data { get; private set; }
 
-public PersonPersonalInformationChangedSuccessed(Person aggregate, Guid correlationId, Guid causationId, bool firstNameChanged, bool lastNameChanged, bool birthChanged, bool genderChanged)
+public PersonPersonalInformationChangedSuccessed(Person aggregate, int version, Guid correlationId, Guid causationId, bool firstNameChanged, bool lastNameChanged, bool birthChanged, bool genderChanged)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
@@ -29,6 +31,7 @@ public PersonPersonalInformationChangedSuccessed(Person aggregate, Guid correlat
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(firstNameChanged, lastNameChanged, birthChanged, genderChanged);
     }
 }
@@ -67,7 +70,9 @@ public class PersonPersonalInformationChangedFailed : IDomainEventFail
 
     public Guid CausationId { get; private set; }
 
-    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
@@ -77,5 +82,6 @@ public class PersonPersonalInformationChangedFailed : IDomainEventFail
         CorrelationId = correlationId;
         CausationId = causationId;
         Errors = errors;
+        Version = version;
     }
 }

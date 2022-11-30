@@ -19,16 +19,19 @@ public class LicenseTypeRenewPeriodChanged : IDomainEvent<LicenseTypeRenewPeriod
 
     public Guid CausationId { get; private set; }
 
-    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.LicenseTypeId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Data = new(aggregate.LicenseTypeId, aggregate.AgeRequirementInYears, aggregate.Operators.Select(x => x.Id));
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
+        Data = new(aggregate.LicenseTypeId, aggregate.AgeRequirementInYears, aggregate.Operators.Select(x => x.Id));
     }
 }
 

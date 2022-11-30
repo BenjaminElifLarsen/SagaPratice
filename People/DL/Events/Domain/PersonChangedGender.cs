@@ -20,7 +20,9 @@ public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
 
     public Guid CausationId { get; private set; }
 
-    internal PersonChangedGender(Person aggregate, int oldGenderId, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal PersonChangedGender(Person aggregate, int oldGenderId, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
@@ -30,6 +32,7 @@ public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
         Data = new(aggregate.PersonId, aggregate.Gender.Id, oldGenderId);
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
     }
 }
 

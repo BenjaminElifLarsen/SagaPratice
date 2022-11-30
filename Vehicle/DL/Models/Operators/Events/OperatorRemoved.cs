@@ -19,7 +19,9 @@ public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
 
     public Guid CausationId { get; private set; }
 
-    public OperatorRemoved(Operator aggregate, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    public OperatorRemoved(Operator aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;
@@ -28,6 +30,7 @@ public class OperatorRemoved : IDomainEvent<OperatorRemovedData>
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(aggregate.OperatorId, aggregate.Vehicles.Select(x => x.Id), aggregate.Licenses.Select(x => x.Type.Id));
     }
 }

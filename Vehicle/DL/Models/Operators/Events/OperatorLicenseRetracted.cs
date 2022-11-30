@@ -19,7 +19,9 @@ public class OperatorLicenseRetracted : IDomainEvent<OperatorLicenseRetractedDat
 
     public Guid CausationId { get; private set; }
 
-    internal OperatorLicenseRetracted(Operator aggregate, License license, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal OperatorLicenseRetracted(Operator aggregate, License license, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;
@@ -28,6 +30,7 @@ public class OperatorLicenseRetracted : IDomainEvent<OperatorLicenseRetractedDat
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(aggregate.OperatorId, license.Type.Id);
     }
 }

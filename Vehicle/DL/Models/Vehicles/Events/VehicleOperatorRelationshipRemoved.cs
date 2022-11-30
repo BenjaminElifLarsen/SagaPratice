@@ -19,7 +19,9 @@ public class VehicleOperatorRelationshipDisbanded : IDomainEvent<VehicleOperator
 
     public Guid CausationId { get; private set; }
 
-    public VehicleOperatorRelationshipDisbanded(Vehicle aggregate, int operatorId, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    public VehicleOperatorRelationshipDisbanded(Vehicle aggregate, int operatorId, int version, Guid correlationId, Guid causationId)
     { //could have a ctor(Operator, int) version
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
@@ -28,6 +30,7 @@ public class VehicleOperatorRelationshipDisbanded : IDomainEvent<VehicleOperator
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(aggregate.VehicleId, operatorId);
     }
 }

@@ -20,7 +20,9 @@ public class PersonRemovedFromGenderSuccessed : IDomainEventSuccess<PersonRemove
 
     public Guid CausationId { get; private set; }
 
-    internal PersonRemovedFromGenderSuccessed(Gender aggregate, int personId, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal PersonRemovedFromGenderSuccessed(Gender aggregate, int personId, int version, Guid correlationId, Guid causationId)
     { 
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.GenderId;
@@ -29,6 +31,7 @@ public class PersonRemovedFromGenderSuccessed : IDomainEventSuccess<PersonRemove
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(personId, aggregate.GenderId);
     }
 }

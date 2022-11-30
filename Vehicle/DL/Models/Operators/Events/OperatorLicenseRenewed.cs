@@ -19,9 +19,11 @@ public class OperatorLicenseRenewed : IDomainEvent<OperatorLicenseRenewedData>
 
     public Guid CausationId { get; private set; }
 
+    public int Version { get; private set; }
+
     internal OperatorLicenseRenewed()
     {
-
+        throw new NotImplementedException();
     }
 }
 

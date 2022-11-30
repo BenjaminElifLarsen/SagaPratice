@@ -19,7 +19,9 @@ public class VehicleSold : IDomainEvent<VehicleSoldData>
 
     public Guid CausationId { get; private set; }
 
-    internal VehicleSold(Vehicle aggregate, Guid correlationId, Guid causationId)
+    public int Version { get; private set; }
+
+    internal VehicleSold(Vehicle aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
@@ -28,6 +30,7 @@ public class VehicleSold : IDomainEvent<VehicleSoldData>
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
+        Version = version;
         Data = new(aggregate.VehicleId, aggregate.Operators.Select(x => x.Id));
     }
 }

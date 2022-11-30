@@ -16,4 +16,6 @@ internal class LicenseTypeAltered : IDomainEvent
     public Guid CorrelationId => throw new NotImplementedException();
 
     public Guid CausationId => throw new NotImplementedException();
+
+    public int Version { get; private set; }
 }

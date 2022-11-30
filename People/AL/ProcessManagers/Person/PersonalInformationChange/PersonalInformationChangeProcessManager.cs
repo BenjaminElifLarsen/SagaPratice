@@ -27,8 +27,8 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
     private Result Finished()
     { //figure out how to best run code for next stage and when fully done.
-        throw new NotImplementedException(); //microsoft statae it should return an event, which means the services need to be handle specific events
-        //could send over handlers for the specific events and then wait on them to have run
+        throw new NotImplementedException(); //microsoft states it should return an event, which means the services need to be handle specific events
+        //could send over handlers for the specific events and then wait on them to have run. After all there is no way for the process manager to directly transmit data back, since all it does is to response to events
     }
 
     public void Handler(PersonPersonalInformationChangedSuccessed @event)
@@ -81,7 +81,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     {
         if (@event.CorrelationId != CorrelationId) { return; }
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Finished);
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished); //maybe just remove failers instead of setting them to finished
+        _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
     }
 
     public void Handler(PersonRemovedFromGenderFailed @event)

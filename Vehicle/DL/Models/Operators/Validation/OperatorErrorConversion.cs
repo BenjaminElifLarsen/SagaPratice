@@ -1,4 +1,4 @@
-﻿using Common.Other;
+﻿using Common.BinaryFlags;
 using Common.SpecificationPattern;
 using VehicleDomain.DL.Errors;
 

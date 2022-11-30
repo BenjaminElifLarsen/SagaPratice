@@ -1,8 +1,6 @@
 ﻿using BaseRepository;
-using Common.CQRS.Commands;
-using Common.Events.Domain;
-using Common.Other;
 using Common.RepositoryPattern;
+using Common.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;

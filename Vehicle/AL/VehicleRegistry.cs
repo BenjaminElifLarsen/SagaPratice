@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 using Common.Events.Domain;
-using Common.Other;
+using Common.Routing;
 using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Command;

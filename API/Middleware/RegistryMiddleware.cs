@@ -1,5 +1,5 @@
 ﻿using API.Controllers;
-using Common.Other;
+using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PeopleDomain.AL;
 using VehicleDomain.AL;

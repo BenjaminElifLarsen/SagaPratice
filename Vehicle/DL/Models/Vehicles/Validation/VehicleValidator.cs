@@ -1,4 +1,4 @@
-﻿using Common.Other;
+﻿using Common.BinaryFlags;
 using Common.SpecificationPattern;
 using Common.SpecificationPattern.Composite.Extensions;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;

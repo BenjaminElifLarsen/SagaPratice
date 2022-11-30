@@ -3,11 +3,11 @@ using VehicleDomain.DL.Errors;
 using Common.SpecificationPattern.Composite.Extensions;
 //using l = VehicleDomain.DL.Models.Operators.CQRS.Commands.License;
 using lv = VehicleDomain.DL.Models.Operators.Validation.PersonCreationLicenseValidationData.LicenseValidationData;
-using Common.Other;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
 using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
+using Common.BinaryFlags;
 
 namespace VehicleDomain.DL.Models.Operators.Validation;
 internal class OperatorValidatorFromSystem : IValidate

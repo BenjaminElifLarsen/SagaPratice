@@ -11,13 +11,11 @@ using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.IPL.Context;
 using VehicleDomain.IPL.Services;
 using VehicleDomain.AL.Handlers.Command;
-using Common.Other;
-using Common.CQRS.Commands;
 using VehicleDomain.AL.Busses.Command;
-using Common.Events.Domain;
 using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Event;
 using VehicleDomain.AL.Services.LicenseTypes;
+using Common.Routing;
 
 namespace VehicleDomain.AL.API;
 

@@ -1,4 +1,4 @@
-﻿using Common.Other;
+﻿using Common.BinaryFlags;
 using Common.ResultPattern;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.CQRS.Queries;

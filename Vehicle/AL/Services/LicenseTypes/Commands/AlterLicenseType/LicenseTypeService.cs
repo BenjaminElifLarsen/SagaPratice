@@ -6,6 +6,6 @@ internal partial class LicenseTypeService
 {
     public async Task<Result> AlterLicenseTypeAsync(AlterLicenseType command)
     {
-        return await Task.Run(() => _commandBus.Publish(command));
+        return await Task.Run(() => _commandBus.Send(command));
     }
 }

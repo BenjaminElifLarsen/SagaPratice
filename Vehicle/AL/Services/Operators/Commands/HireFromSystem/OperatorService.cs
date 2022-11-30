@@ -6,6 +6,6 @@ public partial class OperatorService
 {
     public async Task<Result> AddOperatorFromSystemAsync(AddOperatorNoLicenseFromSystem command)
     {
-        return await Task.Run(() => _commandBus.Publish(command));
+        return await Task.Run(() => _commandBus.Send(command));
     }
 }

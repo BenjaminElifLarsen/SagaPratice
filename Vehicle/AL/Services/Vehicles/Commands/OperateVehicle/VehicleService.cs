@@ -6,11 +6,11 @@ public partial class VehicleService
 {
     public async Task<Result> StartOperatingVehicleAsync(StartOperatingVehicle command)
     {
-        return await Task.Run(() => _commandBus.Publish(command));
+        return await Task.Run(() => _commandBus.Send(command));
     }
 
     public async Task<Result> StopOperatingVehicleAsync(StopOperatingVehicle command)
     {
-        return await Task.Run(() => _commandBus.Publish(command));
+        return await Task.Run(() => _commandBus.Send(command));
     }
 }

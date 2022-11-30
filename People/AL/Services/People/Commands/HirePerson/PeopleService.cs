@@ -6,6 +6,6 @@ public partial class PeopleService
 {
     public async Task<Result> HirePersonAsync(HirePersonFromUser command)
     {
-        return await Task.Run(() => _commandBus.Publish(command));
+        return await Task.Run(() => _commandBus.Send(command));
     }
 }

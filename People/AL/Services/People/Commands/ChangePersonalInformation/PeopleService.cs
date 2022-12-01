@@ -1,4 +1,5 @@
-﻿using Common.ResultPattern;
+﻿using Common.ProcessManager;
+using Common.ResultPattern;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.DL.CQRS.Commands;
 
@@ -11,7 +12,8 @@ public partial class PeopleService
         if(processManager is not null)
         {
             processManager.SetUp(command.CommandId);
-            processManager.SetCallback(Callback);
+            processManager.RegistrateHandler(Handler);
+            //processManager.SetCallback(Callback);
         }
         var result = await Task.Run(() => _commandBus.Dispatch(command));
         if(result is InvalidResultNoData) return result; //temp. solution
@@ -19,6 +21,7 @@ public partial class PeopleService
         return _result; //the problem lies in the fact that domain events are placed on aggregate roots and if none is found there is no place to place the event.
     } //could return the result of the task, at leat for now, while figuring out how to solve the problem
 }
+
 //{
 //  "id": 1,
 //  "gender": {

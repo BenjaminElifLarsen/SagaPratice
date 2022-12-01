@@ -7,23 +7,22 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 internal class PersonalInformationChangeProcessManager : IPersonalInformationChangeProcessManager
 {
-    private IPeopleCommandBus _commandBus;
+    private readonly IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
-    private IEnumerable<string> _errors;
-    private Action<Result> _callback;
+    private List<string> _errors;
+    private readonly HashSet<Action<ProcesserFinished>> _handlers;
 
     public Guid ProcessManagerId { get; private set; }
     public Guid CorrelationId { get; private set; }
-
     public bool Running => !_trackerCollection.AllFinishedOrFailed;
-
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
     public PersonalInformationChangeProcessManager(IPeopleCommandBus commandBus) 
-    {
+    { //could log id
         ProcessManagerId = Guid.NewGuid();
         _commandBus = commandBus;
-        _errors = new List<string>();
+        _handlers = new();
+        _errors = new();
         _trackerCollection = new();
         _trackerCollection.AddEvent<PersonChangedGender>(true);
         _trackerCollection.AddEvent<PersonPersonalInformationChangedSuccessed>(true);
@@ -31,21 +30,25 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     }
 
     public void SetUp(Guid correlationId)
-    {
+    { //could log the corelationId together with the ProcessManagerId
         CorrelationId = correlationId;
     }
 
-    public void SetCallback(Action<Result> callback)
+    public void RegistrateHandler(Action<ProcesserFinished> handler)
     {
-        _callback = callback;
+        _handlers.Add(handler);
     }
-    //consider a better way than these two
-    public void RunCallbackIfPossible()
-    {
+
+    public void PublishEventIfPossible() 
+    { //not to happy with this one, name and implementation, feel like it could be done better
         if (_trackerCollection.AllFinishedOrFailed)
         {
             Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            _callback.Invoke(result);
+            ProcesserFinished @event = new(result);
+            foreach(var handler in _handlers)
+            {
+                handler.Invoke(@event);
+            }
         }
     }
 
@@ -59,7 +62,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         {
             _trackerCollection.RemoveEvent<PersonChangedGender>();
         }
-        RunCallbackIfPossible();
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonPersonalInformationChangedFailed @event)
@@ -71,8 +74,8 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.RemoveEvent<PersonChangedGender>();
 
-        _errors = _errors.Concat(@event.Errors);
-        RunCallbackIfPossible();
+        _errors.AddRange(@event.Errors);
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonAddedToGenderSuccessed @event)
@@ -81,7 +84,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Finished); 
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
-        RunCallbackIfPossible();
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonAddedToGenderFailed @event)
@@ -90,8 +93,8 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Failed);
-        _errors = _errors.Concat(@event.Errors);
-        RunCallbackIfPossible();
+        _errors.AddRange(@event.Errors);
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonRemovedFromGenderSuccessed @event)
@@ -100,7 +103,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
-        RunCallbackIfPossible();
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonRemovedFromGenderFailed @event)
@@ -109,8 +112,8 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Failed);
-        _errors = _errors.Concat(@event.Errors);
-        RunCallbackIfPossible();
+        _errors.AddRange(@event.Errors);
+        PublishEventIfPossible();
     }
 
     public void Handler(PersonChangedGender @event)
@@ -126,7 +129,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.CorrelationId, @event.EventId));
         _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
-        RunCallbackIfPossible();
+        PublishEventIfPossible();
     }
 
 }

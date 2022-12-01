@@ -28,9 +28,7 @@ internal class MockPeopleContext : IPeopleContext
     public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
-
     public IEnumerable<IDomainEvent> Events => _contextData.SelectMany(x => x.Entity.Events);
-
     public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
 
     public MockPeopleContext()

@@ -19,6 +19,6 @@ public partial class PeopleService : IPeopleService
 		_processManagers = processManagers;
 	}
 
-	private void Callback(Result result) => _result = result;
-	private bool CanReturnResult => _result is not null;
+    private void Handler(ProcesserFinished @event) => _result = @event.Result;
+    private bool CanReturnResult => _result is not null;
 }

@@ -1,4 +1,5 @@
-﻿using Common.ResultPattern;
+﻿using Common.ProcessManager;
+using Common.ResultPattern;
 using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
@@ -51,7 +52,12 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         throw new NotImplementedException();
     }
 
-    public void RunCallbackIfPossible()
+    public void PublishEventIfPossible()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RegistrateHandler(Action<ProcesserFinished> handler)
     {
         throw new NotImplementedException();
     }

@@ -1,7 +1,5 @@
-﻿using Common.Events.Domain;
-using Common.ProcessManager;
-using PeopleDomain.AL;
-using PeopleDomain.AL.Busses.Command;
+﻿using Common.ProcessManager;
+using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
@@ -16,7 +14,6 @@ internal class UnitOfWork : IUnitOfWork
     private readonly IEnumerable<IProcessManager> _processManagers;
 
     public IGenderRepository GenderRepository => _genderRepository;
-
     public IPersonRepository PersonRepository => _personRepository;
 
     public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPeopleDomainEventBus eventBus, IPeopleContext context, IEnumerable<IProcessManager> processManagers)
@@ -25,11 +22,22 @@ internal class UnitOfWork : IUnitOfWork
         _personRepository = personRepository;
         _eventBus = eventBus;
         _context = context;
-        _processManagers = processManagers;
+        _processManagers = processManagers; 
     }
+
+    private void Save(ProcesserFinished @event)
+    {
+        if(@event.Result is SuccessResultNoData)
+        { //this will be called first when all events have been run. Could place the ProcesserFinished event on the evnet publisher or have a while check down in Save() that check if the pm is finished and then places it
+            _context.Save(); //only the pm will know if it has finished, unit of work should not be one to tell pm that is has finished.
+        } //cannot place ProcessorFinished on the event bus as it does not implement IDomainEvent and it has nothing to do with the domain models
+    } //service event mayhaps or whatever they were called again (system events?), look into it.
 
     public void Save() 
     {
+        var pm = _processManagers.SingleOrDefault(x => x.CorrelationId != default);
+        pm?.RegistrateHandler(Save);
+
         do
         {
             var roots = _context.GetTracked.ToArray();
@@ -50,11 +58,6 @@ internal class UnitOfWork : IUnitOfWork
         //        _eventBus.Publish(@event); //the bus should set them to have been published, should events really know if they have published?0
         //    }
         //} while (_context.Events.Any());
-        var pm = _processManagers.SingleOrDefault(x => x.CorrelationId != default);
-        while (pm.Running) ; //consider if this can be done better
-        if (pm.FinishedSuccessful)
-        {
-            _context.Save();
-        }
+        //while (pm.Running) ;
     }
 }

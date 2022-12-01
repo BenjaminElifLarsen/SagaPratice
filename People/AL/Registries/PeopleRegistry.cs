@@ -3,6 +3,7 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
+using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
@@ -32,7 +33,7 @@ public class PeopleRegistry : IPeopleRegistry
     private void RoutingEvent()
     {
         _eventBus.RegisterHandler<PersonHired>(_eventHandler.Handle);
-        _eventBus.RegisterHandler<PersonFired>(_eventHandler.Handle);
+        //_eventBus.RegisterHandler<PersonFired>(_eventHandler.Handle);
     }
 
     private void RoutingCommand()
@@ -56,5 +57,13 @@ public class PeopleRegistry : IPeopleRegistry
         _eventBus.RegisterHandler<PersonRemovedFromGenderSuccessed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonChangedGender>(processManager.Handler);
+    }
+
+    public void SetUpRouting(IFireProcessManager processManager)
+    {
+        _eventBus.RegisterHandler<PersonFiredSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonFiredFailed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handler);
     }
 }

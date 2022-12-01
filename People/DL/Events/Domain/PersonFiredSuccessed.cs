@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonFired : IDomainEvent<PersonFiredData>
+public class PersonFiredSuccessed : IDomainEvent<PersonFiredData>
 {
     public string AggregateType { get; private set; }
 
@@ -22,7 +22,7 @@ public class PersonFired : IDomainEvent<PersonFiredData>
 
     public int Version { get; private set; }
 
-    internal PersonFired(Person aggregate, int version, Guid correlationId, Guid causationId)
+    internal PersonFiredSuccessed(Person aggregate, int version, Guid correlationId, Guid causationId)
     { //instead of PersonData data, could just create an instance out of Person.
         //domain events are supposed to be triggered before saving, which means an ORM cannot assign an Id, so will need to do that 'manual'.
         //mayhaps factory or handler should assign an id and validate it against the context?

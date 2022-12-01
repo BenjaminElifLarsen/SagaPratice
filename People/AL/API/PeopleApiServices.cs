@@ -7,6 +7,7 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
+using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
 using PeopleDomain.AL.Services.Genders;
@@ -38,6 +39,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IRoutingRegistry, PeopleRegistry>();
         services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>();
+        services.AddScoped<IProcessManager, FireProcessManager>();
     }
 
     public static void Seed(IServiceProvider provider)

@@ -4,7 +4,7 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.Handlers.Event;
 public interface IPeopleEventHandler : 
     IDomainEventHandler<PersonHired>,
-    IDomainEventHandler<PersonFired>,
+    IDomainEventHandler<PersonFiredSuccessed>,
     IDomainEventHandler<PersonChangedGender>,
     IDomainEventHandler<PersonAddedToGenderSuccessed>,
     IDomainEventHandler<PersonRemovedFromGenderSuccessed>,

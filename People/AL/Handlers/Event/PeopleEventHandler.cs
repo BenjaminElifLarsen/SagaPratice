@@ -16,7 +16,7 @@ internal class PeopleEventHandler : IPeopleEventHandler
         _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
     }
 
-    public void Handle(PersonFired @event)
+    public void Handle(PersonFiredSuccessed @event)
     {
         _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
     }

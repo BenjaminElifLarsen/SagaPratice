@@ -9,7 +9,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 {
     private readonly IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
-    private List<string> _errors;
+    private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
 
     public Guid ProcessManagerId { get; private set; }
@@ -24,9 +24,9 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _handlers = new();
         _errors = new();
         _trackerCollection = new();
-        _trackerCollection.AddEvent<PersonChangedGender>(true);
-        _trackerCollection.AddEvent<PersonPersonalInformationChangedSuccessed>(true);
-        _trackerCollection.AddEvent<PersonPersonalInformationChangedFailed>(false);
+        _trackerCollection.AddEventTracker<PersonChangedGender>(true);
+        _trackerCollection.AddEventTracker<PersonPersonalInformationChangedSuccessed>(true);
+        _trackerCollection.AddEventTracker<PersonPersonalInformationChangedFailed>(false);
     }
 
     public void SetUp(Guid correlationId)
@@ -36,7 +36,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
     public void RegistrateHandler(Action<ProcesserFinished> handler)
     {
-        _handlers.Add(handler);
+        _handlers.Add(handler); //improve this to ensure the same instance of a method cannot be registrated multiple times
     }
 
     public void PublishEventIfPossible() 
@@ -57,7 +57,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         if (@event.CorrelationId != CorrelationId) { return; } 
 
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedSuccessed>(DomainEventStatus.Finished);
-        _trackerCollection.UpdateEvent<PersonPersonalInformationChangedFailed>(DomainEventStatus.Finished);
+        _trackerCollection.RemoveEvent<PersonPersonalInformationChangedFailed>();
         if (!@event.Data.GenderWasChanged) 
         {
             _trackerCollection.RemoveEvent<PersonChangedGender>();
@@ -83,7 +83,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         if(@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Finished); 
-        _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
+        _trackerCollection.RemoveEvent<PersonAddedToGenderFailed>();
         PublishEventIfPossible();
     }
 
@@ -102,7 +102,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Finished);
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
+        _trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
         PublishEventIfPossible();
     }
 
@@ -120,10 +120,10 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.AddEvent<PersonAddedToGenderSuccessed>(true);
-        _trackerCollection.AddEvent<PersonAddedToGenderFailed>(false); 
-        _trackerCollection.AddEvent<PersonRemovedFromGenderSuccessed>(true);
-        _trackerCollection.AddEvent<PersonRemovedFromGenderFailed>(false);
+        _trackerCollection.AddEventTracker<PersonAddedToGenderSuccessed>(true);
+        _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false); 
+        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSuccessed>(true);
+        _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false);
 
         _trackerCollection.UpdateEvent<PersonChangedGender>(DomainEventStatus.Finished);
 

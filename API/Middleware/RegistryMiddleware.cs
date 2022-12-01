@@ -2,6 +2,7 @@
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
 using VehicleDomain.AL;
@@ -38,7 +39,9 @@ public class RegistryMiddleware
                 var selected = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
                 selected.SetUpRouting();
                 var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
-                selected.SetUpRouting(changePM);
+                selected.SetUpRouting(changePM); //consider all related to the process managers over to their own middleware, this class should only care about process managers
+                var firePM = processManagers.SingleOrDefault(x => x is IFireProcessManager) as IFireProcessManager;
+                selected.SetUpRouting(firePM);
             }
         }
         await _next(context);

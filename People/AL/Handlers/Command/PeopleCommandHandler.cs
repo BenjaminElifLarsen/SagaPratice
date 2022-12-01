@@ -29,8 +29,8 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var validationData = new PersonValidationData(genderIds);
         var result = _personFactory.CreatePerson(command, validationData);
         if (result is InvalidResult<Person>)
-        {
-            return new InvalidResultNoData(result.Errors);
+        { //how to add an event for this as there is no aggregate root? Could let the repository take in orphan events and put them in the context. The question thus become how to retrieve them?
+            return new InvalidResultNoData(result.Errors); //or maybe via the unit of work?
         }
         _unitOfWork.PersonRepository.Hire(result.Data);
         try
@@ -51,7 +51,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         if (entity is not null)
         {
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
-            entity.AddDomainEvent(new PersonFired(entity, entity.Events.Count(), command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
+            entity.AddDomainEvent(new PersonFiredSuccessed(entity, entity.Events.Count(), command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity); //could store the event in the context and let a process run through events at times to see which needs processing
             _unitOfWork.Save(); //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
         }
@@ -63,7 +63,7 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.PersonRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
-            return new InvalidResultNoData("Not found");
+            return new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
         }
 
         var genderIds = _unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result;

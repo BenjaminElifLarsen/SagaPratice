@@ -1,5 +1,7 @@
 ﻿using Common.CQRS.Commands;
+using Common.Events.Store;
 using Common.ResultPattern;
+using System.Diagnostics;
 
 namespace PeopleDomain.AL.Busses.Command;
 internal class MockCommandBus : IPeopleCommandBus
@@ -11,10 +13,14 @@ internal class MockCommandBus : IPeopleCommandBus
         _routes = new();
     }
 
-    public Result Send<T>(T command) where T : ICommand
+    public Result Dispatch<T>(T command) where T : ICommand
     {
         List<Func<ICommand, Result>> handlers;
-
+        #if(DEBUG)
+            Debug.WriteLine($"{command.CorrelationId} : {command.CausationId} : {command.CommandId} : {command.GetType()}");
+        #else
+            //write to log
+        #endif
         if (!_routes.TryGetValue(command.GetType(), out handlers))
             return new SuccessResultNoData();
 

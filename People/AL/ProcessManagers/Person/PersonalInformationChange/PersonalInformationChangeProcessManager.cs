@@ -14,10 +14,9 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     public Guid ProcessManagerId { get; private set; }
     public Guid CorrelationId { get; private set; }
 
-    public PersonalInformationChangeProcessManager(Guid correlationId, IPeopleCommandBus commandBus) //not sure if this is the best way to do this, figure out where the instance will be created, e.g. event bus or middlewaren 
+    public PersonalInformationChangeProcessManager(IPeopleCommandBus commandBus) //not sure if this is the best way to do this, figure out where the instance will be created, e.g. event bus or middlewaren 
     { //could be a good idea to create the instance before running the command, just so it can listen to all events.
         ProcessManagerId = Guid.NewGuid();
-        CorrelationId = correlationId;
         _commandBus = commandBus;
         _trackerCollection = new();
         _trackerCollection.AddEvent<PersonChangedGender>(true); //added here because the command handler can add it to the list of event to publish, are reconsider redesigning that part.
@@ -25,22 +24,24 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _trackerCollection.AddEvent<PersonPersonalInformationChangedFailed>(false);
     }
 
-    private Result Finished()
-    { //figure out how to best run code for next stage and when fully done.
-        throw new NotImplementedException(); //microsoft states it should return an event, which means the services need to be handle specific events
-        //could send over handlers for the specific events and then wait on them to have run. After all there is no way for the process manager to directly transmit data back, since all it does is to response to events
+    public void SetUp(Guid correlationId)
+    {
+        CorrelationId = correlationId;
     }
+
+    //have a method for subscription a service handler to a very special event (finish event)
+    //instead of an action it is a Func<TEvent,Result>. So an 'event' that returns data (either SuccessResultNoData or InvalidResult(string[])
+
+    //private Result Finished()
+    //{ //figure out how to best run code for next stage and when fully done.
+    //    throw new NotImplementedException(); //microsoft states it should return an event, which means the services need to be handle specific events
+    //    //could send over handlers for the specific events and then wait on them to have run. After all there is no way for the process manager to directly transmit data back, since all it does is to response to events
+    //}
 
     public void Handler(PersonPersonalInformationChangedSuccessed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; } 
-        //should this one trigger the other event (PersonChangedGender) (regarding adding and removing gender)
-        //feel like it would make more sense when looking through this file's code. So it is the processer that can trigger events that causes commands, while commands can only trigger events for status (regarding failer or not)
-        //the first command would have to publish an event with data rather than status. Also process manager publish an event that it is listning too?
-        //consider asking advisor if they got an idea.
-        //if having to publish events got to figure out a way to do it. Currently it can only publish commands and currently events require data from an aggregate root.
-        //some information is present in @event but it might not be the needed and also the ctor requires the aggregate root
-        //from reading up on event sourcing it might be best to keep event creation out of this as events need to be stored and have a value only the aggregate root would be able to set.
+
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedSuccessed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedFailed>(DomainEventStatus.Finished);
         if (!@event.Data.GenderWasChanged) 
@@ -64,6 +65,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     public void Handler(PersonAddedToGenderSuccessed @event)
     {
         if(@event.CorrelationId != CorrelationId) { return; }
+
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Finished); 
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
     }
@@ -80,6 +82,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
     public void Handler(PersonRemovedFromGenderSuccessed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
+
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
     }
@@ -104,7 +107,8 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonChangedGender>(DomainEventStatus.Finished);
 
-        _commandBus.Send(new AddPersonToGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.CorrelationId, @event.EventId));
-        _commandBus.Send(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
     }
+
 }

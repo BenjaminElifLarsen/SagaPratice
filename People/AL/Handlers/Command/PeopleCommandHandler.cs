@@ -93,11 +93,8 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(new(command.Gender.Gender));
             entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, entity.Events.Count(), command.CorrelationId, command.CommandId));
-        } //maybe best to have a single event for all changes that have multiple handlers
-        //it would make it easier for the process manager as it should only care about what has done and need to do next
-        //if multiple 'update' events, not all may be used each time, it would need to know the command data
-        //then again it would need to know which 'split'-commands succesed or failed and thus need to know which events, at that point, it should wait for as not all commands could be in use
-        //so it would just move the problem to a different place. 
+        }
+
         var firstNameChanged = command.FirstName is not null;
         var lastNameChanged = command.LastName is not null;
         var birthChanged = command.Brith is not null;
@@ -159,7 +156,9 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
             return new InvalidResultNoData(); //create event for saga
         }
         entityToAddToo.AddPerson(new(command.PersonId));
+        entityToAddToo.AddDomainEvent(new PersonAddedToGenderSuccessed(entityToAddToo, command.PersonId, entityToAddToo.Events.Count(), command.CorrelationId, command.CommandId));
         entityToRemoveFrom.RemovePerson(new(command.PersonId));
+        entityToRemoveFrom.AddDomainEvent(new PersonRemovedFromGenderSuccessed(entityToRemoveFrom, command.PersonId, entityToRemoveFrom.Events.Count(), command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entityToAddToo);
         _unitOfWork.GenderRepository.Update(entityToRemoveFrom); //have an event to indicate this is done, mayhaps similar name to the event but with Success at the end?
         return new SuccessResultNoData();

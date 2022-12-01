@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.ProcessManager;
 using Common.RepositoryPattern;
 using Common.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
+using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
 using PeopleDomain.DL.Factories;
@@ -34,6 +36,7 @@ public class PeopleApiServices
         services.AddScoped<IPeopleCommandBus, MockCommandBus>();
         services.AddScoped<IPeopleDomainEventBus, MockDomainEventBus>();
         services.AddScoped<IRoutingRegistry, PeopleRegistry>();
+        services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>();
     }
 
     public static void Seed(IServiceProvider provider)

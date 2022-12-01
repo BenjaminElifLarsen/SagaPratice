@@ -11,7 +11,7 @@ internal class MockCommandBus : IVehicleCommandBus
         _routes = new();
     }
 
-    public Result Send<T>(T command) where T : ICommand
+    public Result Dispatch<T>(T command) where T : ICommand
     {
         List<Func<ICommand, Result>> handlers;
 

@@ -36,7 +36,7 @@ internal class UnitOfWork : IUnitOfWork
             {
                 for (int n = 0; n < roots[i].Events.Count(); n++) //does not work correctly as n goes up and event count goes down
                 {
-                    _eventBus.Publish(roots[i].Events.ToArray()[n]);
+                    _eventBus.Publish(roots[i].Events.ToArray()[n]); //the add and update method in the repository should add them to the event store
                     roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
                 }
             }

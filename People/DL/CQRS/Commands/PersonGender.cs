@@ -6,7 +6,7 @@ public class AddPersonToGender : ICommand //consider a better name
     public int PersonId { get; private set; }
     public int GenderId { get; private set; }
 
-    public Guid CommandId => Guid.NewGuid();
+    public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
 
@@ -18,6 +18,7 @@ public class AddPersonToGender : ICommand //consider a better name
         GenderId = genderId;
         CorrelationId = correlationId;
         CausationId = causationId;
+        CommandId = Guid.NewGuid();
     }
 }
 
@@ -26,7 +27,7 @@ public class RemovePersonFromGender : ICommand
     public int PersonId { get; private set; }
     public int GenderId { get; private set; }
 
-    public Guid CommandId => Guid.NewGuid();
+    public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
 
@@ -38,6 +39,7 @@ public class RemovePersonFromGender : ICommand
         GenderId = genderId;
         CorrelationId = correlationId;
         CausationId = causationId;
+        CommandId = Guid.NewGuid();
     }
 }
 

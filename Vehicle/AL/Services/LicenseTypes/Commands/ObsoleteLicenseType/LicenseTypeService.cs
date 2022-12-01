@@ -6,6 +6,6 @@ internal partial class LicenseTypeService
 {
     public async Task<Result> ObsoleteLicenseTypeAsync(ObsoleteLicenseTypeFromUser command)
     {
-        return await Task.Run(() => _commandBus.Send(command));
+        return await Task.Run(() => _commandBus.Dispatch(command));
     }
 }

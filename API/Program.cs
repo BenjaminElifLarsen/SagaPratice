@@ -42,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<RegistryMiddleware>();
+//app.UseMiddleware<ProcessManagerMiddleware>();
 
 app.MapControllers();
 

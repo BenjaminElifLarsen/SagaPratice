@@ -57,7 +57,7 @@ public class Gender : IAggregateRoot
     public void RemoveDomainEvent(IDomainEvent eventItem)
     {
         if (this == eventItem.AggregateId) //should cause an expection if this fails
-            _events.Add(eventItem);
+            _events.Remove(eventItem);
     }
 
     //public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)

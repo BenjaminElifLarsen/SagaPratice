@@ -35,4 +35,9 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
 
         throw new NotImplementedException();
     }
+
+    public void SetUp(Guid correlationId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using API.Controllers;
+using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PeopleDomain.AL;
+using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using VehicleDomain.AL;
 
 namespace API.Middleware;
@@ -15,7 +17,7 @@ public class RegistryMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries)
+    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries, IEnumerable<IProcessManager> processManagers)
     {
         var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
         var vehicleDomain = new string[] { nameof(OperatorController), nameof(VehicleController), nameof(VehicleInformationController), nameof(LicenseTypeController) };
@@ -35,6 +37,8 @@ public class RegistryMiddleware
             {
                 var selected = registries.SingleOrDefault(x => x.GetType() == typeof(PeopleRegistry));
                 selected.SetUpRouting();
+                var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
+                (selected as PeopleRegistry).SetUpRouting(changePM);
             }
         }
         await _next(context);

@@ -9,17 +9,23 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 {
     private IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
-    private IEnumerable<string> _errors; 
+    private IEnumerable<string> _errors;
+    private Action<Result> _callback;
 
     public Guid ProcessManagerId { get; private set; }
     public Guid CorrelationId { get; private set; }
 
-    public PersonalInformationChangeProcessManager(IPeopleCommandBus commandBus) //not sure if this is the best way to do this, figure out where the instance will be created, e.g. event bus or middlewaren 
-    { //could be a good idea to create the instance before running the command, just so it can listen to all events.
+    public bool Running => !_trackerCollection.AllFinishedOrFailed;
+
+    public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
+
+    public PersonalInformationChangeProcessManager(IPeopleCommandBus commandBus) 
+    {
         ProcessManagerId = Guid.NewGuid();
         _commandBus = commandBus;
+        _errors = new List<string>();
         _trackerCollection = new();
-        _trackerCollection.AddEvent<PersonChangedGender>(true); //added here because the command handler can add it to the list of event to publish, are reconsider redesigning that part.
+        _trackerCollection.AddEvent<PersonChangedGender>(true);
         _trackerCollection.AddEvent<PersonPersonalInformationChangedSuccessed>(true);
         _trackerCollection.AddEvent<PersonPersonalInformationChangedFailed>(false);
     }
@@ -29,14 +35,19 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         CorrelationId = correlationId;
     }
 
-    //have a method for subscription a service handler to a very special event (finish event)
-    //instead of an action it is a Func<TEvent,Result>. So an 'event' that returns data (either SuccessResultNoData or InvalidResult(string[])
-
-    //private Result Finished()
-    //{ //figure out how to best run code for next stage and when fully done.
-    //    throw new NotImplementedException(); //microsoft states it should return an event, which means the services need to be handle specific events
-    //    //could send over handlers for the specific events and then wait on them to have run. After all there is no way for the process manager to directly transmit data back, since all it does is to response to events
-    //}
+    public void SetCallback(Action<Result> callback)
+    {
+        _callback = callback;
+    }
+    //consider a better way than these two
+    public void RunCallbackIfPossible()
+    {
+        if (_trackerCollection.AllFinishedOrFailed)
+        {
+            Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
+            _callback.Invoke(result);
+        }
+    }
 
     public void Handler(PersonPersonalInformationChangedSuccessed @event)
     {
@@ -46,8 +57,9 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedFailed>(DomainEventStatus.Finished);
         if (!@event.Data.GenderWasChanged) 
         {
-            _trackerCollection.RemoveEvent<PersonRemovedFromGenderSuccessed>();
+            _trackerCollection.RemoveEvent<PersonChangedGender>();
         }
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonPersonalInformationChangedFailed @event)
@@ -57,9 +69,10 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedFailed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonPersonalInformationChangedSuccessed>(DomainEventStatus.Failed);
 
-        _trackerCollection.RemoveEvent<PersonRemovedFromGenderSuccessed>();
+        _trackerCollection.RemoveEvent<PersonChangedGender>();
 
         _errors = _errors.Concat(@event.Errors);
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonAddedToGenderSuccessed @event)
@@ -68,6 +81,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Finished); 
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonAddedToGenderFailed @event)
@@ -77,6 +91,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Failed);
         _errors = _errors.Concat(@event.Errors);
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonRemovedFromGenderSuccessed @event)
@@ -85,6 +100,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonRemovedFromGenderFailed @event)
@@ -94,6 +110,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Finished);
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Failed);
         _errors = _errors.Concat(@event.Errors);
+        RunCallbackIfPossible();
     }
 
     public void Handler(PersonChangedGender @event)
@@ -109,6 +126,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
 
         _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.CorrelationId, @event.EventId));
         _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
+        RunCallbackIfPossible();
     }
 
 }

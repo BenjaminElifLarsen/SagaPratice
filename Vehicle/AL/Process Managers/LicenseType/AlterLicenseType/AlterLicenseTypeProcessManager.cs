@@ -1,4 +1,5 @@
-﻿using VehicleDomain.AL.Busses.Command;
+﻿using Common.ResultPattern;
+using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 
@@ -13,6 +14,10 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     public Guid ProcessManagerId { get; private set; }
 
     public Guid CorrelationId => throw new NotImplementedException();
+
+    public bool Running => throw new NotImplementedException();
+
+    public bool FinishedSuccessful => throw new NotImplementedException();
 
     public AlterLicenseTypeProcessManager()
     {
@@ -37,6 +42,16 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     }
 
     public void SetUp(Guid correlationId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetCallback(Action<Result> callback)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RunCallbackIfPossible()
     {
         throw new NotImplementedException();
     }

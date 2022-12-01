@@ -1,5 +1,6 @@
 ﻿using Common.CQRS.Commands;
 using Common.ProcessManager;
+using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.IPL.Services;
 
@@ -9,6 +10,7 @@ public partial class PeopleService : IPeopleService
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IPeopleCommandBus _commandBus;
 	private readonly IEnumerable<IProcessManager> _processManagers; //maybe have an extra interface to split up process mangers between the different modules.
+	private Result? _result;
 
 	public PeopleService(IUnitOfWork unitOfWork, IPeopleCommandBus commandBus, IEnumerable<IProcessManager> processManagers)
 	{
@@ -16,4 +18,7 @@ public partial class PeopleService : IPeopleService
 		_commandBus = commandBus;
 		_processManagers = processManagers;
 	}
+
+	private void Callback(Result result) => _result = result;
+	private bool CanReturnResult => _result is not null;
 }

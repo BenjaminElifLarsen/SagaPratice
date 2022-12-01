@@ -8,6 +8,7 @@ using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PeopleDomain.AL.Registries;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
 using PeopleDomain.DL.Factories;

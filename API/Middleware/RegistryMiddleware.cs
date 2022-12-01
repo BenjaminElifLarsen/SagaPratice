@@ -2,8 +2,8 @@
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PeopleDomain.AL.Registries;
 using VehicleDomain.AL;
 
 namespace API.Middleware;
@@ -35,10 +35,10 @@ public class RegistryMiddleware
             }
             else if (peopleDomain.Any(x => string.Equals(x, controllerName)))
             {
-                var selected = registries.SingleOrDefault(x => x.GetType() == typeof(PeopleRegistry));
+                var selected = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
                 selected.SetUpRouting();
                 var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
-                (selected as PeopleRegistry).SetUpRouting(changePM);
+                selected.SetUpRouting(changePM);
             }
         }
         await _next(context);

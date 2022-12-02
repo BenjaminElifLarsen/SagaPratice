@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
@@ -76,6 +77,19 @@ public class PersonPersonalInformationChangedFailed : IDomainEventFail
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Errors = errors;
+        Version = version;
+    }
+
+    public PersonPersonalInformationChangedFailed(IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
+    {
+        AggregateType = typeof(Person).Name;
+        AggregateId = 0;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;

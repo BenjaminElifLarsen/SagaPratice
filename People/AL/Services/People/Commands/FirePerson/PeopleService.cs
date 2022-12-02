@@ -12,9 +12,9 @@ public partial class PeopleService
         {
             processManager.SetUp(command.CommandId);
             processManager.RegistrateHandler(Handler);
-        }
-        var result = await Task.Run(() => _commandBus.Dispatch(command));
-        if (result is InvalidResultNoData) return result;
+        } //should return the task result if pm is null
+        /*var result = */await Task.Run(() => _commandBus.Dispatch(command));
+        //if (result is InvalidResultNoData) return result;
         while (!CanReturnResult) ;
         return _result;
     }

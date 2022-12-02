@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="AL\ProcessManagers\Gender\" />
     <Folder Include="DL\Events\Integration\" />
   </ItemGroup>
 

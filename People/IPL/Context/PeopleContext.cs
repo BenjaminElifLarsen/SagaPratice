@@ -7,6 +7,7 @@ namespace PeopleDomain.IPL.Context;
 internal class MockPeopleContext : IPeopleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
+    private readonly HashSet<IDomainEvent> _events;
     private DateOnly _date; //mayhaps move the data out into its own class that can be set as singleton. EF Core context is scoped and it could be nice if this context was slightly more similar to it on that point.
     
     public bool Filter { get; set; }
@@ -28,7 +29,7 @@ internal class MockPeopleContext : IPeopleContext
     public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.Events);
-    public IEnumerable<IDomainEvent> Events => _contextData.SelectMany(x => x.Entity.Events);
+    public IEnumerable<IDomainEvent> OrphanEvents => _events;
     public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
 
     public MockPeopleContext()
@@ -37,6 +38,7 @@ internal class MockPeopleContext : IPeopleContext
         _date = new(dateTime.Year, dateTime.Month, dateTime.Day);
         _contextData = new();
         Filter = true;
+        _events = new();
     }
 
     public void Add(IAggregateRoot root)
@@ -114,5 +116,15 @@ internal class MockPeopleContext : IPeopleContext
                 _contextData.Remove(entitiesToRemove[i]);
             }
         }
+    }
+
+    public void Add(IDomainEvent @event)
+    {
+        _events.Add(@event);
+    }
+
+    public void Remove(IDomainEvent @event)
+    {
+        _events.Remove(@event);
     }
 }

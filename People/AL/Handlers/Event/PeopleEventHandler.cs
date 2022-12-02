@@ -11,7 +11,7 @@ internal class PeopleEventHandler : IPeopleEventHandler
         _commandBus = commandBus;
     }
 
-    public void Handle(PersonHired @event)
+    public void Handle(PersonHiredSuccessed @event)
     {
         _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
     }

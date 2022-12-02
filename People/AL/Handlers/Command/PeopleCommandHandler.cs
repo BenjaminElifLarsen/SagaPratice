@@ -30,20 +30,15 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var result = _personFactory.CreatePerson(command, validationData);
         if (result is InvalidResult<Person>)
         { //how to add an event for this as there is no aggregate root? Could let the repository take in orphan events and put them in the context. The question thus become how to retrieve them?
+            _unitOfWork.AddOrphanEvnet(new PersonHiredFailed(result.Errors, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save();
             return new InvalidResultNoData(result.Errors); //or maybe via the unit of work?
         }
         _unitOfWork.PersonRepository.Hire(result.Data);
-        try
-        {
-            result.Data.AddDomainEvent(new PersonHired(result.Data, result.Data.Events.Count(), command.CorrelationId, command.CommandId));
-            _unitOfWork.Save();
-        }
-        catch (Exception e)
-        {
-            return new InvalidResultNoData(e.Message);
-        }
+        result.Data.AddDomainEvent(new PersonHiredSuccessed(result.Data, result.Data.Events.Count(), command.CorrelationId, command.CommandId));
+        _unitOfWork.Save();
         return new SuccessResultNoData();
-    } //maybe move all of the handler implementation code into domain services, one for each aggregate roots
+    } 
 
     public Result Handle(FirePersonFromUser command)
     {
@@ -63,6 +58,8 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.PersonRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
+            _unitOfWork.AddOrphanEvnet(new PersonPersonalInformationChangedFailed(new string[] { "Not found." }, 0, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save(); //consider calling something else like 'ProcessEvents'
             return new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
         }
 

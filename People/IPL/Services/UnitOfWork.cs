@@ -1,4 +1,6 @@
-﻿using Common.ProcessManager;
+﻿using Common.Events.Domain;
+using Common.ProcessManager;
+using Common.RepositoryPattern;
 using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
@@ -36,8 +38,24 @@ internal class UnitOfWork : IUnitOfWork
     public void Save() 
     {
         var pm = _processManagers.SingleOrDefault(x => x.CorrelationId != default);
-        pm?.RegistrateHandler(Save);
+        if(pm is not null)
+        {
+            pm?.RegistrateHandler(Save);
+        }
+        ProcessEvents();
+        if(pm is null)
+        {
+            _context.Save();
+        }
+    }
 
+    public void AddOrphanEvnet(IDomainEvent @event)
+    {
+        _context.Add(@event);
+    }
+
+    public void ProcessEvents()
+    {
         do
         {
             var roots = _context.GetTracked.ToArray();
@@ -49,7 +67,13 @@ internal class UnitOfWork : IUnitOfWork
                     roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
                 }
             }
-        } while (_context.Events.Any());
+        } while (_context.GetTracked.SelectMany(x => x.Events).Any());
+        var eventsArray = _context.OrphanEvents.ToArray();
+        foreach (var @event in eventsArray)
+        {
+            _eventBus.Publish(@event);
+            _context.Remove(@event);
+        }
         //do
         //{
         //    var events = _context.Events;

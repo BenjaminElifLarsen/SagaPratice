@@ -11,6 +11,12 @@ The people domain is structured by type, where Vehicle is grouped by process and
 Regarding the command names the ...From{Value} is used to help to distint who/what the command is sent from e.g. Value could User, a System, or by an Event.
 
 
+## Git
+
+This project contains a GIT submodule (Common). It is very important to ensure the correct version of Common is used as Common is designed for use in multiple projects. 
+If pulling this project down it should pull the correct version of Common.
+
+
 ## Some Comments
 
 All models are using int for their ids, which is fine for most models. The Person and operator models should be using GUIDs. 
@@ -21,14 +27,22 @@ Do note that the id generation code could be considered to break the domain mode
 
 The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough.
 
+
+### Comment Design
+
 Regarding comments in the code, there are two types; permanents and temporals. 
 
+#### Permanent
+
 A permanent follows this pattern // Sentence.
+
+The permanent comments are there to help explain why code is done in the way it is done, what it does or why it is present. 
+
+#### Temporal
 
 A temporal follows this pattern //sentence(.|?)
 
 The temporal comments are just ideas and thoughts and are only present, because I work alone on this project. If working with others such comments would be placed in the task/backlogs on the devops board until they could be resolved.
-The permanent comments are there to help explain why code is done in the way it is done, what it does or why it is present. 
 
 
 

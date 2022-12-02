@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonRemovedFromGenderSuccessed : IDomainEventSuccess<PersonRemovedFromGenderData>
+public sealed class PersonRemovedFromGenderSuccessed : IDomainEventSuccess<PersonRemovedFromGenderData>
 {
     public string AggregateType { get; private set; }
 

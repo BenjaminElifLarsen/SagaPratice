@@ -1,10 +1,9 @@
 ﻿using Common.CQRS.Commands;
-using Common.Events.Store;
 using Common.ResultPattern;
 using System.Diagnostics;
 
 namespace PeopleDomain.AL.Busses.Command;
-internal class MockCommandBus : IPeopleCommandBus
+internal sealed class MockCommandBus : IPeopleCommandBus
 {
     private readonly Dictionary<Type, List<Func<ICommand, Result>>> _routes;
 

@@ -4,7 +4,7 @@ using PeopleDomain.DL.CQRS.Queries.ReadModels;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
-internal class IsPersonGenderValid : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
+internal sealed class IsPersonGenderValid : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
 { //consider a better name
 
     private IEnumerable<GenderIdValidation> _genderIds;

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonRemovedFromGenderFailed : IDomainEventFail
+public sealed class PersonRemovedFromGenderFailed : IDomainEventFail
 {
     public IEnumerable<string> Errors => throw new NotImplementedException();
 

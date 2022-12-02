@@ -5,7 +5,7 @@ using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 
 namespace PeopleDomain.DL.Factories;
-internal class GenderFactory : IGenderFactory
+internal sealed class GenderFactory : IGenderFactory
 {
     public Result<Gender> CreateGender(RecogniseGender gender, GenderValidationData validationData)
     { //consider better name

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 
 namespace PeopleDomain.DL.CQRS.Queries.ReadModels;
-internal record GenderVerbValidation : BaseReadModel
+internal sealed record GenderVerbValidation : BaseReadModel
 {
     public string Object { get; private set; }
     public string Subject { get; private set; }

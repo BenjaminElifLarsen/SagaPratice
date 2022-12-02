@@ -5,7 +5,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-internal class PersonalInformationChangeProcessManager : IPersonalInformationChangeProcessManager
+internal sealed class PersonalInformationChangeProcessManager : IPersonalInformationChangeProcessManager
 {
     private readonly IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
@@ -44,7 +44,7 @@ internal class PersonalInformationChangeProcessManager : IPersonalInformationCha
         if (_trackerCollection.AllFinishedOrFailed)
         {
             Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result);
+            ProcesserFinished @event = new(result, ProcessManagerId);
             foreach(var handler in _handlers)
             {
                 handler.Invoke(@event);

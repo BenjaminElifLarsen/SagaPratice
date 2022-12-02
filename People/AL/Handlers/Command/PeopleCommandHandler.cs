@@ -10,7 +10,7 @@ using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Handlers.Command;
-internal class PeopleCommandHandler : IPeopleCommandHandler
+internal sealed class PeopleCommandHandler : IPeopleCommandHandler
 {
     private readonly IPersonFactory _personFactory;
     private readonly IGenderFactory _genderFactory;

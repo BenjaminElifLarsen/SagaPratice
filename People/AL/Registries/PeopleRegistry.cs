@@ -10,7 +10,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.Registries;
-public class PeopleRegistry : IPeopleRegistry
+public sealed class PeopleRegistry : IPeopleRegistry
 {
     private readonly IPeopleCommandBus _commandBus;
     private readonly IPeopleDomainEventBus _eventBus;

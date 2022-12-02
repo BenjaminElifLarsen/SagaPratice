@@ -6,7 +6,7 @@ using PeopleDomain.DL.Errrors;
 using PeopleDomain.DL.Validation.GenderSpecifications;
 
 namespace PeopleDomain.DL.Validation;
-internal class GenderValidator : IValidate
+internal sealed class GenderValidator : IValidate
 {
     private readonly RecogniseGender _gender;
     private readonly GenderValidationData _validationData;

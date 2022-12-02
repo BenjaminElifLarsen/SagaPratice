@@ -3,7 +3,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
-internal class IsPersonFirstNameValid : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
+internal sealed class IsPersonFirstNameValid : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
 {
     public bool IsSatisfiedBy(ChangePersonalInformationFromUser candidate)
     {

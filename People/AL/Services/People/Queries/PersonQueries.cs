@@ -5,7 +5,7 @@ using PeopleDomain.DL.Models;
 using System.Linq.Expressions;
 
 namespace PeopleDomain.AL.Services.People.Queries;
-internal class PersonListItemQuery : BaseQuery<Person, PersonListItem>
+internal sealed class PersonListItemQuery : BaseQuery<Person, PersonListItem>
 {
     public override Expression<Func<Person, PersonListItem>> Map()
     {
@@ -13,7 +13,7 @@ internal class PersonListItemQuery : BaseQuery<Person, PersonListItem>
     }
 }
 
-internal class PersonDetailsQuery : BaseQuery<Person, PersonDetails>
+internal sealed class PersonDetailsQuery : BaseQuery<Person, PersonDetails>
 {
     public override Expression<Func<Person, PersonDetails>> Map()
     {

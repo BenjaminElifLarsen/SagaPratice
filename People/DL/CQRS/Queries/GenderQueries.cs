@@ -4,7 +4,7 @@ using PeopleDomain.DL.Models;
 using System.Linq.Expressions;
 
 namespace PeopleDomain.DL.CQRS.Queries;
-internal class GenderIdQuery : BaseQuery<Gender, GenderIdValidation>
+internal sealed class GenderIdQuery : BaseQuery<Gender, GenderIdValidation>
 {
     public override Expression<Func<Gender, GenderIdValidation>> Map()
     {
@@ -12,7 +12,7 @@ internal class GenderIdQuery : BaseQuery<Gender, GenderIdValidation>
     }
 }
 
-internal class GenderVerbQuery : BaseQuery<Gender, GenderVerbValidation>
+internal sealed class GenderVerbQuery : BaseQuery<Gender, GenderVerbValidation>
 {
     public override Expression<Func<Gender, GenderVerbValidation>> Map()
     {

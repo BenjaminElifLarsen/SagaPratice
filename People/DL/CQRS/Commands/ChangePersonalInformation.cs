@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace PeopleDomain.DL.CQRS.Commands;
-public class ChangePersonalInformationFromUser : ICommand
+public sealed class ChangePersonalInformationFromUser : ICommand
 {
     public int Id { get; set; }
     public ChangeFirstName? FirstName { get; set; }

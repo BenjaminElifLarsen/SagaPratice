@@ -3,7 +3,7 @@ using Common.RepositoryPattern;
 
 namespace PeopleDomain.DL.Models;
 
-public class Person : IAggregateRoot, ISoftDeleteDate
+public sealed class Person : IAggregateRoot, ISoftDeleteDate
 {
     private int _personId;
     private string _firstName;

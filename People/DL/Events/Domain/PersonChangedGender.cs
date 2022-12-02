@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
+public sealed class PersonChangedGender : IDomainEvent<PersonChangedGenderData>
 {
     public PersonChangedGenderData Data { get; private set; }
 

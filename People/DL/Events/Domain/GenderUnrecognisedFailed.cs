@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class GenderUnrecognisedFailed : IDomainEventFail
+public sealed class GenderUnrecognisedFailed : IDomainEventFail
 {
     public IEnumerable<string> Errors { get; private set; }
 

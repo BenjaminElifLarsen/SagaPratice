@@ -2,7 +2,7 @@
 using PeopleDomain.DL.CQRS.Commands;
 
 namespace PeopleDomain.DL.Validation.GenderSpecifications;
-internal class IsGenderVerbSubjectSat : ISpecification<RecogniseGender>
+internal sealed class IsGenderVerbSubjectSat : ISpecification<RecogniseGender>
 {
     public bool IsSatisfiedBy(RecogniseGender candidate)
     {

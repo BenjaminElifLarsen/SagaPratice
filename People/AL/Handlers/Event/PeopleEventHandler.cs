@@ -3,7 +3,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.Handlers.Event;
-internal class PeopleEventHandler : IPeopleEventHandler
+internal sealed class PeopleEventHandler : IPeopleEventHandler
 {
     private readonly IPeopleCommandBus _commandBus;
     public PeopleEventHandler(IPeopleCommandBus commandBus)

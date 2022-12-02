@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace PeopleDomain.DL.CQRS.Commands;
-public class HirePersonFromUser : ICommand
+public sealed class HirePersonFromUser : ICommand
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

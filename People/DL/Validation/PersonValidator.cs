@@ -6,7 +6,7 @@ using PeopleDomain.DL.Errrors;
 using PeopleDomain.DL.Validation.PersonSpecifications;
 
 namespace PeopleDomain.DL.Validation;
-internal class PersonHireValidator : IValidate
+internal sealed class PersonHireValidator : IValidate
 {
     private readonly HirePersonFromUser _person;
     private readonly PersonValidationData _validationData;

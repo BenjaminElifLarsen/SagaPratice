@@ -5,7 +5,7 @@ using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 
 namespace PeopleDomain.DL.Factories;
-internal class PersonFactory : IPersonFactory
+internal sealed class PersonFactory : IPersonFactory
 {
     public Result<Person> CreatePerson(HirePersonFromUser person, PersonValidationData validationData)
     {

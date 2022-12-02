@@ -4,7 +4,7 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-internal class RecogniseProcessManager : IRecogniseProcessManager
+internal sealed class RecogniseProcessManager : IRecogniseProcessManager
 {
     private readonly IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
@@ -54,7 +54,7 @@ internal class RecogniseProcessManager : IRecogniseProcessManager
         if (_trackerCollection.AllFinishedOrFailed)
         {
             Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result);
+            ProcesserFinished @event = new(result, ProcessManagerId);
             foreach (var handler in _handlers)
             {
                 handler.Invoke(@event);

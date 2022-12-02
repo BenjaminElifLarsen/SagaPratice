@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace PeopleDomain.DL.CQRS.Commands;
-public class AddPersonToGender : ICommand //consider a better name
+public sealed class AddPersonToGender : ICommand //consider a better name
 {
     public int PersonId { get; private set; }
     public int GenderId { get; private set; }

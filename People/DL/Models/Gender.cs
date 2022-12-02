@@ -2,7 +2,7 @@
 using Common.RepositoryPattern;
 
 namespace PeopleDomain.DL.Models;
-public class Gender : IAggregateRoot
+public sealed class Gender : IAggregateRoot
 {
     private int _genderId;
     private string _verbSubject;

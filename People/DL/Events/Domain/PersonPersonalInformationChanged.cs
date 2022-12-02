@@ -1,9 +1,8 @@
 ﻿using Common.Events.Domain;
-using Common.Events.Store;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonPersonalInformationChangedSuccessed : IDomainEventSuccess<PersonPersonalInformationChangedSuccessedData>
+public sealed class PersonPersonalInformationChangedSuccessed : IDomainEventSuccess<PersonPersonalInformationChangedSuccessedData>
 {
     public string AggregateType { get; private set; }
 

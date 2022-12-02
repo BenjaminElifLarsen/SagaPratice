@@ -4,7 +4,7 @@ using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.IPL.Context;
-internal class MockPeopleContext : IPeopleContext
+internal sealed class MockPeopleContext : IPeopleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private readonly HashSet<IDomainEvent> _events;

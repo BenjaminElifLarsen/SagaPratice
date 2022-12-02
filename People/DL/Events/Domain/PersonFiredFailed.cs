@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonFiredFailed : IDomainEventFail
+public sealed class PersonFiredFailed : IDomainEventFail
 {
     public string AggregateType { get; private set; }
     public int AggregateId { get; private set; }

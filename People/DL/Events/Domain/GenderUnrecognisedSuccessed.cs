@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class GenderUnrecognisedSuccessed : IDomainEvent
+public sealed class GenderUnrecognisedSuccessed : IDomainEvent
 {
     public string AggregateType { get; private set; }
 

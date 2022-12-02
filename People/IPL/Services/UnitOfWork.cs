@@ -1,13 +1,12 @@
 ﻿using Common.Events.Domain;
 using Common.ProcessManager;
-using Common.RepositoryPattern;
 using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories;
 
 namespace PeopleDomain.IPL.Services;
-internal class UnitOfWork : IUnitOfWork
+internal sealed class UnitOfWork : IUnitOfWork
 {
     private readonly IGenderRepository _genderRepository;
     private readonly IPersonRepository _personRepository;

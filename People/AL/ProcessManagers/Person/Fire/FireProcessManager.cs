@@ -1,12 +1,11 @@
-﻿using Common.CQRS.Commands;
-using Common.ProcessManager;
+﻿using Common.ProcessManager;
 using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Person.Fire;
-internal class FireProcessManager : IFireProcessManager
+internal sealed class FireProcessManager : IFireProcessManager
 {
     private readonly IPeopleCommandBus _commandBus;
     private readonly EventTrackerCollection _trackerCollection;
@@ -86,7 +85,7 @@ internal class FireProcessManager : IFireProcessManager
         if (_trackerCollection.AllFinishedOrFailed)
         {
             Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result);
+            ProcesserFinished @event = new(result, ProcessManagerId);
             foreach (var handler in _handlers)
             {
                 handler.Invoke(@event);

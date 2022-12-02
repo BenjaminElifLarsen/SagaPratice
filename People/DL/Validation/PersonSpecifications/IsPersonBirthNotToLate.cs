@@ -3,7 +3,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Validation.PersonSpecifications;
-internal class IsPersonBirthNotToLate : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
+internal sealed class IsPersonBirthNotToLate : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)
     {

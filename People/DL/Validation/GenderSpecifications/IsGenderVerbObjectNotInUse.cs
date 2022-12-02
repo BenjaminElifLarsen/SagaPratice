@@ -3,7 +3,7 @@ using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.CQRS.Queries.ReadModels;
 
 namespace PeopleDomain.DL.Validation.GenderSpecifications;
-internal class IsGenderVerbObjectNotInUse : ISpecification<RecogniseGender>
+internal sealed class IsGenderVerbObjectNotInUse : ISpecification<RecogniseGender>
 {
     private IEnumerable<GenderVerbValidation> _genderVerbs;
     public IsGenderVerbObjectNotInUse(GenderValidationData validationData)

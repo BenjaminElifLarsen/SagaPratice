@@ -1,7 +1,7 @@
 ﻿using PeopleDomain.DL.CQRS.Queries.ReadModels;
 
 namespace PeopleDomain.DL.Validation;
-internal class GenderValidationData
+internal sealed class GenderValidationData
 {
     public IEnumerable<GenderVerbValidation> GenderVerbs { get; private set; }
 

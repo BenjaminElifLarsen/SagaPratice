@@ -5,7 +5,7 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Services.People;
-public partial class PeopleService : IPeopleService
+public sealed partial class PeopleService : IPeopleService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IPeopleCommandBus _commandBus;

@@ -2,6 +2,8 @@
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
@@ -45,6 +47,10 @@ public class RegistryMiddleware
                 selected.SetUpRouting(firePM);
                 var hirePM = processManagers.SingleOrDefault(x => x is IHireProcessManager) as IHireProcessManager;
                 selected.SetUpRouting(hirePM);
+                var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;
+                selected.SetUpRouting(regPM);
+                var unregPM = processManagers.SingleOrDefault(x => x is IUnrecogniseProcessManager) as IUnrecogniseProcessManager;
+                selected.SetUpRouting(unregPM);
             }
         }
         await _next(context);

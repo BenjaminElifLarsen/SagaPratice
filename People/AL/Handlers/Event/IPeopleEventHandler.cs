@@ -8,7 +8,7 @@ public interface IPeopleEventHandler :
     IDomainEventHandler<PersonChangedGender>,
     IDomainEventHandler<PersonAddedToGenderSuccessed>,
     IDomainEventHandler<PersonRemovedFromGenderSuccessed>,
-    IDomainEventHandler<GenderRecognised>,
-    IDomainEventHandler<GenderUnrecognised>
+    IDomainEventHandler<GenderRecognisedSuccessed>,
+    IDomainEventHandler<GenderUnrecognisedSuccessed>
 {
 }

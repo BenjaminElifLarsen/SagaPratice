@@ -7,6 +7,8 @@ using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.Handlers.Event;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
@@ -42,6 +44,8 @@ public class PeopleApiServices
         services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>();
         services.AddScoped<IProcessManager, FireProcessManager>();
         services.AddScoped<IProcessManager, HireProcessManager>();
+        services.AddScoped<IProcessManager, RecogniseProcessManager>();
+        services.AddScoped<IProcessManager, UnrecogniseProcessManager>();
     }
 
     public static void Seed(IServiceProvider provider)

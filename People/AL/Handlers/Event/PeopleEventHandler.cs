@@ -36,12 +36,12 @@ internal class PeopleEventHandler : IPeopleEventHandler
         //log all events and commands
     }
 
-    public void Handle(GenderRecognised @event)
+    public void Handle(GenderRecognisedSuccessed @event)
     {
         //log all events and commands
     }
 
-    public void Handle(GenderUnrecognised @event)
+    public void Handle(GenderUnrecognisedSuccessed @event)
     {
         //log all events and commands
     }

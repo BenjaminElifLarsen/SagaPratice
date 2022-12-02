@@ -2,10 +2,8 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public class PersonAddedToGenderFailed : IDomainEventFail
+public class GenderUnrecognisedSuccessed : IDomainEvent
 {
-    public IEnumerable<string> Errors { get; private set; }
-
     public string AggregateType { get; private set; }
 
     public int AggregateId { get; private set; }
@@ -22,16 +20,15 @@ public class PersonAddedToGenderFailed : IDomainEventFail
 
     public int Version { get; private set; }
 
-    public PersonAddedToGenderFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    public GenderUnrecognisedSuccessed(Gender aggregate, int version, Guid correlationId, Guid causationId)
     {
-        AggregateType = typeof(Gender).Name;
-        AggregateId = 0;
+        AggregateType = aggregate.GetType().Name;
+        AggregateId = aggregate.GenderId;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = 0;
-        Errors = errors;
+        Version = version;
     }
 }

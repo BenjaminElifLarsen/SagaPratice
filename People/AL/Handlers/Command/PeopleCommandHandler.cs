@@ -109,9 +109,11 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var result = _genderFactory.CreateGender(command, validationData);
         if (result is InvalidResult<Gender>)
         {
+            _unitOfWork.AddOrphanEvnet(new GenderRecognisedFailed(result.Errors, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save();
             return new InvalidResultNoData(result.Errors);
         }
-        result.Data.AddDomainEvent(new GenderRecognised(result.Data, result.Data.Events.Count(), command.CorrelationId, command.CommandId));
+        result.Data.AddDomainEvent(new GenderRecognisedSuccessed(result.Data, result.Data.Events.Count(), command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Recognise(result.Data);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -122,6 +124,8 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result; //events should not really return data. If something goes wrong another event can be created to inform about this (so sagas and such)
         if (entity is null)
         {
+            _unitOfWork.AddOrphanEvnet(new PersonAddedToGenderFailed(new string[] { $"Gender {command.GenderId} was not found." }, command.CorrelationId, command.CommandId)); ;
+            _unitOfWork.Save();
             return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
         entity.AddPerson(new(command.PersonId));
@@ -166,13 +170,17 @@ internal class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         {
+            _unitOfWork.AddOrphanEvnet(new GenderUnrecognisedFailed(new string[] {"Not Found."}, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save();
             return new SuccessResultNoData();
         }
         if (entity.People.Any())
         {
+            _unitOfWork.AddOrphanEvnet(new GenderUnrecognisedFailed(new string[] { $"People identify with gender {entity.VerbSubject}/{entity.VerbObject}." }, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save();
             return new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
         }
-        entity.AddDomainEvent(new GenderUnrecognised(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new GenderUnrecognisedSuccessed(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Unrecognise(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();

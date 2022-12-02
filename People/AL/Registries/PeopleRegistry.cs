@@ -1,8 +1,8 @@
-﻿using Common.Routing;
-using PeopleDomain.AL.Busses.Command;
+﻿using PeopleDomain.AL.Busses.Command;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
-using PeopleDomain.AL.Handlers.Event;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
@@ -65,5 +65,17 @@ public class PeopleRegistry : IPeopleRegistry
         _eventBus.RegisterHandler<PersonHiredFailed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonAddedToGenderSuccessed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handler);
+    }
+
+    public void SetUpRouting(IRecogniseProcessManager processManager)
+    {
+        _eventBus.RegisterHandler<GenderRecognisedSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<GenderRecognisedFailed>(processManager.Handler);
+    }
+
+    public void SetUpRouting(IUnrecogniseProcessManager processManager)
+    {
+        _eventBus.RegisterHandler<GenderUnrecognisedSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processManager.Handler);
     }
 }

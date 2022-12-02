@@ -1,6 +1,6 @@
 # Pratice
 
-Originally created for praticing sagas, it was decided to expand the area of pratice event storage and event sourcing, command handlers, command and event busses, and more, while also turning the project into one that could be as a display of skills.
+Originally created for praticing sagas, it was decided to expand the area of pratice to cover event storage and event sourcing, command handlers, command and event busses, and more, while also turning the project into one that could be as a display of skills.
 
 
 ## Important

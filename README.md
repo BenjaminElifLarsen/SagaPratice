@@ -1,6 +1,6 @@
 # Pratice
 
-Originally created for praticing sagas, it was decided to expand the area of pratice ..., while also turning the project into one that could be as a display of skills.
+Originally created for praticing sagas, it was decided to expand the area of pratice event storage and event sourcing, command handlers, command and event busses, and more, while also turning the project into one that could be as a display of skills.
 
 
 ## Important
@@ -40,9 +40,9 @@ The permanent comments are there to help explain why code is done in the way it 
 
 #### Temporal
 
-A temporal follows this pattern //sentence(.|?)
+A temporal follows this pattern //sentence( |.|?)
 
-The temporal comments are just ideas and thoughts and are only present, because I work alone on this project. If working with others such comments would be placed in the task/backlogs on the devops board until they could be resolved.
+The temporal comments are just ideas and thoughts and are only present because I work alone on this project. If working with others such comments would be placed in the task/backlogs on the devops board until they could be resolved.
 
 
 

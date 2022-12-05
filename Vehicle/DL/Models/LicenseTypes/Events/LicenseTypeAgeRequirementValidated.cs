@@ -33,11 +33,6 @@ internal class LicenseTypeAgeRequirementValidated : IDomainEvent<LicenseTypeAgeR
         Version = 0;
         Data = new(operatorIdsNotFound, operatorIdsNotValid);
     }
-
-    internal void SetVersion(int version) //how would the pm know what version to use? 
-    { //maybe just let it be an 'orphan' event, but with the aggregate id sat
-        Version = version;
-    }
 }
 
 internal class LicenseTypeAgeRequirementValidatedData

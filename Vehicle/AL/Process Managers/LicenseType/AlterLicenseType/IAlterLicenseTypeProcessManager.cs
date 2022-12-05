@@ -3,16 +3,16 @@ using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.Events;
 
 namespace VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
-internal interface IAlterLicenseTypeProcessManager : IProcessManager,
-    IProcessManagerEventHandler<LicenseTypeAlteredSuccesed>,
-    IProcessManagerEventHandler<LicenseTypeAlteredFailed>,
-    IProcessManagerEventHandler<LicenseTypeAgeRequirementChanged>,
-    IProcessManagerEventHandler<LicenseTypeRenewPeriodChanged>,
-    IProcessManagerEventHandler<OperatorLicenseExpired>, //for removing from license type and vehicle //should an operator keep an expired license?
-    IProcessManagerEventHandler<OperatorNotFound>, //used to remove operators from license type
-    IProcessManagerEventHandler<LicenseTypeAgeRequirementValidated>,
-    IProcessManagerEventHandler<LicenseTypeRenewPeriodValidated>,
-    IProcessManagerEventHandler<LicenseTypeOperatorRemoved> //have a successed version and failed version?
+internal interface IAlterLicenseTypeProcessManager : IProcessManager//,
+    //IProcessManagerEventHandler<LicenseTypeAlteredSuccessed>,
+    //IProcessManagerEventHandler<LicenseTypeAlteredFailed>,
+    //IProcessManagerEventHandler<LicenseTypeAgeRequirementChanged>,
+    //IProcessManagerEventHandler<LicenseTypeRenewPeriodChanged>,
+    //IProcessManagerEventHandler<OperatorLicenseExpired>, //for removing from license type and vehicle //should an operator keep an expired license?
+    //IProcessManagerEventHandler<OperatorNotFound>, //used to remove operators from license type
+    //IProcessManagerEventHandler<LicenseTypeAgeRequirementValidated>,
+    //IProcessManagerEventHandler<LicenseTypeRenewPeriodValidated>,
+    //IProcessManagerEventHandler<LicenseTypeOperatorRemoved> //have a successed version and failed version?
     //might be best to 'start from scrats' regarding events
     //figure out what is needed and the same for commands.
     //data that can be altered, renew period and age requirement

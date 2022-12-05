@@ -3,26 +3,46 @@
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 internal class LicenseTypeRenewPeriodValidated : IDomainEvent<LicenseTypeRenewPeriodValidatedData>
 {
-    public string AggregateType => throw new NotImplementedException();
+    public string AggregateType { get; private set; }
 
-    public int AggregateId => throw new NotImplementedException();
+    public int AggregateId { get; private set; }
 
-    public string EventType => throw new NotImplementedException();
+    public string EventType { get; private set; }
 
-    public Guid EventId => throw new NotImplementedException();
+    public Guid EventId { get; private set; }
 
-    public long TimeStampRecorded => throw new NotImplementedException();
+    public long TimeStampRecorded { get; private set; }
 
-    public Guid CorrelationId => throw new NotImplementedException();
+    public Guid CorrelationId { get; private set; }
 
-    public Guid CausationId => throw new NotImplementedException();
+    public Guid CausationId { get; private set; }
 
-    public int Version => throw new NotImplementedException();
+    public int Version { get; private set; }
 
-    public LicenseTypeRenewPeriodValidatedData Data => throw new NotImplementedException();
+    public LicenseTypeRenewPeriodValidatedData Data { get; private set; }
+
+    public LicenseTypeRenewPeriodValidated(int aggregateId, IEnumerable<int> operatorIdsNotFound, IEnumerable<int> operatorIdsNotValid, Guid correlationId, Guid causationId)
+    {
+        AggregateId = aggregateId;
+        AggregateType = typeof(LicenseType).Name;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Version = 0;
+        Data = new(operatorIdsNotFound, operatorIdsNotValid);
+    }
 }
 
 internal class LicenseTypeRenewPeriodValidatedData
 {
+    public IEnumerable<int> OperatorIdsNotFound { get; private set; }
+    public IEnumerable<int> OperatorIdsNotValid { get; private set; }
 
+    public LicenseTypeRenewPeriodValidatedData(IEnumerable<int> operatorIdsNotFound, IEnumerable<int> operatorIdsNotValid)
+    {
+        OperatorIdsNotFound = operatorIdsNotFound;
+        OperatorIdsNotValid = operatorIdsNotValid;
+    }
 }

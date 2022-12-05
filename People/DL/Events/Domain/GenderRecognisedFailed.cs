@@ -22,17 +22,16 @@ public sealed class GenderRecognisedFailed : IDomainEventFail
 
     public int Version { get; private set; }
 
-    public GenderRecognisedFailed(IEnumerable<string> errors, Guid correlationid, Guid causationId)
+    public GenderRecognisedFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
     {
         AggregateType = typeof(Gender).Name;
         AggregateId = 0;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationid;
+        CorrelationId = correlationId;
         CausationId = causationId;
         Version = 0;
         Errors = errors;
-
     }
 }

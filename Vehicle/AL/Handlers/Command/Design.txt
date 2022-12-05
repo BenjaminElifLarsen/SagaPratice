@@ -1,0 +1,55 @@
+﻿here to help figure out the set up, required commands and events
+remove when done
+
+Start Command: AlterLicenseType:
+	Triggers either LicenseTypeAlteredFailed (contains collection of string errors)
+	or
+	LicenseTypeALteredSuccssed (contains no data)
+		and possible (depending on what was altered)
+		LicenseTypeAgeRequirementChanged (contains the license type id and collection of all operator ids)
+		LicenseTypeRenewPeriodChanged (contains the license type id and collection of all operator ids)
+
+When age requirement has changed:
+	needs to validate all licenses that use the license type
+	license type knows the operators that contain licenses that use it
+	thus an event is triggered with the license type id and collection of operator ids
+	this sends out multiple commands, one for each combination of license type id and operator id
+	the command can either trigger:
+		OperatorNotFound, if the operator was not found in the context. Not considered a fail 
+		OperatorLicenseTypeWasValid, if the operator license is still valid (nothing more has to be done)
+		OperatorLicenseTypeWasNotValid, if the operator license no longer is valid (thus any vehicle that use the license type needs to remove the operator if the operator is part of the collection.)
+		foreach OperatorLicenseTypeWasNotValid, send out a command to all vehicles that use the specific license type. The command contains the operator id and license type id.
+			problem: vehicle does not know its license type. It knows its VehicleInformation which knows its license type id.
+			Thus a command should be sent to the vehicle information which returns, via an event, a collection of id vehicles.
+			the pm needs to save the non-valid operator ids
+			the pm then takes the information in the vehicle information event and sends out a command for each vehicle id. The command contains the full operator id list
+				above line could be changed depending on how OperatorLicenseTypeWasNotValid is handle
+				could wait for return of each before running the commands or run a command as they get published to the pm
+				if done with the latter design, the commands to remove operator ids from a vehicle would be a command for each combination of operator id / vehicle id
+
+When renew period has changed: 
+	needs to validate all licenses that use the license type
+	license type knows the operators that contain licenses that use it
+	thus an event is triggered with the license type id and collection of operator ids
+	this sends out multiple commands, one for each combination of license type id and operator id
+	the command can either trigger:
+		OperatorNotFound, if the operator was not found in the context. Not considered a fail 
+		//from quick brainstorm it seems to be same as the age part. Consider if there are anything that would differ between an invalid age and a license needing to be renewed.
+		//License contains an Expired, so the license should not be removed from the operator, just sat to expired. 
+		//should an operator with an expired license still have access to a vehicle, but unable to use it? How would the vehicle know if an operator can use it or not? Right now it just check if the operator id is in its collection or not
+		//will end up with a pm for operating vehicle that would check if the operator license is expired or not. 
+		OperatorLicenseWasValid (nothing to do)
+		OperatorLicenseExpired (nothing to do, the command sets the license to be expired)
+		Each operator not found should be removed from the license type
+			thus the event OperatorNotFound should dispatch a command that removes the operator from license type (same goes for age requirement change)
+
+
+considerations:
+	could be useful if it was possible to track a collection of the same event
+	perhaps update the event tracker collection to have an collection of event trackers for Type instead of a single event tracker
+	this consideration should have higher priority than the solution it is meant for
+
+
+	could place the pms in the dl, they do not rely on anything in al or ipl
+
+

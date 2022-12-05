@@ -20,8 +20,8 @@ public sealed class PeopleRegistry : IPeopleRegistry
     {
         _commandBus = commandBus;
         _eventBus = eventBus;
-        _commandHandler = commandHandler;
-    }
+        _commandHandler = commandHandler; //consider some way to set it up such than a domain event gets converted to an intergration event and placed on an intergration handler
+    } //so an intergration bus that registrates domain events, converts them to intergration events and publish them to its handlers
 
     public void SetUpRouting()
     {

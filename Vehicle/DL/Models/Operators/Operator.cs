@@ -45,21 +45,21 @@ public class Operator : IAggregateRoot, ISoftDelete
         throw new NotImplementedException();
     }
 
-    internal int UpdateBirth(DateTime birth)
+    internal void UpdateBirth(DateTime birth)
     { //if changing the birth, need to check if all licenses are still valid regarding their age requirements. Could also do the young/old specification
-        if (!new IsOperatorOfValidAge().IsSatisfiedBy(birth)) //if a license is invalid, what to do? Revoke the license or fail the update and inform the caller of the problem?
-        {
-            return (int)OperatorErrors.InvalidBirth;
-        } //hard coded ages, not the best
-        if(!new IsOperatorToYoung(10).And<DateTime>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
-            return (int)OperatorErrors.NotWithinAgeRange;
-        }
+        //if (!new IsOperatorOfValidAge().IsSatisfiedBy(birth)) //if a license is invalid, what to do? Revoke the license or fail the update and inform the caller of the problem?
+        //{
+        //    return (int)OperatorErrors.InvalidBirth;
+        //} //hard coded ages, not the best
+        //if(!new IsOperatorToYoung(10).And<DateTime>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
+        //    return (int)OperatorErrors.NotWithinAgeRange;
+        //}
         _birth = new(birth.Year, birth.Month, birth.Day);
-        return 0;
+        //return 0;
     }
 
     internal bool AddVehicle(IdReference<int> vehicle)
-    { //check if they got the correct license first
+    {
         return _vehicles.Add(vehicle);
     }
 

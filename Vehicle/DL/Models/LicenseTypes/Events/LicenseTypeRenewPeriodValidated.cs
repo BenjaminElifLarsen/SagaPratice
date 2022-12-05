@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class LicenseTypeAltered : IDomainEvent
+internal class LicenseTypeRenewPeriodValidated : IDomainEvent<LicenseTypeRenewPeriodValidatedData>
 {
     public string AggregateType => throw new NotImplementedException();
 
@@ -17,5 +17,12 @@ internal class LicenseTypeAltered : IDomainEvent
 
     public Guid CausationId => throw new NotImplementedException();
 
-    public int Version { get; private set; }
+    public int Version => throw new NotImplementedException();
+
+    public LicenseTypeRenewPeriodValidatedData Data => throw new NotImplementedException();
+}
+
+internal class LicenseTypeRenewPeriodValidatedData
+{
+
 }

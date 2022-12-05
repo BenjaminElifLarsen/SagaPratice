@@ -435,13 +435,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(id).Result;
             if(entity is null)
-            {
+            { //trigger event that removes operator from license type
                 continue;
             }
 
             //check if entity age is below the required age, if it is remove the specific license
             if(entity.CalculateAge() < command.AgeRequirement)
             { //implement age calculator
+                //trigger event that removes the operator from license type and vehicle(s)
                 var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
                 entity.RemoveLicense(license); //need to remove them for any vehicle they may have access too with the license
                 //so more events. This might require changing how events are fetched from the context as it might not get new ones.
@@ -453,6 +454,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
                 //the license type needs to know if a license is removed, so it can remove the operator
             }           
         }
+        //tigger event LicenseTypeAgeRequirementValidatedSuccessed
         throw new NotImplementedException();
         return new SuccessResultNoData();
     }
@@ -461,6 +463,9 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     {
         //need a method on license to renew. Either that or on operator.
         //currently CheckIfExpired might be possible to recycle for this purpose.
+        //if operator is not found trigger event for remove operator from licnese type.
+        //if operator license type cannot be removed trigger event for removing them for license type and vehicld
+        //at the end trigger LicenseTypeRenewPeriodValidatedSucessed
         throw new NotImplementedException();
     }
 }

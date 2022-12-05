@@ -1,9 +1,9 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-public class LicenseTypeAgeRequirementChanged : IDomainEvent<LicenseTypeAgeRequirementChangedData>
+internal class LicenseTypeAlteredFailed : IDomainEventFail
 {
-    public LicenseTypeAgeRequirementChangedData Data { get; private set; }
+    public IEnumerable<string> Errors { get; private set; }
 
     public string AggregateType { get; private set; }
 
@@ -21,7 +21,7 @@ public class LicenseTypeAgeRequirementChanged : IDomainEvent<LicenseTypeAgeRequi
 
     public int Version { get; private set; }
 
-    internal LicenseTypeAgeRequirementChanged(LicenseType aggregate, int version, Guid correlationId, Guid causationId)
+    public LicenseTypeAlteredFailed(LicenseType aggregate, IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.LicenseTypeId;
@@ -31,20 +31,19 @@ public class LicenseTypeAgeRequirementChanged : IDomainEvent<LicenseTypeAgeRequi
         CorrelationId = correlationId;
         CausationId = causationId;
         Version = version;
-        Data = new(aggregate.LicenseTypeId, aggregate.AgeRequirementInYears, aggregate.Operators.Select(x => x.Id));
+        Errors = errors;
     }
-}
 
-public class LicenseTypeAgeRequirementChangedData
-{
-    public int Id { get; private set; }
-    public byte NewAgeRequirement { get; private set; }
-    public IEnumerable<int> OperatorIds { get; private set; }
-
-    public LicenseTypeAgeRequirementChangedData(int id, byte newAgeRequirement, IEnumerable<int> operatorIds)
+    public LicenseTypeAlteredFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
     {
-        Id = id;
-        NewAgeRequirement = newAgeRequirement;
-        OperatorIds = operatorIds;
+        AggregateType = typeof(LicenseType).Name;
+        AggregateId = 0;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Version = 0;
+        Errors = errors;
     }
 }

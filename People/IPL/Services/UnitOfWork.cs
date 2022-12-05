@@ -37,12 +37,12 @@ internal sealed class UnitOfWork : IUnitOfWork
     public void Save() 
     {
         var pm = _processManagers.SingleOrDefault(x => x.CorrelationId != default);
-        if(pm is not null)
+        if (pm is not null) 
         {
             pm?.RegistrateHandler(Save);
         }
         ProcessEvents();
-        if(pm is null)
+        if (pm is null) 
         {
             _context.Save();
         }

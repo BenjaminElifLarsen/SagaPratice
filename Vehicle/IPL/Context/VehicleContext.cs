@@ -10,6 +10,7 @@ namespace VehicleDomain.IPL.Context;
 internal class MockVehicleContext : IVehicleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
+    private readonly HashSet<IDomainEvent> _events;
     private DateOnly _date;
     public bool Filter { get; set; }
 
@@ -42,6 +43,7 @@ internal class MockVehicleContext : IVehicleContext
         _date = new(dateTime.Year, dateTime.Month, dateTime.Day);
         _contextData = new();
         Filter = true;
+        _events = new();
     }
 
     public void Add(IAggregateRoot root)
@@ -124,11 +126,11 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Add(IDomainEvent @event)
     {
-        throw new NotImplementedException();
+        _events.Add(@event);
     }
 
     public void Remove(IDomainEvent @event)
     {
-        throw new NotImplementedException();
+        _events.Add(@event);
     }
 }

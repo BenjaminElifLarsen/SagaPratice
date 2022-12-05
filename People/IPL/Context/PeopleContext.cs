@@ -125,6 +125,6 @@ internal sealed class MockPeopleContext : IPeopleContext
 
     public void Remove(IDomainEvent @event)
     {
-        _events.Remove(@event);
+        _events.Add(@event);
     }
 }

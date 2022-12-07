@@ -60,3 +60,9 @@ considerations:
 		
 		store the commandId and compare the event causation id to the command id?
 		neither pm or evnet tracker are designed for that
+
+	in the future it might be best to make a flow diagram too, together with swimlanes
+
+age requirement part still nned to remove 'relation' between operator and vehicle for the cases where an operator had their license retracked.
+commands exist for this, but will require events 
+also consider better ways to write backlogs/tasks for process managers

@@ -31,7 +31,7 @@ public class OperatorLicenseRetracted : IDomainEvent<OperatorLicenseRetractedDat
         CorrelationId = correlationId;
         CausationId = causationId;
         Version = version;
-        Data = new(aggregate.OperatorId, license.Type.Id);
+        Data = new(aggregate.OperatorId, license.Type.Id, aggregate.Vehicles.Select(x => x.Id));
     }
 }
 
@@ -39,10 +39,12 @@ public class OperatorLicenseRetractedData
 { //consider moving these into the class above them. Tried and not to happy with the design
     public int OperatorId { get; private set; }
     public int LicenseTypeId { get; private set; } //license type id of the retracted license
+    public IEnumerable<int> VehicleIds { get; private set; }
 
-    internal OperatorLicenseRetractedData(int operatorId, int licenseTypeId)
+    internal OperatorLicenseRetractedData(int operatorId, int licenseTypeId, IEnumerable<int> vehicleIds)
     {
         OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;
+        VehicleIds = vehicleIds;
     }
 }

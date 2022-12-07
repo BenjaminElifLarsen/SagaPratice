@@ -8,11 +8,9 @@ namespace VehicleDomain.AL.Handlers.Command;
 public interface IVehicleCommandHandler :
     ICommandHandler<ValidateOperatorLicenseStatus>,
     ICommandHandler<AddOperatorNoLicenseFromSystem>,
-    //ICommandHandler<AddOperatorWithLicenseFromUser>,
     ICommandHandler<AddLicenseToOperator>,
     ICommandHandler<EstablishLicenseTypeFromUser>,
     ICommandHandler<RemoveOperatorFromSystem>,
-    //ICommandHandler<RemoveOperatorFromUser>,
     ICommandHandler<ObsoleteLicenseTypeFromUser>,
     ICommandHandler<AlterLicenseType>,
     ICommandHandler<AddVehicleInformationFromSystem>,
@@ -30,6 +28,9 @@ public interface IVehicleCommandHandler :
     ICommandHandler<StopOperatingVehicle>,
     ICommandHandler<RemoveOperatorFromLicenseType>,
     ICommandHandler<ValidateLicenseAgeRequirementBecauseChange>,
-    ICommandHandler<ValidateLicenseRenewPeriodBecauseChange>
+    ICommandHandler<ValidateLicenseRenewPeriodBecauseChange>,
+    ICommandHandler<LicenseAgeRequirementRequireValidation>,
+    ICommandHandler<LicenseRenewPeriodRequireValidation>,
+    ICommandHandler<RemoveOperatorIfSpecificLicenseType>
 {
 }

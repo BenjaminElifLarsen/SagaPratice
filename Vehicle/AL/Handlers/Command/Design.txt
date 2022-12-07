@@ -66,3 +66,5 @@ considerations:
 age requirement part still nned to remove 'relation' between operator and vehicle for the cases where an operator had their license retracked.
 commands exist for this, but will require events 
 also consider better ways to write backlogs/tasks for process managers
+backlog for each process manager, lots of tasks
+have task for diagram and description 

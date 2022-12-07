@@ -17,6 +17,7 @@ internal interface IAlterLicenseTypeProcessManager : IProcessManager,
     IProcessManagerEventHandler<LicenseTypeOperatorRemoved>,
     IProcessManagerEventHandler<OperatorLicenseRenewPeriodValidated>,
     IProcessManagerEventHandler<VehicleRemovedOperator>,
-    IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>
+    IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>,
+    IProcessManagerEventHandler<OperatorRemovedVehicle>
 {
 }

@@ -221,24 +221,33 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
 
     public void Handler(VehicleRemovedOperator @event)
     {
-
+        if (@event.CorrelationId != CorrelationId) { return; }
 
 
         _trackerCollection.UpdateEvent<VehicleRemovedOperator>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<VehicleNotRequiredToRemoveOperator>();
 
 
+        _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId)); //dispatch cmd to remove vehicle from operator
+        //consider if the current remove vehicle from operator cmd and hdl can be used.
+        //need to have an event for response, OperatorRemovedVehicle
         throw new NotImplementedException();
     }
 
     public void Handler(VehicleNotRequiredToRemoveOperator @event)
     {
-
+        if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<VehicleNotRequiredToRemoveOperator>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<VehicleRemovedOperator>();
+        PublishEventIfPossible();
+    }
 
+    public void Handler(OperatorRemovedVehicle @event)
+    {
+        if (@event.CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+        _trackerCollection.UpdateEvent<OperatorRemovedVehicle>(DomainEventStatus.Completed);
+        PublishEventIfPossible();
     }
 }

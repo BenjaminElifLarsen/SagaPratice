@@ -106,3 +106,14 @@ it seems like instead of waiting for Result coming back in the services they sho
 
 
 read up more on process managers, got one to work, but not super happy with how it is done and are sure they can be done much better.
+
+remember to seal the new events and commands
+
+remove, for events, the int version parameter on all ctors that take in a class that implements IAggregateRoot
+	as the Version can be got from the event collection.
+
+
+
+
+
+

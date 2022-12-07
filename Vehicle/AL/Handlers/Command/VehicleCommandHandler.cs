@@ -55,7 +55,8 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData($"No license with type of {command.TypeId} was found.");
         }
-        var oldValue = license.Expired;
+        return new SuccessResultNoData();
+        var oldValue = license.Expired; //consider rewritting this section
         license.CheckIfExpired();
         if (oldValue != license.Expired)
         {

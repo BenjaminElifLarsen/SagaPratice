@@ -19,14 +19,14 @@ public class ValidateOperatorLicenseStatus : ICommand
         CausationId = CommandId;
     }
 
-    //public ValidateOperatorLicenseStatus(int operatorId, int typeId, Guid correlationId, Guid causationId)
-    //{
-    //    OperatorId = operatorId;
-    //    TypeId = typeId;
-    //    CommandId = Guid.NewGuid();
-    //    CorrelationId = correlationId;
-    //    CausationId = causationId;
-    //}
+    public ValidateOperatorLicenseStatus(int operatorId, int typeId, Guid correlationId, Guid causationId)
+    {
+        OperatorId = operatorId;
+        TypeId = typeId;
+        CommandId = Guid.NewGuid();
+        CorrelationId = correlationId;
+        CausationId = causationId;
+    }
 }
 
 //public class ValidateOperatorLicenses : ICommand

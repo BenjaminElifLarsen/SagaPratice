@@ -16,15 +16,15 @@ When age requirement has changed:
 	this sends out multiple commands, one for each combination of license type id and operator id
 	the command can either trigger:
 		OperatorNotFound, if the operator was not found in the context. Not considered a fail 
-		OperatorLicenseTypeWasValid, if the operator license is still valid (nothing more has to be done)
-		OperatorLicenseTypeWasNotValid, if the operator license no longer is valid (thus any vehicle that use the license type needs to remove the operator if the operator is part of the collection.)
-		foreach OperatorLicenseTypeWasNotValid, send out a command to all vehicles that use the specific license type. The command contains the operator id and license type id.
+		OperatorLicenseValidated, if the operator license is still valid (nothing more has to be done)
+		OperatorLicenseRetracted, if the operator license no longer is valid (thus any vehicle that use the license type needs to remove the operator if the operator is part of the collection.)
+		foreach OperatorLicenseRetracted, send out a command to all vehicles that use the specific license type. The command contains the operator id and license type id.
 			problem: vehicle does not know its license type. It knows its VehicleInformation which knows its license type id.
 			Thus a command should be sent to the vehicle information which returns, via an event, a collection of id vehicles.
 			the pm needs to save the non-valid operator ids
 			the pm then takes the information in the vehicle information event and sends out a command for each vehicle id. The command contains the full operator id list
-				above line could be changed depending on how OperatorLicenseTypeWasNotValid is handle
-				could wait for return of each before running the commands or run a command as they get published to the pm
+				above line could be changed depending on how OperatorLicenseRetracted is handle
+				could wait for return of each before running the commands or run a command as the events get published to the pm
 				if done with the latter design, the commands to remove operator ids from a vehicle would be a command for each combination of operator id / vehicle id
 
 When renew period has changed: 
@@ -38,7 +38,7 @@ When renew period has changed:
 		//License contains an Expired, so the license should not be removed from the operator, just sat to expired. 
 		//should an operator with an expired license still have access to a vehicle, but unable to use it? How would the vehicle know if an operator can use it or not? Right now it just check if the operator id is in its collection or not
 		//will end up with a pm for operating vehicle that would check if the operator license is expired or not. 
-		OperatorLicenseWasValid (nothing to do)
+		OperatorLicenseValidated (nothing to do)
 		OperatorLicenseExpired (nothing to do, the command sets the license to be expired)
 		Each operator not found should be removed from the license type
 			thus the event OperatorNotFound should dispatch a command that removes the operator from license type (same goes for age requirement change)
@@ -53,3 +53,10 @@ considerations:
 	could place the pms in the dl, they do not rely on anything in al or ipl
 
 
+	both use OperatorLicenseValidated, which could cause a problem. 
+		either store the command id the events were caused by and compare or have two different events
+		the reason for a possible problem lies in the fact that the pm does not track the actually events, but rather the types of events
+		the only real problem is caused by the pm processing the event, e.g. which events in the tracker to remove
+		
+		store the commandId and compare the event causation id to the command id?
+		neither pm or evnet tracker are designed for that

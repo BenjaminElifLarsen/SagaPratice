@@ -1,8 +1,9 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
+[Obsolete("Might be removed in a future version", true)]
 internal class LicenseTypeAgeRequirementValidated : IDomainEvent<LicenseTypeAgeRequirementValidatedData>
-{
+{ //not needed if not validating multiple aggregates via a single command
     public string AggregateType { get; private set; }
 
     public int AggregateId { get; private set; }

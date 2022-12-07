@@ -1,8 +1,5 @@
 ﻿using Common.Events.Domain;
 using Common.RepositoryPattern;
-using Common.SpecificationPattern.Composite.Extensions;
-using VehicleDomain.DL.Errors;
-using VehicleDomain.DL.Models.Operators.Validation.OperatorSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators;
 

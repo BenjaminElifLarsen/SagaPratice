@@ -26,4 +26,17 @@ public sealed class PersonFiredFailed : IDomainEventFail
         Errors = errors;
         Version = version;
     }
+
+    public PersonFiredFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    {
+        AggregateType = typeof(Person).Name;
+        AggregateId = 0;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Version = 0;
+        Errors = errors;
+    }
 }

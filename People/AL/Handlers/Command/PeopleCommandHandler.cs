@@ -48,8 +48,13 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
             entity.AddDomainEvent(new PersonFiredSuccessed(entity, entity.Events.Count(), command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity); //could store the event in the context and let a process run through events at times to see which needs processing
-            _unitOfWork.Save(); //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
+            //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
         }
+        else
+        {
+            _unitOfWork.AddOrphanEvnet(new PersonFiredFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
+        }
+        _unitOfWork.Save();
         return new SuccessResultNoData();
     }
 

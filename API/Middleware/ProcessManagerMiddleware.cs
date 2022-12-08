@@ -3,9 +3,12 @@ using Common.CQRS.Commands;
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
+using PeopleDomain.AL.ProcessManagers.Person.Fire;
+using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-using VehicleDomain.AL;
+using PeopleDomain.AL.Registries;
 
 namespace API.Middleware;
 
@@ -19,7 +22,7 @@ public class ProcessManagerMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IEnumerable<IProcessManager> processManagers)
+    public async Task Invoke(HttpContext context, IEnumerable<IProcessManager> processManagers, IEnumerable<IRoutingRegistry> registries)
     {
         var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
         var peopleDomain = new string[] { nameof(GenderController), nameof(PersonController) };
@@ -29,16 +32,20 @@ public class ProcessManagerMiddleware
         var method = context.Request.Method;
 
         if (methodsToRunOn.Any(x => string.Equals(x, method)))
-        { //mayhaps instead of all of this inject into the controllers all ProcessManagers and then each method find the correct and send it with the service method, where it get set up and all that
-            ICommand command; //or, better, inject them into the service.
-            //it just leave the question of how to set up the registrations, inject whatever class that will do that in services too?
-            //getting data seems like it will require reading the context.Request.Boy, which is a stream
+        { 
             if (peopleDomain.Any(x => string.Equals(x, controllerName)))
-            { 
-                IProcessManager selected;
-                if (controllerActionDescriptor.ActionName == nameof(PersonController.ChangePersonalInformation))
-                    selected = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager);
-                //selected.SetUp();
+            {
+                var selectedRegistry = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
+                var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
+                selectedRegistry.SetUpRouting(changePM); //consider moving all related to the process managers over to their own middleware, this class should only care about process managers
+                var firePM = processManagers.SingleOrDefault(x => x is IFireProcessManager) as IFireProcessManager;
+                selectedRegistry.SetUpRouting(firePM);
+                var hirePM = processManagers.SingleOrDefault(x => x is IHireProcessManager) as IHireProcessManager;
+                selectedRegistry.SetUpRouting(hirePM);
+                var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;
+                selectedRegistry.SetUpRouting(regPM);
+                var unregPM = processManagers.SingleOrDefault(x => x is IUnrecogniseProcessManager) as IUnrecogniseProcessManager;
+                selectedRegistry.SetUpRouting(unregPM);
             }
         }
 

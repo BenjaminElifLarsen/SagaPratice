@@ -9,6 +9,9 @@ using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
+using VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
+using VehicleDomain.AL.Registries;
+using VehicleDomain.DL.Models.Vehicles;
 
 namespace API.Middleware;
 
@@ -26,13 +29,14 @@ public class ProcessManagerMiddleware
     {
         var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
         var peopleDomain = new string[] { nameof(GenderController), nameof(PersonController) };
+        var vehicleDomain = new string[] { nameof(OperatorController), nameof(VehicleController), nameof(VehicleInformationController), nameof(LicenseTypeController) };
 
         var controllerActionDescriptor = context.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>();
         var controllerName = controllerActionDescriptor.ControllerTypeInfo.Name;
         var method = context.Request.Method;
 
         if (methodsToRunOn.Any(x => string.Equals(x, method)))
-        { 
+        {
             if (peopleDomain.Any(x => string.Equals(x, controllerName)))
             {
                 var selectedRegistry = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
@@ -46,6 +50,12 @@ public class ProcessManagerMiddleware
                 selectedRegistry.SetUpRouting(regPM);
                 var unregPM = processManagers.SingleOrDefault(x => x is IUnrecogniseProcessManager) as IUnrecogniseProcessManager;
                 selectedRegistry.SetUpRouting(unregPM);
+            }
+            else if (vehicleDomain.Any(x => string.Equals(x, controllerName)))
+            {
+                var selectedRegistry = registries.SingleOrDefault(x => x is IVehicleRegistry) as IVehicleRegistry;
+                var alterPM = processManagers.SingleOrDefault(x => x is IAlterLicenseTypeProcessManager) as IAlterLicenseTypeProcessManager;
+                selectedRegistry.SetUpRouting(alterPM);
             }
         }
 

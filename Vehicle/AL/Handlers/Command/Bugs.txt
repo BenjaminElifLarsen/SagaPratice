@@ -1,0 +1,53 @@
+﻿From the debugging writeouts it stops at 
+VehicleDomain.DL.Models.LicenseTypes.Events.LicenseTypeRenewPeriodChanged
+renew part, not fully implemented most likely 
+the command was not dispatched it seems like
+no data in @event.Data.OperatorIds
+the data is sat with 1 operator id as expected. 
+when outcommenting the _commandBus.Disptch in handler for LicenseTypeAgeRequirementChanged LicenseTypeRenewPeriodChange contains the expected Data
+maybe instead of using IEnumerables use something else like arrays or cast it in the most outer ctor in the commands to array
+tried to cast just the one over in LicenseTypeRenewPeriodChanged, datatype was still ienumerable, to list and that did not help, had expected it to work
+not the bug after all. Took a look at the collection in _trackerCollection and 
+    LicenseTypeOperatorRemoved 
+was awaiting.
+    the cmd hdl RemoveOperatorFromLicenseType is missing events
+fixed, something else is causing a problem now
+last event processed is: LicenseTypeOperatorRemoved, which does not trigger any cmds.
+now it is: FoundVehicleInformations 
+the command, FindVehicleInformationsWithSpecificLicenseType, for it is dispatched it seems like
+(all other tracked events were completed)
+routing is missing for the cmd.
+something is bugged in the path before FoundVehicleInformations as it is never published. FindVehicleInformationsWithSpecificLicenseType is dispatched.
+
+might be related to:
+    OperatorLicenseRetracted
+        RemoveOperatorFromLicenseType (does trigger an event, LicenseTypeOperatorRemoved [might have been processed before the bug])
+        FindVehicleInformationsWithSpecificLicenseType (no event seems to be dispatched [might not hit that point])
+        no data is found in FindVehicleInformationsWithSpecificLicenseType, the chosen test id does not have vehicle information
+
+maybe the problem lies in how UnitOfWork.ProcessEvents is done.
+It process all non-orphan events and then orphan events, but if those orphan events create new non-orphan events they get ignored
+moving the orphan processing code into the do while loop caused a bug in EventTrackerCollection line 49 (var e = _evnets[typeof(TEvent)].First(x => x.Status == DomainEventStatus.Awaiting);)
+called by the LicenseTypeAgeRequirementChanged handler in the pm line 102
+line 120, line 70 can cause bugs if using breaking points and stepping into line 102, line 70 is caused by breaking at 120.
+the collection does state it has a tracked event with the correct status, not sure yet what is wrong.
+
+
+could consider still looking to preventing changes to an entity collection from modifying the collections of events and commands
+
+
+debugging might take a while as new events are first run when all old events are done and removed
+and it stays on like that until there are no more events
+so bugfixing out from the debugger will be fix earlist appearing bugs and then next earlist and so on,
+instead of fixing entire 'paths' at ones
+
+test data: 
+{
+  "id": 1559595546,
+  "ageRequirement": {
+    "ageRequirement": 200
+  },
+  "renewPeriod": {
+    "renewPeriod": 20
+  }
+}

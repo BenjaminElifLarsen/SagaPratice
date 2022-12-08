@@ -2,11 +2,6 @@
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
-using PeopleDomain.AL.ProcessManagers.Person.Fire;
-using PeopleDomain.AL.ProcessManagers.Person.Hire;
-using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
 using VehicleDomain.AL.Registries;
 

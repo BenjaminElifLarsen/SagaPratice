@@ -1,5 +1,6 @@
 ﻿using Common.CQRS.Commands;
 using Common.ResultPattern;
+using System.Diagnostics;
 
 namespace VehicleDomain.AL.Busses.Command;
 internal class MockCommandBus : IVehicleCommandBus
@@ -14,7 +15,11 @@ internal class MockCommandBus : IVehicleCommandBus
     public Result Dispatch<T>(T command) where T : ICommand
     {
         List<Func<ICommand, Result>> handlers;
-
+        #if (DEBUG)
+        Debug.WriteLine($"{command.CorrelationId} : {command.CausationId} : {command.CommandId} : {command.GetType()}");
+        #else
+            //write to log
+        #endif
         if (!_routes.TryGetValue(command.GetType(), out handlers))
             return new SuccessResultNoData();
 

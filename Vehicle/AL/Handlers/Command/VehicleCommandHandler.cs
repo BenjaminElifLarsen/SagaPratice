@@ -152,7 +152,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     }
 
     public Result Handle(AlterLicenseType command)
-    {
+    { //not fully updated to use events, need failer event and not found event
         var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.Id).Result;
         if(entity is null)
         {
@@ -164,22 +164,26 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData(LicenseTypeErrorConversion.Convert(flag).ToArray());
         }
-        
+        bool ageChanged = false;
+        bool renewChanged = false;
+        bool typeChanged = false;
         if(command.Type is not null) //should it be possible to change the type if the license type is in use? Could validate against it by having in the ctor a operator/vehicle amount and a specific specification for it.
         {
             entity.ReplaceType(command.Type.Type);
         }
         if(command.AgeRequirement is not null)
         { //trigger event
-            entity.AddDomainEvent(new LicenseTypeAgeRequirementChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            ageChanged = true;
             entity.ChangeAgeRequirement(command.AgeRequirement.AgeRequirement);
+            entity.AddDomainEvent(new LicenseTypeAgeRequirementChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
         }
         if(command.RenewPeriod is not null)
         { //trigger event
-            entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            renewChanged = true;
             entity.ChangeRenewPeriod(command.RenewPeriod.RenewPeriod);
+            entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
         }
-
+        entity.AddDomainEvent(new LicenseTypeAlteredSuccessed(entity, entity.Events.Count(), typeChanged, ageChanged, renewChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -390,6 +394,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             //error most likely as this should only be called by an evnet.
         }
         entity.RemoveOperator(new(command.OperatorId));
+        entity.AddDomainEvent(new LicenseTypeOperatorRemoved(entity, command.CorrelationId, command.CommandId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         return new SuccessResultNoData();
     }

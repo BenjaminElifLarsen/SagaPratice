@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using System.Diagnostics;
 
 namespace VehicleDomain.AL.Busses.Event;
 internal class MockDomainEventBus : IVehicleDomainEventBus
@@ -28,7 +29,11 @@ internal class MockDomainEventBus : IVehicleDomainEventBus
     public void Publish<T>(T @event) where T : IDomainEvent
     {
         List<Action<IDomainEvent>> handlers;
-
+        #if (DEBUG)
+        Debug.WriteLine($"{@event.CorrelationId} : {@event.CausationId} : {@event.EventId} : {@event.GetType()}");
+        #else
+            //write to log
+        #endif
         if (!_routes.TryGetValue(@event.GetType(), out handlers))
             return;
 

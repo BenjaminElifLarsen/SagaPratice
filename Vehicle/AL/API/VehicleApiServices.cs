@@ -17,6 +17,8 @@ using VehicleDomain.AL.Handlers.Event;
 using VehicleDomain.AL.Services.LicenseTypes;
 using Common.Routing;
 using VehicleDomain.AL.Registries;
+using Common.ProcessManager;
+using VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
 
 namespace VehicleDomain.AL.API;
 
@@ -46,8 +48,8 @@ public class VehicleApiServices
         services.AddScoped<IVehicleEventHandler, VehicleEventHandler>();
         services.AddScoped<IVehicleCommandBus, MockCommandBus>();
         services.AddScoped<IVehicleDomainEventBus, MockDomainEventBus>();
-        services.AddScoped<IRoutingRegistry, VehicleRegistry>(); //does not work in there are multiple of them, e.g. one for each domain. It will select the first one rather than the one of the domain.
-            //come back to the problem of placement of the registry.
+        services.AddScoped<IRoutingRegistry, VehicleRegistry>();
+        services.AddScoped<IProcessManager, AlterLicenseTypeProcessManager>();
     }
 
     public static void Seed(IServiceProvider provider)

@@ -22,7 +22,7 @@ public class OperatorForAgeValidatioNotFound : IDomainEvent<OperatorForAgeValida
 
     public int Version { get; private set; }
 
-    public OperatorForAgeValidatioNotFound(int operatorId, int licenseTypeId, Guid correlationId, Guid causationId)
+    internal OperatorForAgeValidatioNotFound(int operatorId, int licenseTypeId, Guid correlationId, Guid causationId)
     {
         AggregateType = typeof(Operator).Name;
         AggregateId = operatorId;
@@ -36,12 +36,12 @@ public class OperatorForAgeValidatioNotFound : IDomainEvent<OperatorForAgeValida
     }
 }
 
-internal class OperatorForAgeValidatioNotFoundData
+public class OperatorForAgeValidatioNotFoundData
 {
     public int OperatorId { get; private set; }
     public int LicenseTypeId { get; private set; }
 
-    public OperatorForAgeValidatioNotFoundData(int operatorId, int licenseTypeId)
+    internal OperatorForAgeValidatioNotFoundData(int operatorId, int licenseTypeId)
     {
         OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;

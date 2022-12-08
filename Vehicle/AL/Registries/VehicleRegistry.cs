@@ -37,14 +37,10 @@ public class VehicleRegistry : IVehicleRegistry
 
     private void RoutingEvent()
     {
-        //_eventBus.RegisterHandler<LicenseTypeAgeRequirementChanged>(_eventHandler.Handle);
-        //_eventBus.RegisterHandler<LicenseTypeRenewPeriodChanged>(_eventHandler.Handle);
         _eventBus.RegisterHandler<LicenseTypeRetracted>(_eventHandler.Handle);
         _eventBus.RegisterHandler<OperatorAdded>(_eventHandler.Handle);
         _eventBus.RegisterHandler<OperatorGainedLicense>(_eventHandler.Handle);
-        //_eventBus.RegisterHandler<OperatorLicenseExpired>(_eventHandler.Handle);
         _eventBus.RegisterHandler<OperatorLicenseRenewed>(_eventHandler.Handle);
-        //_eventBus.RegisterHandler<OperatorLicenseRetracted>(_eventHandler.Handle);
         _eventBus.RegisterHandler<OperatorRemoved>(_eventHandler.Handle);
         _eventBus.RegisterHandler<VehicleInformationAdded>(_eventHandler.Handle);
         _eventBus.RegisterHandler<VehicleInformationRemoved>(_eventHandler.Handle);
@@ -58,11 +54,9 @@ public class VehicleRegistry : IVehicleRegistry
     {
         _commandBus.RegisterHandler<ValidateOperatorLicenseStatus>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddOperatorNoLicenseFromSystem>(_commandHandler.Handle);
-        //_commandBus.RegisterHandler<AddOperatorWithLicenseFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddLicenseToOperator>(_commandHandler.Handle);
         _commandBus.RegisterHandler<EstablishLicenseTypeFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveOperatorFromSystem>(_commandHandler.Handle);
-        //_commandBus.RegisterHandler<RemoveOperatorFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<ObsoleteLicenseTypeFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AlterLicenseType>(_commandHandler.Handle);
         _commandBus.RegisterHandler<AddVehicleInformationFromSystem>(_commandHandler.Handle);
@@ -79,6 +73,13 @@ public class VehicleRegistry : IVehicleRegistry
         _commandBus.RegisterHandler<StartOperatingVehicle>(_commandHandler.Handle);
         _commandBus.RegisterHandler<StopOperatingVehicle>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveOperatorFromLicenseType>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<ValidateLicenseAgeRequirementBecauseChange>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<ValidateLicenseRenewPeriodBecauseChange>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<LicenseAgeRequirementRequireValidation>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<LicenseRenewPeriodRequireValidation>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<RemoveOperator>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<FindVehiclesWithSpecificVehicleInformationAndOperator>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<FindVehicleInformationsWithSpecificLicenseType>(_commandHandler.Handle);
     }
 
     public void SetUpRouting(IAlterLicenseTypeProcessManager processManager)

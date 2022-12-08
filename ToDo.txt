@@ -106,6 +106,8 @@ it seems like instead of waiting for Result coming back in the services they sho
 
 
 read up more on process managers, got one to work, but not super happy with how it is done and are sure they can be done much better.
+	some people mention state machine for pms 
+
 
 remember to seal the new events and commands
 

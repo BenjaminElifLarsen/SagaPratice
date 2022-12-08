@@ -1,10 +1,13 @@
-﻿using Common.ProcessManager;
+﻿using Common.Events.Domain;
+using Common.ProcessManager;
 using Common.ResultPattern;
 using VehicleDomain.AL.Busses.Command;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
 using VehicleDomain.DL.Models.Operators.Events;
+using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
+using VehicleDomain.DL.Models.VehicleInformations.Events;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.Events;
 
@@ -24,8 +27,9 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
     public AlterLicenseTypeProcessManager(IVehicleCommandBus commandBus)
-    {
-        ProcessManagerId = Guid.NewGuid();
+    { //still need to ensure the renew path is complete.
+        //in reality it might have been better to split this into 3 pms, one for altered, age requirement, and renew period to help keep it more simpel
+        ProcessManagerId = Guid.NewGuid(); //the non altered event pms acting like 'sub' pms
         _commandBus = commandBus;
         _handlers = new();
         _errors = new();
@@ -175,28 +179,27 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         _trackerCollection.RemoveEvent<OperatorLicenseAgeRequirementValidated>();
 
         _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true);
-
-        foreach(var vehicleId in @event.Data.VehicleIds)
-        {
-            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
-            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
-            _commandBus.Dispatch(new RemoveOperatorIfSpecificLicenseType(@event.Data.OperatorId, vehicleId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId)); //will require a new cmd as the current used for removing an operator does not care about license 
-        } //vehicle does not know the license type only vehicle information does
+        _trackerCollection.AddEventTracker<FoundVehicleInformations>(true);
+        //vehicle does not know the license type only vehicle information does
         //so instead of the code above and the command below, first need to ask for all vehicle informations that use the specific license type
         //then do the above and below, but instead of LicenseTypeId it should be vehicle information id
         //FindVehicleInformationsWithSpecificLicenseType cmd to send to get the vehicle informations
         //have a cmd to get a list of vehicles, the cmd needs the vehicle information ids and the operator id (as it is needed later on) 
         //the hdl can then add an event with the list of vehicles with the specific vehicle information ids and operator id. The event also need the operator id
         //then for each vehicle id, transit the cmd as done above.
-        //evnet VehiclesFoundWithSpecificVehicleInformationAndOperator
+
+        //need an cmd/event to get the vehicle information ids
+        //command: FindVehicleInformationsWithSpecificLicenseType 
+        //event: FoundVehicleInformations
+
+        //for processing that data
+        //cmd FindVehiclesWithSpecificVehicleInformationAndOperator
+        //event VehiclesFoundWithSpecificVehicleInformationAndOperator
+
+        _commandBus.Dispatch(new FindVehicleInformationsWithSpecificLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
         _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
-        PublishEventIfPossible(); //need to remove them from vehicle and remove vehicles from them
-    } //operator knows of vehicles, but which require which license type and the vehicle knows which operator is on it.
-    //so could send out commands (one for each vehicle id) to identify vehicles license type id (so OperatorLicenseRetracted require vehicle ids)
-    //the cmd can return either VehicleRemovedOperator (the cmd removes the operator and transmit its id back) 
-    //or VehicleNotRequiredToRemoveOperator (consider a much better name) without any extra data.
-    //for each VehicleRemovedOperator a cmd is send to the operator to remove that specific vehicle id 
-    //new RemoveOperatorFromVehicle() can be used for removing the operator when coming to that point
+        PublishEventIfPossible();
+    } 
     
 
     public void Handler(OperatorLicenseExpired @event)
@@ -257,6 +260,30 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<OperatorRemovedVehicle>(DomainEventStatus.Completed);
+        PublishEventIfPossible();
+    }
+
+    public void Handler(VehiclesFoundWithSpecificVehicleInformationAndOperator @event)
+    {
+        if (@event.CorrelationId != CorrelationId) { return; }
+
+        foreach (var vehicleId in @event.Data.VehicleIds)
+        {
+            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
+            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
+            _commandBus.Dispatch(new RemoveOperator(@event.Data.OperatorId, vehicleId, @event.CorrelationId, @event.EventId)); //will require a new cmd as the current used for removing an operator does not care about license 
+        }
+        PublishEventIfPossible();
+    }
+
+    public void Handler(FoundVehicleInformations @event)
+    {
+        if (@event.CorrelationId != CorrelationId) { return; }
+
+        _trackerCollection.UpdateEvent<FoundVehicleInformations>(DomainEventStatus.Completed);
+
+        _trackerCollection.AddEventTracker<VehiclesFoundWithSpecificVehicleInformationAndOperator>(true);
+        _commandBus.Dispatch(new FindVehiclesWithSpecificVehicleInformationAndOperator(@event.Data.OperatorId, @event.Data.VehicleInformationIds, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible();
     }
 }

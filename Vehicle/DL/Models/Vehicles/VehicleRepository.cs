@@ -36,6 +36,11 @@ internal class VehicleRepository : IVehicleRepository
         return !await _baseRepository.IsUniqueAsync(x => x.VehicleId == id);
     }
 
+    public async Task<IEnumerable<TProjection>> FindSpecificByOperatorIdAndVehicleInformationsAsync<TProjection>(int operatorId, IEnumerable<int> vehicleInformations, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.FindByPredicateAsync(x => x.Operators.Any(xx => xx.Id == operatorId) && vehicleInformations.Any(xx => x.VehicleInformation.Id == xx.Id), query);
+    }
+
     public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
     {
         return await _baseRepository.FindByPredicateAsync(x => x.VehicleId == id, query);

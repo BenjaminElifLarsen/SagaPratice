@@ -7,12 +7,14 @@ public class FindVehicleInformationsWithSpecificLicenseType : ICommand
     public Guid CorrelationId { get; private set; }
     public Guid CausationId { get; private set; }
     public int LicenseTypeId { get; private set; }
+    public int OperatorId { get; private set; }
 
-    public FindVehicleInformationsWithSpecificLicenseType(int licenseTypeId, Guid correlationId, Guid causationId)
+    public FindVehicleInformationsWithSpecificLicenseType(int operatorId, int licenseTypeId, Guid correlationId, Guid causationId)
     {
         LicenseTypeId = licenseTypeId;
         CorrelationId = correlationId;
         CausationId = causationId;
         CommandId = Guid.NewGuid();
+        OperatorId = operatorId;
     }
 }

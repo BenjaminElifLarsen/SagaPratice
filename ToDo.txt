@@ -112,7 +112,7 @@ remember to seal the new events and commands
 remove, for events, the int version parameter on all ctors that take in a class that implements IAggregateRoot
 	as the Version can be got from the event collection.
 
-
+because of the pms the CommandHandler<> has no reason for a return value. 
 
 
 

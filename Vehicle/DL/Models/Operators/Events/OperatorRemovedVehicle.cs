@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorRemovedVehicle : IDomainEvent
+public class OperatorRemovedVehicle : IDomainEvent
 {
     public string AggregateType { get; private set; }
 
@@ -19,7 +19,7 @@ internal class OperatorRemovedVehicle : IDomainEvent
 
     public int Version { get; private set; }
 
-    public OperatorRemovedVehicle(Operator aggregate, Guid correlationId, Guid causationId)
+    internal OperatorRemovedVehicle(Operator aggregate, Guid correlationId, Guid causationId)
     { //no reason to have int version as a parameter as it can be got from the aggregate itself
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;

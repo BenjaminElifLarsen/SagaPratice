@@ -21,7 +21,7 @@ public class OperatorLicenseExpired : IDomainEvent<OperatorLicenseExpiredData>
 
     public int Version { get; private set; }
 
-    public OperatorLicenseExpired(Operator aggregate, int licenseTypeId, int version, Guid correlationId, Guid causationId)
+    internal OperatorLicenseExpired(Operator aggregate, int licenseTypeId, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;

@@ -8,7 +8,7 @@ using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
-using VehicleDomain.AL;
+using VehicleDomain.AL.Registries;
 
 namespace API.Middleware;
 

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorLicenseRenewPeriodValidated : IDomainEvent
+public class OperatorLicenseRenewPeriodValidated : IDomainEvent
 {
     public string AggregateType { get; private set; }
 
@@ -19,7 +19,7 @@ internal class OperatorLicenseRenewPeriodValidated : IDomainEvent
 
     public int Version { get; private set; }
 
-    public OperatorLicenseRenewPeriodValidated(Operator aggregate, int version, Guid correlationId, Guid causationId)
+    internal OperatorLicenseRenewPeriodValidated(Operator aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.OperatorId;

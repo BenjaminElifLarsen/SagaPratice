@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.VehicleInformations.Events;
-internal class FoundVehicleInformations : IDomainEvent<FoundVehicleInformationsData>
+public class FoundVehicleInformations : IDomainEvent<FoundVehicleInformationsData>
 {
     public string AggregateType { get; private set; }
 
@@ -21,7 +21,7 @@ internal class FoundVehicleInformations : IDomainEvent<FoundVehicleInformationsD
 
     public FoundVehicleInformationsData Data { get; private set; }
 
-    public FoundVehicleInformations(IEnumerable<int> vehicleInformationIds, Guid correlationId, Guid causationId)
+    internal FoundVehicleInformations(int operatorId, IEnumerable<int> vehicleInformationIds, Guid correlationId, Guid causationId)
     {
         AggregateType = typeof(VehicleInformation).Name;
         AggregateId = 0;
@@ -30,16 +30,18 @@ internal class FoundVehicleInformations : IDomainEvent<FoundVehicleInformationsD
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Data = new(vehicleInformationIds);
+        Data = new(vehicleInformationIds, operatorId);
     }
 }
 
 public class FoundVehicleInformationsData
 {
+    public int OperatorId { get; private set; }
     public IEnumerable<int> VehicleInformationIds { get; private set; }
 
-    public FoundVehicleInformationsData(IEnumerable<int> vehicleInformationIds)
+    internal FoundVehicleInformationsData(IEnumerable<int> vehicleInformationIds, int operatorId)
     {
         VehicleInformationIds = vehicleInformationIds;
+        OperatorId = operatorId;
     }
 }

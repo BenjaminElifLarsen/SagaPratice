@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class LicenseTypeAlteredSuccessed : IDomainEvent<LicenseTypeAlteredSuccesedData>
+public class LicenseTypeAlteredSuccessed : IDomainEvent<LicenseTypeAlteredSuccesedData>
 { //do similarly to the one over in People
     public string AggregateType { get; private set; }
 
@@ -35,7 +35,7 @@ internal class LicenseTypeAlteredSuccessed : IDomainEvent<LicenseTypeAlteredSucc
     }
 }
 
-internal class LicenseTypeAlteredSuccesedData
+public class LicenseTypeAlteredSuccesedData
 {
     public bool TypeChanged { get; private set; }
     public bool AgeRequirementChanged { get; private set; }

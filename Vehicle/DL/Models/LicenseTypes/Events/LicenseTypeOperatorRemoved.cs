@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class LicenseTypeOperatorRemoved : IDomainEvent
+public class LicenseTypeOperatorRemoved : IDomainEvent
 { //need a command handler and command for removing multiple operator ids from a license type
     public string AggregateType => throw new NotImplementedException();
 

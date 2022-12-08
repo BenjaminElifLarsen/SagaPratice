@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class VehicleRemovedOperator : IDomainEvent<VehicleRemovedOperatorData>
+public class VehicleRemovedOperator : IDomainEvent<VehicleRemovedOperatorData>
 {
     public string AggregateType { get; private set; }
 
@@ -21,7 +21,7 @@ internal class VehicleRemovedOperator : IDomainEvent<VehicleRemovedOperatorData>
 
     public VehicleRemovedOperatorData Data { get; private set; }
 
-    public VehicleRemovedOperator(Vehicle aggregate, int operatorId, int version, Guid correlationId, Guid causationId)
+    internal VehicleRemovedOperator(Vehicle aggregate, int operatorId, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
@@ -30,12 +30,12 @@ internal class VehicleRemovedOperator : IDomainEvent<VehicleRemovedOperatorData>
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = version;
+        Version = aggregate.Events.Count();
         Data = new(operatorId, aggregate.VehicleId);
     }
 }
 
-internal class VehicleRemovedOperatorData
+public class VehicleRemovedOperatorData
 {
     public int OperatorId { get; private set; }
     public int VehicleId { get; private set; }

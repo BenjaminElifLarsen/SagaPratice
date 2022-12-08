@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class LicenseTypeAlteredFailed : IDomainEventFail
+public class LicenseTypeAlteredFailed : IDomainEventFail
 {
     public IEnumerable<string> Errors { get; private set; }
 

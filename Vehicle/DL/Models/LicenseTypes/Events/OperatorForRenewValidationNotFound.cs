@@ -2,7 +2,7 @@
 using VehicleDomain.DL.Models.Operators;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class OperatorForRenewValidationNotFound : IDomainEvent<OperatorForRenewValidationNotFoundData>
+public class OperatorForRenewValidationNotFound : IDomainEvent<OperatorForRenewValidationNotFoundData>
 {
     public OperatorForRenewValidationNotFoundData Data { get; private set; }
 
@@ -36,7 +36,7 @@ internal class OperatorForRenewValidationNotFound : IDomainEvent<OperatorForRene
     }
 }
 
-internal class OperatorForRenewValidationNotFoundData
+public class OperatorForRenewValidationNotFoundData
 {
     public int OperatorId { get; private set; }
     public int LicenseTypeId { get; private set; }

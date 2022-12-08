@@ -495,11 +495,11 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(RemoveOperatorIfSpecificLicenseType command)
+    public Result Handle(RemoveOperator command)
     {
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         var removed = entity.RemoveOperator(new(command.OperatorId));
-        entity.AddDomainEvent(removed ? new VehicleRemovedOperator(entity, command.LicenseTypeId, command.OperatorId, command.CorrelationId, command.CommandId) : new VehicleNotRequiredToRemoveOperator(entity, command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(removed ? new VehicleRemovedOperator(entity, command.OperatorId, command.CorrelationId, command.CommandId) : new VehicleNotRequiredToRemoveOperator(entity, command.CorrelationId, command.CommandId));
 
         _unitOfWork.VehicleRepository.Update(entity);
         return new SuccessResultNoData();
@@ -508,7 +508,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(FindVehicleInformationsWithSpecificLicenseType command)
     {
         var list = _unitOfWork.VehicleInformationRepository.FindAllWithSpecificLicenseTypeId(command.LicenseTypeId, new VehicleInformationIdQuery()).Result;
-        _unitOfWork.AddOrphanEvnet(new FoundVehicleInformations(list.Select(x => x.Id), command.CorrelationId, command.CommandId));
+        _unitOfWork.AddOrphanEvnet(new FoundVehicleInformations(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(FindVehiclesWithSpecificVehicleInformationAndOperator command)
+    {
+        var list = _unitOfWork.VehicleRepository.FindSpecificByOperatorIdAndVehicleInformationsAsync(command.OperatorId, command.VehicleInformationIds, new VehicleIdQuery()).Result;
+        _unitOfWork.AddOrphanEvnet(new VehiclesFoundWithSpecificVehicleInformationAndOperator(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
         return new SuccessResultNoData();
     }
 }

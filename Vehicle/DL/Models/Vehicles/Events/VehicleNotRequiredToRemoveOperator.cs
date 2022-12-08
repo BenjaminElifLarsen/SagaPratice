@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class VehicleNotRequiredToRemoveOperator : IDomainEvent
+public class VehicleNotRequiredToRemoveOperator : IDomainEvent
 {
     public string AggregateType { get; private set; }
 
@@ -19,7 +19,7 @@ internal class VehicleNotRequiredToRemoveOperator : IDomainEvent
 
     public int Version { get; private set; }
 
-    public VehicleNotRequiredToRemoveOperator(Vehicle aggregate, Guid correlationId, Guid causationId)
+    internal VehicleNotRequiredToRemoveOperator(Vehicle aggregate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;

@@ -16,6 +16,7 @@ using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Event;
 using VehicleDomain.AL.Services.LicenseTypes;
 using Common.Routing;
+using VehicleDomain.AL.Registries;
 
 namespace VehicleDomain.AL.API;
 

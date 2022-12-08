@@ -2,7 +2,7 @@
 using VehicleDomain.DL.Models.Operators;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
-internal class OperatorForAgeValidatioNotFound : IDomainEvent<OperatorForAgeValidatioNotFoundData>
+public class OperatorForAgeValidatioNotFound : IDomainEvent<OperatorForAgeValidatioNotFoundData>
 {
     public OperatorForAgeValidatioNotFoundData Data { get; private set; }
 

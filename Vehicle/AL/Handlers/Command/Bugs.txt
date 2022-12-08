@@ -31,7 +31,8 @@ moving the orphan processing code into the do while loop caused a bug in EventTr
 called by the LicenseTypeAgeRequirementChanged handler in the pm line 102
 line 120, line 70 can cause bugs if using breaking points and stepping into line 102, line 70 is caused by breaking at 120.
 the collection does state it has a tracked event with the correct status, not sure yet what is wrong.
-
+also the event LicenseTypeAgeRequirementChanged is one of the first, not a later one, why did it not bug before? 
+Might be related to orphan events, mayhaps? 
 
 could consider still looking to preventing changes to an entity collection from modifying the collections of events and commands
 

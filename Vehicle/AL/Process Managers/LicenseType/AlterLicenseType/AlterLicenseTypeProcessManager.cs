@@ -159,7 +159,11 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     { 
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+        _trackerCollection.UpdateEvent<OperatorLicenseAgeRequirementValidated>(DomainEventStatus.Completed);
+        _trackerCollection.RemoveEvent<OperatorForAgeValidatioNotFound>();
+        _trackerCollection.RemoveEvent<OperatorLicenseRetracted>();
+
+        PublishEventIfPossible();
     }
 
     public void Handler(OperatorLicenseRetracted @event)
@@ -177,8 +181,14 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
             _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
             _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
             _commandBus.Dispatch(new RemoveOperatorIfSpecificLicenseType(@event.Data.OperatorId, vehicleId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId)); //will require a new cmd as the current used for removing an operator does not care about license 
-        } 
-
+        } //vehicle does not know the license type only vehicle information does
+        //so instead of the code above and the command below, first need to ask for all vehicle informations that use the specific license type
+        //then do the above and below, but instead of LicenseTypeId it should be vehicle information id
+        //FindVehicleInformationsWithSpecificLicenseType cmd to send to get the vehicle informations
+        //have a cmd to get a list of vehicles, the cmd needs the vehicle information ids and the operator id (as it is needed later on) 
+        //the hdl can then add an event with the list of vehicles with the specific vehicle information ids and operator id. The event also need the operator id
+        //then for each vehicle id, transit the cmd as done above.
+        //evnet VehiclesFoundWithSpecificVehicleInformationAndOperator
         _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible(); //need to remove them from vehicle and remove vehicles from them
     } //operator knows of vehicles, but which require which license type and the vehicle knows which operator is on it.
@@ -190,7 +200,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     
 
     public void Handler(OperatorLicenseExpired @event)
-    { //should an expired license operator be removed from license type?
+    { //should an expired license operator be removed from license type? Have a PM that check, before a vehicle is used, if the license is expired or not
         if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<OperatorLicenseExpired>(DomainEventStatus.Completed);
@@ -227,11 +237,10 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         _trackerCollection.UpdateEvent<VehicleRemovedOperator>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<VehicleNotRequiredToRemoveOperator>();
 
-
+        _trackerCollection.AddEventTracker<OperatorRemovedVehicle>(true);
         _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId)); //dispatch cmd to remove vehicle from operator
-        //consider if the current remove vehicle from operator cmd and hdl can be used.
-        //need to have an event for response, OperatorRemovedVehicle
-        throw new NotImplementedException();
+
+        PublishEventIfPossible();
     }
 
     public void Handler(VehicleNotRequiredToRemoveOperator @event)

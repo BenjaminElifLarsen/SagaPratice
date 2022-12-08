@@ -9,15 +9,15 @@ internal interface IAlterLicenseTypeProcessManager : IProcessManager,
     IProcessManagerEventHandler<LicenseTypeAlteredFailed>,
     IProcessManagerEventHandler<LicenseTypeAgeRequirementChanged>,
     IProcessManagerEventHandler<LicenseTypeRenewPeriodChanged>,
+    IProcessManagerEventHandler<LicenseTypeOperatorRemoved>,
     IProcessManagerEventHandler<OperatorForAgeValidatioNotFound>,
     IProcessManagerEventHandler<OperatorForRenewValidationNotFound>,
     IProcessManagerEventHandler<OperatorLicenseAgeRequirementValidated>,
     IProcessManagerEventHandler<OperatorLicenseRetracted>,
     IProcessManagerEventHandler<OperatorLicenseExpired>,
-    IProcessManagerEventHandler<LicenseTypeOperatorRemoved>,
     IProcessManagerEventHandler<OperatorLicenseRenewPeriodValidated>,
+    IProcessManagerEventHandler<OperatorRemovedVehicle>,
     IProcessManagerEventHandler<VehicleRemovedOperator>,
-    IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>,
-    IProcessManagerEventHandler<OperatorRemovedVehicle>
+    IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>
 {
 }

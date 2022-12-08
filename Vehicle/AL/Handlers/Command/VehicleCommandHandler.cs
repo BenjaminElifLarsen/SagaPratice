@@ -10,10 +10,12 @@ using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 using VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries;
+using VehicleDomain.DL.Models.VehicleInformations.Events;
 using VehicleDomain.DL.Models.VehicleInformations.Validation;
 using VehicleDomain.DL.Models.Vehicles;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Queries;
+using VehicleDomain.DL.Models.Vehicles.Events;
 using VehicleDomain.DL.Models.Vehicles.Validation;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.IPL.Services;
@@ -434,16 +436,79 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(LicenseAgeRequirementRequireValidation command)
     {
-        throw new NotImplementedException();
+        var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
+        if(entity is null)
+        {
+            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            return new InvalidResultNoData("Not Found.");
+        }
+
+        var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
+        if(license is null)
+        {
+            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            return new InvalidResultNoData("License Not Found.");
+        }
+
+        var status = entity.ValidateLicenseAgeRequirementIsFulfilled(command.NewAgeRequirement, command.LicenseTypeId);
+        if (status == true)
+        {
+            entity.AddDomainEvent(new OperatorLicenseAgeRequirementValidated(entity, entity.Events.Count(), command.CorrelationId, command.CommandId)); ;
+        }
+        else
+        {
+            entity.RemoveLicense(license);
+            entity.AddDomainEvent(new OperatorLicenseRetracted(entity, license, entity.Events.Count(), command.CorrelationId, command.CommandId)); ;
+        }
+        _unitOfWork.OperatorRepository.Update(entity);
+
+        return new SuccessResultNoData();
     }
 
     public Result Handle(LicenseRenewPeriodRequireValidation command)
     {
-        throw new NotImplementedException();
+        var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
+        if (entity is null)
+        {
+            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            return new InvalidResultNoData("Not Found.");
+        }
+
+        var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
+        if (license is null)
+        {
+            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            return new InvalidResultNoData("License Not Found.");
+        }
+
+        var status = entity.ValidateLicenseRenewPeriodIsFulfilled(command.NewRenewPeriod, command.LicenseTypeId);
+        if (status == true)
+        {
+            entity.AddDomainEvent(new OperatorLicenseRenewPeriodValidated(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+        }
+        else
+        {
+            entity.AddDomainEvent(new OperatorLicenseExpired(entity, command.LicenseTypeId, entity.Events.Count(), command.CorrelationId, command.CommandId));
+        }
+        _unitOfWork.OperatorRepository.Update(entity);
+
+        return new SuccessResultNoData();
     }
 
     public Result Handle(RemoveOperatorIfSpecificLicenseType command)
     {
-        throw new NotImplementedException();
+        var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        var removed = entity.RemoveOperator(new(command.OperatorId));
+        entity.AddDomainEvent(removed ? new VehicleRemovedOperator(entity, command.LicenseTypeId, command.OperatorId, command.CorrelationId, command.CommandId) : new VehicleNotRequiredToRemoveOperator(entity, command.CorrelationId, command.CommandId));
+
+        _unitOfWork.VehicleRepository.Update(entity);
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(FindVehicleInformationsWithSpecificLicenseType command)
+    {
+        var list = _unitOfWork.VehicleInformationRepository.FindAllWithSpecificLicenseTypeId(command.LicenseTypeId, new VehicleInformationIdQuery()).Result;
+        _unitOfWork.AddOrphanEvnet(new FoundVehicleInformations(list.Select(x => x.Id), command.CorrelationId, command.CommandId));
+        return new SuccessResultNoData();
     }
 }

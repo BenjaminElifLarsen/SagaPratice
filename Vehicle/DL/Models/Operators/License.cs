@@ -14,11 +14,11 @@ internal class License
     private bool _expired;
     //soft delete, need to deal with license type soft delete, could give either ISoftDelete or ISfotDeleteDate.
     //If going with ISoftDelete, the system needs to validate at n timeperiod if date is or has passed the ISoftDeleteDate over in the specific license type.
-    public int LicenseId { get => _licenseId; private set => _licenseId = value; }
-    public DateOnly Arquired { get => _arquired; private set => _arquired = value; }
-    public DateOnly? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
-    public bool Expired { get => _expired; private set => _expired = value; }
-    public IdReference<int> Type { get => _type; private set => _type = value; }
+    internal int LicenseId { get => _licenseId; private set => _licenseId = value; }
+    internal DateOnly Arquired { get => _arquired; private set => _arquired = value; }
+    internal DateOnly? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
+    internal bool Expired { get => _expired; private set => _expired = value; }
+    internal IdReference<int> Type { get => _type; private set => _type = value; }
 
     private License()
     {
@@ -34,7 +34,7 @@ internal class License
         _expired = false;
     }
 
-    public int UpdateArquired(DateTime arquired, LicenseValidationData licenseTypeAgeValidation)
+    internal int UpdateArquired(DateTime arquired, LicenseValidationData licenseTypeAgeValidation)
     {
         if (!new IsLicenseArquiredValid(licenseTypeAgeValidation).IsSatisfiedBy(arquired)) //not happy with having the validatio data here, bad for purity
         {
@@ -44,7 +44,7 @@ internal class License
         return 0;
     }
 
-    public bool Review(DateOnly date)
+    internal bool Review(DateOnly date)
     {
         if (date <= _arquired)
             return false;
@@ -57,12 +57,12 @@ internal class License
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public bool CheckIfExpired()
+    internal bool CheckIfExpired()
     { //check if last renewed is set or not, subtract current date against arquired/lastrenewed date, get years and compare to RenewPeriodInYears in licenseType
         throw new NotImplementedException();
     }
 
-    public bool CheckIfAboutToExpire() //the handler that call this one should tigger an event that could be used to create an email, sms, or similar
+    internal bool CheckIfAboutToExpire() //the handler that call this one should tigger an event that could be used to create an email, sms, or similar
     {//check if there is less than half a year left
         throw new NotImplementedException();
     }
@@ -72,4 +72,23 @@ internal class License
         return _lastRenewed is not null ? _lastRenewed.Value : _arquired;
     }
 
+    internal bool ValidateAgeRequirement(byte age, byte ageRequirement)
+    {
+        return age >= ageRequirement;
+    }
+
+    internal bool ValidateRenewPeriod(byte renewPeriod)
+    {
+        var now = DateTime.Now;
+        var lastRenew = GetCompareDate();
+        var sinceLastRenew = now.Year - lastRenew.Year - 1 +
+        (now.Month > lastRenew.Month ||
+        now.Month == lastRenew.Month && now.Day >= lastRenew.Day ? 1 : 0);
+        bool timePassed = sinceLastRenew < renewPeriod;
+        if (!timePassed)
+        {
+            _expired = true;
+        }
+        return timePassed;
+    }
 }

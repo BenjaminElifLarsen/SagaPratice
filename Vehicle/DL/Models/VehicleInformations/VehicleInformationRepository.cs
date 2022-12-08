@@ -25,6 +25,11 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
         _baseRepository.Delete(entity);
     }
 
+    public async Task<IEnumerable<TProjection>> FindAllWithSpecificLicenseTypeId<TProjection>(int licenseTypeId, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
+    {
+        return await _baseRepository.AllByPredicateAsync(x => x.LicenseTypeRequired.Id == licenseTypeId, query);
+    }
+
     public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
     {
         return await _baseRepository.FindByPredicateAsync(x => x.VehicleInformationId == id, query);

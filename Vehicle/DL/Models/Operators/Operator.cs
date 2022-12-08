@@ -39,20 +39,16 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     internal byte CalculateAge()
     {
-        throw new NotImplementedException();
+        var now = DateTime.Now;
+        var personAge = now.Year - _birth.Year - 1 +
+        (now.Month > _birth.Month ||
+        now.Month == _birth.Month && now.Day >= _birth.Day ? 1 : 0);
+        return (byte)personAge;
     }
 
     internal void UpdateBirth(DateTime birth)
-    { //if changing the birth, need to check if all licenses are still valid regarding their age requirements. Could also do the young/old specification
-        //if (!new IsOperatorOfValidAge().IsSatisfiedBy(birth)) //if a license is invalid, what to do? Revoke the license or fail the update and inform the caller of the problem?
-        //{
-        //    return (int)OperatorErrors.InvalidBirth;
-        //} //hard coded ages, not the best
-        //if(!new IsOperatorToYoung(10).And<DateTime>(new IsOperatorToOld(80)).IsSatisfiedBy(birth)){
-        //    return (int)OperatorErrors.NotWithinAgeRange;
-        //}
+    { 
         _birth = new(birth.Year, birth.Month, birth.Day);
-        //return 0;
     }
 
     internal bool AddVehicle(IdReference<int> vehicle)
@@ -115,5 +111,31 @@ public class Operator : IAggregateRoot, ISoftDelete
     {
         if (_operatorId == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ageRequirement"></param>
+    /// <param name="licenseTypeId"></param>
+    /// <returns>Null if the license was not found, true if old enough else false.</returns>
+    public bool? ValidateLicenseAgeRequirementIsFulfilled(byte ageRequirement, int licenseTypeId)
+    {
+        var license = GetLicenseViaLicenseType(licenseTypeId);
+        if (license is null) 
+        {
+            return null;
+        }
+        return license.ValidateAgeRequirement(CalculateAge(), ageRequirement);
+    }
+
+    public bool? ValidateLicenseRenewPeriodIsFulfilled(byte renewPeriod, int licenseTypeId)
+    {
+        var license = GetLicenseViaLicenseType(licenseTypeId);
+        if(license is null)
+        {
+            return null;
+        }
+        return license.ValidateRenewPeriod(renewPeriod);
     }
 }

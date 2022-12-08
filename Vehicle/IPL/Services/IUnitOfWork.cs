@@ -5,7 +5,7 @@ using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.IPL.Services;
-public interface IUnitOfWork : IBaseUnitOfWork
+public interface IUnitOfWork : IBaseUnitOfWork, IBaseEventUnitOfWork
 {
     public ILicenseTypeRepository LicenseTypeRepository { get; }
     public IOperatorRepository OperatorRepository { get; }

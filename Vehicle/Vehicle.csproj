@@ -23,8 +23,8 @@
     <Folder Include="AL\Process Managers\LicenseType\RemoveLicenseType\" />
     <Folder Include="AL\Process Managers\VehicleInformation\" />
     <Folder Include="AL\Process Managers\Operator\ValidateLicense\" />
-    <Folder Include="AL\Process Managers\Vehicle\" />
     <Folder Include="AL\Process Managers\Operator\RemoveOperator\" />
+    <Folder Include="AL\Process Managers\Vehicle\StopVehicle\" />
     <Folder Include="AL\Process Managers\Vehicle\RemoveVehicle\" />
     <Folder Include="DL\CQRS\Commands\" />
     <Folder Include="DL\CQRS\Queries\ReadModels\" />

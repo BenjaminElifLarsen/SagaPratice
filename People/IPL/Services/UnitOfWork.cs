@@ -57,6 +57,12 @@ internal sealed class UnitOfWork : IUnitOfWork
     {
         do
         {
+            var eventsArray = _context.OrphanEvents.ToArray();
+            foreach (var @event in eventsArray)
+            {
+                _eventBus.Publish(@event);
+                _context.Remove(@event);
+            }
             var roots = _context.GetTracked.ToArray();
             for (int i = 0; i < roots.Length; i++) //if wanting to multithread this, there is Parallel. Might be more useful for the integrate event bus
             {
@@ -67,12 +73,6 @@ internal sealed class UnitOfWork : IUnitOfWork
                 }
             }
         } while (_context.GetTracked.SelectMany(x => x.Events).Any());
-        var eventsArray = _context.OrphanEvents.ToArray();
-        foreach (var @event in eventsArray)
-        {
-            _eventBus.Publish(@event);
-            _context.Remove(@event);
-        }
         //do
         //{
         //    var events = _context.Events;

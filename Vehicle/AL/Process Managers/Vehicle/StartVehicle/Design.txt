@@ -1,0 +1,35 @@
+﻿Design for starting a vehicle
+Need to valdiate that both the vehicle and operator exist
+Operator needs to have permission to use the vehicle (need to have the vehicle id on their list)
+Vehicle needs to have permission for the operator to use it (operator needs to be on the vehicle's operator list)
+Operator needs a valid and non-expired license
+	Vehicle knows not of the license type needed. This lies in the vehicle information
+	Vehicle knows it vehicle information
+	So need to fetch the vehicle information and check if the operator has a license with the same license type id as the vehicle information
+
+	if the operator does not have the correct license type the operation needs to be stopped and the user needs to be informed.
+	if the operator does have the correct license type the license's expired needs to be checked
+		if it has expired the user needs to know
+		if not the vehicle should be started up
+			if the vehicle has already started up inform the user about this
+
+
+Events needed:
+	OperatorNotFound
+	VehicleNotFound
+	VehicleStartedSuccessed
+	VehicleStartedFailed
+	OperatorLackedPermission
+	OperatorHadPermission
+	VehicleInformationLicenseTypeArquired
+	OperatorLackedCorrectLicense
+	OperatorLicenseExpired
+
+	//how to handle any misalignment in the vehicle's operatorId collection and operator's vehicleId collection?
+	//if any is not found should remove their id from the list of the other
+
+
+
+
+
+

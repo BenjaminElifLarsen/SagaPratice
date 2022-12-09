@@ -156,13 +156,19 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.Id).Result;
         if(entity is null)
         {
+            _unitOfWork.AddOrphanEvnet(new LicenseTypeAlteredFailed(new string[] {"Not found."}, command.CorrelationId, command.CommandId));
+            _unitOfWork.Save(); 
             return new InvalidResultNoData("Not found.");
         }
 
         var flag = new LicenseTypeChangeInformationValidator(command).Validate();
         if (!flag)
         {
-            return new InvalidResultNoData(LicenseTypeErrorConversion.Convert(flag).ToArray());
+            var errors = LicenseTypeErrorConversion.Convert(flag);
+            entity.AddDomainEvent(new LicenseTypeAlteredFailed(entity,errors, command.CorrelationId, command.CommandId));
+            _unitOfWork.LicenseTypeRepository.Update(entity);
+            _unitOfWork.Save();
+            return new InvalidResultNoData(errors.ToArray());
         }
         bool ageChanged = false;
         bool renewChanged = false;
@@ -345,11 +351,13 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if (entity is null) //needs events
         {
+            _unitOfWork.AddOrphanEvnet(new OperatorNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
             return new InvalidResultNoData($"");
         }
         entity.RemoveVehicle(new(command.VehicleId));
+        entity.AddDomainEvent(new OperatorRemovedVehicle(entity, command.CorrelationId, command.CommandId));
         _unitOfWork.OperatorRepository.Update(entity);
-        throw new NotImplementedException();
+        return new SuccessResultNoData();
     }
 
     public Result Handle(StartOperatingVehicle command)

@@ -21,7 +21,7 @@ public class LicenseTypeAlteredFailed : IDomainEventFail
 
     public int Version { get; private set; }
 
-    public LicenseTypeAlteredFailed(LicenseType aggregate, IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
+    public LicenseTypeAlteredFailed(LicenseType aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.LicenseTypeId;
@@ -30,7 +30,7 @@ public class LicenseTypeAlteredFailed : IDomainEventFail
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = version;
+        Version = aggregate.Events.Count();
         Errors = errors;
     }
 

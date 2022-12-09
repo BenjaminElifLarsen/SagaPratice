@@ -44,13 +44,13 @@ Turned out there was a bug in the code to remove orphan events.
 
 VehiclesFoundWithSpecificVehicleInformationAndOperator is not set to completed when ran, fixed
 
+test data 3 fails, it does not trigger any events. Problems with the start command handler
+for some reason the output states events related to the people domain has been added. It is a mix of events from the two different boundared contexts
+regarding test data 3 the cmd hdl did not add events, fixed. 
+All events that are added are those added via the ctor, which makes sense. Could it be a good idea to move them out of it and over to the SetUp(Guid) method?
 
-
-
-
-
-
-
+Need to test if the license expired part works correctly (so not changing the age requirement [test data 4])
+seems to be working
 
 
 
@@ -64,6 +64,7 @@ so bugfixing out from the debugger will be fix earlist appearing bugs and then n
 instead of fixing entire 'paths' at ones
 
 test data: 
+1
 {
   "id": 1559595546,
   "ageRequirement": {
@@ -74,6 +75,7 @@ test data:
   }
 }
 
+2
 {
   "id": 1649316172,
   "ageRequirement": {
@@ -83,3 +85,20 @@ test data:
     "renewPeriod": 20
   }
 }
+
+3
+{
+  "id": 1649316172,
+  "renewPeriod": {
+    "renewPeriod": 1
+  }
+}
+
+4
+{
+  "id": 1649316172,
+  "renewPeriod": {
+    "renewPeriod": 3
+  }
+}
+

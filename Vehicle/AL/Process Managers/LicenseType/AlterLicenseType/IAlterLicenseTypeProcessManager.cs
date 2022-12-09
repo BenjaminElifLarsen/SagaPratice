@@ -21,6 +21,7 @@ public interface IAlterLicenseTypeProcessManager : IProcessManager,
     IProcessManagerEventHandler<VehicleRemovedOperator>,
     IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>,
     IProcessManagerEventHandler<VehiclesFoundWithSpecificVehicleInformationAndOperator>,
-    IProcessManagerEventHandler<FoundVehicleInformations>
+    IProcessManagerEventHandler<FoundVehicleInformations>,
+    IProcessManagerEventHandler<OperatorNotFound>
 {
 }

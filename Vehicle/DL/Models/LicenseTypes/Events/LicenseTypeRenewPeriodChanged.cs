@@ -31,7 +31,7 @@ public class LicenseTypeRenewPeriodChanged : IDomainEvent<LicenseTypeRenewPeriod
         CorrelationId = correlationId;
         CausationId = causationId;
         Version = version;
-        Data = new(aggregate.LicenseTypeId, aggregate.AgeRequirementInYears, aggregate.Operators.Select(x => x.Id));
+        Data = new(aggregate.LicenseTypeId, aggregate.RenewPeriodInYears, aggregate.Operators.Select(x => x.Id));
     }
 }
 

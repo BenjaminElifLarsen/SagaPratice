@@ -47,7 +47,7 @@ internal static class Seeder
         Operator op = new(1, new(1956, 1, 2));
         if (!(vehicleContext as IContextData<Operator>).GetAll.Any())
         {
-            op.AddLicense(new(car.LicenseTypeId), new(2019, 5, 13));
+            op.AddLicense(new(car.LicenseTypeId), new(2018, 5, 13));
             op.AddLicense(new(train.LicenseTypeId), new(2000, 3, 24));
             op.RenewLicense(train.LicenseTypeId, new(2006, 2, 1));
             op.AddVehicle(new(veh1.VehicleId));

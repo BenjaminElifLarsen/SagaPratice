@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorNotFound : IDomainEventFail
+public class OperatorNotFound : IDomainEventFail
 {
     public IEnumerable<string> Errors { get; private set; }
 
@@ -21,7 +21,7 @@ internal class OperatorNotFound : IDomainEventFail
 
     public int Version { get; private set; }
 
-    public OperatorNotFound(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    internal OperatorNotFound(IEnumerable<string> errors, Guid correlationId, Guid causationId)
     {
         AggregateType = typeof(Operator).Name;
         AggregateId = 0;

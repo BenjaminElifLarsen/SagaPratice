@@ -34,6 +34,27 @@ the collection does state it has a tracked event with the correct status, not su
 also the event LicenseTypeAgeRequirementChanged is one of the first, not a later one, why did it not bug before? 
 Might be related to orphan events, mayhaps? 
 
+found a bug in the context file and fixed it (it did not get the correct events) and now someone else fails, but only the first time (most likely given how the code is build up regarding storage)
+same kind of bug, line 283
+Seems like FoundVehicleInformations handler is triggered twice, ones which update it and one which fails
+They are the same event regarding their event id and causation id.
+Turned out there was a bug in the code to remove orphan events.
+
+
+
+VehiclesFoundWithSpecificVehicleInformationAndOperator is not set to completed when ran, fixed
+
+
+
+
+
+
+
+
+
+
+
+
 could consider still looking to preventing changes to an entity collection from modifying the collections of events and commands
 
 
@@ -45,6 +66,16 @@ instead of fixing entire 'paths' at ones
 test data: 
 {
   "id": 1559595546,
+  "ageRequirement": {
+    "ageRequirement": 200
+  },
+  "renewPeriod": {
+    "renewPeriod": 20
+  }
+}
+
+{
+  "id": 1649316172,
   "ageRequirement": {
     "ageRequirement": 200
   },

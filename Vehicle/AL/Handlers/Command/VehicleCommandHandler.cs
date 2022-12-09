@@ -343,7 +343,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(RemoveVehicleFromOperator command)
     {
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
-        if (entity is null)
+        if (entity is null) //needs events
         {
             return new InvalidResultNoData($"");
         }

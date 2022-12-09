@@ -33,7 +33,7 @@ internal class MockVehicleContext : IVehicleContext
     IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
     IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    public IEnumerable<IDomainEvent> OrphanEvents => _contextData.SelectMany(x => x.Entity.Events);
+    public IEnumerable<IDomainEvent> OrphanEvents => _events;
 
     public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
 
@@ -131,6 +131,6 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Remove(IDomainEvent @event)
     {
-        _events.Add(@event);
+        _events.Remove(@event);
     }
 }

@@ -267,6 +267,8 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
+        _trackerCollection.UpdateEvent<VehiclesFoundWithSpecificVehicleInformationAndOperator>(DomainEventStatus.Completed);
+
         foreach (var vehicleId in @event.Data.VehicleIds)
         {
             _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);

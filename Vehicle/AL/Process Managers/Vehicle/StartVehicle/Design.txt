@@ -13,6 +13,8 @@ Operator needs a valid and non-expired license
 		if not the vehicle should be started up
 			if the vehicle has already started up inform the user about this
 
+	the license should be validated if it has expired or not 
+
 
 Events needed:
 	OperatorNotFound
@@ -24,6 +26,8 @@ Events needed:
 	VehicleInformationLicenseTypeArquired
 	OperatorLackedCorrectLicense
 	OperatorLicenseExpired
+	OperatorWasFound
+	VehicleWasFound
 
 	//how to handle any misalignment in the vehicle's operatorId collection and operator's vehicleId collection?
 	//if any is not found should remove their id from the list of the other

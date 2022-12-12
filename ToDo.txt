@@ -116,6 +116,11 @@ remove, for events, the int version parameter on all ctors that take in a class 
 
 because of the pms the CommandHandler<> has no reason for a return value. 
 
+add better states to the pms and persist them in a database
+https://tech.justeattakeaway.com/2015/05/26/process-managers/
+maybe don't modify the old ones, but consider this for the next pms. This will also permit to be compare the different designs.
+the old ones should be fine for a basic system like this, but those described in the link could be more useful when it need things like user input or data from outside the system between parts.
+	consider it for the buying and selling of vehicles, e.g. a vehicle is first sold when someone has 'ordered' to buy it (which prevents others from buying it) and then payed for it within a timelimit.
 
 
 

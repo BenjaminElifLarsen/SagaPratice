@@ -362,19 +362,20 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(StartOperatingVehicle command)
     {
-        var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
-        if (entity is null)
-        {
-            return new InvalidResultNoData($"");
-        }
-        if (!entity.IsOperatorPermitted(new(command.OperatorId)))
-        {
-            return new InvalidResultNoData($"The operator with id {command.OperatorId} is not permitted to operate vehicle.");
-        }
-        entity.StartOperating(new(command.OperatorId));
-        _unitOfWork.VehicleRepository.Update(entity);
-        _unitOfWork.Save();
-        return new SuccessResultNoData();
+        throw new NotImplementedException();
+        //var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        //if (entity is null)
+        //{
+        //    return new InvalidResultNoData($"");
+        //}
+        //if (!entity.IsOperatorPermitted(new(command.OperatorId)))
+        //{
+        //    return new InvalidResultNoData($"The operator with id {command.OperatorId} is not permitted to operate vehicle.");
+        //}
+        //entity.StartOperating(new(command.OperatorId));
+        //_unitOfWork.VehicleRepository.Update(entity);
+        //_unitOfWork.Save();
+        //return new SuccessResultNoData();
     }
 
     public Result Handle(StopOperatingVehicle command)

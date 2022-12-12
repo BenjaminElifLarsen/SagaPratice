@@ -47,7 +47,7 @@ public class VehicleController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     [Route("Start")]
-    public async Task<IActionResult> StartOperating([FromBody]StartOperatingVehicle command)
+    public async Task<IActionResult> StartOperating([FromBody]AttemptToStartVehicle command)
     {
         var result = await _vehicleService.StartOperatingVehicleAsync(command);
         return this.FromResult(result);

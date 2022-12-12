@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
-namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class NotPermittedToOperate : IDomainEvent
+namespace VehicleDomain.DL.Models.Operators.Events;
+internal class OperatorWasFound : IDomainEvent
 {
     public string AggregateType => throw new NotImplementedException();
 

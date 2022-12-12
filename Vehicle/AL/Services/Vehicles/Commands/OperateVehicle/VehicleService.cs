@@ -4,7 +4,7 @@ using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 namespace VehicleDomain.AL.Services.Vehicles;
 public partial class VehicleService
 {
-    public async Task<Result> StartOperatingVehicleAsync(StartOperatingVehicle command)
+    public async Task<Result> StartOperatingVehicleAsync(AttemptToStartVehicle command)
     {
         return await Task.Run(() => _commandBus.Dispatch(command));
     }

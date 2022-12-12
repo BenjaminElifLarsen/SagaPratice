@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-public class PermittedToStart : IDomainEvent<PermittedToStartData>
+public class PermittedToOperate : IDomainEvent<PermittedToStartData>
 {
     public PermittedToStartData Data { get; private set; }
 
@@ -21,7 +21,7 @@ public class PermittedToStart : IDomainEvent<PermittedToStartData>
 
     public int Version { get; private set; }
 
-    internal PermittedToStart()
+    internal PermittedToOperate()
     {
 
     }

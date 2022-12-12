@@ -70,7 +70,7 @@ public class VehicleRegistry : IVehicleRegistry
         _commandBus.RegisterHandler<RemoveRelationBetweenOperatorAndVehicle>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveVehicleFromOperator>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveOperatorFromVehicle>(_commandHandler.Handle);
-        _commandBus.RegisterHandler<StartOperatingVehicle>(_commandHandler.Handle);
+        _commandBus.RegisterHandler<AttemptToStartVehicle>(_commandHandler.Handle);
         _commandBus.RegisterHandler<StopOperatingVehicle>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RemoveOperatorFromLicenseType>(_commandHandler.Handle);
         _commandBus.RegisterHandler<ValidateLicenseAgeRequirementBecauseChange>(_commandHandler.Handle);

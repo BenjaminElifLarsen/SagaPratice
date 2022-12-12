@@ -360,7 +360,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         return new SuccessResultNoData();
     }
 
-    public Result Handle(StartOperatingVehicle command)
+    public Result Handle(AttemptToStartVehicle command)
     {
         throw new NotImplementedException();
         //var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;

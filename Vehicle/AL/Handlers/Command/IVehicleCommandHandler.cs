@@ -24,7 +24,7 @@ public interface IVehicleCommandHandler :
     ICommandHandler<RemoveRelationBetweenOperatorAndVehicle>,
     ICommandHandler<RemoveVehicleFromOperator>,
     ICommandHandler<RemoveOperatorFromVehicle>,
-    ICommandHandler<StartOperatingVehicle>,
+    ICommandHandler<AttemptToStartVehicle>,
     ICommandHandler<StopOperatingVehicle>,
     ICommandHandler<RemoveOperatorFromLicenseType>,
     ICommandHandler<ValidateLicenseAgeRequirementBecauseChange>,

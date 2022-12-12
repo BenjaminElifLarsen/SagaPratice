@@ -16,7 +16,7 @@ Operator needs a valid and non-expired license
 	the license should be validated if it has expired or not 
 
 Commands needed:
-	AttemptToStartVehicle //consider better name for the first command
+	AttemptToStartVehicle 
 	FindOperator
 	FindVehicle
 	CheckPermissions
@@ -29,8 +29,8 @@ Events needed:
 	VehicleNotFound
 	VehicleStartedSuccessed
 	VehicleStartedFailed
-	OperatorLackedPermission
-	OperatorHadPermission
+	OperatorLackedPermission // NotPermittedToOperate
+	OperatorHadPermission // PermittedToOperate
 	VehicleInformationLicenseTypeArquired
 	OperatorLackedNeededLicense
 	OperatorLicenseExpired

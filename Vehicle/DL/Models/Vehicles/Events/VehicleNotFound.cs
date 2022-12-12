@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class NotPermittedToOperate : IDomainEvent
+internal class VehicleNotFound : IDomainEventFail
 {
     public string AggregateType => throw new NotImplementedException();
 
@@ -18,4 +18,6 @@ internal class NotPermittedToOperate : IDomainEvent
     public Guid CausationId => throw new NotImplementedException();
 
     public int Version => throw new NotImplementedException();
+
+    public IEnumerable<string> Errors => throw new NotImplementedException();
 }

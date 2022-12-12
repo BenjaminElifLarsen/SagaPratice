@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
-public class StartOperatingVehicle : ICommand
+public class AttemptToStartVehicle : ICommand
 {
     public int VehicleId { get; set; }
     public int OperatorId { get; set; }
@@ -11,7 +11,7 @@ public class StartOperatingVehicle : ICommand
 
     public Guid CausationId { get; private set; }
 
-    public StartOperatingVehicle()
+    public AttemptToStartVehicle()
     {
         CommandId = Guid.NewGuid();
         CorrelationId = CommandId;

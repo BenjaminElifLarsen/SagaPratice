@@ -57,16 +57,16 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         {
             CorrelationId = correlationId; //maybe have an event for the attempt start command instead of these four here
             //the event, if successed, will set the needed ids and these four here.
-            _trackerCollection.AddEventTracker<AttemptToStartVehicleStarted>(true);
+            _trackerCollection.AddEventTracker<AttemptToStartVehicleStarted>(true, DomainEventType.Succeeder);
         }
     }
 
     public void Handler(OperatorNotFound @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorNotFound>(DomainEventStatus.Completed);
-        _trackerCollection.UpdateEvent<OperatorWasFound>(DomainEventStatus.Failed);
+        _trackerCollection.CompleteEvent<OperatorNotFound>();
+        _trackerCollection.FailEvent<OperatorWasFound>();
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
         //if the VehicleWasFound is complete order vehicle to remove operator id
         //if neither was found nothing extra is needed to be done
@@ -82,10 +82,10 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(VehicleNotFound @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<VehicleNotFound>(DomainEventStatus.Completed);
-        _trackerCollection.UpdateEvent<VehicleWasFound>(DomainEventStatus.Failed);
+        _trackerCollection.CompleteEvent<VehicleNotFound>();
+        _trackerCollection.FailEvent<VehicleWasFound>();
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
         //if the OperatorWasFound is complete order operator to remove vehicle id
         //if neither was found nothing extra is needed to be done
@@ -101,20 +101,20 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(OperatorWasFound @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
         //if other not found, order this one to remove its vehicle id (to ensure it is not present)
         //if both were found order it to check permissions
-        _trackerCollection.UpdateEvent<OperatorWasFound>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorWasFound>();
         _trackerCollection.RemoveEvent<OperatorNotFound>();
 
         if (_trackerCollection.HasEventCompleted<VehicleWasFound>() is true)
         {
             //set the different event trackers needed
-            _trackerCollection.AddEventTracker<PermittedToOperate>(true);
-            _trackerCollection.AddEventTracker<OperatorLackedNeededLicense>(false);
-            _trackerCollection.AddEventTracker<OperatorLicenseExpired>(false);
-            _trackerCollection.AddEventTracker<NotPermittedToOperate>(false);
+            _trackerCollection.AddEventTracker<PermittedToOperate>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<OperatorLackedNeededLicense>(false, DomainEventType.Failer);
+            _trackerCollection.AddEventTracker<OperatorLicenseExpired>(false, DomainEventType.Failer);
+            _trackerCollection.AddEventTracker<NotPermittedToOperate>(false, DomainEventType.Failer);
             _commandBus.Dispatch(new CheckPermissions(_operatorId, _vehicleId, CorrelationId, @event.EventId));
         }
         else if (_trackerCollection.HasEventFailed<VehicleWasFound>() is true)
@@ -127,27 +127,27 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(VehicleWasFound @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
         //if other not found, order this one to remove its operator id (to ensure it is not present)
         //if both were found order it to check permissions
-        _trackerCollection.UpdateEvent<VehicleWasFound>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<VehicleWasFound>();
 
 
         if (_trackerCollection.HasEventCompleted<OperatorWasFound>() is true)
         {
             //set the different event trackers needed
-            _trackerCollection.AddEventTracker<PermittedToOperate>(true);
-            _trackerCollection.AddEventTracker<OperatorLackedNeededLicense>(false);
-            _trackerCollection.AddEventTracker<OperatorLicenseExpired>(false);
-            _trackerCollection.AddEventTracker<NotPermittedToOperate>(false);
+            _trackerCollection.AddEventTracker<PermittedToOperate>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<OperatorLackedNeededLicense>(false, DomainEventType.Failer);
+            _trackerCollection.AddEventTracker<OperatorLicenseExpired>(false, DomainEventType.Failer);
+            _trackerCollection.AddEventTracker<NotPermittedToOperate>(false, DomainEventType.Failer);
             _commandBus.Dispatch(new CheckPermissions(_operatorId, _vehicleId, CorrelationId, @event.EventId));
         }
         else if (_trackerCollection.HasEventFailed<OperatorWasFound>() is true)
         {
-            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
-            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
-            _commandBus.Dispatch(new RemoveOperator(_operatorId, _vehicleId, CorrelationId, @event.EventId));
+            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true, DomainEventType.Succeeder);
+            _commandBus.Dispatch(new RemoveOperatorFromVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
         }
 
 
@@ -156,24 +156,24 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(VehicleStartedSucceeded @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
         throw new NotImplementedException();
     }
 
     public void Handler(VehicleStartedFailed @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
         throw new NotImplementedException();
     }
 
     public void Handler(NotPermittedToOperate @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<NotPermittedToOperate>(DomainEventStatus.Completed);
-        _trackerCollection.RemoveEvent<PermittedToOperate>();
+        _trackerCollection.CompleteEvent<NotPermittedToOperate>();
+        _trackerCollection.FailEvent<PermittedToOperate>();
         _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>();
         _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
 
@@ -182,55 +182,65 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(PermittedToOperate @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<PermittedToOperate>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<PermittedToOperate>();
         _trackerCollection.RemoveEvent<NotPermittedToOperate>();
         _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>();
         _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
 
-        _trackerCollection.AddEventTracker<VehicleStartedSucceeded>(true);
-        _trackerCollection.AddEventTracker<VehicleStartedFailed>(false);
-        _commandBus.Dispatch(new DL.Models.Vehicles.CQRS.Commands.StartVehicle(_vehicleId, @event.CorrelationId, @event.EventId));
+        _trackerCollection.AddEventTracker<VehicleStartedSucceeded>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<VehicleStartedFailed>(false, DomainEventType.Failer);
+        _commandBus.Dispatch(new DL.Models.Vehicles.CQRS.Commands.StartVehicle(_vehicleId, CorrelationId, @event.EventId));
 
         //no reason to check if finished in these methods that dispatch commands
     }
 
     public void Handler(OperatorLackedNeededLicense @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorLackedNeededLicense>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorLackedNeededLicense>();
         _trackerCollection.RemoveEvent<NotPermittedToOperate>();
-        _trackerCollection.RemoveEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
+        _trackerCollection.FailEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
         _trackerCollection.RemoveEvent<OperatorLicenseExpired>(); //either that or have an success/error event type enum that is used in the event tracker collection, e.g. EventType.Succeder, EventType.Failer
 
+        //remember events
+        _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true, DomainEventType.Succeeder);
+        _commandBus.Dispatch(new RemoveOperatorFromVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
+        //remember events
+        _trackerCollection.AddEventTracker<OperatorRemovedVehicle>(true, DomainEventType.Succeeder);
+        _commandBus.Dispatch(new RemoveVehicleFromOperator(_vehicleId, _operatorId, CorrelationId, @event.EventId));
 
-
-        throw new NotImplementedException();
     }
 
     public void Handler(OperatorLicenseExpired @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
+
+        _trackerCollection.CompleteEvent<OperatorLicenseExpired>();
+        _trackerCollection.RemoveEvent<NotPermittedToOperate>();
+        _trackerCollection.FailEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
+        _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>(); //would still need the required, I think
 
         throw new NotImplementedException();
     }
 
     public void Handler(AttemptToStartVehicleStarted @event)
     {
-        if (@event.CorrelationId != CorrelationId) { return; }
+        if (CorrelationId != CorrelationId) { return; }
 
         _operatorId = @event.Data.OperatorId;
         _vehicleId = @event.Data.VehicleId;
 
-        _trackerCollection.AddEventTracker<OperatorWasFound>(true);
-        _trackerCollection.AddEventTracker<VehicleWasFound>(true);
-        _trackerCollection.AddEventTracker<OperatorNotFound>(false);
-        _trackerCollection.AddEventTracker<VehicleNotFound>(false);
+        _trackerCollection.AddEventTracker<OperatorWasFound>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<VehicleWasFound>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<OperatorNotFound>(false, DomainEventType.Failer);
+        _trackerCollection.AddEventTracker<VehicleNotFound>(false, DomainEventType.Failer);
 
-        _commandBus.Dispatch(new FindOperator(_operatorId, @event.CorrelationId, @event.EventId));
-        _commandBus.Dispatch(new FindVehicle(_vehicleId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new FindOperator(_operatorId, CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new FindVehicle(_vehicleId, CorrelationId, @event.EventId));
 
         PublishEventIfPossible();
     }

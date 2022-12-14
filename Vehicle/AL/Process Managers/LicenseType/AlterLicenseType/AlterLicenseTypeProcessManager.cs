@@ -40,10 +40,10 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         if(CorrelationId == default)
         {
             CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<LicenseTypeAlteredSucceeded>(true);
-            _trackerCollection.AddEventTracker<LicenseTypeAlteredFailed>(false);
-            _trackerCollection.AddEventTracker<LicenseTypeAgeRequirementChanged>(true);
-            _trackerCollection.AddEventTracker<LicenseTypeRenewPeriodChanged>(true);
+            _trackerCollection.AddEventTracker<LicenseTypeAlteredSucceeded>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<LicenseTypeAlteredFailed>(false, DomainEventType.Failer);
+            _trackerCollection.AddEventTracker<LicenseTypeAgeRequirementChanged>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<LicenseTypeRenewPeriodChanged>(true, DomainEventType.Failer);
         }
     }
 
@@ -69,7 +69,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeAlteredSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<LicenseTypeAlteredSucceeded>();
         _trackerCollection.RemoveEvent<LicenseTypeAlteredFailed>();
 
         if (!@event.Data.RenewPeriodChanged)
@@ -87,8 +87,8 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeAlteredSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<LicenseTypeAlteredFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<LicenseTypeAlteredSucceeded>();
+        _trackerCollection.CompleteEvent<LicenseTypeAlteredFailed>();
 
         _trackerCollection.RemoveEvent<LicenseTypeAgeRequirementChanged>();
         _trackerCollection.RemoveEvent<LicenseTypeRenewPeriodChanged>();
@@ -101,12 +101,12 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeAgeRequirementChanged>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<LicenseTypeAgeRequirementChanged>();
 
         var amount = @event.Data.OperatorIds.Count();
-        _trackerCollection.AddEventTracker<OperatorForAgeValidatioNotFound>(true, amount);
-        _trackerCollection.AddEventTracker<OperatorLicenseAgeRequirementValidated>(true, amount);
-        _trackerCollection.AddEventTracker<OperatorLicenseRetracted>(true, amount);
+        _trackerCollection.AddEventTracker<OperatorForAgeValidatioNotFound>(true, DomainEventType.Succeeder, amount);
+        _trackerCollection.AddEventTracker<OperatorLicenseAgeRequirementValidated>(true, DomainEventType.Succeeder, amount);
+        _trackerCollection.AddEventTracker<OperatorLicenseRetracted>(true, DomainEventType.Succeeder, amount);
 
         foreach(var operatorId in @event.Data.OperatorIds)
         {
@@ -119,12 +119,12 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeRenewPeriodChanged>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<LicenseTypeRenewPeriodChanged>();
 
         var amount = @event.Data.OperatorIds.Count();
-        _trackerCollection.AddEventTracker<OperatorForRenewValidationNotFound>(true, amount);
-        _trackerCollection.AddEventTracker<OperatorLicenseRenewPeriodValidated>(true, amount);
-        _trackerCollection.AddEventTracker<OperatorLicenseExpired>(true, amount);
+        _trackerCollection.AddEventTracker<OperatorForRenewValidationNotFound>(true, DomainEventType.Succeeder, amount);
+        _trackerCollection.AddEventTracker<OperatorLicenseRenewPeriodValidated>(true, DomainEventType.Succeeder, amount);
+        _trackerCollection.AddEventTracker<OperatorLicenseExpired>(true, DomainEventType.Succeeder, amount);
 
         foreach(var operatorId in @event.Data.OperatorIds)
         {
@@ -137,11 +137,11 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorForRenewValidationNotFound>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorForRenewValidationNotFound>();
         _trackerCollection.RemoveEvent<OperatorLicenseRenewPeriodValidated>();
         _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
 
-        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true);
+        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true, DomainEventType.Succeeder);
         _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible();
     }
@@ -150,11 +150,11 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorForAgeValidatioNotFound>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorForAgeValidatioNotFound>();
         _trackerCollection.RemoveEvent<OperatorLicenseAgeRequirementValidated>();
         _trackerCollection.RemoveEvent<OperatorLicenseRetracted>();
 
-        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true);
+        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true, DomainEventType.Succeeder);
         _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible(); 
     }
@@ -163,7 +163,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     { 
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorLicenseAgeRequirementValidated>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorLicenseAgeRequirementValidated>();
         _trackerCollection.RemoveEvent<OperatorForAgeValidatioNotFound>();
         _trackerCollection.RemoveEvent<OperatorLicenseRetracted>();
 
@@ -174,12 +174,12 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorLicenseRetracted>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorLicenseRetracted>();
         _trackerCollection.RemoveEvent<OperatorForAgeValidatioNotFound>();
         _trackerCollection.RemoveEvent<OperatorLicenseAgeRequirementValidated>();
 
-        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true);
-        _trackerCollection.AddEventTracker<FoundVehicleInformations>(true);
+        _trackerCollection.AddEventTracker<LicenseTypeOperatorRemoved>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<FoundVehicleInformations>(true, DomainEventType.Succeeder);
 
         _commandBus.Dispatch(new FindVehicleInformationsWithSpecificLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
         _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
@@ -190,7 +190,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     { //should an expired license operator be removed from license type? Have a PM that check, before a vehicle is used, if the license is expired or not
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorLicenseExpired>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorLicenseExpired>();
         _trackerCollection.RemoveEvent<OperatorForRenewValidationNotFound>();
         _trackerCollection.RemoveEvent<OperatorLicenseRenewPeriodValidated>();
 
@@ -201,7 +201,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeOperatorRemoved>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<LicenseTypeOperatorRemoved>();
         PublishEventIfPossible();
     }
 
@@ -209,7 +209,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorLicenseRenewPeriodValidated>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorLicenseRenewPeriodValidated>();
         _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
         _trackerCollection.RemoveEvent<OperatorForRenewValidationNotFound>();
 
@@ -221,11 +221,11 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         if (@event.CorrelationId != CorrelationId) { return; }
 
 
-        _trackerCollection.UpdateEvent<VehicleRemovedOperator>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<VehicleRemovedOperator>();
         _trackerCollection.RemoveEvent<VehicleNotRequiredToRemoveOperator>();
 
-        _trackerCollection.AddEventTracker<OperatorRemovedVehicle>(true);
-        _trackerCollection.AddEventTracker<OperatorNotFound>(false);
+        _trackerCollection.AddEventTracker<OperatorRemovedVehicle>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<OperatorNotFound>(false, DomainEventType.Succeeder);
         _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId)); //dispatch cmd to remove vehicle from operator
 
         PublishEventIfPossible();
@@ -235,7 +235,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<VehicleNotRequiredToRemoveOperator>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<VehicleNotRequiredToRemoveOperator>();
         _trackerCollection.RemoveEvent<VehicleRemovedOperator>();
         PublishEventIfPossible();
     }
@@ -244,7 +244,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorRemovedVehicle>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorRemovedVehicle>();
         _trackerCollection.RemoveEvent<OperatorNotFound>();
         PublishEventIfPossible();
     }
@@ -253,13 +253,13 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<VehiclesFoundWithSpecificVehicleInformationAndOperator>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<VehiclesFoundWithSpecificVehicleInformationAndOperator>();
 
         foreach (var vehicleId in @event.Data.VehicleIds)
         {
-            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
-            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
-            _commandBus.Dispatch(new RemoveOperator(@event.Data.OperatorId, vehicleId, @event.CorrelationId, @event.EventId)); //will require a new cmd as the current used for removing an operator does not care about license 
+            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true, DomainEventType.Succeeder);
+            _commandBus.Dispatch(new RemoveOperatorFromVehicle(vehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId)); //will require a new cmd as the current used for removing an operator does not care about license 
         }
         PublishEventIfPossible();
     }
@@ -268,9 +268,9 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<FoundVehicleInformations>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<FoundVehicleInformations>();
 
-        _trackerCollection.AddEventTracker<VehiclesFoundWithSpecificVehicleInformationAndOperator>(true);
+        _trackerCollection.AddEventTracker<VehiclesFoundWithSpecificVehicleInformationAndOperator>(true, DomainEventType.Succeeder);
         _commandBus.Dispatch(new FindVehiclesWithSpecificVehicleInformationAndOperator(@event.Data.OperatorId, @event.Data.VehicleInformationIds, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible();
     }
@@ -279,7 +279,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<OperatorNotFound>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<OperatorNotFound>();
         _trackerCollection.RemoveEvent<OperatorRemovedVehicle>();
         PublishEventIfPossible();
     }

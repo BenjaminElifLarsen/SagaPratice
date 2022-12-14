@@ -27,19 +27,17 @@ internal sealed class HireProcessManager : IHireProcessManager
         _handlers = new();
         _errors = new();
         _trackerCollection = new();
-        _trackerCollection.AddEventTracker<PersonHiredSucceeded>(true);
-        _trackerCollection.AddEventTracker<PersonHiredFailed>(false);
     }
 
     public void Handler(PersonHiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonHiredSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<PersonHiredSucceeded>();
         _trackerCollection.RemoveEvent<PersonHiredFailed>();
 
-        _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true);
-        _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false);
+        _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true, DomainEventType.Succeeder);
+        _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false, DomainEventType.Failer);
 
         _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
 
@@ -50,8 +48,8 @@ internal sealed class HireProcessManager : IHireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonHiredSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<PersonHiredFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<PersonHiredSucceeded>();
+        _trackerCollection.CompleteEvent<PersonHiredFailed>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
@@ -61,7 +59,7 @@ internal sealed class HireProcessManager : IHireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonAddedToGenderSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<PersonAddedToGenderSucceeded>();
         _trackerCollection.RemoveEvent<PersonAddedToGenderFailed>();
 
         PublishEventIfPossible();
@@ -71,8 +69,8 @@ internal sealed class HireProcessManager : IHireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonAddedToGenderSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<PersonAddedToGenderSucceeded>();
+        _trackerCollection.CompleteEvent<PersonAddedToGenderFailed>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
@@ -98,6 +96,11 @@ internal sealed class HireProcessManager : IHireProcessManager
 
     public void SetUp(Guid correlationId)
     {
-        CorrelationId = correlationId;
+        if(CorrelationId == default)
+        {
+            CorrelationId = correlationId;
+            _trackerCollection.AddEventTracker<PersonHiredSucceeded>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<PersonHiredFailed>(false, DomainEventType.Failer);
+        }
     }
 }

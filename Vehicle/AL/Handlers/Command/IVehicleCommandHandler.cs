@@ -31,7 +31,6 @@ public interface IVehicleCommandHandler :
     ICommandHandler<ValidateLicenseRenewPeriodBecauseChange>,
     ICommandHandler<LicenseAgeRequirementRequireValidation>,
     ICommandHandler<LicenseRenewPeriodRequireValidation>,
-    ICommandHandler<RemoveOperator>,
     ICommandHandler<FindVehicleInformationsWithSpecificLicenseType>,
     ICommandHandler<FindVehiclesWithSpecificVehicleInformationAndOperator>
 {

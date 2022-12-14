@@ -23,8 +23,6 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
         _errors = new();
         _handlers = new();
         _trackerCollection = new();
-        _trackerCollection.AddEventTracker<GenderRecognisedSucceeded>(true);
-        _trackerCollection.AddEventTracker<GenderRecognisedFailed>(false);
     }
 
     public void Handler(GenderRecognisedSucceeded @event)
@@ -32,7 +30,7 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
         if (@event.CorrelationId != CorrelationId) return;
 
 
-        _trackerCollection.UpdateEvent<GenderRecognisedSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<GenderRecognisedSucceeded>();
         _trackerCollection.RemoveEvent<GenderRecognisedFailed>();
 
         PublishEventIfPossible();
@@ -42,8 +40,8 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<GenderRecognisedSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<GenderRecognisedFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<GenderRecognisedSucceeded>();
+        _trackerCollection.CompleteEvent<GenderRecognisedFailed>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
@@ -69,6 +67,11 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
 
     public void SetUp(Guid correlationId)
     {
-        CorrelationId = correlationId;
+        if(CorrelationId == default)
+        {
+            CorrelationId = correlationId;
+            _trackerCollection.AddEventTracker<GenderRecognisedSucceeded>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<GenderRecognisedFailed>(false, DomainEventType.Failer);
+        }
     }
 }

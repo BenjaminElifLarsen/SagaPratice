@@ -343,7 +343,9 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             _unitOfWork.AddOrphanEvnet(new VehicleNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId)); ;
             return new InvalidResultNoData($"");
         }
-        entity.RemoveOperator(new(command.OperatorId));
+        var removed = entity.RemoveOperator(new(command.OperatorId));
+        entity.AddDomainEvent(removed ? new VehicleRemovedOperator(entity, command.OperatorId, command.CorrelationId, command.CommandId) : new VehicleNotRequiredToRemoveOperator(entity, command.CorrelationId, command.CommandId));
+
         _unitOfWork.VehicleRepository.Update(entity);
         return new SuccessResultNoData();
     }
@@ -508,16 +510,6 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         }
         _unitOfWork.OperatorRepository.Update(entity);
 
-        return new SuccessResultNoData();
-    }
-
-    public Result Handle(RemoveOperator command)
-    {
-        var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
-        var removed = entity.RemoveOperator(new(command.OperatorId));
-        entity.AddDomainEvent(removed ? new VehicleRemovedOperator(entity, command.OperatorId, command.CorrelationId, command.CommandId) : new VehicleNotRequiredToRemoveOperator(entity, command.CorrelationId, command.CommandId));
-
-        _unitOfWork.VehicleRepository.Update(entity);
         return new SuccessResultNoData();
     }
 

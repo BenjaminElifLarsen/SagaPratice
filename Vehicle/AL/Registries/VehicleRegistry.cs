@@ -77,7 +77,6 @@ public class VehicleRegistry : IVehicleRegistry
         _commandBus.RegisterHandler<ValidateLicenseRenewPeriodBecauseChange>(_commandHandler.Handle);
         _commandBus.RegisterHandler<LicenseAgeRequirementRequireValidation>(_commandHandler.Handle);
         _commandBus.RegisterHandler<LicenseRenewPeriodRequireValidation>(_commandHandler.Handle);
-        _commandBus.RegisterHandler<RemoveOperator>(_commandHandler.Handle);
         _commandBus.RegisterHandler<FindVehiclesWithSpecificVehicleInformationAndOperator>(_commandHandler.Handle);
         _commandBus.RegisterHandler<FindVehicleInformationsWithSpecificLicenseType>(_commandHandler.Handle);
     }

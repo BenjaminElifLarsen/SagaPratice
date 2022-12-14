@@ -24,24 +24,27 @@ internal sealed class FireProcessManager : IFireProcessManager
         _handlers = new();
         _errors = new();
         _trackerCollection = new();
-        _trackerCollection.AddEventTracker<PersonFiredSucceeded>(true);
-        _trackerCollection.AddEventTracker<PersonFiredFailed>(false);
     }
 
     public void SetUp(Guid correlationId)
     {
-        CorrelationId = correlationId;
+        if(CorrelationId == default)
+        {
+            CorrelationId = correlationId;
+            _trackerCollection.AddEventTracker<PersonFiredSucceeded>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<PersonFiredFailed>(false, DomainEventType.Failer);
+        }
     }
 
     public void Handler(PersonFiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonFiredSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<PersonFiredSucceeded>();
         _trackerCollection.RemoveEvent<PersonFiredFailed>();
 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true); 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false);
+        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true, DomainEventType.Succeeder); 
+        _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false, DomainEventType.Failer);
 
         _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
 
@@ -52,8 +55,8 @@ internal sealed class FireProcessManager : IFireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonFiredSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<PersonFiredFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<PersonFiredSucceeded>();
+        _trackerCollection.CompleteEvent<PersonFiredFailed>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
@@ -63,7 +66,7 @@ internal sealed class FireProcessManager : IFireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSucceeded>(DomainEventStatus.Completed);
+        _trackerCollection.CompleteEvent<PersonRemovedFromGenderSucceeded>();
         _trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
 
         PublishEventIfPossible();
@@ -73,8 +76,8 @@ internal sealed class FireProcessManager : IFireProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSucceeded>(DomainEventStatus.Failed);
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Completed);
+        _trackerCollection.FailEvent<PersonRemovedFromGenderSucceeded>();
+        _trackerCollection.CompleteEvent<PersonRemovedFromGenderFailed>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();

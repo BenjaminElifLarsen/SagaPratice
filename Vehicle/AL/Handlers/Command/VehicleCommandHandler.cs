@@ -55,6 +55,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         {
             return new InvalidResultNoData($"No license with type of {command.TypeId} was found.");
         }
+        throw new NotImplementedException();
         return new SuccessResultNoData();
         var oldValue = license.Expired; //consider rewritting this section
         license.CheckIfExpired();
@@ -189,7 +190,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
             entity.ChangeRenewPeriod(command.RenewPeriod.RenewPeriod);
             entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
         }
-        entity.AddDomainEvent(new LicenseTypeAlteredSuccessed(entity, entity.Events.Count(), typeChanged, ageChanged, renewChanged, command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new LicenseTypeAlteredSucceeded(entity, entity.Events.Count(), typeChanged, ageChanged, renewChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -339,6 +340,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         if (entity is null)
         {
+            _unitOfWork.AddOrphanEvnet(new VehicleNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId)); ;
             return new InvalidResultNoData($"");
         }
         entity.RemoveOperator(new(command.OperatorId));

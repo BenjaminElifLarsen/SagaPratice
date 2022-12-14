@@ -84,7 +84,7 @@ public class VehicleRegistry : IVehicleRegistry
 
     public void SetUpRouting(IAlterLicenseTypeProcessManager processManager)
     {
-        _eventBus.RegisterHandler<LicenseTypeAlteredSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<LicenseTypeAlteredSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<LicenseTypeAlteredFailed>(processManager.Handler);
         _eventBus.RegisterHandler<LicenseTypeAgeRequirementChanged>(processManager.Handler);
         _eventBus.RegisterHandler<LicenseTypeRenewPeriodChanged>(processManager.Handler);

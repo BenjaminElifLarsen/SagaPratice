@@ -43,7 +43,9 @@ Events needed:
 	//instead of using the current command handler StartOperatingVehicle consider completely rewrite it to better fit the activity diagram
 
 	//is it really needed to fetch the vehicle infromation license type via a command? Could just check in a handler. After all not modifing that aggregate, just fetching a read model.
-
+	//could just have a method on the repo for vehicle information to get the license type id for a specific vehicle
+	//could then just have a method on the license type repo, that return boolean, if there is the license type contains the operator id.
+	//could have similar when checking permission, do the collections in vehicle and operator 'know' of each other
 
 
 

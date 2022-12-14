@@ -3,12 +3,12 @@ using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.Handlers.Event;
 public interface IPeopleEventHandler : 
-    IDomainEventHandler<PersonHiredSuccessed>,
-    IDomainEventHandler<PersonFiredSuccessed>,
+    IDomainEventHandler<PersonHiredSucceeded>,
+    IDomainEventHandler<PersonFiredSucceeded>,
     IDomainEventHandler<PersonChangedGender>,
-    IDomainEventHandler<PersonAddedToGenderSuccessed>,
-    IDomainEventHandler<PersonRemovedFromGenderSuccessed>,
-    IDomainEventHandler<GenderRecognisedSuccessed>,
-    IDomainEventHandler<GenderUnrecognisedSuccessed>
+    IDomainEventHandler<PersonAddedToGenderSucceeded>,
+    IDomainEventHandler<PersonRemovedFromGenderSucceeded>,
+    IDomainEventHandler<GenderRecognisedSucceeded>,
+    IDomainEventHandler<GenderUnrecognisedSucceeded>
 {
 }

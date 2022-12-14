@@ -44,38 +44,38 @@ public sealed class PeopleRegistry : IPeopleRegistry
     {
         _eventBus.RegisterHandler<PersonPersonalInformationChangedSuccessed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonPersonalInformationChangedFailed>(processManager.Handler);
-        _eventBus.RegisterHandler<PersonAddedToGenderSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonAddedToGenderSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handler);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonChangedGender>(processManager.Handler);
     }
 
     public void SetUpRouting(IFireProcessManager processManager)
     {
-        _eventBus.RegisterHandler<PersonFiredSuccessed>(processManager.Handler);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonFiredSucceeded>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<PersonFiredFailed>(processManager.Handler);
         _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handler);
     }
 
     public void SetUpRouting(IHireProcessManager processManager)
     {
-        _eventBus.RegisterHandler<PersonHiredSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonHiredSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<PersonHiredFailed>(processManager.Handler);
-        _eventBus.RegisterHandler<PersonAddedToGenderSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<PersonAddedToGenderSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handler);
     }
 
     public void SetUpRouting(IRecogniseProcessManager processManager)
     {
-        _eventBus.RegisterHandler<GenderRecognisedSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<GenderRecognisedFailed>(processManager.Handler);
     }
 
     public void SetUpRouting(IUnrecogniseProcessManager processManager)
     {
-        _eventBus.RegisterHandler<GenderUnrecognisedSuccessed>(processManager.Handler);
+        _eventBus.RegisterHandler<GenderUnrecognisedSucceeded>(processManager.Handler);
         _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processManager.Handler);
     }
 }

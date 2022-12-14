@@ -10,7 +10,7 @@ namespace VehicleDomain.AL.Process_Managers.Vehicle.StartVehicle;
 internal class StartVehicleProcessManager : IStartVehicleProcessManager
 {
     private readonly IVehicleCommandBus _commandBus;
-    private readonly EventTrackerCollection _trackerCollection;
+    private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
     private int _operatorId;
@@ -55,8 +55,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
     {
         if(CorrelationId == default)
         {
-            CorrelationId = correlationId; //maybe have an event for the attempt start command instead of these four here
-            //the event, if successed, will set the needed ids and these four here.
+            CorrelationId = correlationId;
             _trackerCollection.AddEventTracker<AttemptToStartVehicleStarted>(true, DomainEventType.Succeeder);
         }
     }
@@ -122,7 +121,6 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
             _commandBus.Dispatch(new RemoveVehicleFromOperator(_vehicleId, _operatorId, CorrelationId, @event.EventId));
         }
         
-        throw new NotImplementedException();
     }
 
     public void Handler(VehicleWasFound @event)
@@ -149,23 +147,29 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
             _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true, DomainEventType.Succeeder);
             _commandBus.Dispatch(new RemoveOperatorFromVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
         }
-
-
-        throw new NotImplementedException();
     }
 
     public void Handler(VehicleStartedSucceeded @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+
+        _trackerCollection.CompleteEvent<VehicleStartedSucceeded>();
+        _trackerCollection.RemoveEvent<VehicleStartedFailed>();
+
+        PublishEventIfPossible();
     }
 
     public void Handler(VehicleStartedFailed @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+        _trackerCollection.FailEvent<VehicleStartedSucceeded>();
+        _trackerCollection.CompleteEvent<VehicleStartedFailed>();
+
+        _errors.AddRange(@event.Errors);
+
+        PublishEventIfPossible();
     }
 
     public void Handler(NotPermittedToOperate @event)
@@ -191,7 +195,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
         _trackerCollection.AddEventTracker<VehicleStartedSucceeded>(true, DomainEventType.Succeeder);
         _trackerCollection.AddEventTracker<VehicleStartedFailed>(false, DomainEventType.Failer);
-        _commandBus.Dispatch(new DL.Models.Vehicles.CQRS.Commands.StartVehicle(_vehicleId, CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new DL.Models.Vehicles.CQRS.Commands.StartVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
 
         //no reason to check if finished in these methods that dispatch commands
     }
@@ -202,14 +206,13 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
         _trackerCollection.CompleteEvent<OperatorLackedNeededLicense>();
         _trackerCollection.RemoveEvent<NotPermittedToOperate>();
-        _trackerCollection.FailEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
-        _trackerCollection.RemoveEvent<OperatorLicenseExpired>(); //either that or have an success/error event type enum that is used in the event tracker collection, e.g. EventType.Succeder, EventType.Failer
+        _trackerCollection.FailEvent<PermittedToOperate>(); 
+        _trackerCollection.RemoveEvent<OperatorLicenseExpired>(); 
 
-        //remember events
         _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true, DomainEventType.Succeeder);
         _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true, DomainEventType.Succeeder);
         _commandBus.Dispatch(new RemoveOperatorFromVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
-        //remember events
+        
         _trackerCollection.AddEventTracker<OperatorRemovedVehicle>(true, DomainEventType.Succeeder);
         _commandBus.Dispatch(new RemoveVehicleFromOperator(_vehicleId, _operatorId, CorrelationId, @event.EventId));
 
@@ -221,10 +224,10 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
         _trackerCollection.CompleteEvent<OperatorLicenseExpired>();
         _trackerCollection.RemoveEvent<NotPermittedToOperate>();
-        _trackerCollection.FailEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
-        _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>(); //would still need the required, I think
+        _trackerCollection.FailEvent<PermittedToOperate>(); 
+        _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>();
 
-        throw new NotImplementedException();
+        PublishEventIfPossible();
     }
 
     public void Handler(AttemptToStartVehicleStarted @event)
@@ -247,11 +250,21 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     public void Handler(VehicleNotRequiredToRemoveOperator @event)
     {
-        throw new NotImplementedException();
+        if (CorrelationId != CorrelationId) { return; }
+
+        _trackerCollection.RemoveEvent<VehicleRemovedOperator>();
+        _trackerCollection.CompleteEvent<VehicleNotRequiredToRemoveOperator>();
+
+        PublishEventIfPossible();
     }
 
     public void Handler(VehicleRemovedOperator @event)
     {
-        throw new NotImplementedException();
+        if (CorrelationId != CorrelationId) { return; }
+
+        _trackerCollection.CompleteEvent<VehicleRemovedOperator>();
+        _trackerCollection.RemoveEvent<VehicleNotRequiredToRemoveOperator>();
+
+        PublishEventIfPossible();
     }
 }

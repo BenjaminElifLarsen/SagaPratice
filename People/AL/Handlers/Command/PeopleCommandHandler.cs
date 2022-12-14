@@ -30,7 +30,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var result = _personFactory.CreatePerson(command, validationData);
         if (result is InvalidResult<Person>)
         { //how to add an event for this as there is no aggregate root? Could let the repository take in orphan events and put them in the context. The question thus become how to retrieve them?
-            _unitOfWork.AddOrphanEvnet(new PersonHiredFailed(result.Errors, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new PersonHiredFailed(result.Errors, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
             return new InvalidResultNoData(result.Errors); //or maybe via the unit of work?
         }
@@ -52,7 +52,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         }
         else
         {
-            _unitOfWork.AddOrphanEvnet(new PersonFiredFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new PersonFiredFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
         }
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -63,7 +63,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.PersonRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
-            _unitOfWork.AddOrphanEvnet(new PersonPersonalInformationChangedFailed(new string[] { "Not found." }, 0, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new PersonPersonalInformationChangedFailed(new string[] { "Not found." }, 0, command.CorrelationId, command.CommandId));
             _unitOfWork.Save(); //consider calling something else like 'ProcessEvents'
             return new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
         }
@@ -114,7 +114,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var result = _genderFactory.CreateGender(command, validationData);
         if (result is InvalidResult<Gender>)
         {
-            _unitOfWork.AddOrphanEvnet(new GenderRecognisedFailed(result.Errors, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new GenderRecognisedFailed(result.Errors, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
             return new InvalidResultNoData(result.Errors);
         }
@@ -129,7 +129,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result; //events should not really return data. If something goes wrong another event can be created to inform about this (so sagas and such)
         if (entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new PersonAddedToGenderFailed(new string[] { $"Gender {command.GenderId} was not found." }, command.CorrelationId, command.CommandId)); ;
+            _unitOfWork.AddOrphanEvent(new PersonAddedToGenderFailed(new string[] { $"Gender {command.GenderId} was not found." }, command.CorrelationId, command.CommandId)); ;
             _unitOfWork.Save();
             return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
@@ -175,13 +175,13 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new GenderUnrecognisedFailed(new string[] {"Not Found."}, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new GenderUnrecognisedFailed(new string[] {"Not Found."}, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
             return new SuccessResultNoData();
         }
         if (entity.People.Any())
         {
-            _unitOfWork.AddOrphanEvnet(new GenderUnrecognisedFailed(new string[] { $"People identify with gender {entity.VerbSubject}/{entity.VerbObject}." }, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new GenderUnrecognisedFailed(new string[] { $"People identify with gender {entity.VerbSubject}/{entity.VerbObject}." }, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
             return new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
         }

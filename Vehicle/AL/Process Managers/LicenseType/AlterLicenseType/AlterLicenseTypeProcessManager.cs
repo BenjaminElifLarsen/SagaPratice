@@ -14,7 +14,7 @@ namespace VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
 internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
 { 
     private readonly IVehicleCommandBus _commandBus;
-    private readonly EventTrackerCollection _trackerCollection;
+    private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
 

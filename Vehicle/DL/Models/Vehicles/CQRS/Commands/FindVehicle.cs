@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
-internal class FindVehicle : ICommand
+public class FindVehicle : ICommand
 {
     public Guid CommandId { get; private set; }
 

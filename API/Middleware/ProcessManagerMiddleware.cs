@@ -10,6 +10,7 @@ using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.Registries;
 using VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
+using VehicleDomain.AL.Process_Managers.Vehicle.StartVehicle;
 using VehicleDomain.AL.Registries;
 using VehicleDomain.DL.Models.Vehicles;
 
@@ -56,6 +57,8 @@ public class ProcessManagerMiddleware
                 var selectedRegistry = registries.SingleOrDefault(x => x is IVehicleRegistry) as IVehicleRegistry;
                 var alterPM = processManagers.SingleOrDefault(x => x is IAlterLicenseTypeProcessManager) as IAlterLicenseTypeProcessManager;
                 selectedRegistry.SetUpRouting(alterPM);
+                var startPM = processManagers.SingleOrDefault(x => x is IStartVehicleProcessManager) as IStartVehicleProcessManager;
+                selectedRegistry.SetUpRouting(startPM);
             }
         }
 

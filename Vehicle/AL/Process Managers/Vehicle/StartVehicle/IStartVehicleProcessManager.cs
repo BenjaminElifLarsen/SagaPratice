@@ -3,7 +3,7 @@ using VehicleDomain.DL.Models.Operators.Events;
 using VehicleDomain.DL.Models.Vehicles.Events;
 
 namespace VehicleDomain.AL.Process_Managers.Vehicle.StartVehicle;
-internal interface IStartVehicleProcessManager : IProcessManager,
+public interface IStartVehicleProcessManager : IProcessManager,
     IProcessManagerEventHandler<OperatorNotFound>,
     IProcessManagerEventHandler<VehicleNotFound>,
     IProcessManagerEventHandler<OperatorWasFound>,

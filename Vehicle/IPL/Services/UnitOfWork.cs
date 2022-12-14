@@ -59,7 +59,7 @@ internal class UnitOfWork : IUnitOfWork
         }
     }
 
-    public void AddOrphanEvnet(IDomainEvent @event)
+    public void AddOrphanEvent(IDomainEvent @event)
     {
         _context.Add(@event);
     }

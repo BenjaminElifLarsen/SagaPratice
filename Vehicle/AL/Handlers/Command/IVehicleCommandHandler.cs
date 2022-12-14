@@ -32,6 +32,10 @@ public interface IVehicleCommandHandler :
     ICommandHandler<LicenseAgeRequirementRequireValidation>,
     ICommandHandler<LicenseRenewPeriodRequireValidation>,
     ICommandHandler<FindVehicleInformationsWithSpecificLicenseType>,
-    ICommandHandler<FindVehiclesWithSpecificVehicleInformationAndOperator>
+    ICommandHandler<FindVehiclesWithSpecificVehicleInformationAndOperator>,
+    ICommandHandler<CheckPermissions>,
+    ICommandHandler<StartVehicle>,
+    ICommandHandler<FindOperator>,
+    ICommandHandler<FindVehicle>
 {
 }

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorLackedNeededLicense : IDomainEvent
+public class OperatorLackedNeededLicense : IDomainEvent
 {
     public string AggregateType { get; private set; }
 

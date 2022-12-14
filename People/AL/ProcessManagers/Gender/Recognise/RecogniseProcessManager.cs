@@ -7,7 +7,7 @@ namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 internal sealed class RecogniseProcessManager : IRecogniseProcessManager
 {
     private readonly IPeopleCommandBus _commandBus;
-    private readonly EventTrackerCollection _trackerCollection;
+    private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
 

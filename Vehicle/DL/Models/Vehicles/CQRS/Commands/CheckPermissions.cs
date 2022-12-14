@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
-internal class CheckPermissions : ICommand
+public class CheckPermissions : ICommand
 {
     public Guid CommandId { get; private set; }
 
@@ -13,7 +13,7 @@ internal class CheckPermissions : ICommand
     
     public int VehicleId { get; private set; }
 
-    public CheckPermissions(int operatorId, int vehicleId, Guid correlationId, Guid causationId)
+    internal CheckPermissions(int operatorId, int vehicleId, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         VehicleId = vehicleId;

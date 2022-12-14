@@ -1,21 +1,33 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-internal class OperatorWasFound : IDomainEvent
+public class OperatorWasFound : IDomainEvent
 {
-    public string AggregateType => throw new NotImplementedException();
+    public string AggregateType { get; private set; }
 
-    public int AggregateId => throw new NotImplementedException();
+    public int AggregateId { get; private set; }
 
-    public string EventType => throw new NotImplementedException();
+    public string EventType { get; private set; }
 
-    public Guid EventId => throw new NotImplementedException();
+    public Guid EventId { get; private set; }
 
-    public long TimeStampRecorded => throw new NotImplementedException();
+    public long TimeStampRecorded { get; private set; }
 
-    public Guid CorrelationId => throw new NotImplementedException();
+    public Guid CorrelationId { get; private set; }
 
-    public Guid CausationId => throw new NotImplementedException();
+    public Guid CausationId { get; private set; }
 
-    public int Version => throw new NotImplementedException();
+    public int Version { get; private set; }
+
+    public OperatorWasFound(int operatorId, Guid correlationId, Guid causationId)
+    {
+        AggregateType = typeof(Operator).Name;
+        AggregateId = operatorId;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Version = 0;
+    }
 }

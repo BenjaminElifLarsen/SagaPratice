@@ -157,7 +157,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.Id).Result;
         if(entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new LicenseTypeAlteredFailed(new string[] {"Not found."}, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new LicenseTypeAlteredFailed(new string[] {"Not found."}, command.CorrelationId, command.CommandId));
             _unitOfWork.Save(); 
             return new InvalidResultNoData("Not found.");
         }
@@ -340,7 +340,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         if (entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new VehicleNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId)); ;
+            _unitOfWork.AddOrphanEvent(new VehicleNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId)); ;
             return new InvalidResultNoData($"");
         }
         var removed = entity.RemoveOperator(new(command.OperatorId));
@@ -355,7 +355,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if (entity is null) //needs events
         {
-            _unitOfWork.AddOrphanEvnet(new OperatorNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
+            _unitOfWork.AddOrphanEvent(new OperatorNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
             return new InvalidResultNoData($"");
         }
         entity.RemoveVehicle(new(command.VehicleId));
@@ -366,7 +366,10 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(AttemptToStartVehicle command)
     {
-        throw new NotImplementedException();
+
+        _unitOfWork.AddOrphanEvent(new AttemptToStartVehicleStarted(command.VehicleId, command.OperatorId, command.CorrelationId, command.CommandId));
+        _unitOfWork.Save();
+        return new SuccessResultNoData();
         //var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
         //if (entity is null)
         //{
@@ -404,7 +407,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.LicenseTypeRepository.GetForOperationAsync(command.LicenseTypeId).Result;
         if (entity is null)
         {
-            //error most likely as this should only be called by an evnet.
+            //error most likely as this should only be called by an event
         }
         entity.RemoveOperator(new(command.OperatorId));
         entity.AddDomainEvent(new LicenseTypeOperatorRemoved(entity, command.CorrelationId, command.CommandId));
@@ -457,14 +460,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if(entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            _unitOfWork.AddOrphanEvent(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
             return new InvalidResultNoData("Not Found.");
         }
 
         var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
         if(license is null)
         {
-            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            _unitOfWork.AddOrphanEvent(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
             return new InvalidResultNoData("License Not Found.");
         }
 
@@ -488,14 +491,14 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var entity = _unitOfWork.OperatorRepository.GetForOperationAsync(command.OperatorId).Result;
         if (entity is null)
         {
-            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            _unitOfWork.AddOrphanEvent(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
             return new InvalidResultNoData("Not Found.");
         }
 
         var license = entity.GetLicenseViaLicenseType(command.LicenseTypeId);
         if (license is null)
         {
-            _unitOfWork.AddOrphanEvnet(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
+            _unitOfWork.AddOrphanEvent(new OperatorForAgeValidatioNotFound(command.OperatorId, command.LicenseTypeId, command.CorrelationId, command.CausationId));
             return new InvalidResultNoData("License Not Found.");
         }
 
@@ -516,14 +519,60 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
     public Result Handle(FindVehicleInformationsWithSpecificLicenseType command)
     {
         var list = _unitOfWork.VehicleInformationRepository.FindAllWithSpecificLicenseTypeId(command.LicenseTypeId, new VehicleInformationIdQuery()).Result;
-        _unitOfWork.AddOrphanEvnet(new FoundVehicleInformations(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
+        _unitOfWork.AddOrphanEvent(new FoundVehicleInformations(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
         return new SuccessResultNoData();
     }
 
     public Result Handle(FindVehiclesWithSpecificVehicleInformationAndOperator command)
     {
         var list = _unitOfWork.VehicleRepository.FindSpecificByOperatorIdAndVehicleInformationsAsync(command.OperatorId, command.VehicleInformationIds, new VehicleIdQuery()).Result;
-        _unitOfWork.AddOrphanEvnet(new VehiclesFoundWithSpecificVehicleInformationAndOperator(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
+        _unitOfWork.AddOrphanEvent(new VehiclesFoundWithSpecificVehicleInformationAndOperator(command.OperatorId, list.Select(x => x.Id), command.CorrelationId, command.CommandId));
         return new SuccessResultNoData();
+    }
+
+    public Result Handle(CheckPermissions command)
+    {
+        //have methods to check against the context, see Design.txt
+        throw new NotImplementedException();
+    }
+
+    public Result Handle(StartVehicle command)
+    {
+        var entity = _unitOfWork.VehicleRepository.GetForOperationAsync(command.VehicleId).Result;
+        //should handle a null reference, should not happen but may in a real enviroment
+        if (entity.InUse)
+        {
+            entity.AddDomainEvent(new VehicleStartedFailed(entity, new string[] { "Already started." }, command.CorrelationId, command.CommandId));
+            _unitOfWork.VehicleRepository.Update(entity);
+            return new InvalidResultNoData();
+        }
+        entity.StartOperating(new(command.OperatorId)); //a vehicle that is in the process of being sold should not permit being operated?
+        _unitOfWork.VehicleRepository.Update(entity);
+        return new SuccessResultNoData();
+    }
+
+    public Result Handle(FindOperator command)
+    {
+        var exist = !_unitOfWork.OperatorRepository.IsIdUniqueAsync(command.OperatorId).Result;
+        if (exist)
+        {
+            _unitOfWork.AddOrphanEvent(new OperatorWasFound(command.OperatorId, command.CorrelationId, command.CommandId));
+            return new SuccessResultNoData();
+        }
+        _unitOfWork.AddOrphanEvent(new OperatorNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
+        return new InvalidResultNoData();
+    }
+
+    public Result Handle(FindVehicle command)
+    {
+        var exist = _unitOfWork.VehicleRepository.DoesVehicleExist(command.VehicleId).Result;
+        if (exist)
+        {
+            _unitOfWork.AddOrphanEvent(new VehicleWasFound(command.VehicleId, command.CorrelationId, command.CommandId));
+            return new SuccessResultNoData();
+        }
+
+        _unitOfWork.AddOrphanEvent(new VehicleNotFound(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
+        return new InvalidResultNoData();
     }
 }

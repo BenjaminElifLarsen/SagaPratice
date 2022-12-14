@@ -29,8 +29,8 @@ Events needed:
 	VehicleNotFound
 	VehicleStartedSuccessed
 	VehicleStartedFailed
-	OperatorLackedPermission // NotPermittedToOperate
-	OperatorHadPermission // PermittedToOperate
+	NotPermittedToOperate
+	PermittedToOperate
 	VehicleInformationLicenseTypeArquired
 	OperatorLackedNeededLicense
 	OperatorLicenseExpired
@@ -48,6 +48,8 @@ Events needed:
 	//could have similar when checking permission, do the collections in vehicle and operator 'know' of each other
 
 
+regarding startpm activity diagram, the 'start vehicle' action should have been before the decision node
+	could also make the diagram more detailed. After all it does not really display the flow between commandhandler, eventbus, pm, and commandbus.
 
 
 

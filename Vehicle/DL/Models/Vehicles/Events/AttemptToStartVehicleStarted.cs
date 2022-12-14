@@ -3,23 +3,36 @@
 namespace VehicleDomain.DL.Models.Vehicles.Events;
 public class AttemptToStartVehicleStarted : IDomainEvent<AttemptToStartVehicleStartedData>
 {
-    public string AggregateType => throw new NotImplementedException();
+    public string AggregateType { get; private set;}
 
-    public int AggregateId => throw new NotImplementedException();
+    public int AggregateId { get; private set;}
 
-    public string EventType => throw new NotImplementedException();
+    public string EventType { get; private set;}
 
-    public Guid EventId => throw new NotImplementedException();
+    public Guid EventId { get; private set;}
 
-    public long TimeStampRecorded => throw new NotImplementedException();
+    public long TimeStampRecorded { get; private set;}
 
-    public Guid CorrelationId => throw new NotImplementedException();
+    public Guid CorrelationId { get; private set;}
 
-    public Guid CausationId => throw new NotImplementedException();
+    public Guid CausationId { get; private set;}
 
-    public int Version => throw new NotImplementedException();
+    public int Version { get; private set;}
 
-    public AttemptToStartVehicleStartedData Data => throw new NotImplementedException();
+    public AttemptToStartVehicleStartedData Data { get; private set;}
+
+    public AttemptToStartVehicleStarted(int vehicleId, int operatorId, Guid correlationId, Guid cuasationId)
+    {
+        AggregateType = typeof(Vehicle).Name;
+        AggregateId = vehicleId;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = cuasationId;
+        Version = 0;
+        Data = new(operatorId, vehicleId);
+    }
 }
 
 public class AttemptToStartVehicleStartedData
@@ -27,8 +40,9 @@ public class AttemptToStartVehicleStartedData
     public int OperatorId { get; private set; }
     public int VehicleId { get; private set; }
 
-    internal AttemptToStartVehicleStartedData()
+    internal AttemptToStartVehicleStartedData(int operatorId, int vehicleId)
     {
-
+        OperatorId = operatorId;
+        VehicleId = vehicleId;
     }
 }

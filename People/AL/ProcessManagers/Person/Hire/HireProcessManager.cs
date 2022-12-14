@@ -8,7 +8,7 @@ namespace PeopleDomain.AL.ProcessManagers.Person.Hire;
 internal sealed class HireProcessManager : IHireProcessManager
 {
     private readonly IPeopleCommandBus _commandBus;
-    private readonly EventTrackerCollection _trackerCollection;
+    private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
 

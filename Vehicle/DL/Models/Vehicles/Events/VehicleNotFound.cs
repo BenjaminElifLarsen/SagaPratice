@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-internal class VehicleNotFound : IDomainEventFail
+public class VehicleNotFound : IDomainEventFail
 {
     public string AggregateType { get; private set; }
 
@@ -21,7 +21,7 @@ internal class VehicleNotFound : IDomainEventFail
 
     public IEnumerable<string> Errors { get; private set; }
 
-    public VehicleNotFound(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    internal VehicleNotFound(IEnumerable<string> errors, Guid correlationId, Guid causationId)
     {
         AggregateType = typeof(Vehicle).Name;
         AggregateId = 0;

@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
 public class VehicleWasFound : IDomainEvent
@@ -19,7 +20,7 @@ public class VehicleWasFound : IDomainEvent
 
     public int Version { get; private set; }
 
-    public VehicleWasFound(Vehicle aggregate, Guid correlationId, Guid causationId)
+    internal VehicleWasFound(Vehicle aggregate, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.VehicleId;
@@ -29,5 +30,17 @@ public class VehicleWasFound : IDomainEvent
         CorrelationId = correlationId;
         CausationId = causationId;
         Version = aggregate.Events.Count();
+    }
+
+    internal VehicleWasFound(int vehicleId, Guid correlationId, Guid causationId)
+    {
+        AggregateType = typeof(Vehicle).Name;
+        AggregateId = vehicleId;
+        EventType = GetType().Name;
+        EventId = Guid.NewGuid();
+        TimeStampRecorded = DateTime.Now.Ticks;
+        CorrelationId = correlationId;
+        CausationId = causationId;
+        Version = 0;
     }
 }

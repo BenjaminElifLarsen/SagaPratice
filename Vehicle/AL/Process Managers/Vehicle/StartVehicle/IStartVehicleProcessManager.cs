@@ -8,12 +8,14 @@ internal interface IStartVehicleProcessManager : IProcessManager,
     IProcessManagerEventHandler<VehicleNotFound>,
     IProcessManagerEventHandler<OperatorWasFound>,
     IProcessManagerEventHandler<VehicleWasFound>,
-    IProcessManagerEventHandler<VehicleStartedSuccessed>,
+    IProcessManagerEventHandler<VehicleStartedSucceeded>,
     IProcessManagerEventHandler<VehicleStartedFailed>,
     IProcessManagerEventHandler<NotPermittedToOperate>,
     IProcessManagerEventHandler<PermittedToOperate>,
     IProcessManagerEventHandler<OperatorLackedNeededLicense>,
     IProcessManagerEventHandler<OperatorLicenseExpired>,
-    IProcessManagerEventHandler<AttemptToStartVehicleStarted>
+    IProcessManagerEventHandler<AttemptToStartVehicleStarted>,
+    IProcessManagerEventHandler<VehicleNotRequiredToRemoveOperator>,
+    IProcessManagerEventHandler<VehicleRemovedOperator>
 {
 }

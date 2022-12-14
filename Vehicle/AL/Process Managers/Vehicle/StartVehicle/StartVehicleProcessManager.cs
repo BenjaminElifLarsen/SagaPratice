@@ -131,6 +131,8 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
         //if other not found, order this one to remove its operator id (to ensure it is not present)
         //if both were found order it to check permissions
+        _trackerCollection.UpdateEvent<VehicleWasFound>(DomainEventStatus.Completed);
+
 
         if (_trackerCollection.HasEventCompleted<OperatorWasFound>() is true)
         {
@@ -142,15 +144,17 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
             _commandBus.Dispatch(new CheckPermissions(_operatorId, _vehicleId, CorrelationId, @event.EventId));
         }
         else if (_trackerCollection.HasEventFailed<OperatorWasFound>() is true)
-        { //set the event tracker
-            _commandBus.Dispatch(new RemoveOperatorFromVehicle(_vehicleId, _operatorId, CorrelationId, @event.EventId));
+        {
+            _trackerCollection.AddEventTracker<VehicleRemovedOperator>(true);
+            _trackerCollection.AddEventTracker<VehicleNotRequiredToRemoveOperator>(true);
+            _commandBus.Dispatch(new RemoveOperator(_operatorId, _vehicleId, CorrelationId, @event.EventId));
         }
 
 
         throw new NotImplementedException();
     }
 
-    public void Handler(VehicleStartedSuccessed @event)
+    public void Handler(VehicleStartedSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -168,19 +172,40 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+        _trackerCollection.UpdateEvent<NotPermittedToOperate>(DomainEventStatus.Completed);
+        _trackerCollection.RemoveEvent<PermittedToOperate>();
+        _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>();
+        _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
+
+        PublishEventIfPossible();
     }
 
     public void Handler(PermittedToOperate @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        throw new NotImplementedException();
+        _trackerCollection.UpdateEvent<PermittedToOperate>(DomainEventStatus.Completed);
+        _trackerCollection.RemoveEvent<NotPermittedToOperate>();
+        _trackerCollection.RemoveEvent<OperatorLackedNeededLicense>();
+        _trackerCollection.RemoveEvent<OperatorLicenseExpired>();
+
+        _trackerCollection.AddEventTracker<VehicleStartedSucceeded>(true);
+        _trackerCollection.AddEventTracker<VehicleStartedFailed>(false);
+        _commandBus.Dispatch(new DL.Models.Vehicles.CQRS.Commands.StartVehicle(_vehicleId, @event.CorrelationId, @event.EventId));
+
+        //no reason to check if finished in these methods that dispatch commands
     }
 
     public void Handler(OperatorLackedNeededLicense @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
+
+        _trackerCollection.UpdateEvent<OperatorLackedNeededLicense>(DomainEventStatus.Completed);
+        _trackerCollection.RemoveEvent<NotPermittedToOperate>();
+        _trackerCollection.RemoveEvent<PermittedToOperate>(); //consider setting this failed instead to ensure a InvalidResultNoData is transmitted back
+        _trackerCollection.RemoveEvent<OperatorLicenseExpired>(); //either that or have an success/error event type enum that is used in the event tracker collection, e.g. EventType.Succeder, EventType.Failer
+
+
 
         throw new NotImplementedException();
     }
@@ -208,5 +233,15 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         _commandBus.Dispatch(new FindVehicle(_vehicleId, @event.CorrelationId, @event.EventId));
 
         PublishEventIfPossible();
+    }
+
+    public void Handler(VehicleNotRequiredToRemoveOperator @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Handler(VehicleRemovedOperator @event)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -78,11 +78,11 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonAddedToGenderSuccessed @event)
+    public void Handler(PersonAddedToGenderSucceeded @event)
     {
         if(@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Completed); 
+        _trackerCollection.UpdateEvent<PersonAddedToGenderSucceeded>(DomainEventStatus.Completed); 
         _trackerCollection.RemoveEvent<PersonAddedToGenderFailed>();
         PublishEventIfPossible();
     }
@@ -92,16 +92,16 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<PersonAddedToGenderFailed>(DomainEventStatus.Completed);
-        _trackerCollection.UpdateEvent<PersonAddedToGenderSuccessed>(DomainEventStatus.Failed);
+        _trackerCollection.UpdateEvent<PersonAddedToGenderSucceeded>(DomainEventStatus.Failed);
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonRemovedFromGenderSuccessed @event)
+    public void Handler(PersonRemovedFromGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Completed);
+        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSucceeded>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
         PublishEventIfPossible();
     }
@@ -111,7 +111,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         if (@event.CorrelationId != CorrelationId) { return; }
 
         _trackerCollection.UpdateEvent<PersonRemovedFromGenderFailed>(DomainEventStatus.Completed);
-        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSuccessed>(DomainEventStatus.Failed);
+        _trackerCollection.UpdateEvent<PersonRemovedFromGenderSucceeded>(DomainEventStatus.Failed);
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
     }
@@ -120,9 +120,9 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.AddEventTracker<PersonAddedToGenderSuccessed>(true);
+        _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true);
         _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false); 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSuccessed>(true);
+        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true);
         _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false);
 
         _trackerCollection.UpdateEvent<PersonChangedGender>(DomainEventStatus.Completed);

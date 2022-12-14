@@ -23,16 +23,16 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
         _errors = new();
         _handlers = new();
         _trackerCollection = new();
-        _trackerCollection.AddEventTracker<GenderRecognisedSuccessed>(true);
+        _trackerCollection.AddEventTracker<GenderRecognisedSucceeded>(true);
         _trackerCollection.AddEventTracker<GenderRecognisedFailed>(false);
     }
 
-    public void Handler(GenderRecognisedSuccessed @event)
+    public void Handler(GenderRecognisedSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
 
-        _trackerCollection.UpdateEvent<GenderRecognisedSuccessed>(DomainEventStatus.Completed);
+        _trackerCollection.UpdateEvent<GenderRecognisedSucceeded>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<GenderRecognisedFailed>();
 
         PublishEventIfPossible();
@@ -42,7 +42,7 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.UpdateEvent<GenderRecognisedSuccessed>(DomainEventStatus.Failed);
+        _trackerCollection.UpdateEvent<GenderRecognisedSucceeded>(DomainEventStatus.Failed);
         _trackerCollection.UpdateEvent<GenderRecognisedFailed>(DomainEventStatus.Completed);
 
         _errors.AddRange(@event.Errors);

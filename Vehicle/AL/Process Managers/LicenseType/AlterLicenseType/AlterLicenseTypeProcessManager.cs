@@ -40,7 +40,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         if(CorrelationId == default)
         {
             CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<LicenseTypeAlteredSuccessed>(true);
+            _trackerCollection.AddEventTracker<LicenseTypeAlteredSucceeded>(true);
             _trackerCollection.AddEventTracker<LicenseTypeAlteredFailed>(false);
             _trackerCollection.AddEventTracker<LicenseTypeAgeRequirementChanged>(true);
             _trackerCollection.AddEventTracker<LicenseTypeRenewPeriodChanged>(true);
@@ -65,11 +65,11 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
         _handlers.Add(handler);
     }
 
-    public void Handler(LicenseTypeAlteredSuccessed @event)
+    public void Handler(LicenseTypeAlteredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeAlteredSuccessed>(DomainEventStatus.Completed);
+        _trackerCollection.UpdateEvent<LicenseTypeAlteredSucceeded>(DomainEventStatus.Completed);
         _trackerCollection.RemoveEvent<LicenseTypeAlteredFailed>();
 
         if (!@event.Data.RenewPeriodChanged)
@@ -87,7 +87,7 @@ internal class AlterLicenseTypeProcessManager : IAlterLicenseTypeProcessManager
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.UpdateEvent<LicenseTypeAlteredSuccessed>(DomainEventStatus.Failed);
+        _trackerCollection.UpdateEvent<LicenseTypeAlteredSucceeded>(DomainEventStatus.Failed);
         _trackerCollection.UpdateEvent<LicenseTypeAlteredFailed>(DomainEventStatus.Completed);
 
         _trackerCollection.RemoveEvent<LicenseTypeAgeRequirementChanged>();

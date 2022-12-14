@@ -6,7 +6,7 @@ using VehicleDomain.DL.Models.Vehicles.Events;
 
 namespace VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
 public interface IAlterLicenseTypeProcessManager : IProcessManager,
-    IProcessManagerEventHandler<LicenseTypeAlteredSuccessed>,
+    IProcessManagerEventHandler<LicenseTypeAlteredSucceeded>,
     IProcessManagerEventHandler<LicenseTypeAlteredFailed>,
     IProcessManagerEventHandler<LicenseTypeAgeRequirementChanged>,
     IProcessManagerEventHandler<LicenseTypeRenewPeriodChanged>,

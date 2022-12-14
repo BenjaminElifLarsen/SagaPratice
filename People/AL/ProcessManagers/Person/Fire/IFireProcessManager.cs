@@ -3,9 +3,9 @@ using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Person.Fire;
 public interface IFireProcessManager : IProcessManager,
-    IProcessManagerEventHandler<PersonFiredSuccessed>,
+    IProcessManagerEventHandler<PersonFiredSucceeded>,
     IProcessManagerEventHandler<PersonFiredFailed>,
-    IProcessManagerEventHandler<PersonRemovedFromGenderSuccessed>,
+    IProcessManagerEventHandler<PersonRemovedFromGenderSucceeded>,
     IProcessManagerEventHandler<PersonRemovedFromGenderFailed>
 {
 }

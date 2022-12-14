@@ -5,8 +5,8 @@ namespace PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 public interface IPersonalInformationChangeProcessManager : IProcessManager,
     IProcessManagerEventHandler<PersonPersonalInformationChangedSuccessed>,
     IProcessManagerEventHandler<PersonPersonalInformationChangedFailed>,
-    IProcessManagerEventHandler<PersonAddedToGenderSuccessed>,
-    IProcessManagerEventHandler<PersonRemovedFromGenderSuccessed>,
+    IProcessManagerEventHandler<PersonAddedToGenderSucceeded>,
+    IProcessManagerEventHandler<PersonRemovedFromGenderSucceeded>,
     IProcessManagerEventHandler<PersonChangedGender>, 
     IProcessManagerEventHandler<PersonAddedToGenderFailed>,
     IProcessManagerEventHandler<PersonRemovedFromGenderFailed>

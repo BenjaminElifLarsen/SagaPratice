@@ -3,9 +3,9 @@ using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Person.Hire;
 public interface IHireProcessManager : IProcessManager,
-    IProcessManagerEventHandler<PersonHiredSuccessed>,
+    IProcessManagerEventHandler<PersonHiredSucceeded>,
     IProcessManagerEventHandler<PersonHiredFailed>,
-    IProcessManagerEventHandler<PersonAddedToGenderSuccessed>,
+    IProcessManagerEventHandler<PersonAddedToGenderSucceeded>,
     IProcessManagerEventHandler<PersonAddedToGenderFailed>
 {
 }

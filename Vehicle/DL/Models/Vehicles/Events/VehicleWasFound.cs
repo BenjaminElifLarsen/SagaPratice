@@ -1,5 +1,4 @@
 ﻿using Common.Events.Domain;
-using Common.Events.Store;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
 public class VehicleWasFound : IDomainEvent

@@ -532,7 +532,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
 
     public Result Handle(CheckPermissions command)
     {
-        //have methods to check against the context, see Design.txt
+        //have repo methods to check against the context, see Design.txt
         throw new NotImplementedException();
     }
 

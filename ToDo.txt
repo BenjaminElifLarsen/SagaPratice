@@ -6,16 +6,7 @@ consider based your solution on the Domain Events section from https://vaadin.co
 but code to work with the idea of no service can run all the time
 also look at Domain Services
 
-
-when updating, data should be validated before updating the entities and the entities should validate the data themsevles too and return an interger if data is invalid
-
 https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation
-
-Consider how to best use ISpecification regarding entity update. If having e.g. a ISpecification<int>, the model can validate before changing value.
-	But if using e.g. ISpecification<Person> then it is locked to the model and ensure ISpecification cannot be used with 'any random' value, but it require updating the value first and then validate. This could put the entity in an invalid status.
-	Could recover to the pre-updated value by saving it as a temp in the update method, but not the prettist solution.
-	All cases return an int, 0 is valid else an enum int
-
 
 throw in jwt
 two users, one with permission for everything, the other only for some aggregate roots / domains / commands / queries.
@@ -23,45 +14,41 @@ set up hasher and salter in security project. Project should have an user model 
 
 split up some classes/interfaces to better follow the single responsibility principle.
 
-
-vehicle event sourcing: Could event source when the vehicle was in use and stopped be in use (operator id, time, bool started, distance moved)
-
 Consider how events with data can best be stored in a context, like a mssql database, given each event got their own Data type.
 Could store them as a json string.
 
 consider moving the repos in Vehicle.DL into the IPL 
-
-figure out what layer would be best for the busses.
-	parts:
-		event bus
-		event handler
-		command bus
-		command handler
-	communication:
-		the event handler would communicate with the command bus.
-		command bus would communicate with the command handler.
-		command handler can create events that are stored in the domain models
-		the unit of work publishes, via the event bus, the events.
-		the events should be handled by the event handler. 
-	dependencies:
-		event bus got no dependencies
-		event handler needs to talk to the command bus
-		the command bus got no dependencies
-		the command handler does not talk with any of those parts as events are processed in unit of work
-			unit of work needs to talk with the event bus
-	possible problem:
-		event bus depends on event handler which depends on command bus which depends on command handler which depends on unit of work which depends on event bus which...
-		wait, does the busses really depend on the handlers? The handlers need to registrate themselves in the busses, but the busses themselves should have no knowledge of the handler contracts. The busses just want Action<T>s where T : IDomainEvent/ICommand
-		ensure you are correct and update dependencies as busses have no dependencies. 
-	considerations:
-		fact: communication to the layer below is permitted, but not the layer above.
-		The busses needs to talk with the handlers. At least the command handler depends on DL and IPL, because of the DL dependency it cannot be placed there.
-		Thus the handlers are either in the AL or IPL. Since they have nothing to do with the context or persisting of data, IPL does not make sense.
-		Thus the handlers are placed in AL.
-		The busses depends on the handlers and are thus also stored in the AL. Wrong, they do not depend on the handlers, the handlers depend on them, and can thus be placed in the DL.
-		(The AL is considered a layer above IPL.)
-Need to figuere out how to registrate event and commands in the busses. Done via the {Domain}Registry
-Remember that the controllers also need to talk with the command busses, but this is not important. Done by applying the command bus and unit of work as parameters to the services.
+	figure out what layer would be best for the busses.
+		parts:
+			event bus
+			event handler
+			command bus
+			command handler
+		communication:
+			the event handler would communicate with the command bus.
+			command bus would communicate with the command handler.
+			command handler can create events that are stored in the domain models
+			the unit of work publishes, via the event bus, the events.
+			the events should be handled by the event handler. 
+		dependencies:
+			event bus got no dependencies
+			event handler needs to talk to the command bus
+			the command bus got no dependencies
+			the command handler does not talk with any of those parts as events are processed in unit of work
+				unit of work needs to talk with the event bus
+		possible problem:
+			event bus depends on event handler which depends on command bus which depends on command handler which depends on unit of work which depends on event bus which...
+			wait, does the busses really depend on the handlers? The handlers need to registrate themselves in the busses, but the busses themselves should have no knowledge of the handler contracts. The busses just want Action<T>s where T : IDomainEvent/ICommand
+			ensure you are correct and update dependencies as busses have no dependencies. 
+		considerations:
+			fact: communication to the layer below is permitted, but not the layer above.
+			The busses needs to talk with the handlers. At least the command handler depends on DL and IPL, because of the DL dependency it cannot be placed there.
+			Thus the handlers are either in the AL or IPL. Since they have nothing to do with the context or persisting of data, IPL does not make sense.
+			Thus the handlers are placed in AL.
+			The handlers depends on the busses and are thus also stored in the AL. The busses could be placed in the domain model layer, but they are not domain models, so maybe just keep them in the AL
+			(The AL is considered a layer above IPL for me.)
+	Need to figuere out how to registrate event and commands in the busses. Done via the {Domain}Registry
+	Remember that the controllers also need to talk with the command busses, but this is not important. Done by applying the command bus and unit of work as parameters to the services.
 
 a command:
 	can have many senders, but only one receiver
@@ -70,9 +57,6 @@ an event:
 
 move Operator queries over to their service.
 
-events to do
-	licenseType does not get updated when adding a vehicle information
-	vehicle information does not get updated when adding a vehicle.
 
 
 License Type need to deal with CanBeIssedFrom, update specifications, ctor, factory, and error(handling)
@@ -85,29 +69,8 @@ instead of From{Thing} for commands, have By{Thing}
 
 if a command fails it should trigger a failer event. Can also have 'partial' completed events, so a handler can transmit success and failer events at the same time, if the bl permits that.
 
-from reading some more on process manager, it would make sense to have a process manager for each task in the system.
-e.g. one for removing an user from the system, one for adding a vehicle and so on.
-process managers are for communication in a bounded context, while saga are for communication that span multiple bounded contexts.
-an aggregate sends the start event to the process manager, which then mediate command and events between the different aggregates in play. 
-	so instead of triggering the event(s) before saving in the unit of work the process manager handlers them as their arrive  
-	so aggregate creates an event on the event bus. When processed this start up one or more process managers. The process manager knows how to response to the event, e.g. which commands to place on the command bus and it listen to the events (via the event bus) that these commands place pn the event bus.
-	when it receives events it can trigger more commands and wait on their events and so on. Finally it itself places an event that goes back to the aggregate and how-/whatever transmitted the start command. So the process manager does not return any result directly.
-		each process manager should give a process manger unique id to their own commands and events should contain this id so the process manager knowns if it need to response to an event from the event bus.
-		currently an event is sent to the event bus which transmit it to the event handler which creates a command and transmit it to the command bus which transmit it to the command bus.
-		from reading and the current implementation (the read stuff did not mention busses/handlers [most likely because of focus]) the process manager should be placed between the event bus or event handler and the command bus.
-			the question is if the events should be transmitted directly to the process manager(s) or go through the event handler. The event handler could transmit the events to the process manager(s) and to the command bus (if needed). 
-			if using the event handler the process manager does not need to registrate with the event bus, but then the event handler needs to know how to handle process managers.
-			most likely best to place the process manager between event bus and command bus. Let it registates its handlers with the event bus. The process manager needs an instance of the command bus.
-	when should the events, caused by the command handler, be pushed to the event bus? The command handler does not know of the event bus
-	maybe keep the event triggering that is currently done in UnitOfWork.
-
-
-it seems like instead of waiting for Result coming back in the services they should wait for events.
-
-
 read up more on process managers, got one to work, but not super happy with how it is done and are sure they can be done much better.
 	some people mention state machine for pms 
-
 
 remember to seal the new events and commands
 
@@ -121,6 +84,31 @@ https://tech.justeattakeaway.com/2015/05/26/process-managers/
 maybe don't modify the old ones, but consider this for the next pms. This will also permit to be compare the different designs.
 the old ones should be fine for a basic system like this, but those described in the link could be more useful when it need things like user input or data from outside the system between parts.
 	consider it for the buying and selling of vehicles, e.g. a vehicle is first sold when someone has 'ordered' to buy it (which prevents others from buying it) and then payed for it within a timelimit.
+
+look into a better way to handle events regarding storage and aggregates
+https://stackoverflow.com/questions/12362641/relation-between-command-handlers-aggregates-the-repository-and-the-event-stor?rq=1
+maybe slip the domain evnets into two groups, both inherit from an Event record/contract
+	DomainEvent (similar or fully the same as the current in design)
+		appended to their aggregate, only about modifications to the aggregate
+	SystemEvent (consider a better name)
+		used for retrieving information like if a entity with a specific id exist, checking stuff like permission and such, non-modifying responses
+		these are always orphan events as they don't really belong to an event when looking at what normmally is meant
+	The event storage will store the domain events 
+	The system events will be discarded when used
+	Have a ctor that takes in events from the storage to create an aggregate 
+	Maybe have the current design in one domain and this new design in another to better compare them
+		people for the old 
+		vehicle for the new (as vehicle is not done yet)
+	will require a new repo contract, aggregate root contract, and process manager event handler contract
+		(process manager event handler need to be modified to take in Event rather than DomainEvent)
+	when working on the event store, remember memento pattern
+	store should be interacted with through repos 
+		consider how to best to modify the read queries (cqrs) to work with events 
+	Consider what to do with the Data aspect of the domain events (either keep it like it is or make it such that Data properties are properties on the event implementation itself)
+	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
+
+regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
+
 
 
 

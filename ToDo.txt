@@ -105,6 +105,7 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 	store should be interacted with through repos 
 		consider how to best to modify the read queries (cqrs) to work with events 
 	Consider what to do with the Data aspect of the domain events (either keep it like it is or make it such that Data properties are properties on the event implementation itself)
+		the only point where a generic domain event's data matter is when it is needed to encode and decode regarding to JSON for storage
 	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
 
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents

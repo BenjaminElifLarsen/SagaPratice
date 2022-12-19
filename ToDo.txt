@@ -108,6 +108,10 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 		the only point where a generic domain event's data matter is when it is needed to encode and decode regarding to JSON for storage
 	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
 
+	could use switch cases for storing type of domain event implementation
+		so a switch case on type that returns a unique int that identity the concrete domain event
+		and a switch case on int that return the type of the concrete domain event
+
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
 

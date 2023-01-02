@@ -109,6 +109,8 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
 	not sure ORMs like EntityFramework Core would be able to do its job correct/best way if using interfaces for the events.
 
+	maybe update all boundared contexes to the new design, firstly people as it is the more simple one
+		keep the current working version, while implementing the new, event, ones
 
 	could use switch cases for storing type of domain event implementation
 		so a switch case on type that returns a unique int that identity the concrete domain event

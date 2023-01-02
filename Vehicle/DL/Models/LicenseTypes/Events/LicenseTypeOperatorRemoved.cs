@@ -27,7 +27,7 @@ public class LicenseTypeOperatorRemoved : IDomainEvent
         EventId = Guid.NewGuid();
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = aggregate.Events.Count();
+        Version = aggregate.OldEventsDesign.Count();
 
     }
 }

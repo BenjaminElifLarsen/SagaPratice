@@ -26,7 +26,7 @@ public class NotPermittedToOperate : IDomainEvent
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
-        Version = aggregate.Events.Count();
+        Version = aggregate.OldEventsDesign.Count();
         CorrelationId = correlationId;
         CausationId = causationId;
     }

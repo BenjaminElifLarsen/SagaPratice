@@ -30,7 +30,7 @@ public class VehicleRemovedOperator : IDomainEvent<VehicleRemovedOperatorData>
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = aggregate.Events.Count();
+        Version = aggregate.OldEventsDesign.Count();
         Data = new(operatorId, aggregate.VehicleId);
     }
 }

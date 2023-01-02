@@ -24,7 +24,11 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     public IEnumerable<IdReference<int>> VehicleInformations => _vehicleInformations;
     public IEnumerable<IdReference<int>> Operators => _operators;
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+
+    public int Id => throw new NotImplementedException();
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     private LicenseType()
     {
@@ -88,5 +92,10 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     {
         if (_licenseTypeId == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -21,7 +21,11 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+
+    public int Id => throw new NotImplementedException();
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     private Person()
     {
@@ -78,6 +82,11 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
     {
         if (this == eventItem.AggregateId) //could cause an expection if this fails
             _events.Remove(eventItem);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        throw new NotImplementedException();
     }
 
     public static bool operator ==(Person left, int right)

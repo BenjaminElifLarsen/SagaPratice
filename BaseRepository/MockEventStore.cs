@@ -3,10 +3,12 @@ using Common.RepositoryPattern;
 
 namespace BaseRepository;
 public class MockEventStore : IEventStore
-{
+{ //current version does not implement memento pattern, implement when current version is well tested and fully working.
     private readonly IList<Event> _events;
     private readonly IList<Aggregate> _aggregates;
     private readonly IList<Snapshot> _snapshots;
+
+    private readonly ushort _amountOfEventsBeforeSnapshop = 10;
 
     public MockEventStore()
     {
@@ -25,11 +27,14 @@ public class MockEventStore : IEventStore
             entity = new(aggregate);
             _aggregates.Add(entity);
         }
-
-        foreach(var @event in aggregate.GetEvents.Select(x => new Event(x)).ToList())
+        //need to handle inconsistence of event ids and expected id, e.g. aggregate.Version = 10, first event id = 12
+        //or 11 and next is 15
+        //errors can also happen if two different commands are modifying the same entity at the same time
+        foreach(var @event in aggregate.Events.Where(x => x.Version > entity.Version).Select(x => new Event(x)).ToList())
         {
             _events.Add(@event);
         }
+        entity.UpdateVersion(aggregate.Events.OrderBy(x => x.Version).Last().Version);
     }
 
     public async Task<IEnumerable<Event>> LoadStreamAsync(int id, string aggregateType)

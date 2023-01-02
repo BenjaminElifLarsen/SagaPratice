@@ -132,7 +132,7 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         if (entity is not null)
         {
             entity.Delete();
-            entity.AddDomainEvent(new OperatorRemoved(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new OperatorRemoved(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
             _unitOfWork.OperatorRepository.Update(entity);
             _unitOfWork.Save();
         }
@@ -182,15 +182,15 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         { //trigger event
             ageChanged = true;
             entity.ChangeAgeRequirement(command.AgeRequirement.AgeRequirement);
-            entity.AddDomainEvent(new LicenseTypeAgeRequirementChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new LicenseTypeAgeRequirementChanged(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
         }
         if(command.RenewPeriod is not null)
         { //trigger event
             renewChanged = true;
             entity.ChangeRenewPeriod(command.RenewPeriod.RenewPeriod);
-            entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new LicenseTypeRenewPeriodChanged(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
         }
-        entity.AddDomainEvent(new LicenseTypeAlteredSucceeded(entity, entity.Events.Count(), typeChanged, ageChanged, renewChanged, command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new LicenseTypeAlteredSucceeded(entity, entity.OldEventsDesign.Count(), typeChanged, ageChanged, renewChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         _unitOfWork.Save();
         return new SuccessResultNoData();
@@ -474,12 +474,12 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var status = entity.ValidateLicenseAgeRequirementIsFulfilled(command.NewAgeRequirement, command.LicenseTypeId);
         if (status == true)
         {
-            entity.AddDomainEvent(new OperatorLicenseAgeRequirementValidated(entity, entity.Events.Count(), command.CorrelationId, command.CommandId)); ;
+            entity.AddDomainEvent(new OperatorLicenseAgeRequirementValidated(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId)); ;
         }
         else
         {
             entity.RemoveLicense(license);
-            entity.AddDomainEvent(new OperatorLicenseRetracted(entity, license, entity.Events.Count(), command.CorrelationId, command.CommandId)); ;
+            entity.AddDomainEvent(new OperatorLicenseRetracted(entity, license, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId)); ;
         }
         _unitOfWork.OperatorRepository.Update(entity);
 
@@ -505,11 +505,11 @@ internal class VehicleCommandHandler : IVehicleCommandHandler
         var status = entity.ValidateLicenseRenewPeriodIsFulfilled(command.NewRenewPeriod, command.LicenseTypeId);
         if (status == true)
         {
-            entity.AddDomainEvent(new OperatorLicenseRenewPeriodValidated(entity, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new OperatorLicenseRenewPeriodValidated(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
         }
         else
         {
-            entity.AddDomainEvent(new OperatorLicenseExpired(entity, command.LicenseTypeId, entity.Events.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new OperatorLicenseExpired(entity, command.LicenseTypeId, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
         }
         _unitOfWork.OperatorRepository.Update(entity);
 

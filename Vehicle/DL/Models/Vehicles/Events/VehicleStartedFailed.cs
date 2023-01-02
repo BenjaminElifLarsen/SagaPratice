@@ -30,7 +30,7 @@ public class VehicleStartedFailed : IDomainEventFail
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
-        Version = aggregate.Events.Count();
+        Version = aggregate.OldEventsDesign.Count();
         Errors = errors;
     }
 }

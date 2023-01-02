@@ -26,7 +26,11 @@ public class Vehicle : IAggregateRoot
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+
+    public int Id => throw new NotImplementedException();
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     private Vehicle()
     {
@@ -127,5 +131,10 @@ public class Vehicle : IAggregateRoot
     {
         if (_vehicleId == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        throw new NotImplementedException();
     }
 }

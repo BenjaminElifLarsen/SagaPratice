@@ -1,4 +1,5 @@
-﻿using Common.Events.Domain;
+﻿using Common.Events.Bus;
+using Common.Events.Domain;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.Handlers.Event;
@@ -8,7 +9,7 @@ public interface IPeopleEventHandler :
     IDomainEventHandler<PersonChangedGender>,
     IDomainEventHandler<PersonAddedToGenderSucceeded>,
     IDomainEventHandler<PersonRemovedFromGenderSucceeded>,
-    IDomainEventHandler<GenderRecognisedSucceeded>,
+    IAppDomainEventHandler<GenderRecognisedSucceeded>,
     IDomainEventHandler<GenderUnrecognisedSucceeded>
 {
 }

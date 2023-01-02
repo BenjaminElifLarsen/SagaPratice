@@ -17,7 +17,11 @@ public class VehicleInformation : IAggregateRoot
     internal byte MaxWheelAmount { get => _maxWheelAmount; private set => _maxWheelAmount = value; }
     internal IEnumerable<IdReference<int>> Vehicles => _vehicles;
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+
+    public int Id => throw new NotImplementedException();
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     private VehicleInformation()
     { //it does not make sense to be able to update amount of wheeels after adding the entity, but what about name?
@@ -56,5 +60,10 @@ public class VehicleInformation : IAggregateRoot
     {
         if (_vehicleInformationId == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        throw new NotImplementedException();
     }
 }

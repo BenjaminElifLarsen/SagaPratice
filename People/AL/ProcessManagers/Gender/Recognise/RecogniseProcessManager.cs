@@ -5,16 +5,18 @@ using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 internal sealed class RecogniseProcessManager : IRecogniseProcessManager
-{
+{ //need a GenderProcessRouter and repositories for each gender pm 
     private readonly IPeopleCommandBus _commandBus;
     private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
-
+    //update to a new way of keeping state, one that better can be stored in a context
     public Guid ProcessManagerId { get; private set; }
     public Guid CorrelationId { get; private set; }
     public bool Running => !_trackerCollection.AllFinishedOrFailed;
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
+    public RecogniseGenderState State { get; private set; }
+
 
     public RecogniseProcessManager(IPeopleCommandBus commandBus)
     {
@@ -23,6 +25,8 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
         _errors = new();
         _handlers = new();
         _trackerCollection = new();
+        State = RecogniseGenderState.NotStarted;
+
     }
 
     public void Handler(GenderRecognisedSucceeded @event)
@@ -73,5 +77,15 @@ internal sealed class RecogniseProcessManager : IRecogniseProcessManager
             _trackerCollection.AddEventTracker<GenderRecognisedSucceeded>(true, DomainEventType.Succeeder);
             _trackerCollection.AddEventTracker<GenderRecognisedFailed>(false, DomainEventType.Failer);
         }
+    }
+
+    public enum RecogniseGenderState
+    {
+        NotStarted = 1,
+        Started = 2,
+        Succeeded = 3,
+        Failed = 4,
+
+        Unknown = 0,
     }
 }

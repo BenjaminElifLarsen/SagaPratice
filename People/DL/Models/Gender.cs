@@ -8,14 +8,19 @@ public sealed class Gender : IAggregateRoot
     private string _verbSubject;
     private string _verbObject;
     private readonly HashSet<IdReference<int>> _people;
-    private readonly HashSet<IDomainEvent> _events;
+    //private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<DomainEvent> _events;
 
-    internal int GenderId { get => _genderId; private set => _genderId = value; }
+    //internal int GenderId { get => _genderId; private set => _genderId = value; }
     internal string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
     internal IEnumerable<IdReference<int>> People { get => _people; }
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => throw new NotImplementedException();
+
+    public int Id { get => _genderId; private set => _genderId = value; }
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     //what is the term for things like her/him/they and the term for she/him???
 
@@ -50,14 +55,20 @@ public sealed class Gender : IAggregateRoot
 
     public void AddDomainEvent(IDomainEvent eventItem)
     {
-        if (this == eventItem.AggregateId) //should cause an expection if this fails
-            _events.Add(eventItem);
+        //if (this == eventItem.AggregateId) //should cause an expection if this fails
+        //    _events.Add(eventItem);
     }
 
     public void RemoveDomainEvent(IDomainEvent eventItem)
     {
-        if (this == eventItem.AggregateId) //should cause an expection if this fails
-            _events.Remove(eventItem);
+        //if (this == eventItem.AggregateId) //should cause an expection if this fails
+        //    _events.Remove(eventItem);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        if(this == eventItem.AggregateId)
+            _events.Add(eventItem);
     }
 
     //public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)
@@ -69,7 +80,7 @@ public sealed class Gender : IAggregateRoot
 
     public static bool operator ==(Gender left, int right)
     {
-        return left.GenderId == right;
+        return left.Id == right;
     }
 
     public static bool operator !=(Gender left, int right)
@@ -79,7 +90,7 @@ public sealed class Gender : IAggregateRoot
 
     public static bool operator ==(Gender left, Gender right)
     {
-        return left.GenderId == right.GenderId;
+        return left.Id == right.Id;
     }
 
     public static bool operator !=(Gender left, Gender right)

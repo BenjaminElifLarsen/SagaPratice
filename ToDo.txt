@@ -116,6 +116,9 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 		so a switch case on type that returns a unique int that identity the concrete domain event
 		and a switch case on int that return the type of the concrete domain event
 
+	when loading the events to hydrate an entity figure out where to do it, e.g. public ctor or a new method in the factory? 
+	update the seeders to work fully using events
+
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
 

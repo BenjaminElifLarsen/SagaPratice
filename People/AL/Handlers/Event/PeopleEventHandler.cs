@@ -36,7 +36,7 @@ internal sealed class PeopleEventHandler : IPeopleEventHandler
         //log all events and commands
     }
 
-    public void Handle(GenderRecognisedSucceeded @event)
+    public void Handler(GenderRecognisedSucceeded @event)
     {
         //log all events and commands
     }

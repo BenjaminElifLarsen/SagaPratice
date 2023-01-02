@@ -21,7 +21,11 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
-    public IEnumerable<IDomainEvent> Events => _events;
+    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+
+    public int Id => throw new NotImplementedException();
+
+    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
 
     private Operator()
     {
@@ -137,5 +141,10 @@ public class Operator : IAggregateRoot, ISoftDelete
             return null;
         }
         return license.ValidateRenewPeriod(renewPeriod);
+    }
+
+    public void AddDomainEvent(DomainEvent eventItem)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,9 +1,10 @@
-﻿using Common.ProcessManager;
+﻿using Common.Events.Bus;
+using Common.ProcessManager;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 public interface IRecogniseProcessManager : IProcessManager,
-    IProcessManagerEventHandler<GenderRecognisedSucceeded>,
+    IAppDomainEventHandler<GenderRecognisedSucceeded>,
     IProcessManagerEventHandler<GenderRecognisedFailed>
 {
 }

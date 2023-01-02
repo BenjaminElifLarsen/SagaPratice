@@ -1,5 +1,6 @@
 ﻿using BaseRepository;
 using Common.Events.Domain;
+using Common.Events.Store.Event;
 using Common.RepositoryPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
@@ -132,5 +133,15 @@ internal class MockVehicleContext : IVehicleContext
     public void Remove(IDomainEvent @event)
     {
         _events.Remove(@event);
+    }
+
+    public void AddEvents(IAggregateRoot root)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<Event> LoadStream(int id, string aggregateRoot)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -107,6 +107,8 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 	Consider what to do with the Data aspect of the domain events (either keep it like it is or make it such that Data properties are properties on the event implementation itself)
 		the only point where a generic domain event's data matter is when it is needed to encode and decode regarding to JSON for storage
 	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
+	not sure ORMs like EntityFramework Core would be able to do its job correct/best way if using interfaces for the events.
+
 
 	could use switch cases for storing type of domain event implementation
 		so a switch case on type that returns a unique int that identity the concrete domain event

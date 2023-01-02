@@ -12,7 +12,6 @@ using PeopleDomain.AL.Registries;
 using VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
 using VehicleDomain.AL.Process_Managers.Vehicle.StartVehicle;
 using VehicleDomain.AL.Registries;
-using VehicleDomain.DL.Models.Vehicles;
 
 namespace API.Middleware;
 

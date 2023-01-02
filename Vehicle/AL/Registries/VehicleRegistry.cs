@@ -4,6 +4,7 @@ using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.AL.Handlers.Command;
 using VehicleDomain.AL.Handlers.Event;
 using VehicleDomain.AL.Process_Managers.LicenseType.AlterLicenseType;
+using VehicleDomain.AL.Process_Managers.Vehicle.StartVehicle;
 using VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 using VehicleDomain.DL.Models.LicenseTypes.Events;
 using VehicleDomain.DL.Models.Operators.CQRS.Commands;
@@ -101,4 +102,8 @@ public class VehicleRegistry : IVehicleRegistry
         _eventBus.RegisterHandler<FoundVehicleInformations>(processManager.Handler);
     }
 
+    public void SetUpRouting(IStartVehicleProcessManager processManager)
+    {
+        //throw new NotImplementedException();
+    }
 }

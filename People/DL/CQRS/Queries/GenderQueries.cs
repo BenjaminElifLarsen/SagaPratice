@@ -8,7 +8,7 @@ internal sealed class GenderIdQuery : BaseQuery<Gender, GenderIdValidation>
 {
     public override Expression<Func<Gender, GenderIdValidation>> Map()
     {
-        return e => new(e.GenderId);
+        return e => new(e.Id);
     }
 }
 

@@ -25,14 +25,14 @@ public sealed class PersonAddedToGenderSucceeded : IDomainEventSuccess<PersonAdd
     internal PersonAddedToGenderSucceeded(Gender aggregate, int personId, int version, Guid correlationId, Guid causationId)
     { 
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.GenderId;
+        AggregateId = aggregate.Id;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;
         CorrelationId = correlationId;
         CausationId = causationId;
         Version = version;
-        Data = new(personId, aggregate.GenderId);
+        Data = new(personId, aggregate.Id);
     }
 }
 

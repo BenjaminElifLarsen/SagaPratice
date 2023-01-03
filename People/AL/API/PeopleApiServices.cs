@@ -44,7 +44,7 @@ public class PeopleApiServices
         services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>();
         services.AddScoped<IProcessManager, FireProcessManager>();
         services.AddScoped<IProcessManager, HireProcessManager>();
-        services.AddScoped<IProcessManager, RecogniseProcessManager>();
+        //services.AddScoped<IProcessManager, RecogniseProcessManager>();
         services.AddScoped<IProcessManager, UnrecogniseProcessManager>();
     }
 

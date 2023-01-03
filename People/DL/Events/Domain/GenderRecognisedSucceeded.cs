@@ -2,7 +2,7 @@
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public sealed class GenderRecognisedSucceeded : DomainEvent
+public sealed record GenderRecognisedSucceeded : DomainEvent
 {
     public string Subject { get; set; }
     public string Object { get; set; }

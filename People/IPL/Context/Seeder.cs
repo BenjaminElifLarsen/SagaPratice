@@ -7,7 +7,7 @@ internal static class Seeder
 {
     public static void MockSeedData(IPeopleContext peopleContext)
     {
-        Gender g1 = new("She", "Her");
+        Gender g1 = new("She", "Her"); //could in the end convert this to run through the system as intended via the services
         Gender g2 = new("She", "They");
         var g1Guid = Guid.NewGuid();
         var g2Guid = Guid.NewGuid();
@@ -22,7 +22,7 @@ internal static class Seeder
 
         Person p1 = new(1,"Triss", "Nib", new(1956, 1, 2), new(g1.Id));
         if (!(peopleContext as IContextData<Person>).GetAll.Any())
-        {
+        { //remember the create event and events for adding a gender to a person and other way around
             peopleContext.Add(p1);
             g1.AddPerson(new(p1.PersonId));
         }

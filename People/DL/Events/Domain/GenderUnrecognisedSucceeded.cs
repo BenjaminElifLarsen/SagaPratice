@@ -23,7 +23,7 @@ public sealed class GenderUnrecognisedSucceeded : IDomainEvent
     public GenderUnrecognisedSucceeded(Gender aggregate, int version, Guid correlationId, Guid causationId)
     {
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.GenderId;
+        AggregateId = aggregate.Id;
         EventType = GetType().Name;
         EventId = Guid.NewGuid();
         TimeStampRecorded = DateTime.Now.Ticks;

@@ -11,6 +11,6 @@ public interface IPeopleRegistry : IRoutingRegistry
     public void SetUpRouting(IPersonalInformationChangeProcessManager processManager);
     public void SetUpRouting(IFireProcessManager processManager);
     public void SetUpRouting(IHireProcessManager processManager);
-    public void SetUpRouting(IRecogniseProcessManager processManager);
+    //public void SetUpRouting(IRecogniseProcessManager processManager);
     public void SetUpRouting(IUnrecogniseProcessManager processManager);
 }

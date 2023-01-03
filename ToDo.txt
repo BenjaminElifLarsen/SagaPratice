@@ -119,6 +119,17 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 	when loading the events to hydrate an entity figure out where to do it, e.g. public ctor or a new method in the factory? 
 	update the seeders to work fully using events
 
+	will need to alter the entire pm middleware, might not even be needed, if repositories are going to handle the pms instead
+		feels a little wierd that repositories are going to transmit data to the pms.
+			consider this (based partly on the just eat link):
+				an event is transmitted via the bus to a handler in a router (like GenderRecogniseRouter).
+				the handler contacts the repository to get a pm (either created or retreated)
+				the event handler then gives the pm the event and the pm acts upon it
+				the handler then saves the pm (need versioning in the pm and enforece concurrency checks in the repo [Version could be a Guid,  check if the current loaded one is the same as the one in the context or not])
+				after the save the repository will contact the infrastructure to transmit the commands via the bus (let the unit of work get the commands and publish them)
+				
+				both the pm and the event need to be saved via their respective repos
+
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
 

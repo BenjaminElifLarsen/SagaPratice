@@ -20,6 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="AL\ProcessManagers\Repositories\GenderUnrecogniseProcessRepository\" />
+    <Folder Include="AL\ProcessManagers\Routers\GenderRecogniseProcessRouter\" />
+    <Folder Include="AL\ProcessManagers\Routers\GenderUnrecogniseProcessRouter\" />
     <Folder Include="DL\Events\Integration\" />
   </ItemGroup>
 

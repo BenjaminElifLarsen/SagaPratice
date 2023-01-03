@@ -1,37 +1,12 @@
-﻿using Common.Events.Domain;
-
-using PeopleDomain.DL.Models;
+﻿using Common.Events.System;
 
 namespace PeopleDomain.DL.Events.Domain;
-public sealed class GenderRecognisedFailed : IDomainEventFail
+public sealed record GenderRecognisedFailed : SystemEvent //system event, since it did not up altering any data and does not belong to any aggregate
 {
     public IEnumerable<string> Errors { get; private set; }
 
-    public string AggregateType { get; private set; }
-
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    public GenderRecognisedFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    public GenderRecognisedFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
-        AggregateType = typeof(Gender).Name;
-        AggregateId = 0;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = 0;
         Errors = errors;
     }
 }

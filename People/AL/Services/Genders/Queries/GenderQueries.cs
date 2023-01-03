@@ -9,7 +9,7 @@ internal sealed class GenderListItemQuery : BaseQuery<Gender, GenderListItem>
 {
     public override Expression<Func<Gender, GenderListItem>> Map()
     {
-        return e => new(e.GenderId, e.VerbSubject, e.VerbObject, e.People.Count());
+        return e => new(e.Id, e.VerbSubject, e.VerbObject, e.People.Count());
     }
 }
 
@@ -17,6 +17,6 @@ internal sealed class GenderDetailsQuery : BaseQuery<Gender, GenderDetails>
 {
     public override Expression<Func<Gender, GenderDetails>> Map()
     {
-        return e => new(e.GenderId, e.VerbSubject, e.VerbObject, e.People.Select(x => x.Id));
+        return e => new(e.Id, e.VerbSubject, e.VerbObject, e.People.Select(x => x.Id));
     }
 }

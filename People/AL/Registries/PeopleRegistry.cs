@@ -67,11 +67,11 @@ public sealed class PeopleRegistry : IPeopleRegistry
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handler);
     }
 
-    public void SetUpRouting(IRecogniseProcessManager processManager)
-    {
-        _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processManager.Handler);
-        _eventBus.RegisterHandler<GenderRecognisedFailed>(processManager.Handler);
-    }
+    //public void SetUpRouting(IRecogniseProcessManager processManager)
+    //{
+    //    _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processManager.Handler);
+    //    _eventBus.RegisterHandler<GenderRecognisedFailed>(processManager.Handler);
+    //}
 
     public void SetUpRouting(IUnrecogniseProcessManager processManager)
     {

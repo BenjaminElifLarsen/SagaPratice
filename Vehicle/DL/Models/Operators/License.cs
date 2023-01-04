@@ -4,7 +4,7 @@ using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;
 
 namespace VehicleDomain.DL.Models.Operators;
-internal class License
+internal sealed class License
 {
     private int _licenseId;
     private Operator _operator; //ORMs like EF Core would use and set this variable
@@ -79,7 +79,7 @@ internal class License
 
     internal bool ValidateRenewPeriod(byte renewPeriod)
     {
-        var now = DateTime.Now;
+        var now = DateTime.Now; //consider if there is a good way to make this DRY
         var lastRenew = GetCompareDate();
         var sinceLastRenew = now.Year - lastRenew.Year - 1 +
         (now.Month > lastRenew.Month ||

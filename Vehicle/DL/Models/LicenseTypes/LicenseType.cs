@@ -4,7 +4,7 @@ using Common.RepositoryPattern;
 namespace VehicleDomain.DL.Models.LicenseTypes;
 public class LicenseType : IAggregateRoot, ISoftDeleteDate
 {
-    private int _licenseTypeId;
+    private int _id;
     private string _type; //type can only be updated if there is no license that use the entity, need a query that look if any people got license with the specifc license type id
     private byte _renewPeriodInYears; //makes more sense to just use any(x => ...), in the repo, before trying to update, where should validation be done... entity? validator? handler? 
     private byte _ageRequirementInYears; //or would it make more sense that an incorrect, but not invalid, entity would be removed from the system and a new inserted?
@@ -13,9 +13,9 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     private readonly HashSet<IdReference<int>> _vehicleInformations;
     //cannot contain a collection of licenses, since License is not an aggregate root, could hold a collection of operators who got the required license.
     private readonly HashSet<IdReference<int>> _operators;
-    private HashSet<IDomainEvent> _events;
+    private HashSet<DomainEvent> _events;
 
-    internal int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
+    //internal int LicenseTypeId { get => _licenseTypeId; private set => _licenseTypeId = value; }
     internal string Type { get => _type; private set => _type = value; }
     internal byte RenewPeriodInYears { get => _renewPeriodInYears; private set => _renewPeriodInYears = value; }
     internal byte AgeRequirementInYears { get => _ageRequirementInYears; private set => _ageRequirementInYears = value; }
@@ -23,12 +23,9 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
     public DateOnly CanBeIssuedFrom { get => _canBeIssuedFrom; private set => _canBeIssuedFrom = value; } //can only be updated if there is no licenses that use it.
     public IEnumerable<IdReference<int>> VehicleInformations => _vehicleInformations;
     public IEnumerable<IdReference<int>> Operators => _operators;
+    public int Id { get => _id; private set => _id = value; }
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
-
-    public int Id => throw new NotImplementedException();
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public IEnumerable<DomainEvent> Events => _events;
 
     private LicenseType()
     {
@@ -37,7 +34,7 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
 
     internal LicenseType(string type, byte renewPeriodInYears, byte ageRequirementInYears)
     {
-        _licenseTypeId = RandomValue.GetValue;
+        _id = RandomValue.GetValue;
         _type = type;
         _renewPeriodInYears = renewPeriodInYears;
         _ageRequirementInYears = ageRequirementInYears;
@@ -82,20 +79,15 @@ public class LicenseType : IAggregateRoot, ISoftDeleteDate
         return _operators.Remove(@operator);
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
+    public void AddDomainEvent(DomainEvent eventItem)
     {
-        if (_licenseTypeId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Add(eventItem);
     }
 
-    public void RemoveDomainEvent(IDomainEvent eventItem)
+    public void RemoveDomainEvent(DomainEvent eventItem)
     {
-        if (_licenseTypeId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
-    }
-
-    public void AddDomainEvent(DomainEvent eventItem)
-    {
-        throw new NotImplementedException();
     }
 }

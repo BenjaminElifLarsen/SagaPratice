@@ -5,14 +5,12 @@ namespace VehicleDomain.DL.Models.Operators;
 
 public class Operator : IAggregateRoot, ISoftDelete
 {
-    private int _operatorId;
+    private int _id;
     private DateOnly _birth;
     private readonly HashSet<License> _licenses;
     private readonly HashSet<IdReference<int>> _vehicles;
     private bool _deleted;
-    private readonly HashSet<IDomainEvent> _events;
-
-    internal int OperatorId { get => _operatorId; private set => _operatorId = value; }
+    private readonly HashSet<DomainEvent> _events;
 
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
 
@@ -21,11 +19,9 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+    public int Id { get => _id; private set => _id = value; }
 
-    public int Id => throw new NotImplementedException();
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public IEnumerable<DomainEvent> Events => _events;
 
     private Operator()
     {
@@ -34,7 +30,7 @@ public class Operator : IAggregateRoot, ISoftDelete
 
     internal Operator(int operatorId, DateOnly birth)
     {
-        _operatorId = operatorId;
+        _id = operatorId;
         _birth = birth;
         _licenses = new();
         _vehicles = new();
@@ -105,15 +101,15 @@ public class Operator : IAggregateRoot, ISoftDelete
         _deleted = true;
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
+    public void AddDomainEvent(DomainEvent eventItem)
     {
-        if (_operatorId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Add(eventItem);
     }
 
-    public void RemoveDomainEvent(IDomainEvent eventItem)
+    public void RemoveDomainEvent(DomainEvent eventItem)
     {
-        if (_operatorId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
     }
 
@@ -141,10 +137,5 @@ public class Operator : IAggregateRoot, ISoftDelete
             return null;
         }
         return license.ValidateRenewPeriod(renewPeriod);
-    }
-
-    public void AddDomainEvent(DomainEvent eventItem)
-    {
-        throw new NotImplementedException();
     }
 }

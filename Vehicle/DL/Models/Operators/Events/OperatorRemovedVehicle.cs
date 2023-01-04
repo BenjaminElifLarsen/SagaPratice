@@ -1,33 +1,14 @@
 ﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorRemovedVehicle : IDomainEvent
+public sealed record OperatorRemovedVehicle : DomainEvent
 {
-    public string AggregateType { get; private set; }
+    public int VehicleId { get; private set; } 
 
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-    
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    internal OperatorRemovedVehicle(Operator aggregate, Guid correlationId, Guid causationId)
-    { //no reason to have int version as a parameter as it can be got from the aggregate itself
-        AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.OperatorId;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = aggregate.OldEventsDesign.Count();
+    internal OperatorRemovedVehicle(Operator aggregate, int vehicleId, Guid correlationId, Guid causationId)
+        : base(aggregate, correlationId, causationId)
+    {
+        VehicleId = vehicleId;
     }
 }

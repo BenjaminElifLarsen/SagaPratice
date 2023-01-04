@@ -132,6 +132,7 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
-
+let factory (or something like it) set the id of newly created objects
+	thus consider switching to Guids
 
 

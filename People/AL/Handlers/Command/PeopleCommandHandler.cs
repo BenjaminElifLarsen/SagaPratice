@@ -8,6 +8,7 @@ using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace PeopleDomain.AL.Handlers.Command;
 internal sealed class PeopleCommandHandler : IPeopleCommandHandler
@@ -32,12 +33,12 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         { //how to add an event for this as there is no aggregate root? Could let the repository take in orphan events and put them in the context. The question thus become how to retrieve them?
             _unitOfWork.AddSystemEvent(new PersonHiredFailed(result.Errors, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
-            //return new InvalidResultNoData(result.Errors); //or maybe via the unit of work?
+            return; // new InvalidResultNoData(result.Errors); //or maybe via the unit of work?
         }
         _unitOfWork.PersonRepository.Hire(result.Data);
-        result.Data.AddDomainEvent(new PersonHiredSucceeded(result.Data, result.Data.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        result.Data.AddDomainEvent(new PersonHiredSucceeded(result.Data, command.CorrelationId, command.CommandId));
         _unitOfWork.Save();
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     } 
 
     public void Handle(FirePersonFromUser command)
@@ -46,7 +47,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         if (entity is not null)
         {
             entity.Delete(new(command.FiredFrom.Year, command.FiredFrom.Month, command.FiredFrom.Day));
-            entity.AddDomainEvent(new PersonFiredSucceeded(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
+            entity.AddDomainEvent(new PersonFiredSucceeded(entity, command.CorrelationId, command.CommandId)); //the event should first be triggered when DeletedFrom is true
             _unitOfWork.PersonRepository.Fire(entity); //could store the event in the context and let a process run through events at times to see which needs processing
             //also need to create an integration event, which again should first be processed when the fired from date is current or passed.
         }
@@ -55,7 +56,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
             _unitOfWork.AddSystemEvent(new PersonFiredFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
         }
         _unitOfWork.Save();
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(ChangePersonalInformationFromUser command)
@@ -65,7 +66,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
             _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
             _unitOfWork.Save(); //consider calling something else like 'ProcessEvents'
-            //return new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
+            return; // new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
         }
 
         var genderIds = _unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result;
@@ -75,7 +76,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         { //have event
             _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(entity, PersonErrorConversion.Convert(flag), command.CorrelationId, command.CommandId));
             _unitOfWork.Save(); //not really happy with this design. Mayhaps also have a call that permit publishing evnets. Then again if events is going to be saved, maybe it make sense??
-            //return new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
+            return; // new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
         }
 
         if (command.FirstName is not null)
@@ -94,17 +95,17 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         {
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(new(command.Gender.Gender));
-            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, command.CorrelationId, command.CommandId));
         }
 
         var firstNameChanged = command.FirstName is not null;
         var lastNameChanged = command.LastName is not null;
         var birthChanged = command.Brith is not null;
         var genderChanged = command.Gender is not null;
-        entity.AddDomainEvent(new PersonPersonalInformationChangedSuccessed(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId, firstNameChanged, lastNameChanged, birthChanged, genderChanged));
+        entity.AddDomainEvent(new PersonPersonalInformationChangedSuccessed(entity, firstNameChanged, lastNameChanged, birthChanged, genderChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);
         _unitOfWork.Save();
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(RecogniseGender command)
@@ -116,27 +117,27 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         {
             _unitOfWork.AddSystemEvent(new GenderRecognisedFailed(result.Errors, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
-            //return new InvalidResultNoData(result.Errors);
+            return; // new InvalidResultNoData(result.Errors);
         }
         result.Data.AddDomainEvent(new GenderRecognisedSucceeded(result.Data, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Recognise(result.Data);
         _unitOfWork.Save();
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(AddPersonToGender command)
     {
-        var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result; //events should not really //return data. If something goes wrong another event can be created to inform about this (so sagas and such)
+        var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result; //events should not really return; // data. If something goes wrong another event can be created to inform about this (so sagas and such)
         if (entity is null)
         {
             _unitOfWork.AddSystemEvent(new PersonAddedToGenderFailed(command.PersonId, command.GenderId, new string[] { $"Gender {command.GenderId} was not found." }, command.CorrelationId, command.CommandId)); ;
             _unitOfWork.Save();
-            //return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
+            return; // new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
         entity.AddPerson(new(command.PersonId));
-        entity.AddDomainEvent(new PersonAddedToGenderSucceeded(entity, command.PersonId, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new PersonAddedToGenderSucceeded(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(RemovePersonFromGender command)
@@ -144,13 +145,13 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result;
         if (entity is null)
         {
-            //return new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
+            return; // new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
             //cause an error that will prevent the saving of person.
         } //these handlers should, in theory, not fail as they rely on validated data.
         entity.RemovePerson(new(command.PersonId)); //no need for validating if the person exist or not as they are getting removed.
-        entity.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entity, command.PersonId, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(ChangePersonGender command)
@@ -159,15 +160,15 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         var entityToRemoveFrom = _unitOfWork.GenderRepository.GetForOperationAsync(command.OldGenderId).Result;
         if (entityToAddToo is null || entityToRemoveFrom is null)
         {
-            //return new InvalidResultNoData(); //create event for saga
+            return; // new InvalidResultNoData(); //create event for saga
         }
         entityToAddToo.AddPerson(new(command.PersonId));
-        entityToAddToo.AddDomainEvent(new PersonAddedToGenderSucceeded(entityToAddToo, command.PersonId, entityToAddToo.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        entityToAddToo.AddDomainEvent(new PersonAddedToGenderSucceeded(entityToAddToo, command.PersonId, command.CorrelationId, command.CommandId));
         entityToRemoveFrom.RemovePerson(new(command.PersonId));
-        entityToRemoveFrom.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entityToRemoveFrom, command.PersonId, entityToRemoveFrom.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        entityToRemoveFrom.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entityToRemoveFrom, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entityToAddToo);
         _unitOfWork.GenderRepository.Update(entityToRemoveFrom); //have an event to indicate this is done, mayhaps similar name to the event but with Success at the end?
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 
     public void Handle(UnrecogniseGender command)
@@ -177,17 +178,17 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         {
             _unitOfWork.AddSystemEvent(new GenderUnrecognisedFailed(new string[] {"Not Found."}, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
-            //return new SuccessResultNoData();
+            return; // new SuccessResultNoData();
         }
         if (entity.People.Any())
         {
             _unitOfWork.AddSystemEvent(new GenderUnrecognisedFailed(new string[] { $"People identify with gender {entity.VerbSubject}/{entity.VerbObject}." }, command.CorrelationId, command.CommandId));
             _unitOfWork.Save();
-            //return new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
+            return; // new InvalidResultNoData($"People identify with gender {entity.VerbSubject}/{entity.VerbObject}.");
         }
-        entity.AddDomainEvent(new GenderUnrecognisedSucceeded(entity, entity.OldEventsDesign.Count(), command.CorrelationId, command.CommandId));
+        entity.AddDomainEvent(new GenderUnrecognisedSucceeded(entity, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Unrecognise(entity);
         _unitOfWork.Save();
-        //return new SuccessResultNoData();
+        return; // new SuccessResultNoData();
     }
 }

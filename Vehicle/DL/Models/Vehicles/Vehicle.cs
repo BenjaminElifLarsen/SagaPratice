@@ -9,16 +9,15 @@ public class Vehicle : IAggregateRoot
     /*
      * could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
      */
-    private int _vehicleId;
+    private int _id;
     private DateTime _productionDate;
     private IdReference<int> _vehicleInformation;
     private double _distanceMovedKm; //this could make use of event sourcing
     private readonly HashSet<IdReference<int>> _operators;
     private bool _inUse;
     private SerielNumber _serielNumber; //ensure uniqueness
-    private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<DomainEvent> _events;
 
-    internal int VehicleId { get => _vehicleId; private set => _vehicleId = value; }
     internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
     internal IdReference<int> VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
     internal double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
@@ -26,11 +25,9 @@ public class Vehicle : IAggregateRoot
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+    public int Id { get => _id; private set => _id = value; }
 
-    public int Id => throw new NotImplementedException();
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public IEnumerable<DomainEvent> Events => _events;
 
     private Vehicle()
     {
@@ -39,7 +36,7 @@ public class Vehicle : IAggregateRoot
 
     internal Vehicle(DateTime productionDate, IdReference<int> vehicleInformation, SerielNumber serielNumber)
     {
-        _vehicleId = RandomValue.GetValue;
+        _id = RandomValue.GetValue;
         _distanceMovedKm = 0;
         _productionDate = productionDate;
         _vehicleInformation = vehicleInformation;
@@ -121,20 +118,15 @@ public class Vehicle : IAggregateRoot
         _serielNumber = serielNumber;
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
+    public void AddDomainEvent(DomainEvent eventItem)
     {
-        if (_vehicleId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Add(eventItem);
     }
 
-    public void RemoveDomainEvent(IDomainEvent eventItem)
+    public void RemoveDomainEvent(DomainEvent eventItem)
     {
-        if (_vehicleId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
-    }
-
-    public void AddDomainEvent(DomainEvent eventItem)
-    {
-        throw new NotImplementedException();
     }
 }

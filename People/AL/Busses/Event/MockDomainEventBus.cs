@@ -6,12 +6,11 @@ namespace PeopleDomain.AL.Busses.Event;
 internal sealed class MockDomainEventBus : IPeopleDomainEventBus
 { //works kind as a bus currently, a fake bus, but kind of following the pricipels, but does not permit comminucation between different modules.
   //the integration event bus would be closer to an actually bus as it would handle communication over different modules.
-    private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routesOld;
     private readonly Dictionary<Type, List<Action<IBaseEvent>>> _routes;
 
     public MockDomainEventBus()
     {
-        _routesOld = new();
+        _routes = new();
     }
 
     public void RegisterHandler<T>(Action<T> handler) where T : IBaseEvent

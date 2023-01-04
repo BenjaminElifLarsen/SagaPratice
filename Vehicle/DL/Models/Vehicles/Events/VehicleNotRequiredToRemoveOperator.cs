@@ -1,33 +1,13 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-public class VehicleNotRequiredToRemoveOperator : IDomainEvent
+public sealed record VehicleNotRequiredToRemoveOperator : SystemEvent
 {
-    public string AggregateType { get; private set; }
-
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
+    public int VehicleId { get; private set; }
+    public int OperatorId { get; private set; }
     internal VehicleNotRequiredToRemoveOperator(Vehicle aggregate, Guid correlationId, Guid causationId)
+        : base(correlationId, causationId)
     {
-        AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.VehicleId;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks; 
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = aggregate.OldEventsDesign.Count();
     }
 }

@@ -3,54 +3,20 @@ using Common.Events.System;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public sealed class PersonPersonalInformationChangedSuccessed : IDomainEventSuccess<PersonPersonalInformationChangedSuccessedData>
-{
-    public string AggregateType { get; private set; }
-
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    public PersonPersonalInformationChangedSuccessedData Data { get; private set; }
-
-public PersonPersonalInformationChangedSuccessed(Person aggregate, int version, Guid correlationId, Guid causationId, bool firstNameChanged, bool lastNameChanged, bool birthChanged, bool genderChanged)
-    {
-        AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.PersonId;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = version;
-        Data = new(firstNameChanged, lastNameChanged, birthChanged, genderChanged);
-    }
-}
-
-public class PersonPersonalInformationChangedSuccessedData
+public sealed record PersonPersonalInformationChangedSuccessed : DomainEvent
 {
     public bool FirstNameWasChanged { get; private set; }
     public bool LastNameWasChanged { get; private set; }
     public bool BirthWasChanged { get; private set; }
     public bool GenderWasChanged { get; private set; }
 
-    public PersonPersonalInformationChangedSuccessedData(bool firstName, bool lastName, bool birth, bool gender)
+    public PersonPersonalInformationChangedSuccessed(Person aggregate, bool firstNameChanged, bool lastNameChanged, bool birthChanged, bool genderChanged, Guid correlationId, Guid causationId)
+        : base(aggregate, correlationId, causationId)
     {
-        FirstNameWasChanged = firstName;
-        LastNameWasChanged = lastName;
-        BirthWasChanged = birth;
-        GenderWasChanged = gender;
-    }
+        FirstNameWasChanged = firstNameChanged;
+        LastNameWasChanged = lastNameChanged;
+        BirthWasChanged = birthChanged;
+        GenderWasChanged = genderChanged;    }
 }
 
 public sealed record PersonPersonalInformationChangedFailed : SystemEvent

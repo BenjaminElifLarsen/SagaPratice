@@ -29,7 +29,7 @@ internal sealed class HireProcessManager : IHireProcessManager
         _trackerCollection = new();
     }
 
-    public void Handler(PersonHiredSucceeded @event)
+    public void Handle(PersonHiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -39,12 +39,12 @@ internal sealed class HireProcessManager : IHireProcessManager
         _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true, DomainEventType.Succeeder);
         _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false, DomainEventType.Failer);
 
-        _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddPersonToGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
 
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonHiredFailed @event)
+    public void Handle(PersonHiredFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -55,7 +55,7 @@ internal sealed class HireProcessManager : IHireProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonAddedToGenderSucceeded @event)
+    public void Handle(PersonAddedToGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -65,7 +65,7 @@ internal sealed class HireProcessManager : IHireProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonAddedToGenderFailed @event)
+    public void Handle(PersonAddedToGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 

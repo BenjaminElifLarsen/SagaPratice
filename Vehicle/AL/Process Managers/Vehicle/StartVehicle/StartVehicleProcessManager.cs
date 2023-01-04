@@ -60,7 +60,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         }
     }
 
-    public void Handler(OperatorNotFound @event)
+    public void Handle(OperatorNotFound @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -79,7 +79,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(VehicleNotFound @event)
+    public void Handle(VehicleNotFound @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -98,7 +98,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(OperatorWasFound @event)
+    public void Handle(OperatorWasFound @event)
     {
         if (CorrelationId != CorrelationId) { return; }
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
@@ -123,7 +123,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         
     }
 
-    public void Handler(VehicleWasFound @event)
+    public void Handle(VehicleWasFound @event)
     {
         if (CorrelationId != CorrelationId) { return; }
         //command to send depends on if, at this point, the other was found has failed, completed or awaiting.
@@ -149,7 +149,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         }
     }
 
-    public void Handler(VehicleStartedSucceeded @event)
+    public void Handle(VehicleStartedSucceeded @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -160,7 +160,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(VehicleStartedFailed @event)
+    public void Handle(VehicleStartedFailed @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -172,7 +172,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(NotPermittedToOperate @event)
+    public void Handle(NotPermittedToOperate @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -184,7 +184,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(PermittedToOperate @event)
+    public void Handle(PermittedToOperate @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -200,7 +200,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         //no reason to check if finished in these methods that dispatch commands
     }
 
-    public void Handler(OperatorLackedNeededLicense @event)
+    public void Handle(OperatorLackedNeededLicense @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -218,7 +218,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
 
     }
 
-    public void Handler(OperatorLicenseExpired @event)
+    public void Handle(OperatorLicenseExpired @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -230,7 +230,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(AttemptToStartVehicleStarted @event)
+    public void Handle(AttemptToStartVehicleStarted @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -248,7 +248,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(VehicleNotRequiredToRemoveOperator @event)
+    public void Handle(VehicleNotRequiredToRemoveOperator @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 
@@ -258,7 +258,7 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(VehicleRemovedOperator @event)
+    public void Handle(VehicleRemovedOperator @event)
     {
         if (CorrelationId != CorrelationId) { return; }
 

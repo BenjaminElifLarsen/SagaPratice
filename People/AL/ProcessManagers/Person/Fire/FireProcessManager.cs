@@ -36,7 +36,7 @@ internal sealed class FireProcessManager : IFireProcessManager
         }
     }
 
-    public void Handler(PersonFiredSucceeded @event)
+    public void Handle(PersonFiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -46,12 +46,12 @@ internal sealed class FireProcessManager : IFireProcessManager
         _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true, DomainEventType.Succeeder); 
         _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false, DomainEventType.Failer);
 
-        _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
 
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonFiredFailed @event)
+    public void Handle(PersonFiredFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -62,7 +62,7 @@ internal sealed class FireProcessManager : IFireProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonRemovedFromGenderSucceeded @event)
+    public void Handle(PersonRemovedFromGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -72,7 +72,7 @@ internal sealed class FireProcessManager : IFireProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonRemovedFromGenderFailed @event)
+    public void Handle(PersonRemovedFromGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 

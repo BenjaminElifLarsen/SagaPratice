@@ -6,7 +6,7 @@ public sealed record VehicleRemovedOperator : DomainEvent
     public int OperatorId { get; private set; }
 
     internal VehicleRemovedOperator(Vehicle aggregate, int operatorId, Guid correlationId, Guid causationId)
-        : base(aggregate.Id, aggregate.GetType().Name, aggregate.Events.Count(), correlationId, causationId)
+        : base(aggregate, correlationId, causationId)
     {
         OperatorId = operatorId;
     }

@@ -3,7 +3,7 @@ using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 public interface IGenderRecogniseProcessRouter : 
-    IAppDomainEventHandler<GenderRecognisedSucceeded>,
+    IEventHandler<GenderRecognisedSucceeded>,
     IAppSystemEventHandler<GenderRecognisedFailed>
 {
 }

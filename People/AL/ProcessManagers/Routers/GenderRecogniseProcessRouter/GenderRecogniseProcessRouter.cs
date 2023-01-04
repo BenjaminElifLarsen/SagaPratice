@@ -18,14 +18,14 @@ internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
         _eventBus = eventBus;
     }
 
-    public async void Handler(GenderRecognisedSucceeded @event)
+    public async void Handle(GenderRecognisedSucceeded @event)
     {
         var pm = await Task.Run(() => _repository.LoadAsync(@event.CorrelationId));
         if(pm is null)
         {
             pm = new GenderRecogniseProcessManager();
         }
-        pm.Handler(@event);
+        pm.Handle(@event);
         _repository.Save(pm);
         foreach(var c in pm.Commands)
         {
@@ -37,14 +37,14 @@ internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
         }
     }
 
-    public void Handler(GenderRecognisedFailed @event)
+    public void Handle(GenderRecognisedFailed @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
         if (pm is null)
         {
             pm = new GenderRecogniseProcessManager();
         }
-        pm.Handler(@event);
+        pm.Handle(@event);
         _repository.Save(pm);
         foreach (var c in pm.Commands)
         {

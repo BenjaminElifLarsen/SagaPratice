@@ -55,7 +55,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
 
     }
 
-    public override void Handler(GenderRecognisedSucceeded @event)
+    public override void Handle(GenderRecognisedSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -80,7 +80,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
 
     }
 
-    public override void Handler(GenderRecognisedFailed @event)
+    public override void Handle(GenderRecognisedFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 

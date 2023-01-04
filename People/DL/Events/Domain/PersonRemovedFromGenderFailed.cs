@@ -1,23 +1,13 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 
 namespace PeopleDomain.DL.Events.Domain;
-public sealed class PersonRemovedFromGenderFailed : IDomainEventFail
+public sealed record PersonRemovedFromGenderFailed : SystemEvent
 {
-    public IEnumerable<string> Errors => throw new NotImplementedException();
-
-    public string AggregateType => throw new NotImplementedException();
-
-    public int AggregateId => throw new NotImplementedException();
-
-    public string EventType => throw new NotImplementedException();
-
-    public Guid EventId => throw new NotImplementedException();
-
-    public long TimeStampRecorded => throw new NotImplementedException();
-
-    public Guid CorrelationId => throw new NotImplementedException();
-
-    public Guid CausationId => throw new NotImplementedException();
-
-    public int Version { get; private set; }
+	public IEnumerable<string> Errors { get; private set; }
+	public PersonRemovedFromGenderFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+		: base(correlationId, causationId)
+	{
+		Errors = errors;
+	}
 }

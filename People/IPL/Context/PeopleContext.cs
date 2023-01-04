@@ -1,6 +1,8 @@
 ﻿using BaseRepository;
+using Common.Events.Base;
 using Common.Events.Domain;
 using Common.Events.Store.Event;
+using Common.Events.System;
 using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
 
@@ -8,7 +10,7 @@ namespace PeopleDomain.IPL.Context;
 internal sealed class MockPeopleContext : IPeopleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
-    private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<SystemEvent> _events;
     private readonly MockEventStore _eventStore;
     private DateOnly _date; //mayhaps move the data out into its own class that can be set as singleton. EF Core context is scoped and it could be nice if this context was slightly more similar to it on that point.
     
@@ -30,9 +32,8 @@ internal sealed class MockPeopleContext : IPeopleContext
     IEnumerable<Person> IContextData<Person>.GetAll => People.Where(Filtering<Person>());
     public IEnumerable<IAggregateRoot> GetAllTrackedEntities => _contextData.Select(x => x.Entity);
     public IEnumerable<IAggregateRoot> AllTrackedEntities => _contextData.Select(x => x.Entity);
-    public IEnumerable<IDomainEvent> AllTrackedEvents => _contextData.SelectMany(x => x.Entity.OldEventsDesign);
-    public IEnumerable<IDomainEvent> OrphanEvents => _events;
     public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
+    public IEnumerable<SystemEvent> SystemEvents => _events;
 
     public MockPeopleContext()
     {
@@ -120,12 +121,12 @@ internal sealed class MockPeopleContext : IPeopleContext
         }
     }
 
-    public void Add(IDomainEvent @event)
+    public void Add(SystemEvent @event)
     {
         _events.Add(@event);
     }
 
-    public void Remove(IDomainEvent @event)
+    public void Remove(SystemEvent @event)
     {
         _events.Add(@event);
     }

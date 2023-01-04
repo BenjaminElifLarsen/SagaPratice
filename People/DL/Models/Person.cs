@@ -5,15 +5,14 @@ namespace PeopleDomain.DL.Models;
 
 public sealed class Person : IAggregateRoot, ISoftDeleteDate
 {
-    private int _personId;
+    private int _id;
     private string _firstName;
     private string _lastName;
     private DateOnly _birth;
     private IdReference<int> _gender;
     private DateOnly? _deletedFrom;
-    private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<DomainEvent> _events;
 
-    internal int PersonId { get => _personId; private set => _personId = value; }
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
@@ -21,11 +20,9 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
+    public int Id { get => _id; private set => _id = value; }
 
-    public int Id => throw new NotImplementedException();
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public IEnumerable<DomainEvent> Events => _events;
 
     private Person()
     {
@@ -34,7 +31,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     internal Person(string firstName, string lastName, DateOnly birth, IdReference<int> gender)
     {
-        _personId = RandomValue.GetValue;
+        _id = RandomValue.GetValue;
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
@@ -44,7 +41,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     internal Person(int id, string firstName, string lastName, DateOnly birth, IdReference<int> gender) : this(firstName, lastName, birth, gender)
     {
-        _personId = id;
+        _id = id;
     }
 
     internal void ReplaceFistName(string firstName)
@@ -72,26 +69,21 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _deletedFrom = dateTime;
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
+    public void AddDomainEvent(DomainEvent eventItem)
     {
         if (this == eventItem.AggregateId) //could cause an expection if this fails
             _events.Add(eventItem);
     }
 
-    public void RemoveDomainEvent(IDomainEvent eventItem)
+    public void RemoveDomainEvent(DomainEvent eventItem)
     {
         if (this == eventItem.AggregateId) //could cause an expection if this fails
             _events.Remove(eventItem);
     }
 
-    public void AddDomainEvent(DomainEvent eventItem)
-    {
-        throw new NotImplementedException();
-    }
-
     public static bool operator ==(Person left, int right)
     {
-        return left.PersonId == right;
+        return left.Id == right;
     }
 
     public static bool operator !=(Person left, int right)
@@ -101,7 +93,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     public static bool operator ==(Person left, Person right)
     {
-        return left.PersonId == right.PersonId;
+        return left.Id == right.Id;
     }
 
     public static bool operator !=(Person left, Person right)

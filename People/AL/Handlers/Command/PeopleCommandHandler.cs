@@ -8,7 +8,6 @@ using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Models;
 using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
-using System.ComponentModel.DataAnnotations;
 
 namespace PeopleDomain.AL.Handlers.Command;
 internal sealed class PeopleCommandHandler : IPeopleCommandHandler

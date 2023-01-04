@@ -54,20 +54,20 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         }
     }
 
-    public void Handler(PersonPersonalInformationChangedSuccessed @event)
+    public void Handle(PersonPersonalInformationChangedSuccessed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; } 
 
         _trackerCollection.CompleteEvent<PersonPersonalInformationChangedSuccessed>();
         _trackerCollection.RemoveEvent<PersonPersonalInformationChangedFailed>();
-        if (!@event.Data.GenderWasChanged) 
+        if (!@event.GenderWasChanged) 
         {
             _trackerCollection.RemoveEvent<PersonChangedGender>();
         }
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonPersonalInformationChangedFailed @event)
+    public void Handle(PersonPersonalInformationChangedFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -80,7 +80,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonAddedToGenderSucceeded @event)
+    public void Handle(PersonAddedToGenderSucceeded @event)
     {
         if(@event.CorrelationId != CorrelationId) { return; }
 
@@ -89,7 +89,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonAddedToGenderFailed @event)
+    public void Handle(PersonAddedToGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -99,7 +99,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonRemovedFromGenderSucceeded @event)
+    public void Handle(PersonRemovedFromGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -108,7 +108,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonRemovedFromGenderFailed @event)
+    public void Handle(PersonRemovedFromGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -118,7 +118,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handler(PersonChangedGender @event)
+    public void Handle(PersonChangedGender @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 

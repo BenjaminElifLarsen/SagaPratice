@@ -4,7 +4,7 @@ using Common.RepositoryPattern;
 namespace PeopleDomain.DL.Models;
 public sealed class Gender : IAggregateRoot
 {
-    private int _genderId;
+    private int _id;
     private string _verbSubject;
     private string _verbObject;
     private readonly HashSet<IdReference<int>> _people;
@@ -16,11 +16,9 @@ public sealed class Gender : IAggregateRoot
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
     internal IEnumerable<IdReference<int>> People { get => _people; }
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => throw new NotImplementedException();
+    public int Id { get => _id; private set => _id = value; }
 
-    public int Id { get => _genderId; private set => _genderId = value; }
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public IEnumerable<DomainEvent> Events => _events;
 
     //what is the term for things like her/him/they and the term for she/him???
 
@@ -31,7 +29,7 @@ public sealed class Gender : IAggregateRoot
 
     internal Gender(string subject, string @object)
     {
-        _genderId = RandomValue.GetValue;
+        _id = RandomValue.GetValue;
         _people = new();
         _verbSubject = subject;
         _verbObject = @object;
@@ -53,22 +51,16 @@ public sealed class Gender : IAggregateRoot
         return _people.Remove(person);
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
-    {
-        //if (this == eventItem.AggregateId) //should cause an expection if this fails
-        //    _events.Add(eventItem);
-    }
-
-    public void RemoveDomainEvent(IDomainEvent eventItem)
-    {
-        //if (this == eventItem.AggregateId) //should cause an expection if this fails
-        //    _events.Remove(eventItem);
-    }
-
     public void AddDomainEvent(DomainEvent eventItem)
     {
         if(this == eventItem.AggregateId)
             _events.Add(eventItem);
+    }
+
+    public void RemoveDomainEvent(DomainEvent eventItem)
+    {
+        if (this == eventItem.AggregateId)
+            _events.Remove(eventItem);
     }
 
     //public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)

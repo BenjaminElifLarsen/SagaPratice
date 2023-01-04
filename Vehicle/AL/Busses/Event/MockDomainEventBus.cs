@@ -1,19 +1,19 @@
-﻿using Common.Events.Domain;
+﻿using Common.Events.Base;
 using System.Diagnostics;
 
 namespace VehicleDomain.AL.Busses.Event;
 internal class MockDomainEventBus : IVehicleDomainEventBus
 {
-    private readonly Dictionary<Type, List<Action<IDomainEvent>>> _routes;
+    private readonly Dictionary<Type, List<Action<IBaseEvent>>> _routes;
 
     public MockDomainEventBus()
     {
         _routes = new();
     }
 
-    public void RegisterHandler<T>(Action<T> handler) where T : IDomainEvent
+    public void RegisterHandler<T>(Action<T> handler) where T : IBaseEvent
     {
-        List<Action<IDomainEvent>> handlers;
+        List<Action<IBaseEvent>> handlers;
 
         if (!_routes.TryGetValue(typeof(T), out handlers))
         {
@@ -26,9 +26,9 @@ internal class MockDomainEventBus : IVehicleDomainEventBus
 
     }
 
-    public void Publish<T>(T @event) where T : IDomainEvent
+    public void Publish<T>(T @event) where T : IBaseEvent
     {
-        List<Action<IDomainEvent>> handlers;
+        List<Action<IBaseEvent>> handlers;
         #if (DEBUG)
         Debug.WriteLine($"{@event.CorrelationId} : {@event.CausationId} : {@event.EventId} : {@event.GetType()}");
         #else
@@ -43,9 +43,9 @@ internal class MockDomainEventBus : IVehicleDomainEventBus
         }
     }
 
-    public void UnregisterHandler<T>(Action<T> handler) where T : IDomainEvent
+    public void UnregisterHandler<T>(Action<T> handler) where T : IBaseEvent
     {
-        List<Action<IDomainEvent>> handlers;
+        List<Action<IBaseEvent>> handlers;
 
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;

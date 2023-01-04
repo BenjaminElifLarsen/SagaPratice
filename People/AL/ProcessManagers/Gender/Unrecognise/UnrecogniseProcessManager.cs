@@ -25,7 +25,7 @@ internal sealed class UnrecogniseProcessManager : IUnrecogniseProcessManager
         _trackerCollection = new();
     }
 
-    public void Handler(GenderUnrecognisedSucceeded @event)
+    public void Handle(GenderUnrecognisedSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -35,7 +35,7 @@ internal sealed class UnrecogniseProcessManager : IUnrecogniseProcessManager
         PublishEventIfPossible();
     }
 
-    public void Handler(GenderUnrecognisedFailed @event)
+    public void Handle(GenderUnrecognisedFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 

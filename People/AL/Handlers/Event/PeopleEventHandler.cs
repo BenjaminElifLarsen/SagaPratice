@@ -13,17 +13,17 @@ internal sealed class PeopleEventHandler : IPeopleEventHandler
 
     public void Handle(PersonHiredSucceeded @event)
     {
-        _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddPersonToGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(PersonFiredSucceeded @event)
     {
-        _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.GenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(PersonChangedGender @event)
     {
-        _commandBus.Dispatch(new ChangePersonGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new ChangePersonGender(@event.AggregateId, @event.NewGenderId, @event.OldGenderId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(PersonAddedToGenderSucceeded @event)
@@ -36,7 +36,7 @@ internal sealed class PeopleEventHandler : IPeopleEventHandler
         //log all events and commands
     }
 
-    public void Handler(GenderRecognisedSucceeded @event)
+    public void Handle(GenderRecognisedSucceeded @event)
     {
         //log all events and commands
     }

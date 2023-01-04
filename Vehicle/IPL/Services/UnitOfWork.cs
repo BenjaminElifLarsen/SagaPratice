@@ -69,7 +69,7 @@ internal class UnitOfWork : IUnitOfWork
     {
         do
         {
-            var eventsArray = _context.OrphanEvents.ToArray();
+            var eventsArray = _context.SystemEvents.ToArray();
             foreach (var @event in eventsArray)
             {
                 _eventBus.Publish(@event);
@@ -78,13 +78,13 @@ internal class UnitOfWork : IUnitOfWork
             var roots = _context.GetTracked.ToArray();
             for (int i = 0; i < roots.Length; i++) //if wanting to multithread this, there is Parallel. Might be more useful for the integrate event bus
             {
-                for (int n = 0; n < roots[i].OldEventsDesign.Count(); n++) //does not work correctly as n goes up and event count goes down
+                for (int n = 0; n < roots[i].Events.Count(); n++) //does not work correctly as n goes up and event count goes down
                 {
-                    _eventBus.Publish(roots[i].OldEventsDesign.ToArray()[n]); //the add and update method in the repository should add them to the event store
-                    roots[i].RemoveDomainEvent(roots[i].OldEventsDesign.ToArray()[n]);
+                    _eventBus.Publish(roots[i].Events.ToArray()[n]); //the add and update method in the repository should add them to the event store
+                    roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
                 }
             }
-        } while (_context.GetTracked.SelectMany(x => x.OldEventsDesign).Any());
+        } while (_context.GetTracked.SelectMany(x => x.Events).Any());
         
     }
 }

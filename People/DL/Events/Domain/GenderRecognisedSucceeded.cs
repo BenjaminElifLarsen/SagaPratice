@@ -10,7 +10,7 @@ public sealed record GenderRecognisedSucceeded : DomainEvent
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.Id;
-        Version = aggregate.OldEventsDesign.Count();
+        Version = aggregate.Events.Count();
         Subject = aggregate.VerbSubject;
         Object = aggregate.VerbObject;
     }

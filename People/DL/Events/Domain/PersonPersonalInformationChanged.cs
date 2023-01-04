@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
@@ -52,7 +53,7 @@ public class PersonPersonalInformationChangedSuccessedData
     }
 }
 
-public class PersonPersonalInformationChangedFailed : IDomainEventFail
+public sealed record PersonPersonalInformationChangedFailed : SystemEvent
 {
     public IEnumerable<string> Errors { get; private set; }
 
@@ -60,41 +61,17 @@ public class PersonPersonalInformationChangedFailed : IDomainEventFail
 
     public int AggregateId { get; private set; }
 
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
+    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.PersonId;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
         Errors = errors;
-        Version = version;
     }
 
-    public PersonPersonalInformationChangedFailed(IEnumerable<string> errors, int version, Guid correlationId, Guid causationId)
+    public PersonPersonalInformationChangedFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = typeof(Person).Name;
         AggregateId = 0;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
         Errors = errors;
-        Version = version;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
 using PeopleDomain.DL.Models;
 
-namespace PeopleDomain.IPL.Repositories;
+namespace PeopleDomain.IPL.Repositories.DomainModels;
 public interface IPersonRepository
 {
     public void Hire(Person entity);

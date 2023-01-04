@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 using Common.ProcessManager;
 using Common.ResultPattern;
 using VehicleDomain.AL.Busses.Event;
@@ -59,7 +60,7 @@ internal class UnitOfWork : IUnitOfWork
         }
     }
 
-    public void AddOrphanEvent(IDomainEvent @event)
+    public void AddSystemEvent(SystemEvent @event)
     {
         _context.Add(@event);
     }

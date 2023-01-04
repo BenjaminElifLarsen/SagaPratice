@@ -1,8 +1,8 @@
-﻿using Common.Events.Domain;
+﻿using Common.Events.System;
 using PeopleDomain.DL.Models;
 
 namespace PeopleDomain.DL.Events.Domain;
-public sealed class PersonAddedToGenderFailed : IDomainEventFail
+public sealed record PersonAddedToGenderFailed : SystemEvent
 {
     public IEnumerable<string> Errors { get; private set; }
 
@@ -10,28 +10,15 @@ public sealed class PersonAddedToGenderFailed : IDomainEventFail
 
     public int AggregateId { get; private set; }
 
-    public string EventType { get; private set; }
+    public int GenderId { get; private set; }
+    public int PersonId { get; private set; }
 
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    public PersonAddedToGenderFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    internal PersonAddedToGenderFailed(int personId, int genderId, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = typeof(Gender).Name;
         AggregateId = 0;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = 0;
         Errors = errors;
+        GenderId = genderId;
+        PersonId = personId;
     }
 }

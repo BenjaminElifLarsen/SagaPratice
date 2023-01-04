@@ -1,6 +1,6 @@
 ﻿using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 
-namespace PeopleDomain.AL.ProcessManagers.Repositories.GenderRecogniseProcessRepository;
+namespace PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 public interface IGenderRecogniseProcessRepository
 {
     public Task<RecogniseProcessManager> LoadAsync(Guid correlationId);

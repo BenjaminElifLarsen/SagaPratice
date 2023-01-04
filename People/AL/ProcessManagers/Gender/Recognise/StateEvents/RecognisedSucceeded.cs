@@ -5,8 +5,8 @@ public sealed record RecognisedSucceeded : SystemEvent
 {
     public int GenderId { get; set; }
 
-    public RecognisedSucceeded(int Id, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    public RecognisedSucceeded(/*int Id,*/ Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
-        GenderId = Id;
+        //GenderId = Id;
     }
 }

@@ -2,7 +2,7 @@
 using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
 
-namespace PeopleDomain.IPL.Repositories;
+namespace PeopleDomain.IPL.Repositories.DomainModels;
 internal sealed class PersonRepository : IPersonRepository
 {
     private readonly IBaseRepository<Person> _baseRepository;

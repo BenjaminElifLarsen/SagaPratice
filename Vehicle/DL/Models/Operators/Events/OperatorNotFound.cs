@@ -1,7 +1,8 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorNotFound : IDomainEventFail
+public sealed record OperatorNotFound : SystemEvent
 {
     public IEnumerable<string> Errors { get; private set; }
 
@@ -9,28 +10,10 @@ public class OperatorNotFound : IDomainEventFail
 
     public int AggregateId { get; private set; }
 
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    internal OperatorNotFound(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    internal OperatorNotFound(int id, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = typeof(Operator).Name;
-        AggregateId = 0;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = 0;
+        AggregateId = id;
         Errors = errors;
     }
 }

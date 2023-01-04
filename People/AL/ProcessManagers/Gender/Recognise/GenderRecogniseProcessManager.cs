@@ -1,14 +1,20 @@
-﻿using Common.ProcessManager;
+﻿using Common.CQRS.Commands;
+using Common.Events.Base;
+using Common.ProcessManager;
 using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Command;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
 { //need a GenderProcessRouter and repositories for each gender pm 
-    private readonly IPeopleCommandBus _commandBus;
+    //private readonly IPeopleCommandBus _commandBus;
     private readonly List<string> _errors;
-    private readonly HashSet<Action<ProcesserFinished>> _handlers;
+    private readonly List<ICommand> _commands;
+    private readonly List<IBaseEvent> _events;
+
+    //private readonly HashSet<Action<ProcesserFinished>> _handlers;
     /*
      * ^ collection of handlers cannot be stored in context
      * instead of saving these, these should be used to transmit a response back for when it hits a point where it has to wait,
@@ -34,14 +40,17 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
     public Guid ProcessManagerId { get; private set; }
     public Guid CorrelationId { get; private set; }
     public RecogniseGenderState State { get; private set; }
+    public IEnumerable<ICommand> Commands => _commands;
+    public IEnumerable<IBaseEvent> Events => _events;
 
-
-    public GenderRecogniseProcessManager(IPeopleCommandBus commandBus)
+    public GenderRecogniseProcessManager(/*IPeopleCommandBus commandBus*/)
     {
-        _commandBus = commandBus;
+        //_commandBus = commandBus;
         ProcessManagerId = Guid.NewGuid();
         _errors = new();
-        _handlers = new();
+        _commands = new();
+        _events = new();
+        //_handlers = new();
         State = RecogniseGenderState.NotStarted;
 
     }
@@ -54,6 +63,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
         {
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderRecognised;
+                _events.Add(new RecognisedSucceeded(@event.CorrelationId, @event.EventId));
                 //create the state change event response thing
                 break;
 
@@ -79,6 +89,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderFailedToRecognise;
                 _errors.AddRange(@event.Errors);
+                _events.Add(new RecognisedFailed(_errors,@event.CorrelationId, @event.CausationId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.
@@ -94,15 +105,15 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
 
     }
 
-    public void PublishEventIfPossible()
-    { //not really needed if starting to publish on each state change
+    //public void PublishEventIfPossible()
+    //{ //not really needed if starting to publish on each state change
        
-    }
+    //}
 
-    public void RegistrateHandler(Action<ProcesserFinished> handler)
-    {
-        _handlers.Add(handler);
-    }
+    //public void RegistrateHandler(Action<ProcesserFinished> handler)
+    //{
+    //    _handlers.Add(handler);
+    //}
 
     public void SetUp(Guid correlationId)
     {

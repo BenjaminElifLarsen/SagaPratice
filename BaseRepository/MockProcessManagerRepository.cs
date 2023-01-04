@@ -13,16 +13,19 @@ public class MockProcessManagerRepository<TProcessManager> : IBaseProcessManager
 
     public void Delete(Guid correlationId)
     {
-        throw new NotImplementedException();
+        _processManagers.Remove(_processManagers.SingleOrDefault(x => x.CorrelationId == correlationId));
     }
 
-    public Task<TProcessManager> LoadAsync(Guid correlationId)
+    public async Task<TProcessManager> LoadAsync(Guid correlationId)
     {
-        throw new NotImplementedException();
+        return await Task.Run(() => _processManagers.SingleOrDefault(x => x.CorrelationId == correlationId));
     }
 
     public void Save(TProcessManager processManager)
     {
-        throw new NotImplementedException();
+        if (!_processManagers.Contains(processManager))
+        {
+            _processManagers.Add(processManager);
+        }
     }
 }

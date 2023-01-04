@@ -1,6 +1,7 @@
 ﻿using BaseRepository;
 using Common.ProcessManager;
 using Common.RepositoryPattern;
+using Common.RepositoryPattern.ProcessManagers;
 using Common.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PeopleDomain.AL.Busses.Command;
@@ -18,7 +19,8 @@ using PeopleDomain.AL.Services.People;
 using PeopleDomain.DL.Factories;
 using PeopleDomain.DL.Models;
 using PeopleDomain.IPL.Context;
-using PeopleDomain.IPL.Repositories;
+using PeopleDomain.IPL.Repositories.DomainModels;
+using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.API;
@@ -46,6 +48,8 @@ public class PeopleApiServices
         services.AddScoped<IProcessManager, HireProcessManager>();
         //services.AddScoped<IProcessManager, RecogniseProcessManager>();
         services.AddScoped<IProcessManager, UnrecogniseProcessManager>();
+        services.AddScoped<IBaseProcessManagerRepository<RecogniseProcessManager>, MockProcessManagerRepository<RecogniseProcessManager>>();
+        services.AddScoped<IGenderRecogniseProcessRepository, GenderRecogniseProcessRepository>();
     }
 
     public static void Seed(IServiceProvider provider)

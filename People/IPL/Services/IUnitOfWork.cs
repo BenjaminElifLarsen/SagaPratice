@@ -1,6 +1,6 @@
 ﻿using Common.Events.Domain;
 using Common.RepositoryPattern;
-using PeopleDomain.IPL.Repositories;
+using PeopleDomain.IPL.Repositories.DomainModels;
 
 namespace PeopleDomain.IPL.Services;
 public interface IUnitOfWork : IBaseUnitOfWork, IBaseEventUnitOfWork

@@ -3,7 +3,7 @@ using Common.ProcessManager;
 using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
-using PeopleDomain.IPL.Repositories;
+using PeopleDomain.IPL.Repositories.DomainModels;
 
 namespace PeopleDomain.IPL.Services;
 internal sealed class UnitOfWork : IUnitOfWork
@@ -48,7 +48,7 @@ internal sealed class UnitOfWork : IUnitOfWork
         }
     }
 
-    public void AddOrphanEvent(IDomainEvent @event)
+    public void AddSystemEvent(IDomainEvent @event)
     {
         _context.Add(@event);
     }

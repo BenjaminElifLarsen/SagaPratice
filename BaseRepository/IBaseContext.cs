@@ -1,4 +1,5 @@
-﻿using Common.Events.Domain;
+﻿using Common.Events.Base;
+using Common.Events.Domain;
 using Common.Events.Store.Event;
 
 namespace Common.RepositoryPattern;
@@ -12,8 +13,8 @@ public interface IBaseContext
     public void Update(IAggregateRoot root);
     public void Remove(IAggregateRoot root);
     public IEnumerable<IAggregateRoot> GetTracked { get; }
-    public void Add(IDomainEvent @event);
-    public void Remove(IDomainEvent @event);
+    public void Add(IBaseEvent @event);
+    public void Remove(IBaseEvent @event);
     public void AddEvents(IAggregateRoot root);
     public IEnumerable<Event> LoadStream(int id, string aggregateRoot);
 }

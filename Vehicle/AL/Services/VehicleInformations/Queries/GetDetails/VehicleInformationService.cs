@@ -5,7 +5,7 @@ using VehicleDomain.AL.Services.VehicleInformations.Queries.GetDetails;
 namespace VehicleDomain.AL.Services.VehicleInformations;
 public partial class VehicleInformationService
 {
-    public async Task<Result<VehicleInformationDetails>> GetVehicleInformationDetailsAsync(int id)
+    public async Task<Result<VehicleInformationDetails>> GetVehicleInformationDetailsAsync(Guid id)
     {
         var details = await _unitOfWork.VehicleInformationRepository.GetAsync(id, new VehicleInformationDetailsQuery());
         if(details is null)

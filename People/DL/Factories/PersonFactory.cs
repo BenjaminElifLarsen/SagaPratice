@@ -22,7 +22,7 @@ internal sealed class PersonFactory : IPersonFactory
             return new InvalidResult<Person>(errors.ToArray());
         }
 
-        Person entity = new(person.FirstName, person.LastName, new(person.Birth.Year, person.Birth.Month, person.Birth.Day), new(person.Gender));
+        Person entity = new(person.FirstName, person.LastName, new(person.Birth.Year, person.Birth.Month, person.Birth.Day), person.Gender);
         return new SuccessResult<Person>(entity);
     }
 }

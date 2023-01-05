@@ -5,21 +5,21 @@ namespace VehicleDomain.DL.Models.Operators;
 
 public class Operator : IAggregateRoot, ISoftDelete
 {
-    private int _id;
+    private Guid _id;
     private DateOnly _birth;
     private readonly HashSet<License> _licenses;
-    private readonly HashSet<IdReference<int>> _vehicles;
+    private readonly HashSet<IdReference> _vehicles;
     private bool _deleted;
     private readonly HashSet<DomainEvent> _events;
 
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
 
     internal IEnumerable<License> Licenses => _licenses;
-    internal IEnumerable<IdReference<int>> Vehicles => _vehicles;
+    internal IEnumerable<Guid> Vehicles => _vehicles.Select(x => x.Id);
 
     public bool Deleted { get => _deleted; private set => _deleted = value; }
 
-    public int Id { get => _id; private set => _id = value; }
+    public Guid Id { get => _id; private set => _id = value; }
 
     public IEnumerable<DomainEvent> Events => _events;
 
@@ -28,7 +28,7 @@ public class Operator : IAggregateRoot, ISoftDelete
         _events = new();
     }
 
-    internal Operator(int operatorId, DateOnly birth)
+    internal Operator(Guid operatorId, DateOnly birth)
     {
         _id = operatorId;
         _birth = birth;
@@ -51,24 +51,24 @@ public class Operator : IAggregateRoot, ISoftDelete
         _birth = new(birth.Year, birth.Month, birth.Day);
     }
 
-    internal bool AddVehicle(IdReference<int> vehicle)
+    internal bool AddVehicle(Guid vehicle)
     {
         return _vehicles.Add(vehicle);
     }
 
-    internal bool RemoveVehicle(IdReference<int> vehicle)
+    internal bool RemoveVehicle(Guid vehicle)
     {
         return _vehicles.Remove(vehicle);
     }
 
-    internal IdReference<int> GetVehicle(int id)
+    internal Guid GetVehicle(Guid id)
     {
-        return _vehicles.FirstOrDefault(x => x.Id == id);
+        return _vehicles.FirstOrDefault(x => x == id);
     }
 
-    internal bool AddLicense(IdReference<int> type, DateTime arquired)
+    internal bool AddLicense(Guid type, DateTime arquired)
     {
-        if (_licenses.Any(x => x.Type.Id == type.Id))
+        if (_licenses.Any(x => x.Type == type))
             return false;
         return _licenses.Add(new(type, new(arquired.Year, arquired.Month, arquired.Day)));
     }
@@ -78,9 +78,9 @@ public class Operator : IAggregateRoot, ISoftDelete
         return _licenses.Remove(license);
     }
 
-    internal License GetLicenseViaLicenseType(int typeId)
+    internal License GetLicenseViaLicenseType(Guid typeId)
     {
-        return _licenses.FirstOrDefault(x => x.Type.Id == typeId);
+        return _licenses.FirstOrDefault(x => x.Type == typeId);
     }
 
     internal IEnumerable<License> GetValidLincenses()
@@ -88,7 +88,7 @@ public class Operator : IAggregateRoot, ISoftDelete
         return _licenses.Where(x => x.Expired == false);
     }
 
-    public bool RenewLicense(int LicenseTypeId, DateOnly renewDate)
+    public bool RenewLicense(Guid LicenseTypeId, DateOnly renewDate)
     {
         var license = GetLicenseViaLicenseType(LicenseTypeId);
         if (license is null)
@@ -119,7 +119,7 @@ public class Operator : IAggregateRoot, ISoftDelete
     /// <param name="ageRequirement"></param>
     /// <param name="licenseTypeId"></param>
     /// <returns>Null if the license was not found, true if old enough else false.</returns>
-    public bool? ValidateLicenseAgeRequirementIsFulfilled(byte ageRequirement, int licenseTypeId)
+    public bool? ValidateLicenseAgeRequirementIsFulfilled(byte ageRequirement, Guid licenseTypeId)
     {
         var license = GetLicenseViaLicenseType(licenseTypeId);
         if (license is null) 
@@ -129,7 +129,7 @@ public class Operator : IAggregateRoot, ISoftDelete
         return license.ValidateAgeRequirement(CalculateAge(), ageRequirement);
     }
 
-    public bool? ValidateLicenseRenewPeriodIsFulfilled(byte renewPeriod, int licenseTypeId)
+    public bool? ValidateLicenseRenewPeriodIsFulfilled(byte renewPeriod, Guid licenseTypeId)
     {
         var license = GetLicenseViaLicenseType(licenseTypeId);
         if(license is null)

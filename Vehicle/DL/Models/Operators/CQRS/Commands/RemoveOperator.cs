@@ -3,7 +3,7 @@
 namespace VehicleDomain.DL.Models.Operators.CQRS.Commands;
 public class RemoveOperatorFromSystem : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public Guid CommandId { get; private set; }
 

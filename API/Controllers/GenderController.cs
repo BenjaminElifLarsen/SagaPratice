@@ -29,7 +29,7 @@ public class GenderController : ControllerBase
     [AllowAnonymous]
     [HttpGet]
     [Route("Details")]
-    public async Task<IActionResult> Details([FromQuery] int id)
+    public async Task<IActionResult> Details([FromQuery] Guid id)
     {
         var result = await _genderService.GetGenderDetailsAsync(id);
         return this.FromResult(result);

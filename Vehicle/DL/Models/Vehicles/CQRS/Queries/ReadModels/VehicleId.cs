@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Queries.ReadModels;
 internal record VehicleId : BaseReadModel
 {
-    public int Id { get; private set; }
-	public VehicleId(int id)
+    public Guid Id { get; private set; }
+	public VehicleId(Guid id)
 	{
 		Id = id;
 	}

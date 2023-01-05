@@ -142,7 +142,7 @@ internal class MockVehicleContext : IVehicleContext
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Event> LoadStream(int id, string aggregateRoot)
+    public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
     {
         throw new NotImplementedException();
     }

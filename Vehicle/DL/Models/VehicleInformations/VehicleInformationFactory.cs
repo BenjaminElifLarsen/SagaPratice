@@ -22,7 +22,7 @@ internal class VehicleInformationFactory : IVehicleInformationFactory
             return new InvalidResult<VehicleInformation>(errors.ToArray());
         }
 
-        VehicleInformation entity = new(vehicleInformation.VehicleName, vehicleInformation.MaxNumberOfWheel, new(vehicleInformation.LicenseTypeId));
+        VehicleInformation entity = new(vehicleInformation.VehicleName, vehicleInformation.MaxNumberOfWheel, vehicleInformation.LicenseTypeId);
         return new SuccessResult<VehicleInformation>(entity);
     }
 }

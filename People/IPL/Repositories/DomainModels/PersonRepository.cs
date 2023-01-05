@@ -17,7 +17,7 @@ internal sealed class PersonRepository : IPersonRepository
         return await _baseRepository.AllAsync(query);
     }
 
-    public async Task<bool> DoesPersonExist(int id)
+    public async Task<bool> DoesPersonExist(Guid id)
     {
         return !await _baseRepository.IsUniqueAsync(x => x == id);
     }
@@ -27,12 +27,12 @@ internal sealed class PersonRepository : IPersonRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel
     {
         return await _baseRepository.FindByPredicateAsync(x => x == id, query);
     }
 
-    public async Task<Person> GetForOperationAsync(int id)
+    public async Task<Person> GetForOperationAsync(Guid id)
     {
         return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }

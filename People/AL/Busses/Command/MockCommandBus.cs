@@ -5,33 +5,33 @@ using System.Diagnostics;
 namespace PeopleDomain.AL.Busses.Command;
 internal sealed class MockCommandBus : IPeopleCommandBus
 {
-    private readonly Dictionary<Type, List<Func<ICommand, Result>>> _routes;
+    private readonly Dictionary<Type, List<Action<ICommand>>> _routes;
 
     public MockCommandBus() 
     {
         _routes = new();
     }
 
-    public Result Dispatch<T>(T command) where T : ICommand
+    public void Dispatch<T>(T command) where T : ICommand
     {
-        List<Func<ICommand, Result>> handlers;
+        List<Action<ICommand>> handlers;
         #if(DEBUG)
             Debug.WriteLine($"{command.CorrelationId} : {command.CausationId} : {command.CommandId} : {command.GetType()}");
         #else
             //write to log
         #endif
         if (!_routes.TryGetValue(command.GetType(), out handlers))
-            return new SuccessResultNoData();
+            return;// new SuccessResultNoData();
 
         if (handlers.Count > 1)
             throw new Exception("To many command handlers.");
 
-        return handlers[0](command);
+        return;// handlers[0](command);
     }
 
-    public void RegisterHandler<T>(Func<T, Result> handler) where T : ICommand
+    public void RegisterHandler<T>(Action<T> handler) where T : ICommand
     {
-        List<Func<ICommand, Result>> handlers;
+        List<Action<ICommand>> handlers;
 
         if(!_routes.TryGetValue(typeof(T), out handlers))
         {
@@ -45,9 +45,9 @@ internal sealed class MockCommandBus : IPeopleCommandBus
         handlers.Add(x => handler((T)x));
     }
 
-    public void UnregisterHandler<T>(Func<T, Result> handler) where T : ICommand
+    public void UnregisterHandler<T>(Action<T> handler) where T : ICommand
     {
-        List<Func<ICommand, Result>> handlers;
+        List<Action<ICommand>> handlers;
 
         if (!_routes.TryGetValue(typeof(T), out handlers))
             return;

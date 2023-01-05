@@ -8,6 +8,6 @@ internal class VehicleInformationIdQuery : BaseQuery<VehicleInformation, Vehicle
 {
     public override Expression<Func<VehicleInformation, VehicleInformationIdValidation>> Map()
     {
-        return e => new(e.VehicleInformationId);
+        return e => new(e.Id);
     }
 }

@@ -5,11 +5,11 @@ namespace VehicleDomain.DL.Models.Vehicles.Events;
 public sealed record VehiclesFoundWithSpecificVehicleInformationAndOperator : SystemEvent
 {
 
-    public int OperatorId { get; private set; }
+    public Guid OperatorId { get; private set; }
     
-    public IEnumerable<int> VehicleIds { get; private set; }
+    public IEnumerable<Guid> VehicleIds { get; private set; }
 
-    internal VehiclesFoundWithSpecificVehicleInformationAndOperator(int operatorId, IEnumerable<int> vehicleIds, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    internal VehiclesFoundWithSpecificVehicleInformationAndOperator(Guid operatorId, IEnumerable<Guid> vehicleIds, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         OperatorId = operatorId;
         VehicleIds = vehicleIds;

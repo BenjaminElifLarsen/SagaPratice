@@ -9,9 +9,9 @@ public class FindOperator : ICommand
 
     public Guid CausationId { get; private set; }
 
-    public int OperatorId { get; private set; }
+    public Guid OperatorId { get; private set; }
 
-    internal FindOperator(int operatorId, Guid correlationId, Guid causationId)
+    internal FindOperator(Guid operatorId, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         CorrelationId = correlationId;

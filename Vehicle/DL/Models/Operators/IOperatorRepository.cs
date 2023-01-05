@@ -3,11 +3,11 @@
 namespace VehicleDomain.DL.Models.Operators;
 public interface IOperatorRepository
 {
-    Task<bool> IsIdUniqueAsync(int id);
-    Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel;
+    Task<bool> IsIdUniqueAsync(Guid id);
+    Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel;
     Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel;
     void Create(Operator entity);
     void Update(Operator entity);
     void Delete(Operator entity);
-    Task<Operator> GetForOperationAsync(int id);
+    Task<Operator> GetForOperationAsync(Guid id);
 }

@@ -15,5 +15,5 @@ public interface IBaseContext
     public void Add(SystemEvent @event);
     public void Remove(SystemEvent @event);
     public void AddEvents(IAggregateRoot root);
-    public IEnumerable<Event> LoadStream(int id, string aggregateRoot);
+    public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot);
 }

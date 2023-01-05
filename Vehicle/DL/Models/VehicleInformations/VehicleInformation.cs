@@ -12,7 +12,7 @@ public class VehicleInformation : IAggregateRoot
     private readonly HashSet<DomainEvent> _events;
     //could have a producer model, might be its own domain. If added, no reason to let user create vehicle informations, only the Producer domain can trigger that
     internal string Name { get => _name; private set => _name = value; }
-    internal Guid LicenseTypeRequired { get => _licenseTypeRequired.Id; private set => _licenseTypeRequired = new(value); }
+    internal Guid LicenseTypeRequired { get => _licenseTypeRequired; private set => _licenseTypeRequired = value; }
     internal byte MaxWheelAmount { get => _maxWheelAmount; private set => _maxWheelAmount = value; }
     internal IEnumerable<Guid> Vehicles => _vehicles.Select(x => x.Id);
 
@@ -38,12 +38,12 @@ public class VehicleInformation : IAggregateRoot
 
     internal bool RegistrateVehicle(Guid vehicle)
     {
-        return _vehicles.Add(new(vehicle));
+        return _vehicles.Add(vehicle);
     }
 
     internal bool UnregistrateVehicle(Guid vehicle)
     {
-        return _vehicles.Remove(_vehicles.FirstOrDefault(x => x.Id == vehicle));
+        return _vehicles.Remove(vehicle);
     }
 
     public void AddDomainEvent(DomainEvent eventItem)

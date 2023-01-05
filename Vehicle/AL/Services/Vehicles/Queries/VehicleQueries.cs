@@ -9,7 +9,7 @@ internal class VehicleListItemQuery : BaseQuery<Vehicle, VehicleListItem>
 {
     public override Expression<Func<Vehicle, VehicleListItem>> Map()
     {
-        return e => new(e.VehicleId, e.SerielNumber.SerialNumber, e.Operators.Count());
+        return e => new(e.Id, e.SerielNumber.SerialNumber, e.Operators.Count());
     }
 }
 
@@ -17,6 +17,6 @@ internal class VehicleDetailsQuery : BaseQuery<Vehicle, VehicleDetails>
 {
     public override Expression<Func<Vehicle, VehicleDetails>> Map()
     {
-        return e => new(e.VehicleId, e.ProductionDate, e.DistanceMovedKm, e.InUse, e.SerielNumber.SerialNumber, e.Operators.Select(x => x.Id));
+        return e => new(e.Id, e.ProductionDate, e.DistanceMovedKm, e.InUse, e.SerielNumber.SerialNumber, e.Operators);
     }
 }

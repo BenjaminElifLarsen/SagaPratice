@@ -17,6 +17,6 @@ internal sealed class GenderDetailsQuery : BaseQuery<Gender, GenderDetails>
 {
     public override Expression<Func<Gender, GenderDetails>> Map()
     {
-        return e => new(e.Id, e.VerbSubject, e.VerbObject, e.People.Select(x => x.Id));
+        return e => new(e.Id, e.VerbSubject, e.VerbObject, e.People.Select(x => x));
     }
 }

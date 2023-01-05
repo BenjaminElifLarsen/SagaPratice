@@ -9,23 +9,23 @@ public class Vehicle : IAggregateRoot
     /*
      * could have a Wheel model and Vehicle could have a collection of wheels, max amount controlled by MaxWheelAmount in vehicle information
      */
-    private int _id;
+    private Guid _id;
     private DateTime _productionDate;
-    private IdReference<int> _vehicleInformation;
+    private IdReference _vehicleInformation;
     private double _distanceMovedKm; //this could make use of event sourcing
-    private readonly HashSet<IdReference<int>> _operators;
+    private readonly HashSet<IdReference> _operators;
     private bool _inUse;
     private SerielNumber _serielNumber; //ensure uniqueness
     private readonly HashSet<DomainEvent> _events;
 
     internal DateTime ProductionDate { get => _productionDate; private set => _productionDate = value; }
-    internal IdReference<int> VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
+    internal Guid VehicleInformation { get => _vehicleInformation; private set => _vehicleInformation = value; }
     internal double DistanceMovedKm { get => _distanceMovedKm; private set => _distanceMovedKm = value; }
-    internal IEnumerable<IdReference<int>> Operators => _operators;
+    internal IEnumerable<Guid> Operators => _operators.Select(x => x.Id);
     internal bool InUse { get => _inUse; private set => _inUse = value; }
     internal SerielNumber SerielNumber { get => _serielNumber; private set => _serielNumber = value; }
 
-    public int Id { get => _id; private set => _id = value; }
+    public Guid Id { get => _id; private set => _id = value; }
 
     public IEnumerable<DomainEvent> Events => _events;
 
@@ -34,9 +34,9 @@ public class Vehicle : IAggregateRoot
         _events = new();
     }
 
-    internal Vehicle(DateTime productionDate, IdReference<int> vehicleInformation, SerielNumber serielNumber)
+    internal Vehicle(DateTime productionDate, Guid vehicleInformation, SerielNumber serielNumber)
     {
-        _id = RandomValue.GetValue;
+        _id = Guid.NewGuid();
         _distanceMovedKm = 0;
         _productionDate = productionDate;
         _vehicleInformation = vehicleInformation;
@@ -45,7 +45,7 @@ public class Vehicle : IAggregateRoot
         _events = new();
     }
 
-    internal Vehicle(DateTime productionDate, IdReference<int> vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
+    internal Vehicle(DateTime productionDate, Guid vehicleInformation, SerielNumber serielNumber, double distanceMovedKm) : this(productionDate, vehicleInformation, serielNumber)
     {
         _distanceMovedKm = distanceMovedKm;
     }
@@ -55,12 +55,6 @@ public class Vehicle : IAggregateRoot
         _productionDate = produced;
         return 0;
     }
-
-    //public int ReplaceVehicleInformation(IdReference vehicleInformation)
-    //{ //makes more sense to remove and create a new one
-    //    _vehicleInformation = vehicleInformation;
-    //    return 0;
-    //}
 
     internal int OverwriteDistanceMoved(double newDistance)
     {
@@ -82,32 +76,32 @@ public class Vehicle : IAggregateRoot
         return 0;
     }
 
-    internal bool AddOperator(IdReference<int> @operator)
+    internal bool AddOperator(Guid @operator)
     {
         return _operators.Add(@operator);
     }
 
-    internal bool RemoveOperator(IdReference<int> @operator)
+    internal bool RemoveOperator(Guid @operator)
     {
         return _operators.Remove(@operator);
     }
 
-    internal bool IsOperatorPermitted(IdReference<int> @operator)
+    internal bool IsOperatorPermitted(Guid @operator)
     {
         return _operators.Any(x => x == @operator);
     }
 
-    internal void StartOperating(IdReference<int> @operator)
+    internal void StartOperating(Guid @operator)
     {
-        if (Operators.Any(x => x.Id == @operator.Id))
+        if (Operators.Any(x => x == @operator))
         {
             _inUse = true;
         }
     }
 
-    internal void StopOperating(IdReference<int> @operator)
+    internal void StopOperating(Guid @operator)
     {
-        if (Operators.Any(x => x.Id == @operator.Id))
+        if (Operators.Any(x => x == @operator))
         { 
             _inUse = false;
         }

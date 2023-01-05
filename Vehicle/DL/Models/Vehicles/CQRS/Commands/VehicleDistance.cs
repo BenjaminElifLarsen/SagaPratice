@@ -3,7 +3,7 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class AddDistanceToVehicleDistance : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public double DistanceToAdd { get; set; }
     public Guid CommandId { get; set; }
 
@@ -21,7 +21,7 @@ public class AddDistanceToVehicleDistance : ICommand
 
 public class ResetVehicleMovedDistance : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public double NewDistance { get; set; }
     public Guid CommandId { get; set; }
 

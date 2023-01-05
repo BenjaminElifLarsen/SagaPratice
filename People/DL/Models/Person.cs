@@ -16,7 +16,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
-    internal Guid Gender { get => _gender.Id; private set => _gender = new(value); }
+    internal Guid Gender { get => _gender; private set => _gender = value; }
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
@@ -35,7 +35,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
-        _gender = new(gender);
+        _gender = gender;
         _events = new();
     }
 
@@ -61,7 +61,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
 
     internal void UpdateGenderIdentification(Guid gender)
     {
-        _gender = new(gender);
+        _gender = gender;
     }
 
     public void Delete(DateOnly? dateTime)

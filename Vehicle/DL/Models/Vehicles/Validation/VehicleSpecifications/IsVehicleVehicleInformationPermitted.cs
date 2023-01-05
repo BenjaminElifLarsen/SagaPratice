@@ -27,7 +27,7 @@ internal class IsVehicleVehicleInformationPermitted : ISpecification<BuyVehicleW
         return IsSatisfiedBy(candidate.VehicleInformation);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
         return _vehicleInformations.Any(x => x.Id == candidate);
     }

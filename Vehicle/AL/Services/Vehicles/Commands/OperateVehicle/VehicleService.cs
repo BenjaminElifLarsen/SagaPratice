@@ -6,11 +6,13 @@ public partial class VehicleService
 {
     public async Task<Result> StartOperatingVehicleAsync(AttemptToStartVehicle command)
     {
-        return await Task.Run(() => _commandBus.Dispatch(command));
+        await Task.Run(() => _commandBus.Dispatch(command));
+        throw new NotImplementedException();//return;
     }
 
     public async Task<Result> StopOperatingVehicleAsync(StopOperatingVehicle command)
     {
-        return await Task.Run(() => _commandBus.Dispatch(command));
+        await Task.Run(() => _commandBus.Dispatch(command));
+        throw new NotImplementedException();//return;
     }
 }

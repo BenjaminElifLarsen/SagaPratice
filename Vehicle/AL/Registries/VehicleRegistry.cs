@@ -84,22 +84,22 @@ public class VehicleRegistry : IVehicleRegistry
 
     public void SetUpRouting(IAlterLicenseTypeProcessManager processManager)
     {
-        _eventBus.RegisterHandler<LicenseTypeAlteredSucceeded>(processManager.Handler);
-        _eventBus.RegisterHandler<LicenseTypeAlteredFailed>(processManager.Handler);
-        _eventBus.RegisterHandler<LicenseTypeAgeRequirementChanged>(processManager.Handler);
-        _eventBus.RegisterHandler<LicenseTypeRenewPeriodChanged>(processManager.Handler);
-        _eventBus.RegisterHandler<LicenseTypeOperatorRemoved>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorForAgeValidatioNotFound>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorForRenewValidationNotFound>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorLicenseAgeRequirementValidated>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorLicenseRetracted>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorLicenseExpired>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorLicenseRenewPeriodValidated>(processManager.Handler);
-        _eventBus.RegisterHandler<OperatorRemovedVehicle>(processManager.Handler);
-        _eventBus.RegisterHandler<VehicleRemovedOperator>(processManager.Handler);
-        _eventBus.RegisterHandler<VehicleNotRequiredToRemoveOperator>(processManager.Handler);
-        _eventBus.RegisterHandler<VehiclesFoundWithSpecificVehicleInformationAndOperator>(processManager.Handler);
-        _eventBus.RegisterHandler<FoundVehicleInformations>(processManager.Handler);
+        _eventBus.RegisterHandler<LicenseTypeAlteredSucceeded>(processManager.Handle);
+        _eventBus.RegisterHandler<LicenseTypeAlteredFailed>(processManager.Handle);
+        _eventBus.RegisterHandler<LicenseTypeAgeRequirementChanged>(processManager.Handle);
+        _eventBus.RegisterHandler<LicenseTypeRenewPeriodChanged>(processManager.Handle);
+        _eventBus.RegisterHandler<LicenseTypeOperatorRemoved>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorForAgeValidatioNotFound>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorForRenewValidationNotFound>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorLicenseAgeRequirementValidated>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorLicenseRetracted>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorLicenseExpired>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorLicenseRenewPeriodValidated>(processManager.Handle);
+        _eventBus.RegisterHandler<OperatorRemovedVehicle>(processManager.Handle);
+        _eventBus.RegisterHandler<VehicleRemovedOperator>(processManager.Handle);
+        _eventBus.RegisterHandler<VehicleNotRequiredToRemoveOperator>(processManager.Handle);
+        _eventBus.RegisterHandler<VehiclesFoundWithSpecificVehicleInformationAndOperator>(processManager.Handle);
+        _eventBus.RegisterHandler<FoundVehicleInformations>(processManager.Handle);
     }
 
     public void SetUpRouting(IStartVehicleProcessManager processManager)

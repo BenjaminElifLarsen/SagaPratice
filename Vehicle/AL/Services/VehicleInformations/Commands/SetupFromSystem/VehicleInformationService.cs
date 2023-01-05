@@ -6,6 +6,7 @@ public partial class VehicleInformationService
 {
     public async Task<Result> SetupVehicleInformation(AddVehicleInformationFromSystem command)
     {
-        return await Task.Run(() =>_commandBus.Dispatch(command));
+        await Task.Run(() =>_commandBus.Dispatch(command));
+        throw new NotImplementedException();//return;
     }
 }

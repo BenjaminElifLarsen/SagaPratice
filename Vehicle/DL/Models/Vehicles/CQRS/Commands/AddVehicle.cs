@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class BuyVehicleWithOperators : ICommand
 {
-    public int VehicleInformation { get; set; }
-    public IEnumerable<int> Operators { get; set; }
+    public Guid VehicleInformation { get; set; }
+    public IEnumerable<Guid> Operators { get; set; }
     public DateTime Produced { get; set; }
     public string SerialNumber { get; set; }
 
@@ -24,7 +24,7 @@ public class BuyVehicleWithOperators : ICommand
 
 public class BuyVehicleWithNoOperator : ICommand
 {
-    public int VehicleInformation { get; set; }
+    public Guid VehicleInformation { get; set; }
     public DateTime Produced { get; set; }
     public string SerialNumber { get; set; }
 

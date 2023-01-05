@@ -38,7 +38,7 @@ public class VehicleController : ControllerBase
     [AllowAnonymous]
     [HttpGet]
     [Route("Details")]
-    public async Task<IActionResult> Details([FromQuery] int id)
+    public async Task<IActionResult> Details([FromQuery] Guid id)
     {
         var result = await _vehicleService.GetVehicleDetailsAsync(id);
         return this.FromResult(result);

@@ -5,7 +5,7 @@ using VehicleDomain.DL.Models.Operators.CQRS.Queries.ReadModels;
 namespace VehicleDomain.AL.Services.Operators;
 public partial class OperatorService
 {
-    public async Task<Result<OperatorDetails>> GetOperatorDetailsAsync(int id)
+    public async Task<Result<OperatorDetails>> GetOperatorDetailsAsync(Guid id)
     {
         var details = await Task.Run(() => _unitOfWork.OperatorRepository.GetAsync(id, new OperatorDetailsQuery()));
         if(details is null)

@@ -27,7 +27,7 @@ internal sealed class GenderRepository : IGenderRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Gender, TProjection> query) where TProjection : BaseReadModel
     {
         return await _baseRepository.FindByPredicateAsync(x => x == id, query);
     }
@@ -37,7 +37,7 @@ internal sealed class GenderRepository : IGenderRepository
         _baseRepository.Update(entity);
     }
 
-    public async Task<Gender> GetForOperationAsync(int id)
+    public async Task<Gender> GetForOperationAsync(Guid id)
     {
         return await _baseRepository.FindByPredicateForOperationAsync(x => x == id);
     }

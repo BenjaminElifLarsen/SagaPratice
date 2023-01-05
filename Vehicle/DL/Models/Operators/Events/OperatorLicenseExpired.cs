@@ -3,9 +3,9 @@
 namespace VehicleDomain.DL.Models.Operators.Events;
 public sealed record OperatorLicenseExpired : DomainEvent
 {
-    public int LicenseTypeId { get; private set; }
+    public Guid LicenseTypeId { get; private set; }
     
-    internal OperatorLicenseExpired(Operator aggregate, int licenseTypeId, Guid correlationId, Guid causationId)
+    internal OperatorLicenseExpired(Operator aggregate, Guid licenseTypeId, Guid correlationId, Guid causationId)
         : base(aggregate, correlationId, causationId)
     {
         LicenseTypeId = licenseTypeId;

@@ -6,11 +6,11 @@ public class LicenseRenewPeriodRequireValidation : ICommand
     public Guid CommandId { get; private set; }
     public Guid CorrelationId { get; private set; }
     public Guid CausationId { get; private set; }
-    public int OperatorId { get; private set; }
-    public int LicenseTypeId { get; private set; }
+    public Guid OperatorId { get; private set; }
+    public Guid LicenseTypeId { get; private set; }
     public byte NewRenewPeriod { get; private set; }
     
-    public LicenseRenewPeriodRequireValidation(int operatorId, int licenseTypeId, byte newRenewPeriod, Guid correlationId, Guid causationId)
+    public LicenseRenewPeriodRequireValidation(Guid operatorId, Guid licenseTypeId, byte newRenewPeriod, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;

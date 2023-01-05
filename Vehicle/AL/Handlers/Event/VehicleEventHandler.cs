@@ -20,12 +20,12 @@ internal class VehicleEventHandler : IVehicleEventHandler
 
     public void Handle(LicenseTypeAgeRequirementChanged @event)
     { //will needd to find all licenses that uese the given license type, via their operator, and validate them
-        _commandBus.Dispatch(new ValidateLicenseAgeRequirementBecauseChange(@event.Data.Id, @event.Data.NewAgeRequirement, @event.Data.OperatorIds, @event.CorrelationId, @event.EventId)); //needs command handler
+        _commandBus.Dispatch(new ValidateLicenseAgeRequirementBecauseChange(@event.AggregateId, @event.NewAgeRequirement, @event.OperatorIds, @event.CorrelationId, @event.EventId)); //needs command handler
     }
 
     public void Handle(LicenseTypeRenewPeriodChanged @event) //license type do know of the operators that need to be contacted, consider transmitted that data (goes for above too)
     { //will need to find all licenses that use the given license type, via their operator, and validate them
-        _commandBus.Dispatch(new ValidateLicenseRenewPeriodBecauseChange(@event.Data.Id, @event.Data.NewRenewPeriodInYears, @event.Data.OperatorIds, @event.CorrelationId, @event.EventId)); //needs command license 
+        _commandBus.Dispatch(new ValidateLicenseRenewPeriodBecauseChange(@event.AggregateId, @event.NewRenewPeriodInYears, @event.OperatorIds, @event.CorrelationId, @event.EventId)); //needs command license 
     }
 
     public void Handle(LicenseTypeRetracted @event)
@@ -49,7 +49,7 @@ internal class VehicleEventHandler : IVehicleEventHandler
         //vehicle knows it vehicle information and vehicle information knows it license type. 
         //so the command needs to get the specific vehicle information with the license type id and then get all vehicle with that vehicle information and also got a reference to the operator in their operator collection.
         //in not wanting to operator on multiple aggregates in one command, could create events for each combination
-        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.AggregateId, @event.LicenseTypeId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(OperatorLicenseRenewed @event)
@@ -59,18 +59,18 @@ internal class VehicleEventHandler : IVehicleEventHandler
 
     public void Handle(OperatorLicenseRetracted @event)
     {
-        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.Data.OperatorId, @event.Data.LicenseTypeId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.AggregateId, @event.LicenseTypeId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(OperatorRemoved @event)
     {
-        foreach(var vehicle in @event.Data.VehicleIds)
+        foreach(var vehicle in @event.VehicleIds)
         {
-            _commandBus.Dispatch(new RemoveOperatorFromVehicle(vehicle, @event.Data.Id, @event.CorrelationId, @event.EventId));
+            _commandBus.Dispatch(new RemoveOperatorFromVehicle(vehicle, @event.AggregateId, @event.CorrelationId, @event.EventId));
         }
-        foreach(var licenseType in @event.Data.LicenseTypeIds)
+        foreach(var licenseType in @event.LicenseTypeIds)
         {
-            _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.Data.Id, licenseType, @event.CorrelationId, @event.EventId)); //needs command handler
+            _commandBus.Dispatch(new RemoveOperatorFromLicenseType(@event.AggregateId, licenseType, @event.CorrelationId, @event.EventId)); //needs command handler
         }
     }
 
@@ -91,21 +91,21 @@ internal class VehicleEventHandler : IVehicleEventHandler
 
     public void Handle(VehicleOperatorRelationshipEstablished @event)
     {
-        _commandBus.Dispatch(new AddVehicleToOperator(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId));
-        _commandBus.Dispatch(new AddOperatorToVehicle(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddVehicleToOperator(@event.AggregateId, @event.OperatorId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddOperatorToVehicle(@event.AggregateId, @event.OperatorId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(VehicleOperatorRelationshipDisbanded @event)
     {
-        _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId));
-        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.Data.VehicleId, @event.Data.OperatorId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.AggregateId, @event.OperatorId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemoveOperatorFromVehicle(@event.AggregateId, @event.OperatorId, @event.CorrelationId, @event.EventId));
     }
 
     public void Handle(VehicleSold @event)
     {
-        foreach(var @operator in @event.Data.OperatorIds)
+        foreach(var @operator in @event.OperatorIds)
         {
-            _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.Data.Id, @operator, @event.CorrelationId, @event.EventId));
+            _commandBus.Dispatch(new RemoveVehicleFromOperator(@event.AggregateId, @operator, @event.CorrelationId, @event.EventId));
         }
     }
 }

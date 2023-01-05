@@ -14,8 +14,8 @@ internal class IsOperatorIdSet : ISpecification<AddOperatorNoLicenseFromSystem>/
         return IsSatisfiedBy(candidate.Id);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
-        return candidate > 0;
+        return candidate != Guid.Empty;
     }
 }

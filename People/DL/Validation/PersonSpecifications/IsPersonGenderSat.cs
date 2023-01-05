@@ -20,8 +20,8 @@ internal sealed class IsPersonGenderSat : ISpecification<Person>, ISpecification
         return candidate.Gender is null || IsSatisfiedBy(candidate.Gender.Gender);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
-        return candidate != 0;
+        return candidate != Guid.Empty;
     }
 }

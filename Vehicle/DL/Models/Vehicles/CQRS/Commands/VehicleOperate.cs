@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class AttemptToStartVehicle : ICommand
 {
-    public int VehicleId { get; set; }
-    public int OperatorId { get; set; }
+    public Guid VehicleId { get; set; }
+    public Guid OperatorId { get; set; }
     public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
@@ -21,8 +21,8 @@ public class AttemptToStartVehicle : ICommand
 
 public class StopOperatingVehicle : ICommand
 {
-    public int VehicleId { get; set; }
-    public int OperatorId { get; set; }
+    public Guid VehicleId { get; set; }
+    public Guid OperatorId { get; set; }
     public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }

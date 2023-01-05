@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.LicenseTypes.CQRS.Commands;
 public class RemoveOperatorFromLicenseType : ICommand
 {
-    public int OperatorId { get; private set; }
-    public int LicenseTypeId { get; private set; }
+    public Guid OperatorId { get; private set; }
+    public Guid LicenseTypeId { get; private set; }
 
     public Guid CommandId { get; private set; }
 
@@ -12,7 +12,7 @@ public class RemoveOperatorFromLicenseType : ICommand
 
     public Guid CausationId { get; private set; }
 
-    public RemoveOperatorFromLicenseType(int operatorId, int licenseTypeId, Guid correlationId, Guid causationId)
+    public RemoveOperatorFromLicenseType(Guid operatorId, Guid licenseTypeId, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;

@@ -9,7 +9,7 @@ internal class LicenseTypeListItemQuery : BaseQuery<LicenseType, LicenseTypeList
 {
     public override Expression<Func<LicenseType, LicenseTypeListItem>> Map()
     {
-        return e => new(e.LicenseTypeId, e.Type, e.RenewPeriodInYears, e.AgeRequirementInYears, e.Operators.Count(), e.VehicleInformations.Count());
+        return e => new(e.Id, e.Type, e.RenewPeriodInYears, e.AgeRequirementInYears, e.Operators.Count(), e.VehicleInformations.Count());
     }
 }
 
@@ -17,7 +17,7 @@ internal class LicenseTypeDetailsQuery : BaseQuery<LicenseType, LicenseTypeDetai
 {
     public override Expression<Func<LicenseType, LicenseTypeDetails>> Map()
     {
-        return e => new(e.LicenseTypeId, e.Type, e.RenewPeriodInYears, e.AgeRequirementInYears, new(e.CanBeIssuedFrom.Year, e.CanBeIssuedFrom.Month, e.CanBeIssuedFrom.Day),
-            e.Operators.Select(x => x.Id), e.VehicleInformations.Select(x => x.Id));
+        return e => new(e.Id, e.Type, e.RenewPeriodInYears, e.AgeRequirementInYears, new(e.CanBeIssuedFrom.Year, e.CanBeIssuedFrom.Month, e.CanBeIssuedFrom.Day),
+            e.Operators, e.VehicleInformations);
     }
 }

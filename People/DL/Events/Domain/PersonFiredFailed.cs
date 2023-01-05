@@ -5,20 +5,22 @@ namespace PeopleDomain.DL.Events.Domain;
 public sealed record PersonFiredFailed : SystemEvent
 {
     public string AggregateType { get; private set; }
-    public int AggregateId { get; private set; }
+    public Guid AggregateId { get; private set; }
     public IEnumerable<string> Errors { get; private set; }
 
-    public PersonFiredFailed(Person aggregate, IEnumerable<string> errors, int version, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    public PersonFiredFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId)
+        : base(correlationId, causationId)
     {
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.PersonId;
+        AggregateId = aggregate.Id;
         Errors = errors;
     }
 
-    public PersonFiredFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    public PersonFiredFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId)
+        : base(correlationId, causationId)
     {
         AggregateType = typeof(Person).Name;
-        AggregateId = 0;
+        AggregateId = Guid.Empty;
         Errors = errors;
     }
 }

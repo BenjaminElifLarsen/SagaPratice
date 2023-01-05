@@ -3,9 +3,9 @@
 namespace PeopleDomain.DL.CQRS.Queries.ReadModels;
 internal sealed record GenderIdValidation : BaseReadModel
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
 
-	public GenderIdValidation(int id)
+	public GenderIdValidation(Guid id)
 	{
 		Id = id;
 	}

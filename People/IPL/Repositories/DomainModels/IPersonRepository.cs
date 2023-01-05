@@ -7,8 +7,8 @@ public interface IPersonRepository
     public void Hire(Person entity);
     public void Fire(Person entity);
     public void UpdatePersonalInformation(Person entity);
-    public Task<bool> DoesPersonExist(int id);
-    Task<Person> GetForOperationAsync(int id);
+    public Task<bool> DoesPersonExist(Guid id);
+    Task<Person> GetForOperationAsync(Guid id);
     public Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel;
-    public Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel;
+    public Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Person, TProjection> query) where TProjection : BaseReadModel;
 }

@@ -14,8 +14,8 @@ internal class IsVehicleVehicleInformationSat : ISpecification<BuyVehicleWithOpe
         return IsSatisfiedBy(candidate.VehicleInformation);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
-        return candidate != 0;
+        return candidate != Guid.Empty;
     }
 }

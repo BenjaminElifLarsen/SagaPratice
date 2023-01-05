@@ -5,11 +5,12 @@ public sealed record LicenseTypeRenewPeriodChanged : DomainEvent
 {
     public byte NewRenewPeriodInYears { get; private set; }
 
-    public IEnumerable<int> OperatorIds { get; private set; }
+    public IEnumerable<Guid> OperatorIds { get; private set; }
     
-    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate, Guid correlationId, Guid causationId) : base(aggregate.Id, aggregate.GetType().Name, aggregate.Events.Count(), correlationId, causationId)
+    internal LicenseTypeRenewPeriodChanged(LicenseType aggregate, Guid correlationId, Guid causationId) 
+        : base(aggregate, correlationId, causationId)
     {
         NewRenewPeriodInYears = aggregate.RenewPeriodInYears;
-        OperatorIds = aggregate.Operators.Select(x => x.Id).ToList();
+        OperatorIds = aggregate.Operators;
     }
 }

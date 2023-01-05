@@ -20,11 +20,11 @@ internal static class Seeder
             peopleContext.Add(g2);
         }
 
-        Person p1 = new(1,"Triss", "Nib", new(1956, 1, 2), new(g1.Id));
+        Person p1 = new(Guid.Parse("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA"), "Triss", "Nib", new(1956, 1, 2), g1.Id);
         if (!(peopleContext as IContextData<Person>).GetAll.Any())
         { //remember the create event and events for adding a gender to a person and other way around
-            peopleContext.Add(p1);
-            g1.AddPerson(new(p1.PersonId));
+            peopleContext.Add(p1); //or set up command and dispatch them
+            g1.AddPerson(p1.Id);
         }
 
         peopleContext.Save();

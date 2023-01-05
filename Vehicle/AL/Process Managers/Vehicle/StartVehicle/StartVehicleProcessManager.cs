@@ -13,8 +13,8 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
     private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
-    private int _operatorId;
-    private int _vehicleId;
+    private Guid _operatorId;
+    private Guid _vehicleId;
 
     public Guid ProcessManagerId { get; private set; }
 

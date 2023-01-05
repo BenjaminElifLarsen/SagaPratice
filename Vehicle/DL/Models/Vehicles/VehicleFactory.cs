@@ -22,7 +22,7 @@ internal class VehicleFactory : IVehicleFactory
             return new InvalidResult<Vehicle>(errors.ToArray());
         }
 
-        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(vehicle.SerialNumber));
+        Vehicle entity = new(vehicle.Produced, vehicle.VehicleInformation, new(vehicle.SerialNumber));
         return new SuccessResult<Vehicle>(entity);
     }
 
@@ -41,10 +41,10 @@ internal class VehicleFactory : IVehicleFactory
             return new InvalidResult<Vehicle>(errors.ToArray());
         }
 
-        Vehicle entity = new(vehicle.Produced, new(vehicle.VehicleInformation), new(vehicle.SerialNumber));
+        Vehicle entity = new(vehicle.Produced, vehicle.VehicleInformation, new(vehicle.SerialNumber));
         foreach(var @operator in vehicle.Operators)
         {
-            entity.AddOperator(new(@operator));
+            entity.AddOperator(@operator);
         }        
         return new SuccessResult<Vehicle>(entity);
     }

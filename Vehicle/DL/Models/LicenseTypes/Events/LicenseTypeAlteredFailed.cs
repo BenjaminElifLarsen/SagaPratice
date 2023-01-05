@@ -8,16 +8,16 @@ public sealed record LicenseTypeAlteredFailed : SystemEvent
 
     public string AggregateType { get; private set; }
 
-    public int AggregateId { get; private set; }
+    public Guid AggregateId { get; private set; }
 
     public LicenseTypeAlteredFailed(LicenseType aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.LicenseTypeId;
+        AggregateId = aggregate.Id;
         Errors = errors;
     }
 
-    public LicenseTypeAlteredFailed(int id, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    public LicenseTypeAlteredFailed(Guid id, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = typeof(LicenseType).Name;
         AggregateId = id;

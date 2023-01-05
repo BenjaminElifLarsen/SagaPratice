@@ -8,6 +8,6 @@ internal class LicenseTypeForVehicleInformationValidationQuery : BaseQuery<Licen
 {
     public override Expression<Func<LicenseType, LicenseTypeValidation>> Map()
     {
-        return e => new(e.LicenseTypeId);
+        return e => new(e.Id);
     }
 }

@@ -102,7 +102,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
         {
             return; // new InvalidResultNoData("Operator was not found.");
         }
-        if (@operator.AddLicense(new(command.LicenseType), command.Arquired))
+        if (@operator.AddLicense(command.LicenseType, command.Arquired))
         {
             return; // new InvalidResultNoData($"A license with type of {command.LicenseType} is already present.");
         }
@@ -302,7 +302,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
         {
             return; // new InvalidResultNoData($"");
         }
-        entity.AddOperator(new(command.OperatorId));
+        entity.AddOperator(command.OperatorId);
         _unitOfWork.VehicleRepository.Update(entity);
         return; // new SuccessResultNoData();
     }
@@ -318,7 +318,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
         {
             return; // new InvalidResultNoData($"");
         }
-        entity.AddVehicle(new(command.VehicleId));
+        entity.AddVehicle(command.VehicleId);
         _unitOfWork.OperatorRepository.Update(entity);
         return; // new SuccessResultNoData();
     }
@@ -344,7 +344,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
             _unitOfWork.AddSystemEvent(new VehicleNotFound(command.VehicleId, new string[] { "Not found." }, command.CorrelationId, command.CommandId)); ;
             return; // new InvalidResultNoData($"");
         }
-        var removed = entity.RemoveOperator(new(command.OperatorId));
+        var removed = entity.RemoveOperator(command.OperatorId);
         if (removed)
         {
             entity.AddDomainEvent(new VehicleRemovedOperator(entity, command.OperatorId, command.CorrelationId, command.CommandId));
@@ -366,7 +366,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
             _unitOfWork.AddSystemEvent(new OperatorNotFound(command.OperatorId, new string[] { "Not found." }, command.CorrelationId, command.CommandId));
             return; // new InvalidResultNoData($"");
         }
-        entity.RemoveVehicle(new(command.VehicleId));
+        entity.RemoveVehicle(command.VehicleId);
         entity.AddDomainEvent(new OperatorRemovedVehicle(entity, command.VehicleId, command.CorrelationId, command.CommandId));
         _unitOfWork.OperatorRepository.Update(entity);
         return; // new SuccessResultNoData();
@@ -400,11 +400,11 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
         {
             return; // new InvalidResultNoData($"Not found.");
         }
-        if (!entity.IsOperatorPermitted(new(command.OperatorId)))
+        if (!entity.IsOperatorPermitted(command.OperatorId))
         {
             return; // new InvalidResultNoData($"The operator with id {command.OperatorId} is not permitted to operate vehicle.");
         }
-        entity.StopOperating(new(command.OperatorId));
+        entity.StopOperating(command.OperatorId);
         _unitOfWork.VehicleRepository.Update(entity);
         _unitOfWork.Save();
         return; // new SuccessResultNoData();
@@ -417,7 +417,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
         {
             //error most likely as this should only be called by an event
         }
-        entity.RemoveOperator(new(command.OperatorId));
+        entity.RemoveOperator(command.OperatorId);
         entity.AddDomainEvent(new LicenseTypeOperatorRemoved(entity, command.OperatorId, command.CorrelationId, command.CommandId));
         _unitOfWork.LicenseTypeRepository.Update(entity);
         return; // new SuccessResultNoData();
@@ -554,7 +554,7 @@ internal sealed class VehicleCommandHandler : IVehicleCommandHandler
             _unitOfWork.VehicleRepository.Update(entity);
             return; // new InvalidResultNoData();
         }
-        entity.StartOperating(new(command.OperatorId)); //a vehicle that is in the process of being sold should not permit being operated?
+        entity.StartOperating(command.OperatorId); //a vehicle that is in the process of being sold should not permit being operated?
         _unitOfWork.VehicleRepository.Update(entity);
         return; // new SuccessResultNoData();
     }

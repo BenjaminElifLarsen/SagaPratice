@@ -7,6 +7,6 @@ namespace VehicleDomain.AL.Services.VehicleInformations;
 public interface IVehicleInformationService
 {//put the read models and queries into the CQRS folder under AL
     Task<Result<IEnumerable<VehicleInformationListItem>>> GetVehicleInformationListAsync();
-    Task<Result<VehicleInformationDetails>> GetVehicleInformationDetailsAsync(int id);
+    Task<Result<VehicleInformationDetails>> GetVehicleInformationDetailsAsync(Guid id);
     Task<Result> SetupVehicleInformation(AddVehicleInformationFromSystem command);
 }

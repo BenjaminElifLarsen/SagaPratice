@@ -26,19 +26,19 @@ internal class LicenseTypeRepository : ILicenseTypeRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<LicenseType, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.FindByPredicateAsync(x => x.LicenseTypeId == id, query);
+        return await _baseRepository.FindByPredicateAsync(x => x.Id == id, query);
     }
 
-    public async Task<LicenseType> GetForOperationAsync(int id)
+    public async Task<LicenseType> GetForOperationAsync(Guid id)
     {
-        return await _baseRepository.FindByPredicateForOperationAsync(x => x.LicenseTypeId == id);
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.Id == id);
     }
 
-    public async Task<bool> IsIdUniqueAsync(int id)
+    public async Task<bool> IsIdUniqueAsync(Guid id)
     {
-        return await _baseRepository.IsUniqueAsync(x => x.LicenseTypeId == id);
+        return await _baseRepository.IsUniqueAsync(x => x.Id == id);
     }
 
     public async Task<bool> IsTypeUniqueAsync(string type)

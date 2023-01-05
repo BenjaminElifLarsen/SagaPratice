@@ -10,7 +10,7 @@ public sealed record LicenseTypeAlteredSucceeded : DomainEvent
     public bool RenewPeriodChanged { get; private set; }
     
     public LicenseTypeAlteredSucceeded(LicenseType aggregate, bool typeChanged, bool ageRequirementChanged, bool renewPeriodChanged, Guid correlationId, Guid causationId)
-        : base(aggregate.Id, aggregate.GetType().Name, aggregate.Events.Count(), correlationId, causationId)
+        : base(aggregate, correlationId, causationId)
     {
         TypeChanged = typeChanged;
         AgeRequirementChanged = ageRequirementChanged;

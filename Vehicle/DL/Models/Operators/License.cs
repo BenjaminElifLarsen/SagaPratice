@@ -8,7 +8,7 @@ internal sealed class License
 {
     private int _licenseId;
     private Operator _operator; //ORMs like EF Core would use and set this variable
-    private IdReference<int> _type;
+    private IdReference _type;
     private DateOnly _arquired;
     private DateOnly? _lastRenewed;
     private bool _expired;
@@ -18,14 +18,14 @@ internal sealed class License
     internal DateOnly Arquired { get => _arquired; private set => _arquired = value; }
     internal DateOnly? LastRenewed { get => _lastRenewed; private set => _lastRenewed = value; }
     internal bool Expired { get => _expired; private set => _expired = value; }
-    internal IdReference<int> Type { get => _type; private set => _type = value; }
+    internal Guid Type { get => _type; private set => _type = value; }
 
     private License()
     {
 
     }
 
-    internal License(IdReference<int> type, DateOnly arquired)
+    internal License(Guid type, DateOnly arquired)
     {
         _licenseId = RandomValue.GetValue;
         _type = type;

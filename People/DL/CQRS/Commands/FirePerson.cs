@@ -3,7 +3,7 @@
 namespace PeopleDomain.DL.CQRS.Commands;
 public sealed class FirePersonFromUser : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public DateTime FiredFrom { get; set; }
 
     public Guid CommandId { get; private set; }

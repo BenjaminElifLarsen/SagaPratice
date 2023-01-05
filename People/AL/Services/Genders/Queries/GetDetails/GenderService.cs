@@ -5,7 +5,7 @@ using PeopleDomain.AL.Services.Genders.Queries.GetDetails;
 namespace PeopleDomain.AL.Services.Genders;
 public partial class GenderService
 {
-    public async Task<Result<GenderDetails>> GetGenderDetailsAsync(int id)
+    public async Task<Result<GenderDetails>> GetGenderDetailsAsync(Guid id)
     {
         var details = await _unitOfWork.GenderRepository.GetAsync(id, new GenderDetailsQuery());
         if(details is null)

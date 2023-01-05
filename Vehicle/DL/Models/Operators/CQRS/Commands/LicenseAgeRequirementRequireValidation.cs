@@ -6,11 +6,11 @@ public class LicenseAgeRequirementRequireValidation : ICommand
     public Guid CommandId { get; private set; }
     public Guid CorrelationId { get; private set; }
     public Guid CausationId { get; private set; }
-    public int OperatorId { get; private set; }
-    public int LicenseTypeId { get; private set; }
+    public Guid OperatorId { get; private set; }
+    public Guid LicenseTypeId { get; private set; }
     public byte NewAgeRequirement { get; private set; }
 
-    public LicenseAgeRequirementRequireValidation(int operatorId, int licenseTypeId, byte newAgeRequirement, Guid correlationId, Guid causationId)
+    public LicenseAgeRequirementRequireValidation(Guid operatorId, Guid licenseTypeId, byte newAgeRequirement, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         LicenseTypeId = licenseTypeId;

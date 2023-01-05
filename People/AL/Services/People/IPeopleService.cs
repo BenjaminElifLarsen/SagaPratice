@@ -7,7 +7,7 @@ namespace PeopleDomain.AL.Services.People;
 public interface IPeopleService
 {
     Task<Result<IEnumerable<PersonListItem>>> GetPeopleListAsync();
-    Task<Result<PersonDetails>> GetPersonDetailsAsync(int id);
+    Task<Result<PersonDetails>> GetPersonDetailsAsync(Guid id);
     Task<Result> HirePersonAsync(HirePersonFromUser command);
     Task<Result> FirePersonAsync(FirePersonFromUser command);
     Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command);

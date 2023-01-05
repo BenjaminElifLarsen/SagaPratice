@@ -26,19 +26,19 @@ internal class OperatorRepository : IOperatorRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Operator, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.FindByPredicateAsync(x => x.OperatorId == id, query);
+        return await _baseRepository.FindByPredicateAsync(x => x.Id == id, query);
     }
 
-    public async Task<Operator> GetForOperationAsync(int id)
+    public async Task<Operator> GetForOperationAsync(Guid id)
     {
-        return await _baseRepository.FindByPredicateForOperationAsync(x => x.OperatorId == id);
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.Id == id);
     }
 
-    public async Task<bool> IsIdUniqueAsync(int id)
+    public async Task<bool> IsIdUniqueAsync(Guid id)
     {
-        return await _baseRepository.IsUniqueAsync(x => x.OperatorId == id);
+        return await _baseRepository.IsUniqueAsync(x => x.Id == id);
     }
 
     public void Update(Operator entity)

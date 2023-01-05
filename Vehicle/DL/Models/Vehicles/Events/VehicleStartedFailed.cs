@@ -5,9 +5,9 @@ namespace VehicleDomain.DL.Models.Vehicles.Events;
 public sealed record VehicleStartedFailed : SystemEvent
 {
     public IEnumerable<string> Errors { get; private set; }
-    public int VehicleId { get; private set; }
+    public Guid VehicleId { get; private set; }
 
-    public VehicleStartedFailed(int vehicleId, IEnumerable<string> errors, Guid correlationId, Guid causationId)
+    public VehicleStartedFailed(Guid vehicleId, IEnumerable<string> errors, Guid correlationId, Guid causationId)
         : base(correlationId, causationId)
     {
         VehicleId = vehicleId;

@@ -6,6 +6,7 @@ public partial class OperatorService
 {
     public async Task<Result> RemoveOperatorFromSystemAsync(RemoveOperatorFromSystem command)
     {
-        return await Task.Run(() => _commandBus.Dispatch(command));
+        await Task.Run(() => _commandBus.Dispatch(command));
+        throw new NotImplementedException();//return;
     }
 }

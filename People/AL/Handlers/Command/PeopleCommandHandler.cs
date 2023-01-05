@@ -93,8 +93,8 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         if (command.Gender is not null)
         {
             var oldGender = entity.Gender;
-            entity.UpdateGenderIdentification(new(command.Gender.Gender));
-            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender.Id, command.CorrelationId, command.CommandId));
+            entity.UpdateGenderIdentification(command.Gender.Gender);
+            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender, command.CorrelationId, command.CommandId));
         }
 
         var firstNameChanged = command.FirstName is not null;
@@ -133,7 +133,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
             _unitOfWork.Save();
             return; // new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
         } //should validate if the person id exist
-        entity.AddPerson(new(command.PersonId));
+        entity.AddPerson(command.PersonId);
         entity.AddDomainEvent(new PersonAddedToGenderSucceeded(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return; // new SuccessResultNoData();
@@ -147,7 +147,7 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
             return; // new InvalidResultNoData();//create an event for a saga to handle and stop the execution of the current code.
             //cause an error that will prevent the saving of person.
         } //these handlers should, in theory, not fail as they rely on validated data.
-        entity.RemovePerson(new(command.PersonId)); //no need for validating if the person exist or not as they are getting removed.
+        entity.RemovePerson(command.PersonId); //no need for validating if the person exist or not as they are getting removed.
         entity.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entity, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entity);
         return; // new SuccessResultNoData();
@@ -161,9 +161,9 @@ internal sealed class PeopleCommandHandler : IPeopleCommandHandler
         {
             return; // new InvalidResultNoData(); //create event for saga
         }
-        entityToAddToo.AddPerson(new(command.PersonId));
+        entityToAddToo.AddPerson(command.PersonId);
         entityToAddToo.AddDomainEvent(new PersonAddedToGenderSucceeded(entityToAddToo, command.PersonId, command.CorrelationId, command.CommandId));
-        entityToRemoveFrom.RemovePerson(new(command.PersonId));
+        entityToRemoveFrom.RemovePerson(command.PersonId);
         entityToRemoveFrom.AddDomainEvent(new PersonRemovedFromGenderSucceeded(entityToRemoveFrom, command.PersonId, command.CorrelationId, command.CommandId));
         _unitOfWork.GenderRepository.Update(entityToAddToo);
         _unitOfWork.GenderRepository.Update(entityToRemoveFrom); //have an event to indicate this is done, mayhaps similar name to the event but with Success at the end?

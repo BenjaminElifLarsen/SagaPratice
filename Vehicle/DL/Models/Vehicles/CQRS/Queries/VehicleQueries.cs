@@ -7,6 +7,6 @@ internal class VehicleIdQuery : BaseQuery<Vehicle, VehicleId>
 {
     public override Expression<Func<Vehicle, VehicleId>> Map()
     {
-        return e => new(e.VehicleId);
+        return e => new(e.Id);
     }
 }

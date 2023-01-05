@@ -3,9 +3,9 @@
 namespace VehicleDomain.DL.Models.VehicleInformations.CQRS.Queries.ReadModels;
 internal record LicenseTypeValidation : BaseReadModel
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
 
-    public LicenseTypeValidation(int id)
+    public LicenseTypeValidation(Guid id)
     {
         Id = id;
     }

@@ -22,7 +22,7 @@ internal class DoesVehicleOperatorExist : ISpecification<BuyVehicleWithOperators
         return candidate.Operators.All(IsSatisfiedBy);
     }
 
-    private bool IsSatisfiedBy(int candidte)
+    private bool IsSatisfiedBy(Guid candidte)
     {
         return _operators.Any(x => x.Id == candidte);
     }

@@ -31,24 +31,24 @@ internal class VehicleRepository : IVehicleRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<bool> DoesVehicleExist(int id)
+    public async Task<bool> DoesVehicleExist(Guid id)
     {
-        return !await _baseRepository.IsUniqueAsync(x => x.VehicleId == id);
+        return !await _baseRepository.IsUniqueAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<TProjection>> FindSpecificByOperatorIdAndVehicleInformationsAsync<TProjection>(int operatorId, IEnumerable<int> vehicleInformations, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
+    public async Task<IEnumerable<TProjection>> FindSpecificByOperatorIdAndVehicleInformationsAsync<TProjection>(Guid operatorId, IEnumerable<Guid> vehicleInformations, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.AllByPredicateAsync(x => x.Operators.Any(xx => xx.Id == operatorId) && vehicleInformations.Any(xx => x.VehicleInformation.Id == xx), query);
+        return await _baseRepository.AllByPredicateAsync(x => x.Operators.Any(xx => xx == operatorId) && vehicleInformations.Any(xx => x.VehicleInformation == xx), query);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<Vehicle, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.FindByPredicateAsync(x => x.VehicleId == id, query);
+        return await _baseRepository.FindByPredicateAsync(x => x.Id == id, query);
     }
 
-    public async Task<Vehicle> GetForOperationAsync(int id)
+    public async Task<Vehicle> GetForOperationAsync(Guid id)
     {
-        return await _baseRepository.FindByPredicateForOperationAsync(x => x.VehicleId == id);
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.Id == id);
     }
 
     public void Update(Vehicle entity)

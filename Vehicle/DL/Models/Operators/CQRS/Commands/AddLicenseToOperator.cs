@@ -3,9 +3,9 @@
 namespace VehicleDomain.DL.Models.Operators.CQRS.Commands;
 public class AddLicenseToOperator : ICommand
 {
-    public int OperatorId { get; set; }
+    public Guid OperatorId { get; set; }
     public DateTime Arquired { get; set; }
-    public int LicenseType { get; set; }
+    public Guid LicenseType { get; set; }
 
     public Guid CommandId { get; private set; }
 
@@ -20,7 +20,7 @@ public class AddLicenseToOperator : ICommand
         CausationId = CommandId;
     }
 
-    public AddLicenseToOperator(int operatorId, DateTime arquired, int licenseType, Guid correlationId, Guid causationId)
+    public AddLicenseToOperator(Guid operatorId, DateTime arquired, Guid licenseType, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         Arquired = arquired;

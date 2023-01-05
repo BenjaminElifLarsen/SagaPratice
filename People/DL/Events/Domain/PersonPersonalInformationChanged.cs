@@ -25,19 +25,19 @@ public sealed record PersonPersonalInformationChangedFailed : SystemEvent
 
     public string AggregateType { get; private set; }
 
-    public int AggregateId { get; private set; }
+    public Guid AggregateId { get; private set; }
 
     public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = aggregate.GetType().Name;
-        AggregateId = aggregate.PersonId;
+        AggregateId = aggregate.Id;
         Errors = errors;
     }
 
     public PersonPersonalInformationChangedFailed(IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
     {
         AggregateType = typeof(Person).Name;
-        AggregateId = 0;
+        AggregateId = Guid.Empty;
         Errors = errors;
     }
 }

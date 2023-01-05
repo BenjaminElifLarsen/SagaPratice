@@ -1,6 +1,4 @@
 ﻿using BaseRepository;
-using Common.Events.Base;
-using Common.Events.Domain;
 using Common.Events.Store.Event;
 using Common.Events.System;
 using Common.RepositoryPattern;
@@ -136,7 +134,7 @@ internal sealed class MockPeopleContext : IPeopleContext
         _eventStore.AddEvents(root);
     }
 
-    public IEnumerable<Event> LoadStream(int id, string aggregateRoot)
+    public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
     {
         return _eventStore.LoadStreamAsync(id, aggregateRoot).Result;
     }

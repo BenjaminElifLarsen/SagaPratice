@@ -3,8 +3,8 @@
 namespace VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 public class RemoveRelationBetweenOperatorAndVehicle : ICommand
 {
-    public int VehicleId { get; set; }
-    public int OperatorId { get; set; }
+    public Guid VehicleId { get; set; }
+    public Guid OperatorId { get; set; }
     public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
@@ -25,8 +25,8 @@ public class RemoveRelationBetweenOperatorAndVehicle : ICommand
 /// </summary>
 public class RemoveOperatorFromVehicle : ICommand
 {
-    internal int VehicleId { get; private set; }
-    internal int OperatorId { get; private set; }
+    internal Guid VehicleId { get; private set; }
+    internal Guid OperatorId { get; private set; }
     public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
@@ -34,7 +34,7 @@ public class RemoveOperatorFromVehicle : ICommand
     public Guid CausationId { get; private set; }
 
 
-    public RemoveOperatorFromVehicle(int vehicleId, int operatorId, Guid correlationId, Guid causationId)
+    public RemoveOperatorFromVehicle(Guid vehicleId, Guid operatorId, Guid correlationId, Guid causationId)
     {
         VehicleId = vehicleId;
         OperatorId = operatorId;
@@ -49,8 +49,8 @@ public class RemoveOperatorFromVehicle : ICommand
 /// </summary>
 public class RemoveVehicleFromOperator : ICommand
 {
-    internal int VehicleId { get; private set; }
-    internal int OperatorId { get; private set; }
+    internal Guid VehicleId { get; private set; }
+    internal Guid OperatorId { get; private set; }
     public Guid CommandId { get; private set; }
 
     public Guid CorrelationId { get; private set; }
@@ -58,7 +58,7 @@ public class RemoveVehicleFromOperator : ICommand
     public Guid CausationId { get; private set; }
 
 
-    public RemoveVehicleFromOperator(int vehicleId, int operatorId, Guid correlationId, Guid causationId)
+    public RemoveVehicleFromOperator(Guid vehicleId, Guid operatorId, Guid correlationId, Guid causationId)
     {
         VehicleId = vehicleId;
         OperatorId = operatorId;

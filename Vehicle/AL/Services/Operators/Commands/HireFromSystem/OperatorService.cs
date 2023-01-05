@@ -6,6 +6,7 @@ public partial class OperatorService
 {
     public async Task<Result> AddOperatorFromSystemAsync(AddOperatorNoLicenseFromSystem command)
     {
-        return await Task.Run(() => _commandBus.Dispatch(command));
+        await Task.Run(() => _commandBus.Dispatch(command));
+        throw new NotImplementedException(); //return; //need to return a result, just like the servies that use pms do, but no pm for these yet
     }
 }

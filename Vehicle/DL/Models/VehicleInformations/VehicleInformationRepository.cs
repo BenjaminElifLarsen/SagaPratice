@@ -25,19 +25,19 @@ internal class VehicleInformationRepository : IVehicleInformationRepository
         _baseRepository.Delete(entity);
     }
 
-    public async Task<IEnumerable<TProjection>> FindAllWithSpecificLicenseTypeId<TProjection>(int licenseTypeId, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
+    public async Task<IEnumerable<TProjection>> FindAllWithSpecificLicenseTypeId<TProjection>(Guid licenseTypeId, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.AllByPredicateAsync(x => x.LicenseTypeRequired.Id == licenseTypeId, query);
+        return await _baseRepository.AllByPredicateAsync(x => x.LicenseTypeRequired == licenseTypeId, query);
     }
 
-    public async Task<TProjection> GetAsync<TProjection>(int id, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, BaseQuery<VehicleInformation, TProjection> query) where TProjection : BaseReadModel
     {
-        return await _baseRepository.FindByPredicateAsync(x => x.VehicleInformationId == id, query);
+        return await _baseRepository.FindByPredicateAsync(x => x.Id == id, query);
     }
 
-    public async Task<VehicleInformation> GetForOperationAsync(int id)
+    public async Task<VehicleInformation> GetForOperationAsync(Guid id)
     {
-        return await _baseRepository.FindByPredicateForOperationAsync(x => x.VehicleInformationId == id);
+        return await _baseRepository.FindByPredicateForOperationAsync(x => x.Id == id);
     }
 
     public Task<bool> IsNameUniqueAsync(string name)

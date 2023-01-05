@@ -7,6 +7,6 @@ public sealed record VehicleSold : DomainEvent
     internal VehicleSold(Vehicle aggregate, Guid correlationId, Guid causationId)
         : base(aggregate, correlationId, causationId)
     {
-        OperatorIds = aggregate.Operators.Select(x => x.Id);
+        OperatorIds = aggregate.Operators;
     }
 }

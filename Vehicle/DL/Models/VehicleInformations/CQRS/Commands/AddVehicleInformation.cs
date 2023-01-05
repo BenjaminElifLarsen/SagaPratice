@@ -4,7 +4,7 @@ namespace VehicleDomain.DL.Models.VehicleInformations.CQRS.Commands;
 public class AddVehicleInformationFromSystem : ICommand
 {
     public string VehicleName { get; set; }
-    public int LicenseTypeId { get; set; }
+    public Guid LicenseTypeId { get; set; }
     public byte MaxNumberOfWheel { get; set; }
 
     public Guid CommandId { get; private set; }
@@ -20,7 +20,7 @@ public class AddVehicleInformationFromSystem : ICommand
         CausationId = CommandId;
     }
 
-    public AddVehicleInformationFromSystem(string vehicleName, int licenseTypeId, byte maxWheelAmount, Guid correlationId, Guid causationId)
+    public AddVehicleInformationFromSystem(string vehicleName, Guid licenseTypeId, byte maxWheelAmount, Guid correlationId, Guid causationId)
     {
         CommandId = Guid.NewGuid();
         VehicleName = vehicleName;

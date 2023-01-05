@@ -9,11 +9,11 @@ public class CheckPermissions : ICommand
 
     public Guid CausationId { get; private set; }
 
-    public int OperatorId { get; private set; }
+    public Guid OperatorId { get; private set; }
     
-    public int VehicleId { get; private set; }
+    public Guid VehicleId { get; private set; }
 
-    internal CheckPermissions(int operatorId, int vehicleId, Guid correlationId, Guid causationId)
+    internal CheckPermissions(Guid operatorId, Guid vehicleId, Guid correlationId, Guid causationId)
     {
         OperatorId = operatorId;
         VehicleId = vehicleId;

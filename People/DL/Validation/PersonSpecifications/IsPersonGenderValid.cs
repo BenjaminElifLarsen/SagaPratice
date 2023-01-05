@@ -28,7 +28,7 @@ internal sealed class IsPersonGenderValid : ISpecification<Person>, ISpecificati
         return candidate.Gender is null || IsSatisfiedBy(candidate.Gender.Gender);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
         return _genderIds.Any(x => x.Id == candidate);
     }

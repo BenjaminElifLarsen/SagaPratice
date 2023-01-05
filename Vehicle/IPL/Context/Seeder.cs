@@ -21,42 +21,42 @@ internal static class Seeder
             vehicleContext.Add(moterBike);
         }
 
-        VehicleInformation carInfo1 = new("Quick Yellow Car", 3, new(car.LicenseTypeId));
-        VehicleInformation carInfo2 = new("Slow Car", 4, new(car.LicenseTypeId));
-        VehicleInformation busInfo1 = new("CO2 Generating City Bus", 13, new(bus.LicenseTypeId));
+        VehicleInformation carInfo1 = new("Quick Yellow Car", 3, car.Id);
+        VehicleInformation carInfo2 = new("Slow Car", 4, car.Id);
+        VehicleInformation busInfo1 = new("CO2 Generating City Bus", 13, bus.Id);
         if (!(vehicleContext as IContextData<VehicleInformation>).GetAll.Any())
         {
             vehicleContext.Add(carInfo1);
             vehicleContext.Add(carInfo2);
             vehicleContext.Add(busInfo1);
-            car.AddVehicleInformation(new(carInfo1.VehicleInformationId));
-            car.AddVehicleInformation(new(carInfo2.VehicleInformationId));
-            bus.AddVehicleInformation(new(busInfo1.VehicleInformationId));
+            car.AddVehicleInformation(carInfo1.Id);
+            car.AddVehicleInformation(carInfo2.Id);
+            bus.AddVehicleInformation(busInfo1.Id);
         }
 
-        Vehicle veh1 = new(new(200, 5, 21), new(carInfo1.VehicleInformationId), new("XM71"), 5);
-        Vehicle veh2 = new(DateTime.Now, new(busInfo1.VehicleInformationId), new("???2G3"));
+        Vehicle veh1 = new(new(200, 5, 21), carInfo1.Id, new("XM71"), 5);
+        Vehicle veh2 = new(DateTime.Now, busInfo1.Id, new("???2G3"));
         if (!(vehicleContext as IContextData<Vehicle>).GetAll.Any())
         {
             vehicleContext.Add(veh1);
             vehicleContext.Add(veh2);
-            carInfo1.RegistrateVehicle(new(veh1.VehicleId));
-            busInfo1.RegistrateVehicle(new(veh2.VehicleId));
+            carInfo1.RegistrateVehicle(veh1.Id);
+            busInfo1.RegistrateVehicle(veh2.Id);
         }
 
-        Operator op = new(1, new(1956, 1, 2));
+        Operator op = new(Guid.Parse("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA"), new(1956, 1, 2));
         if (!(vehicleContext as IContextData<Operator>).GetAll.Any())
         {
-            op.AddLicense(new(car.LicenseTypeId), new(2018, 5, 13));
-            op.AddLicense(new(train.LicenseTypeId), new(2000, 3, 24));
-            op.RenewLicense(train.LicenseTypeId, new(2006, 2, 1));
-            op.AddVehicle(new(veh1.VehicleId));
-            op.AddVehicle(new(veh2.VehicleId));
+            op.AddLicense(car.Id, new(2018, 5, 13));
+            op.AddLicense(train.Id, new(2000, 3, 24));
+            op.RenewLicense(train.Id, new(2006, 2, 1));
+            op.AddVehicle(veh1.Id);
+            op.AddVehicle(veh2.Id);
             vehicleContext.Add(op);
-            veh1.AddOperator(new(op.OperatorId));
-            veh2.AddOperator(new(op.OperatorId));
-            car.AddOperator(new(1));
-            train.AddOperator(new(1));
+            veh1.AddOperator(op.Id);
+            veh2.AddOperator(op.Id);
+            car.AddOperator(op.Id);
+            train.AddOperator(op.Id);
         }
 
         vehicleContext.Save();

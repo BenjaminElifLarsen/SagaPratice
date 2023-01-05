@@ -3,7 +3,7 @@
 namespace PeopleDomain.DL.CQRS.Commands;
 public sealed class ChangePersonalInformationFromUser : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public ChangeFirstName? FirstName { get; set; }
     public ChangeLastName? LastName { get; set; }
     public ChangeBrith? Brith { get; set; }
@@ -40,5 +40,5 @@ public record ChangeBrith
 
 public record ChangeGender
 {
-    public int Gender { get; set; }
+    public Guid Gender { get; set; }
 }

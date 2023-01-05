@@ -9,10 +9,10 @@ public class StartVehicle : ICommand
 
     public Guid CausationId { get; private set; }
     
-    public int VehicleId { get; private set; }
-    public int OperatorId { get; private set; }
+    public Guid VehicleId { get; private set; }
+    public Guid OperatorId { get; private set; }
 
-    internal StartVehicle(int vehicleId, int operatorId, Guid correlationId, Guid causationId)
+    internal StartVehicle(Guid vehicleId, Guid operatorId, Guid correlationId, Guid causationId)
     {
         VehicleId = vehicleId;
         CorrelationId = correlationId;

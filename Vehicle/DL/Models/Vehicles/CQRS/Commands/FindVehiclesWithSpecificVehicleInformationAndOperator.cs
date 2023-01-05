@@ -9,10 +9,10 @@ public class FindVehiclesWithSpecificVehicleInformationAndOperator : ICommand
 
     public Guid CausationId { get; private set; }
 
-    public int OperatorId { get; private set; }
-    public IEnumerable<int> VehicleInformationIds { get; private set; }
+    public Guid OperatorId { get; private set; }
+    public IEnumerable<Guid> VehicleInformationIds { get; private set; }
 
-    public FindVehiclesWithSpecificVehicleInformationAndOperator(int operatorId, IEnumerable<int> vehicleInformationIds, Guid correlationId, Guid causationId)
+    public FindVehiclesWithSpecificVehicleInformationAndOperator(Guid operatorId, IEnumerable<Guid> vehicleInformationIds, Guid correlationId, Guid causationId)
     {
         CommandId = Guid.NewGuid();
         CorrelationId = correlationId;

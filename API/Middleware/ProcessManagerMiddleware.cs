@@ -46,8 +46,8 @@ public class ProcessManagerMiddleware
                 selectedRegistry.SetUpRouting(firePM);
                 var hirePM = processManagers.SingleOrDefault(x => x is IHireProcessManager) as IHireProcessManager;
                 selectedRegistry.SetUpRouting(hirePM);
-                var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;
-                selectedRegistry.SetUpRouting(regPM);
+                //var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;
+                //selectedRegistry.SetUpRouting(regPM);
                 var unregPM = processManagers.SingleOrDefault(x => x is IUnrecogniseProcessManager) as IUnrecogniseProcessManager;
                 selectedRegistry.SetUpRouting(unregPM);
             }

@@ -9,8 +9,8 @@ internal class IsVehicleInformationLicenseTypeSat : ISpecification<AddVehicleInf
         return IsSatisfiedBy(candidate.LicenseTypeId);
     }
 
-    private bool IsSatisfiedBy(int candidate)
+    private bool IsSatisfiedBy(Guid candidate)
     {
-        return candidate > 0;
+        return candidate != Guid.Empty;
     }
 }

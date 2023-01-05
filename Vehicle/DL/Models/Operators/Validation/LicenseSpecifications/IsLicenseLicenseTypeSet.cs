@@ -7,7 +7,7 @@ internal class IsLicenseLicenseTypeSet : ISpecification<AddLicenseToOperator>/*,
 {
     public bool IsSatisfiedBy(AddLicenseToOperator candidate)
     {
-        return candidate.LicenseType != 0;
+        return candidate.LicenseType != Guid.Empty;
     }
 
     //public bool IsSatisfiedBy(l candidate)

@@ -6,7 +6,8 @@ public partial class VehicleService
 {
     public async Task<Result> BuyVehicleNoOperatorAsync(BuyVehicleWithNoOperator command)
     {
-        return await Task.Run(() => _commandBus.Dispatch(command));
+        await Task.Run(() => _commandBus.Dispatch(command));
+        throw new NotImplementedException();//return;
     }
 
     //public async Task<Result> BuyVehicleWithOperator(BuyVehicleWithOperators command)

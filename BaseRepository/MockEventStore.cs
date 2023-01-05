@@ -37,12 +37,12 @@ public class MockEventStore : IEventStore
         entity.UpdateVersion(aggregate.Events.OrderBy(x => x.Version).Last().Version);
     }
 
-    public async Task<IEnumerable<Event>> LoadStreamAsync(int id, string aggregateType)
+    public async Task<IEnumerable<Event>> LoadStreamAsync(Guid id, string aggregateType)
     {
         return await Task.Run<IEnumerable<Event>>(() => _events.Where(x => x.AggregateId == id && x.AggregateType == aggregateType).OrderBy(x => x.Version));
     }
 
-    public async Task<IEnumerable<Event>> LoadStreamAsync(int id, string aggregateType, DateTime endTime)
+    public async Task<IEnumerable<Event>> LoadStreamAsync(Guid id, string aggregateType, DateTime endTime)
     {
         var tick = endTime.Ticks;
         return await Task.Run(() => _events.Where(x => x.AggregateId == id && x.AggregateType == aggregateType && x.Timestamp <= tick).OrderBy(x => x.Version));

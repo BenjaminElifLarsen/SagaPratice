@@ -25,8 +25,8 @@ internal class MockCommandBus : IVehicleCommandBus
 
         if (handlers.Count > 1)
             throw new Exception("To many command handlers.");
-
-        return;// handlers[0](command);
+        handlers[0](command);
+        return;// 
     }
 
     public void RegisterHandler<T>(Action<T> handler) where T : ICommand

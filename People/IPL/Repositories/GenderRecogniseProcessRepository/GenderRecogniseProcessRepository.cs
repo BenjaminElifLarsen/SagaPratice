@@ -1,12 +1,13 @@
 ﻿using BaseRepository;
+using Common.RepositoryPattern.ProcessManagers;
 using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 
 namespace PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 internal sealed class GenderRecogniseProcessRepository : IGenderRecogniseProcessRepository
 {
-    private readonly MockProcessManagerRepository<RecogniseProcessManager> _repository;
+    private readonly IBaseProcessManagerRepository<RecogniseProcessManager> _repository;
 
-    public GenderRecogniseProcessRepository(MockProcessManagerRepository<RecogniseProcessManager> repository)
+    public GenderRecogniseProcessRepository(IBaseProcessManagerRepository<RecogniseProcessManager> repository)
     {
         _repository = repository;
     }

@@ -234,8 +234,8 @@ internal class StartVehicleProcessManager : IStartVehicleProcessManager
     {
         if (CorrelationId != CorrelationId) { return; }
 
-        _operatorId = @event.Data.OperatorId;
-        _vehicleId = @event.Data.VehicleId;
+        _operatorId = @event.OperatorId;
+        _vehicleId = @event.VehicleId;
 
         _trackerCollection.AddEventTracker<OperatorWasFound>(true, DomainEventType.Succeeder);
         _trackerCollection.AddEventTracker<VehicleWasFound>(true, DomainEventType.Succeeder);

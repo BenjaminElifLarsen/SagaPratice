@@ -1,21 +1,11 @@
 ﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorAdded : IDomainEvent
-{ //is this event needed? What would react to it in this domain?
-    public string AggregateType => throw new NotImplementedException();
-
-    public int AggregateId => throw new NotImplementedException();
-
-    public string EventType => throw new NotImplementedException();
-
-    public Guid EventId => throw new NotImplementedException();
-
-    public long TimeStampRecorded => throw new NotImplementedException();
-
-    public Guid CorrelationId => throw new NotImplementedException();
-
-    public Guid CausationId => throw new NotImplementedException();
-
-    public int Version { get; private set; }
+public sealed record OperatorAdded : DomainEvent
+{ //is this event needed? What would react to it in this domain? Really just here to store it in event store
+    public OperatorAdded(IAggregateRoot aggregate, Guid correlationId, Guid causationId) 
+        : base(aggregate, correlationId, causationId)
+    {
+    }
 }

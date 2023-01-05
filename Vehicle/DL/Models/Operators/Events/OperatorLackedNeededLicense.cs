@@ -1,21 +1,11 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
-public class OperatorLackedNeededLicense : IDomainEvent
+public sealed record OperatorLackedNeededLicense : SystemEvent
 {
-    public string AggregateType { get; private set; }
-
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
+    public OperatorLackedNeededLicense(Guid correlationId, Guid causationId) 
+        : base(correlationId, causationId)
+    {
+    }
 }

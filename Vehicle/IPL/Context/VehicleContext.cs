@@ -1,6 +1,8 @@
 ﻿using BaseRepository;
+using Common.Events.Base;
 using Common.Events.Domain;
 using Common.Events.Store.Event;
+using Common.Events.System;
 using Common.RepositoryPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
@@ -11,7 +13,7 @@ namespace VehicleDomain.IPL.Context;
 internal class MockVehicleContext : IVehicleContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
-    private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<SystemEvent> _events;
     private DateOnly _date;
     public bool Filter { get; set; }
 
@@ -34,9 +36,9 @@ internal class MockVehicleContext : IVehicleContext
     IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
     IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    public IEnumerable<IDomainEvent> OrphanEvents => _events;
-
     public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
+
+    public IEnumerable<SystemEvent> SystemEvents => _events;
 
     public MockVehicleContext()
     {
@@ -125,12 +127,12 @@ internal class MockVehicleContext : IVehicleContext
         }
     }
 
-    public void Add(IDomainEvent @event)
+    public void Add(SystemEvent @event)
     {
         _events.Add(@event);
     }
 
-    public void Remove(IDomainEvent @event)
+    public void Remove(SystemEvent @event)
     {
         _events.Remove(@event);
     }

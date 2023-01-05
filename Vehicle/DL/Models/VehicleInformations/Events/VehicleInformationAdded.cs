@@ -1,21 +1,10 @@
 ﻿using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.VehicleInformations.Events;
-public class VehicleInformationAdded : IDomainEvent
+public sealed record VehicleInformationAdded : DomainEvent
 {
-    public string AggregateType => throw new NotImplementedException();
-
-    public int AggregateId => throw new NotImplementedException();
-
-    public string EventType => throw new NotImplementedException();
-
-    public Guid EventId => throw new NotImplementedException();
-
-    public long TimeStampRecorded => throw new NotImplementedException();
-
-    public Guid CorrelationId => throw new NotImplementedException();
-
-    public Guid CausationId => throw new NotImplementedException();
-
-    public int Version { get; private set; }
+    public VehicleInformationAdded(VehicleInformation aggregate, Guid correlationId, Guid causationId) 
+        : base(aggregate, correlationId, causationId)
+    {
+    }
 }

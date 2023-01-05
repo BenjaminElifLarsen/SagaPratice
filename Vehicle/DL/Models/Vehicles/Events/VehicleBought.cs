@@ -1,21 +1,10 @@
 ﻿using Common.Events.Domain;
+using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-public class VehicleBought : IDomainEvent
+public sealed record VehicleBought : DomainEvent
 {
-    public string AggregateType => throw new NotImplementedException();
-
-    public int AggregateId => throw new NotImplementedException();
-
-    public string EventType => throw new NotImplementedException();
-
-    public Guid EventId => throw new NotImplementedException();
-
-    public long TimeStampRecorded => throw new NotImplementedException();
-
-    public Guid CorrelationId => throw new NotImplementedException();
-
-    public Guid CausationId => throw new NotImplementedException();
-
-    public int Version { get; private set; }
+    internal VehicleBought(Vehicle aggregate, Guid correlationId, Guid causationId) : base(aggregate, correlationId, causationId)
+    {
+    }
 }

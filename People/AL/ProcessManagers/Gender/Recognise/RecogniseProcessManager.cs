@@ -7,7 +7,7 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 public abstract class RecogniseProcessManager : BaseProcessManager,
     IEventHandler<GenderRecognisedSucceeded>,
-    IAppSystemEventHandler<GenderRecognisedFailed>
+    IEventHandler<GenderRecognisedFailed>
 {
     public IEnumerable<ICommand> Commands { get; }
 

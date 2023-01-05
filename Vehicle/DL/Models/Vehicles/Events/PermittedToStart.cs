@@ -1,34 +1,12 @@
 ﻿using Common.Events.Domain;
+using Common.Events.System;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
-public class PermittedToOperate : IDomainEvent<PermittedToStartData>
+public sealed record PermittedToOperate : SystemEvent
 {
-    public PermittedToStartData Data { get; private set; }
-
-    public string AggregateType { get; private set; }
-
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    internal PermittedToOperate()
+    internal PermittedToOperate(Guid correlationId, Guid causationId)
+        : base(correlationId, causationId)
     {
 
     }
-}
-
-public class PermittedToStartData
-{
-    //public int OperatorId { get; set; }
-    public int VehicleId { get; set; }
 }

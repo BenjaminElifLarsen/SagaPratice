@@ -34,7 +34,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
      * 
      * 
      * after https://tech.justeattakeaway.com/2015/05/26/process-managers/ commands should be transmitted when the pm is saved and repository should transmit them via the infrastructure
-     * so when received an event, run code, save to context, commands are send. Some people state it could be a good idea to save comlmands in the context, but other say it does not matter
+     * so when received an event, run code, save to context, commands are send. Some people state it could be a good idea to save commands in the context, but other say it does not matter
      */
 
     public Guid ProcessManagerId { get; private set; }

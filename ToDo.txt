@@ -128,11 +128,13 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 				the handler then saves the pm (need versioning in the pm and enforece concurrency checks in the repo [Version could be a Guid,  check if the current loaded one is the same as the one in the context or not])
 				after the save the repository will contact the infrastructure to transmit the commands via the bus (let the unit of work get the commands and publish them)
 				
-				both the pm and the event need to be saved via their respective repos
+				both the pm and the event need to be saved via their respective repos.
+					Consider if events should be saved as the same time as entities. The point of the event store is not to store the entity itself, from reading it at least some so, but need to ensure entities/events are valid. If saving events before a pm is done need to handle any errors that appear (via events that reverse the, now, 'failed' events)
 
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
 let factory (or something like it) set the id of newly created objects
 	thus consider switching to Guids
 
-
+it does not make sense to store the system events in the 'context'. Figure out a better way to store them before they are published.
+	could make it such that the command handlers can publish system events. Spend some time reading up to see what others have done 

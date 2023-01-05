@@ -4,24 +4,20 @@ using Common.RepositoryPattern;
 namespace VehicleDomain.DL.Models.VehicleInformations;
 public class VehicleInformation : IAggregateRoot
 {
-    private int _vehicleInformationId;
+    private Guid _id;
     private string _name;
     private byte _maxWheelAmount;
     private IdReference<int> _licenseTypeRequired;
     private HashSet<IdReference<int>> _vehicles;
-    private readonly HashSet<IDomainEvent> _events;
+    private readonly HashSet<DomainEvent> _events;
     //could have a producer model, might be its own domain. If added, no reason to let user create vehicle informations, only the Producer domain can trigger that
-    internal int VehicleInformationId { get => _vehicleInformationId; private set => _vehicleInformationId = value; }
     internal string Name { get => _name; private set => _name = value; }
     internal IdReference<int> LicenseTypeRequired { get => _licenseTypeRequired; private set => _licenseTypeRequired = value; }
     internal byte MaxWheelAmount { get => _maxWheelAmount; private set => _maxWheelAmount = value; }
     internal IEnumerable<IdReference<int>> Vehicles => _vehicles;
 
-    public IEnumerable<IDomainEvent> OldEventsDesign => _events;
-
-    public int Id => throw new NotImplementedException();
-
-    public IEnumerable<DomainEvent> Events => throw new NotImplementedException();
+    public Guid Id { get => _id; private set => _id = value; }
+    public IEnumerable<DomainEvent> Events => _events;
 
     private VehicleInformation()
     { //it does not make sense to be able to update amount of wheeels after adding the entity, but what about name?
@@ -32,7 +28,7 @@ public class VehicleInformation : IAggregateRoot
 
     internal VehicleInformation(string name, byte maxWheelAmount, IdReference<int> licenseTypeRequired)
     {
-        _vehicleInformationId = RandomValue.GetValue;
+        _id = Guid.NewGuid();
         _name = name;
         _licenseTypeRequired = licenseTypeRequired;
         _maxWheelAmount = maxWheelAmount;
@@ -50,20 +46,15 @@ public class VehicleInformation : IAggregateRoot
         return _vehicles.Remove(vehicle);
     }
 
-    public void AddDomainEvent(IDomainEvent eventItem)
+    public void AddDomainEvent(DomainEvent eventItem)
     {
-        if (_vehicleInformationId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Add(eventItem);
     }
 
-    public void RemoveDomainEvent(IDomainEvent eventItem)
+    public void RemoveDomainEvent(DomainEvent eventItem)
     {
-        if (_vehicleInformationId == eventItem.AggregateId) //should cause an expection if this fails
+        if (_id == eventItem.AggregateId) //should cause an expection if this fails
             _events.Remove(eventItem);
-    }
-
-    public void AddDomainEvent(DomainEvent eventItem)
-    {
-        throw new NotImplementedException();
     }
 }

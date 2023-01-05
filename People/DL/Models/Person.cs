@@ -5,22 +5,22 @@ namespace PeopleDomain.DL.Models;
 
 public sealed class Person : IAggregateRoot, ISoftDeleteDate
 {
-    private int _id;
+    private Guid _id;
     private string _firstName;
     private string _lastName;
     private DateOnly _birth;
-    private IdReference<int> _gender;
+    private IdReference _gender;
     private DateOnly? _deletedFrom;
     private readonly HashSet<DomainEvent> _events;
 
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
     internal DateOnly Birth { get => _birth; private set => _birth = value; }
-    internal IdReference<int> Gender { get => _gender; private set => _gender = value; }
+    internal Guid Gender { get => _gender.Id; private set => _gender = new(value); }
 
     public DateOnly? DeletedFrom { get => _deletedFrom; private set => _deletedFrom = value; }
 
-    public int Id { get => _id; private set => _id = value; }
+    public Guid Id { get => _id; private set => _id = value; }
 
     public IEnumerable<DomainEvent> Events => _events;
 
@@ -29,17 +29,17 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _events = new();
     }
 
-    internal Person(string firstName, string lastName, DateOnly birth, IdReference<int> gender)
+    internal Person(string firstName, string lastName, DateOnly birth, Guid gender)
     {
-        _id = RandomValue.GetValue;
+        _id = Guid.NewGuid();
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
-        _gender = gender;
+        _gender = new(gender);
         _events = new();
     }
 
-    internal Person(int id, string firstName, string lastName, DateOnly birth, IdReference<int> gender) : this(firstName, lastName, birth, gender)
+    internal Person(Guid id, string firstName, string lastName, DateOnly birth, Guid gender) : this(firstName, lastName, birth, gender)
     {
         _id = id;
     }
@@ -59,9 +59,9 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _birth = birth;
     }
 
-    internal void UpdateGenderIdentification(IdReference<int> gender)
+    internal void UpdateGenderIdentification(Guid gender)
     {
-        _gender = gender;
+        _gender = new(gender);
     }
 
     public void Delete(DateOnly? dateTime)
@@ -81,12 +81,12 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
             _events.Remove(eventItem);
     }
 
-    public static bool operator ==(Person left, int right)
+    public static bool operator ==(Person left, Guid right)
     {
         return left.Id == right;
     }
 
-    public static bool operator !=(Person left, int right)
+    public static bool operator !=(Person left, Guid right)
     {
         return !(left == right);
     }

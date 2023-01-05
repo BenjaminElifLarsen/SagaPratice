@@ -7,14 +7,14 @@ public class VehicleInformation : IAggregateRoot
     private Guid _id;
     private string _name;
     private byte _maxWheelAmount;
-    private IdReference<int> _licenseTypeRequired;
-    private HashSet<IdReference<int>> _vehicles;
+    private IdReference _licenseTypeRequired;
+    private HashSet<IdReference> _vehicles;
     private readonly HashSet<DomainEvent> _events;
     //could have a producer model, might be its own domain. If added, no reason to let user create vehicle informations, only the Producer domain can trigger that
     internal string Name { get => _name; private set => _name = value; }
-    internal IdReference<int> LicenseTypeRequired { get => _licenseTypeRequired; private set => _licenseTypeRequired = value; }
+    internal Guid LicenseTypeRequired { get => _licenseTypeRequired.Id; private set => _licenseTypeRequired = new(value); }
     internal byte MaxWheelAmount { get => _maxWheelAmount; private set => _maxWheelAmount = value; }
-    internal IEnumerable<IdReference<int>> Vehicles => _vehicles;
+    internal IEnumerable<Guid> Vehicles => _vehicles.Select(x => x.Id);
 
     public Guid Id { get => _id; private set => _id = value; }
     public IEnumerable<DomainEvent> Events => _events;
@@ -26,24 +26,24 @@ public class VehicleInformation : IAggregateRoot
         _events = new();
     }
 
-    internal VehicleInformation(string name, byte maxWheelAmount, IdReference<int> licenseTypeRequired)
+    internal VehicleInformation(string name, byte maxWheelAmount, Guid licenseTypeRequired)
     {
         _id = Guid.NewGuid();
         _name = name;
-        _licenseTypeRequired = licenseTypeRequired;
+        _licenseTypeRequired = new(licenseTypeRequired);
         _maxWheelAmount = maxWheelAmount;
         _vehicles = new();
         _events = new();
     }
 
-    internal bool RegistrateVehicle(IdReference<int> vehicle)
+    internal bool RegistrateVehicle(Guid vehicle)
     {
-        return _vehicles.Add(vehicle);
+        return _vehicles.Add(new(vehicle));
     }
 
-    internal bool UnregistrateVehicle(IdReference<int> vehicle)
+    internal bool UnregistrateVehicle(Guid vehicle)
     {
-        return _vehicles.Remove(vehicle);
+        return _vehicles.Remove(_vehicles.FirstOrDefault(x => x.Id == vehicle));
     }
 
     public void AddDomainEvent(DomainEvent eventItem)

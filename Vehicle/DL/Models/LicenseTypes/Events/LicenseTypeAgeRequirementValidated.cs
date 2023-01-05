@@ -2,46 +2,13 @@
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 [Obsolete("Might be removed in a future version", true)]
-internal class LicenseTypeAgeRequirementValidated : IDomainEvent<LicenseTypeAgeRequirementValidatedData>
+internal sealed record LicenseTypeAgeRequirementValidated : DomainEvent
 { //not needed if not validating multiple aggregates via a single command
-    public string AggregateType { get; private set; }
+    public IEnumerable<Guid> OperatorIdsNotFound { get; private set; }
+    public IEnumerable<Guid> OperatorIdsNotValid { get; private set; }
 
-    public int AggregateId { get; private set; }
-
-    public string EventType { get; private set; }
-
-    public Guid EventId { get; private set; }
-
-    public long TimeStampRecorded { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public Guid CausationId { get; private set; }
-
-    public int Version { get; private set; }
-
-    public LicenseTypeAgeRequirementValidatedData Data { get; private set; }
-
-    public LicenseTypeAgeRequirementValidated(int aggregateId, IEnumerable<int> operatorIdsNotFound, IEnumerable<int> operatorIdsNotValid, Guid correlationId, Guid causationId)
-    {
-        AggregateId = aggregateId;
-        AggregateType = typeof(LicenseType).Name;
-        EventType = GetType().Name;
-        EventId = Guid.NewGuid();
-        TimeStampRecorded = DateTime.Now.Ticks;
-        CorrelationId = correlationId;
-        CausationId = causationId;
-        Version = 0;
-        Data = new(operatorIdsNotFound, operatorIdsNotValid);
-    }
-}
-
-internal class LicenseTypeAgeRequirementValidatedData
-{
-    public IEnumerable<int> OperatorIdsNotFound { get; private set; }
-    public IEnumerable<int> OperatorIdsNotValid { get; private set; }
-
-    public LicenseTypeAgeRequirementValidatedData(IEnumerable<int> operatorIdsNotFound, IEnumerable<int> operatorIdsNotValid)
+    internal LicenseTypeAgeRequirementValidated(LicenseType aggregate, IEnumerable<Guid> operatorIdsNotFound, IEnumerable<Guid> operatorIdsNotValid, Guid correlationId, Guid causationId)
+        : base(aggregate, correlationId, causationId)
     {
         OperatorIdsNotFound = operatorIdsNotFound;
         OperatorIdsNotValid = operatorIdsNotValid;

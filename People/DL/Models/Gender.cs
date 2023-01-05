@@ -4,19 +4,19 @@ using Common.RepositoryPattern;
 namespace PeopleDomain.DL.Models;
 public sealed class Gender : IAggregateRoot
 {
-    private int _id;
+    private Guid _id;
     private string _verbSubject;
     private string _verbObject;
-    private readonly HashSet<IdReference<int>> _people;
+    private readonly HashSet<IdReference> _people;
     //private readonly HashSet<IDomainEvent> _events;
     private readonly HashSet<DomainEvent> _events;
 
     //internal int GenderId { get => _genderId; private set => _genderId = value; }
     internal string VerbSubject { get => _verbSubject; private set => _verbSubject = value; }
     internal string VerbObject { get => _verbObject; private set => _verbObject = value; }
-    internal IEnumerable<IdReference<int>> People { get => _people; }
+    internal IEnumerable<Guid> People { get => _people.Select(x => x.Id); }
 
-    public int Id { get => _id; private set => _id = value; }
+    public Guid Id { get => _id; private set => _id = value; }
 
     public IEnumerable<DomainEvent> Events => _events;
 
@@ -29,7 +29,7 @@ public sealed class Gender : IAggregateRoot
 
     internal Gender(string subject, string @object)
     {
-        _id = RandomValue.GetValue;
+        _id = Guid.NewGuid();
         _people = new();
         _verbSubject = subject;
         _verbObject = @object;
@@ -41,14 +41,14 @@ public sealed class Gender : IAggregateRoot
     //    _verbSubject = name;
     //}
 
-    internal bool AddPerson(IdReference<int> person)
+    internal bool AddPerson(Guid person)
     {
-        return _people.Add(person);
+        return _people.Add(new(person));
     }
 
-    internal bool RemovePerson(IdReference<int> person)
+    internal bool RemovePerson(Guid person)
     {
-        return _people.Remove(person);
+        return _people.Remove(new(person));
     }
 
     public void AddDomainEvent(DomainEvent eventItem)
@@ -70,12 +70,12 @@ public sealed class Gender : IAggregateRoot
     //    return query;
     //}
 
-    public static bool operator ==(Gender left, int right)
+    public static bool operator ==(Gender left, Guid right)
     {
         return left.Id == right;
     }
 
-    public static bool operator !=(Gender left, int right)
+    public static bool operator !=(Gender left, Guid right)
     {
         return !(left == right);
     }

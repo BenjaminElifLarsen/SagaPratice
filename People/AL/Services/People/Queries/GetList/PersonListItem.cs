@@ -3,12 +3,12 @@
 namespace PeopleDomain.AL.Services.People.Queries.GetList;
 public record PersonListItem : BaseReadModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string FullName { get; set; }
-    public int GenderId { get; set; }
+    public Guid GenderId { get; set; }
     public DateTime Birth { get; set; }
 
-    public PersonListItem(int id, string fullName, DateOnly birth, int genderId)
+    public PersonListItem(Guid id, string fullName, DateOnly birth, Guid genderId)
     {
         Id = id;
         FullName = fullName;

@@ -9,7 +9,7 @@ internal sealed class PersonListItemQuery : BaseQuery<Person, PersonListItem>
 {
     public override Expression<Func<Person, PersonListItem>> Map()
     {
-        return e => new(e.PersonId, e.FirstName + " " + e.LastName, e.Birth, e.Gender.Id);
+        return e => new(e.Id, e.FirstName + " " + e.LastName, e.Birth, e.Gender);
     }
 }
 
@@ -17,6 +17,6 @@ internal sealed class PersonDetailsQuery : BaseQuery<Person, PersonDetails>
 {
     public override Expression<Func<Person, PersonDetails>> Map()
     {
-        return e => new(e.PersonId, e.FirstName, e.LastName, e.Birth, e.Gender.Id);
+        return e => new(e.Id, e.FirstName, e.LastName, e.Birth, e.Gender);
     }
 }

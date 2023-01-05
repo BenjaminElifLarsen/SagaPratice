@@ -1,5 +1,4 @@
 ﻿using Common.Events.Domain;
-using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
 public sealed record VehicleBought : DomainEvent

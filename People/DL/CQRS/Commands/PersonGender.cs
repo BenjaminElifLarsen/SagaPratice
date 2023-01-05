@@ -3,8 +3,8 @@
 namespace PeopleDomain.DL.CQRS.Commands;
 public sealed class AddPersonToGender : ICommand //consider a better name
 {
-    public int PersonId { get; private set; }
-    public int GenderId { get; private set; }
+    public Guid PersonId { get; private set; }
+    public Guid GenderId { get; private set; }
 
     public Guid CommandId { get; private set; }
 
@@ -12,7 +12,7 @@ public sealed class AddPersonToGender : ICommand //consider a better name
 
     public Guid CausationId { get; private set; }
 
-    internal AddPersonToGender(int personId, int genderId, Guid correlationId, Guid causationId)
+    internal AddPersonToGender(Guid personId, Guid genderId, Guid correlationId, Guid causationId)
     {
         PersonId = personId;
         GenderId = genderId;
@@ -24,8 +24,8 @@ public sealed class AddPersonToGender : ICommand //consider a better name
 
 public class RemovePersonFromGender : ICommand
 {
-    public int PersonId { get; private set; }
-    public int GenderId { get; private set; }
+    public Guid PersonId { get; private set; }
+    public Guid GenderId { get; private set; }
 
     public Guid CommandId { get; private set; }
 
@@ -33,7 +33,7 @@ public class RemovePersonFromGender : ICommand
 
     public Guid CausationId { get; private set; }
 
-    internal RemovePersonFromGender(int personId, int genderId, Guid correlationId, Guid causationId)
+    internal RemovePersonFromGender(Guid personId, Guid genderId, Guid correlationId, Guid causationId)
     {
         PersonId = personId;
         GenderId = genderId;
@@ -45,9 +45,9 @@ public class RemovePersonFromGender : ICommand
 
 public class ChangePersonGender : ICommand
 {
-    public int PersonId { get; private set; }
-    public int NewGenderId { get; private set; }
-    public int OldGenderId { get; private set; }
+    public Guid PersonId { get; private set; }
+    public Guid NewGenderId { get; private set; }
+    public Guid OldGenderId { get; private set; }
 
     public Guid CommandId { get; private set; }
 
@@ -55,7 +55,7 @@ public class ChangePersonGender : ICommand
 
     public Guid CausationId { get; private set; }
 
-    internal ChangePersonGender(int personId, int newGenderId, int oldGenderId, Guid correlationId, Guid causationId)
+    internal ChangePersonGender(Guid personId, Guid newGenderId, Guid oldGenderId, Guid correlationId, Guid causationId)
     {
         PersonId = personId;
         NewGenderId = newGenderId;

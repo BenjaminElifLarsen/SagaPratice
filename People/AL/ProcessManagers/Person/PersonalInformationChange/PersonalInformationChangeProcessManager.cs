@@ -129,8 +129,8 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
 
         _trackerCollection.CompleteEvent<PersonChangedGender>();
 
-        _commandBus.Dispatch(new AddPersonToGender(@event.Data.PersonId, @event.Data.NewGenderId, @event.CorrelationId, @event.EventId));
-        _commandBus.Dispatch(new RemovePersonFromGender(@event.Data.PersonId, @event.Data.OldGenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new AddPersonToGender(@event.AggregateId, @event.NewGenderId, @event.CorrelationId, @event.EventId));
+        _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.OldGenderId, @event.CorrelationId, @event.EventId));
         PublishEventIfPossible();
     }
 

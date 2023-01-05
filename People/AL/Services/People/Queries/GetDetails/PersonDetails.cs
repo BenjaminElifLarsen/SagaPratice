@@ -3,13 +3,13 @@
 namespace PeopleDomain.AL.Services.People.Queries.GetDetails;
 public record PersonDetails : BaseReadModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime Birth { get; set; }
-    public int GenderId { get; set; }
+    public Guid GenderId { get; set; }
 
-    public PersonDetails(int id, string firstName, string lastName, DateOnly birth, int genderId)
+    public PersonDetails(Guid id, string firstName, string lastName, DateOnly birth, Guid genderId)
     {
         Id = id;
         FirstName = firstName;

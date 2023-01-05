@@ -18,4 +18,10 @@ public sealed class RecogniseGender : ICommand
         CorrelationId = CommandId;
         CausationId = CommandId;
     }
+
+    internal RecogniseGender(string verbSubject, string verbObject) : this()
+    {
+        VerbSubject = verbSubject;
+        VerbObject = verbObject;
+    }
 }

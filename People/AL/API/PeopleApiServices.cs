@@ -54,6 +54,6 @@ public class PeopleApiServices
 
     public static void Seed(IServiceProvider provider)
     {
-        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPeopleContext>());
+        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPeopleContext>(), provider.CreateScope().ServiceProvider.GetService<IUnitOfWork>(), provider.CreateScope().ServiceProvider.GetService<IPeopleCommandBus>());
     }
 }

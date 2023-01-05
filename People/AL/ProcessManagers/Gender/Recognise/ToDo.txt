@@ -4,3 +4,4 @@
 	3) Update the service to use the new design
 	4) Update PeopleApiServices (and rename to PersonApiServices)
 	5) Work on middleware to ensure the Router is ready and services subscribe to the state events via the event bus
+	6) Need to ensure that the newly created (or retrived for that matter) pm are subscribed to the correct events

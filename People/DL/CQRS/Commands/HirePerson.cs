@@ -20,4 +20,12 @@ public sealed class HirePersonFromUser : ICommand
         CorrelationId = CommandId;
         CausationId = CommandId;
     }
+
+    internal HirePersonFromUser(string firstName, string lastName, Guid gender, DateTime birth) : base()
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        Birth = birth;
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using Common.BinaryFlags;
 using Common.SpecificationPattern;
 
-namespace PeopleDomain.DL.Errrors;
+namespace PersonDomain.DL.Errrors;
 internal sealed class GenderErrorConversion : IErrorConversion
 {
     public static IEnumerable<string> Convert(BinaryFlag binaryFlag)

@@ -2,7 +2,7 @@
 using Common.Events.Domain;
 using System.Diagnostics;
 
-namespace PeopleDomain.AL.Busses.Event;
+namespace PersonDomain.AL.Busses.Event;
 internal sealed class MockDomainEventBus : IPersonDomainEventBus
 { //works kind as a bus currently, a fake bus, but kind of following the pricipels, but does not permit comminucation between different modules.
   //the integration event bus would be closer to an actually bus as it would handle communication over different modules.

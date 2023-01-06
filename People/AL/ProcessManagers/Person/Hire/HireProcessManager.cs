@@ -1,10 +1,10 @@
 ﻿using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Events.Domain;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.ProcessManagers.Person.Hire;
+namespace PersonDomain.AL.ProcessManagers.Person.Hire;
 internal sealed class HireProcessManager : IHireProcessManager
 {
     private readonly IPersonCommandBus _commandBus;

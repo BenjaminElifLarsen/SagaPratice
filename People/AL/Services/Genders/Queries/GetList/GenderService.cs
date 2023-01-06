@@ -1,8 +1,8 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.Services.Genders.Queries;
-using PeopleDomain.AL.Services.Genders.Queries.GetList;
+using PersonDomain.AL.Services.Genders.Queries;
+using PersonDomain.AL.Services.Genders.Queries.GetList;
 
-namespace PeopleDomain.AL.Services.Genders;
+namespace PersonDomain.AL.Services.Genders;
 public partial class GenderService
 {
     public async Task<Result<IEnumerable<GenderListItem>>> GetGenderListAsync()

@@ -1,9 +1,9 @@
 ﻿using Common.CQRS.Queries;
-using PeopleDomain.DL.CQRS.Queries.ReadModels;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.CQRS.Queries.ReadModels;
+using PersonDomain.DL.Models;
 using System.Linq.Expressions;
 
-namespace PeopleDomain.DL.CQRS.Queries;
+namespace PersonDomain.DL.CQRS.Queries;
 internal sealed class GenderIdQuery : BaseQuery<Gender, GenderIdValidation>
 {
     public override Expression<Func<Gender, GenderIdValidation>> Map()

@@ -1,8 +1,8 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.Genders;
+namespace PersonDomain.AL.Services.Genders;
 public partial class GenderService
 {
     public async Task<Result> RecogniseGenderAsync(RecogniseGender command)

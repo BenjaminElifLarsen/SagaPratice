@@ -1,10 +1,10 @@
 ﻿using Common.CQRS.Queries;
-using PeopleDomain.AL.Services.People.Queries.GetDetails;
-using PeopleDomain.AL.Services.People.Queries.GetList;
-using PeopleDomain.DL.Models;
+using PersonDomain.AL.Services.People.Queries.GetDetails;
+using PersonDomain.AL.Services.People.Queries.GetList;
+using PersonDomain.DL.Models;
 using System.Linq.Expressions;
 
-namespace PeopleDomain.AL.Services.People.Queries;
+namespace PersonDomain.AL.Services.People.Queries;
 internal sealed class PersonListItemQuery : BaseQuery<Person, PersonListItem>
 {
     public override Expression<Func<Person, PersonListItem>> Map()

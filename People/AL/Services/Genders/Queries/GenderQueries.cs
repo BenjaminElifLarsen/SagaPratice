@@ -1,10 +1,10 @@
 ﻿using Common.CQRS.Queries;
-using PeopleDomain.AL.Services.Genders.Queries.GetDetails;
-using PeopleDomain.AL.Services.Genders.Queries.GetList;
-using PeopleDomain.DL.Models;
+using PersonDomain.AL.Services.Genders.Queries.GetDetails;
+using PersonDomain.AL.Services.Genders.Queries.GetList;
+using PersonDomain.DL.Models;
 using System.Linq.Expressions;
 
-namespace PeopleDomain.AL.Services.Genders.Queries;
+namespace PersonDomain.AL.Services.Genders.Queries;
 internal sealed class GenderListItemQuery : BaseQuery<Gender, GenderListItem>
 {
     public override Expression<Func<Gender, GenderListItem>> Map()

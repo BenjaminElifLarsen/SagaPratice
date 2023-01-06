@@ -1,4 +1,4 @@
-﻿namespace PeopleDomain.DL.Models;
+﻿namespace PersonDomain.DL.Models;
 
 internal static class RandomValue // Just here for the mock id generation.
 {

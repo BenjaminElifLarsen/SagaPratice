@@ -1,8 +1,8 @@
 ﻿using Common.RepositoryPattern;
-using PeopleDomain.IPL.Repositories.DomainModels;
-using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+using PersonDomain.IPL.Repositories.DomainModels;
+using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 
-namespace PeopleDomain.IPL.Services;
+namespace PersonDomain.IPL.Services;
 public interface IUnitOfWork : IBaseUnitOfWork, IBaseEventUnitOfWork
 {
     public IGenderRepository GenderRepository { get; }

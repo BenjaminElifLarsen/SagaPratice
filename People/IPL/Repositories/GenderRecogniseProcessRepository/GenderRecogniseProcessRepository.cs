@@ -1,7 +1,7 @@
 ﻿using Common.RepositoryPattern.ProcessManagers;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise;
 
-namespace PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+namespace PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 internal sealed class GenderRecogniseProcessRepository : IGenderRecogniseProcessRepository
 {
     private readonly IBaseProcessManagerRepository<GenderRecogniseProcessManager> _repository;

@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.RepositoryPattern;
 
-namespace PeopleDomain.DL.Models;
+namespace PersonDomain.DL.Models;
 
 public sealed class Person : IAggregateRoot, ISoftDeleteDate
 {

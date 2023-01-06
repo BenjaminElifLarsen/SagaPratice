@@ -2,7 +2,7 @@
 using Common.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL.Registries;
+using PersonDomain.AL.Registries;
 using VehicleDomain.AL.Registries;
 
 namespace API.Middleware;

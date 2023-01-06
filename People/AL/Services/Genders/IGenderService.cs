@@ -1,10 +1,10 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PeopleDomain.AL.Services.Genders.Queries.GetDetails;
-using PeopleDomain.AL.Services.Genders.Queries.GetList;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.AL.Services.Genders.Queries.GetDetails;
+using PersonDomain.AL.Services.Genders.Queries.GetList;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.Genders;
+namespace PersonDomain.AL.Services.Genders;
 public interface IGenderService
 {
     Task<Result<IEnumerable<GenderListItem>>> GetGenderListAsync();

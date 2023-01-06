@@ -1,8 +1,8 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.Genders;
+namespace PersonDomain.AL.Services.Genders;
 public partial class GenderService
 {
     public async Task<Result> UnrecogniseGenderAsync(UnrecogniseGender command)

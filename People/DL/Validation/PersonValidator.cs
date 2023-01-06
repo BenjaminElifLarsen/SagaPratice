@@ -1,11 +1,11 @@
 ﻿using Common.BinaryFlags;
 using Common.SpecificationPattern;
 using Common.SpecificationPattern.Composite.Extensions;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Errrors;
-using PeopleDomain.DL.Validation.PersonSpecifications;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Errrors;
+using PersonDomain.DL.Validation.PersonSpecifications;
 
-namespace PeopleDomain.DL.Validation;
+namespace PersonDomain.DL.Validation;
 internal sealed class PersonHireValidator : IValidate
 {
     private readonly HirePersonFromUser _person;

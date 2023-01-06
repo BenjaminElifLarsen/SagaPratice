@@ -2,12 +2,12 @@
 using Common.Events.System;
 using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Event;
-using PeopleDomain.IPL.Context;
-using PeopleDomain.IPL.Repositories.DomainModels;
-using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+using PersonDomain.AL.Busses.Event;
+using PersonDomain.IPL.Context;
+using PersonDomain.IPL.Repositories.DomainModels;
+using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 
-namespace PeopleDomain.IPL.Services;
+namespace PersonDomain.IPL.Services;
 internal sealed class UnitOfWork : IUnitOfWork
 {
     private readonly IGenderRepository _genderRepository;

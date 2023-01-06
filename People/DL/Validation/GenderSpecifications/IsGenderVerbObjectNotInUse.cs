@@ -1,8 +1,8 @@
 ﻿using Common.SpecificationPattern;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.CQRS.Queries.ReadModels;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.CQRS.Queries.ReadModels;
 
-namespace PeopleDomain.DL.Validation.GenderSpecifications;
+namespace PersonDomain.DL.Validation.GenderSpecifications;
 internal sealed class IsGenderVerbObjectNotInUse : ISpecification<RecogniseGender>
 {
     private IEnumerable<GenderVerbValidation> _genderVerbs;

@@ -1,9 +1,9 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Models;
-using PeopleDomain.DL.Validation;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Models;
+using PersonDomain.DL.Validation;
 
-namespace PeopleDomain.DL.Factories;
+namespace PersonDomain.DL.Factories;
 internal interface IPersonFactory
 {
     public Result<Person> CreatePerson(HirePersonFromUser person, PersonValidationData validationData);

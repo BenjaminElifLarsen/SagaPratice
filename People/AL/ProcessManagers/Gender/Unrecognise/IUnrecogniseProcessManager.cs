@@ -1,7 +1,7 @@
 ﻿using Common.ProcessManager;
-using PeopleDomain.DL.Events.Domain;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
+namespace PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 public interface IUnrecogniseProcessManager : IProcessManager,
     IProcessManagerEventHandler<GenderUnrecognisedSucceeded>,
     IProcessManagerEventHandler<GenderUnrecognisedFailed>

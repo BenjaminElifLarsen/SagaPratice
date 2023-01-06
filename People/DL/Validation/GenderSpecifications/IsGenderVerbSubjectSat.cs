@@ -1,7 +1,7 @@
 ﻿using Common.SpecificationPattern;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.DL.Validation.GenderSpecifications;
+namespace PersonDomain.DL.Validation.GenderSpecifications;
 internal sealed class IsGenderVerbSubjectSat : ISpecification<RecogniseGender>
 {
     public bool IsSatisfiedBy(RecogniseGender candidate)

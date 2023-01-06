@@ -1,7 +1,7 @@
 ﻿using Common.SpecificationPattern;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.DL.Validation.GenderSpecifications;
+namespace PersonDomain.DL.Validation.GenderSpecifications;
 internal sealed class CanGenderBeRemoved : ISpecification<Gender>
 { //gender cannot be removed as long time there are references to it
     public bool IsSatisfiedBy(Gender candidate)

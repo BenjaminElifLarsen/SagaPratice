@@ -2,8 +2,8 @@
 using Common.Events.Store.ProcessManager;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
-using PeopleDomain.AL.Registries;
+using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PersonDomain.AL.Registries;
 
 namespace API.Middleware;
 

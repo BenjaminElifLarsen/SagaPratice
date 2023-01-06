@@ -1,8 +1,8 @@
-﻿using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Events.Domain;
+﻿using PersonDomain.AL.Busses.Command;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.Handlers.Event;
+namespace PersonDomain.AL.Handlers.Event;
 internal sealed class PeopleEventHandler : IPeopleEventHandler
 {
     private readonly IPersonCommandBus _commandBus;

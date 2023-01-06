@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace PeopleDomain.AL.Busses.Command;
+namespace PersonDomain.AL.Busses.Command;
 public interface IPersonCommandBus : ICommandBus
 {
 }

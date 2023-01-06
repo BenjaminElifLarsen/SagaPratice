@@ -1,7 +1,7 @@
 ﻿using Common.Events.System;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.DL.Events.Domain;
+namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonFiredFailed : SystemEvent
 {
     public string AggregateType { get; private set; }

@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Queries;
 
-namespace PeopleDomain.AL.Services.Genders.Queries.GetDetails;
+namespace PersonDomain.AL.Services.Genders.Queries.GetDetails;
 public record GenderDetails : BaseReadModel
 {
     public Guid Id { get; set; }

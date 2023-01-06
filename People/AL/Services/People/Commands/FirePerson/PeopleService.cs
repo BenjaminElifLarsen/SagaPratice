@@ -1,8 +1,8 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.ProcessManagers.Person.Fire;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.ProcessManagers.Person.Fire;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.People;
+namespace PersonDomain.AL.Services.People;
 public partial class PeopleService
 {
     public async Task<Result> FirePersonAsync(FirePersonFromUser command)

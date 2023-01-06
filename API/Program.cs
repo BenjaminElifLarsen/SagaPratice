@@ -4,8 +4,8 @@ using Common.Other;
 using Common.Other.Converters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL;
-using PeopleDomain.AL.API;
+using PersonDomain.AL;
+using PersonDomain.AL.API;
 using VehicleDomain.AL;
 using VehicleDomain.AL.API;
 

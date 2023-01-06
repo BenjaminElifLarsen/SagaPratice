@@ -1,8 +1,8 @@
-﻿using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PeopleDomain.DL.Events.Domain;
+﻿using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.DL.Events.Domain;
 using PersonDomain.AL.ProcessManagers;
 
-namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+namespace PersonDomain.AL.ProcessManagers.Gender.Recognise;
 public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogniseProcessManager
 { //need a GenderProcessRouter and repositories for each gender pm type
     //private readonly IPeopleCommandBus _commandBus;

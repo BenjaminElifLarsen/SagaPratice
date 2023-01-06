@@ -1,9 +1,9 @@
 ﻿using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.DL.Events.Domain;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
+namespace PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 internal sealed class UnrecogniseProcessManager : IUnrecogniseProcessManager
 {
     private readonly IPersonCommandBus _commandBus;

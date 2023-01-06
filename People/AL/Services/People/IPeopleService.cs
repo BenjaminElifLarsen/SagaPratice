@@ -1,9 +1,9 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.Services.People.Queries.GetDetails;
-using PeopleDomain.AL.Services.People.Queries.GetList;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.Services.People.Queries.GetDetails;
+using PersonDomain.AL.Services.People.Queries.GetList;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.People;
+namespace PersonDomain.AL.Services.People;
 public interface IPeopleService
 {
     Task<Result<IEnumerable<PersonListItem>>> GetPeopleListAsync();

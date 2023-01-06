@@ -1,6 +1,6 @@
 ﻿using Common.CQRS.Commands;
 
-namespace PeopleDomain.DL.CQRS.Commands;
+namespace PersonDomain.DL.CQRS.Commands;
 public sealed class RecogniseGender : ICommand
 { //figure out a better name
     public string VerbSubject { get; set; }

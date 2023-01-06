@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.DL.Events.Domain;
+namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonAddedToGenderSucceeded : DomainEvent
 {
     public Guid PersonId { get; private set; }

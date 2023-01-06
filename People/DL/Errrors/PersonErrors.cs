@@ -1,4 +1,4 @@
-﻿namespace PeopleDomain.DL.Errrors;
+﻿namespace PersonDomain.DL.Errrors;
 internal enum PersonErrors
 {
     InvalidBirth = 0b1,

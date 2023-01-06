@@ -1,10 +1,10 @@
 ﻿using Common.CQRS.Commands;
 using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.IPL.Services;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.IPL.Services;
 
-namespace PeopleDomain.AL.Services.People;
+namespace PersonDomain.AL.Services.People;
 public sealed partial class PeopleService : IPeopleService
 {
 	private readonly IUnitOfWork _unitOfWork;

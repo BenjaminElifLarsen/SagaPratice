@@ -2,8 +2,8 @@
 using Common.Other;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PeopleDomain.AL.Services.Genders;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.Services.Genders;
+using PersonDomain.DL.CQRS.Commands;
 
 namespace API.Controllers;
 [Route("[controller]")]

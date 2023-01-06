@@ -1,10 +1,10 @@
 ﻿using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.Busses.Event;
-using PeopleDomain.IPL.Services;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.Busses.Event;
+using PersonDomain.IPL.Services;
 
-namespace PeopleDomain.AL.Services.Genders;
+namespace PersonDomain.AL.Services.Genders;
 public sealed partial class GenderService : IGenderService
 {
     private readonly IUnitOfWork _unitOfWork;

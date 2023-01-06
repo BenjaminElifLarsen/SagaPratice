@@ -1,8 +1,8 @@
 ﻿using Common.SpecificationPattern;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.DL.Validation.PersonSpecifications;
+namespace PersonDomain.DL.Validation.PersonSpecifications;
 internal sealed class IsPersonBirthNotToLate : ISpecification<Person>, ISpecification<HirePersonFromUser>, ISpecification<ChangePersonalInformationFromUser>
 {
     public bool IsSatisfiedBy(HirePersonFromUser candidate)

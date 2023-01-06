@@ -1,8 +1,8 @@
 ﻿using BaseRepository;
 using Common.RepositoryPattern;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.IPL.Context;
+namespace PersonDomain.IPL.Context;
 public interface IPeopleContext : IBaseContext, IContextData<Person>, IContextData<Gender>
 {
 }

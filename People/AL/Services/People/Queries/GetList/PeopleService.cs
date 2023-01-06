@@ -1,8 +1,8 @@
 ﻿using Common.ResultPattern;
-using PeopleDomain.AL.Services.People.Queries;
-using PeopleDomain.AL.Services.People.Queries.GetList;
+using PersonDomain.AL.Services.People.Queries;
+using PersonDomain.AL.Services.People.Queries.GetList;
 
-namespace PeopleDomain.AL.Services.People;
+namespace PersonDomain.AL.Services.People;
 public partial class PeopleService
 {
     public async Task<Result<IEnumerable<PersonListItem>>> GetPeopleListAsync()

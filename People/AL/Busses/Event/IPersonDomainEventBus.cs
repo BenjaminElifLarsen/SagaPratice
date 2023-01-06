@@ -1,7 +1,7 @@
 ﻿using Common.Events.Bus;
 using Common.Events.Domain;
 
-namespace PeopleDomain.AL.Busses.Event;
+namespace PersonDomain.AL.Busses.Event;
 public interface IPersonDomainEventBus : /*IDomainEventBus,*/ IApplicationBus
 {
 }

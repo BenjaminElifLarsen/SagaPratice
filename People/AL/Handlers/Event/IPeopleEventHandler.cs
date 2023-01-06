@@ -1,8 +1,8 @@
 ﻿using Common.Events.Bus;
 using Common.Events.Domain;
-using PeopleDomain.DL.Events.Domain;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.Handlers.Event;
+namespace PersonDomain.AL.Handlers.Event;
 public interface IPeopleEventHandler :
     IEventHandler<PersonHiredSucceeded>,
     IEventHandler<PersonFiredSucceeded>,

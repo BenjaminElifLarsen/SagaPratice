@@ -1,9 +1,9 @@
 ﻿using Common.ProcessManager;
 using Common.ResultPattern;
-using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-using PeopleDomain.DL.CQRS.Commands;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PersonDomain.DL.CQRS.Commands;
 
-namespace PeopleDomain.AL.Services.People;
+namespace PersonDomain.AL.Services.People;
 public partial class PeopleService
 {
     public async Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command)

@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Queries;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.IPL.Repositories.DomainModels;
+namespace PersonDomain.IPL.Repositories.DomainModels;
 public interface IGenderRepository
 {
     void Recognise(Gender entity);

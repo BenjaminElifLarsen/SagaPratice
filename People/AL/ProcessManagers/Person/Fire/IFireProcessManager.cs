@@ -1,7 +1,7 @@
 ﻿using Common.ProcessManager;
-using PeopleDomain.DL.Events.Domain;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.ProcessManagers.Person.Fire;
+namespace PersonDomain.AL.ProcessManagers.Person.Fire;
 public interface IFireProcessManager : IProcessManager,
     IProcessManagerEventHandler<PersonFiredSucceeded>,
     IProcessManagerEventHandler<PersonFiredFailed>,

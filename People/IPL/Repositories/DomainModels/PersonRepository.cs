@@ -1,8 +1,8 @@
 ﻿using Common.CQRS.Queries;
 using Common.RepositoryPattern;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.IPL.Repositories.DomainModels;
+namespace PersonDomain.IPL.Repositories.DomainModels;
 internal sealed class PersonRepository : IPersonRepository
 {
     private readonly IBaseRepository<Person> _baseRepository;

@@ -1,7 +1,7 @@
 ﻿using Common.Events.System;
-using PeopleDomain.DL.Models;
+using PersonDomain.DL.Models;
 
-namespace PeopleDomain.DL.Events.Domain;
+namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonHiredFailed : SystemEvent
 {
     public IEnumerable<string> Errors { get; private set; }

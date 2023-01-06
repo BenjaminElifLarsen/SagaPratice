@@ -1,18 +1,18 @@
-﻿using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.Busses.Event;
-using PeopleDomain.AL.Handlers.Command;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
-using PeopleDomain.AL.ProcessManagers.Person.Fire;
-using PeopleDomain.AL.ProcessManagers.Person.Hire;
-using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
-using PeopleDomain.AL.Services.Genders;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Events.Domain;
+﻿using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.Busses.Event;
+using PersonDomain.AL.Handlers.Command;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
+using PersonDomain.AL.ProcessManagers.Person.Fire;
+using PersonDomain.AL.ProcessManagers.Person.Hire;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PersonDomain.AL.Services.Genders;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Events.Domain;
 
-namespace PeopleDomain.AL.Registries;
+namespace PersonDomain.AL.Registries;
 public sealed class PersonRegistry : IPersonRegistry
 {
     private readonly IPersonCommandBus _commandBus;

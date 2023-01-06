@@ -5,27 +5,27 @@ using Common.RepositoryPattern;
 using Common.RepositoryPattern.ProcessManagers;
 using Common.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.Busses.Event;
-using PeopleDomain.AL.Handlers.Command;
-using PeopleDomain.AL.Handlers.Event;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
-using PeopleDomain.AL.ProcessManagers.Person.Fire;
-using PeopleDomain.AL.ProcessManagers.Person.Hire;
-using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
-using PeopleDomain.AL.Registries;
-using PeopleDomain.AL.Services.Genders;
-using PeopleDomain.AL.Services.People;
-using PeopleDomain.DL.Factories;
-using PeopleDomain.DL.Models;
-using PeopleDomain.IPL.Context;
-using PeopleDomain.IPL.Repositories.DomainModels;
-using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
-using PeopleDomain.IPL.Services;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.Busses.Event;
+using PersonDomain.AL.Handlers.Command;
+using PersonDomain.AL.Handlers.Event;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
+using PersonDomain.AL.ProcessManagers.Person.Fire;
+using PersonDomain.AL.ProcessManagers.Person.Hire;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PersonDomain.AL.Registries;
+using PersonDomain.AL.Services.Genders;
+using PersonDomain.AL.Services.People;
+using PersonDomain.DL.Factories;
+using PersonDomain.DL.Models;
+using PersonDomain.IPL.Context;
+using PersonDomain.IPL.Repositories.DomainModels;
+using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+using PersonDomain.IPL.Services;
 
-namespace PeopleDomain.AL.API;
+namespace PersonDomain.AL.API;
 public class PeopleApiServices
 {
     public static void Add(IServiceCollection services)

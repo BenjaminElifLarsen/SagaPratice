@@ -1,15 +1,15 @@
 ﻿using Common.BinaryFlags;
 using Common.ResultPattern;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.CQRS.Queries;
-using PeopleDomain.DL.Errrors;
-using PeopleDomain.DL.Events.Domain;
-using PeopleDomain.DL.Factories;
-using PeopleDomain.DL.Models;
-using PeopleDomain.DL.Validation;
-using PeopleDomain.IPL.Services;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.CQRS.Queries;
+using PersonDomain.DL.Errrors;
+using PersonDomain.DL.Events.Domain;
+using PersonDomain.DL.Factories;
+using PersonDomain.DL.Models;
+using PersonDomain.DL.Validation;
+using PersonDomain.IPL.Services;
 
-namespace PeopleDomain.AL.Handlers.Command;
+namespace PersonDomain.AL.Handlers.Command;
 internal sealed class PersonCommandHandler : IPersonCommandHandler
 {
     private readonly IPersonFactory _personFactory;

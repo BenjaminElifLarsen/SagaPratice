@@ -1,10 +1,10 @@
-﻿using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.Busses.Event;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-using PeopleDomain.DL.Events.Domain;
-using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+﻿using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.Busses.Event;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise;
+using PersonDomain.DL.Events.Domain;
+using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 
-namespace PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+namespace PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
 { //could have a middleware for this regarding setting up the routes and handlers between the event bus and this class
     private readonly IGenderRecogniseProcessRepository _repository;

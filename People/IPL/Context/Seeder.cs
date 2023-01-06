@@ -1,13 +1,13 @@
 ﻿using BaseRepository;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.Services.People.Queries;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.CQRS.Queries;
-using PeopleDomain.DL.Events.Domain;
-using PeopleDomain.DL.Models;
-using PeopleDomain.IPL.Services;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.Services.People.Queries;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.CQRS.Queries;
+using PersonDomain.DL.Events.Domain;
+using PersonDomain.DL.Models;
+using PersonDomain.IPL.Services;
 
-namespace PeopleDomain.IPL.Context;
+namespace PersonDomain.IPL.Context;
 internal static class Seeder
 {
     public static void MockSeedData(IPeopleContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus)

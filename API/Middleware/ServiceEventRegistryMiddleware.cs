@@ -1,8 +1,8 @@
 ﻿using API.Controllers;
 using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using PeopleDomain.AL.Registries;
-using PeopleDomain.AL.Services.Genders;
+using PersonDomain.AL.Registries;
+using PersonDomain.AL.Services.Genders;
 
 namespace API.Middleware;
 

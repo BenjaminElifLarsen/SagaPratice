@@ -1,11 +1,11 @@
 ﻿using Common.BinaryFlags;
 using Common.SpecificationPattern;
 using Common.SpecificationPattern.Composite.Extensions;
-using PeopleDomain.DL.CQRS.Commands;
-using PeopleDomain.DL.Errrors;
-using PeopleDomain.DL.Validation.GenderSpecifications;
+using PersonDomain.DL.CQRS.Commands;
+using PersonDomain.DL.Errrors;
+using PersonDomain.DL.Validation.GenderSpecifications;
 
-namespace PeopleDomain.DL.Validation;
+namespace PersonDomain.DL.Validation;
 internal sealed class GenderValidator : IValidate
 {
     private readonly RecogniseGender _gender;

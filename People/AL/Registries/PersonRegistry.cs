@@ -2,11 +2,13 @@
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.AL.Handlers.Command;
 using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
+using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
@@ -84,5 +86,11 @@ public sealed class PersonRegistry : IPersonRegistry
     {
         _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processRouter.Handle);
         _eventBus.RegisterHandler<GenderRecognisedFailed>(processRouter.Handle);
+    }
+
+    public void SetUpRouting(IGenderService service)
+    {
+        _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
     }
 }

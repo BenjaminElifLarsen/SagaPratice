@@ -1,7 +1,6 @@
 ﻿using BaseRepository;
-using Common.Events.Base;
-using Common.Events.Domain;
 using Common.Events.Store.Event;
+using Common.Events.Store.ProcessManager;
 using Common.Events.System;
 using Common.RepositoryPattern;
 using VehicleDomain.DL.Models.LicenseTypes;
@@ -143,6 +142,26 @@ internal class MockVehicleContext : IVehicleContext
     }
 
     public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Add(IBaseProcessManager processManager)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Remove(IBaseProcessManager processManager)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<T> Set<T>()
     {
         throw new NotImplementedException();
     }

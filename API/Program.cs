@@ -44,6 +44,7 @@ app.UseAuthorization();
 app.UseMiddleware<RegistryMiddleware>();
 app.UseMiddleware<ProcessManagerMiddleware>();
 app.UseMiddleware<ProcessManagerRouterMiddleware>();
+app.UseMiddleware<ServiceEventRegistryMiddleware>();
 
 app.MapControllers();
 

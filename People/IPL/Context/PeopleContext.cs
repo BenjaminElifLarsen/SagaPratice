@@ -1,5 +1,6 @@
 ﻿using BaseRepository;
 using Common.Events.Store.Event;
+using Common.Events.Store.ProcessManager;
 using Common.Events.System;
 using Common.RepositoryPattern;
 using PeopleDomain.DL.Models;
@@ -11,7 +12,8 @@ internal sealed class MockPeopleContext : IPeopleContext
     private readonly HashSet<SystemEvent> _events;
     private readonly MockEventStore _eventStore;
     private DateOnly _date; //mayhaps move the data out into its own class that can be set as singleton. EF Core context is scoped and it could be nice if this context was slightly more similar to it on that point.
-    
+    private readonly HashSet<IBaseProcessManager> _processManager;
+
     public bool Filter { get; set; }
 
     private Func<TEntity, bool> Filtering<TEntity>()
@@ -40,6 +42,7 @@ internal sealed class MockPeopleContext : IPeopleContext
         _contextData = new();
         Filter = true;
         _events = new();
+        _processManager = new();
     }
 
     public void Add(IAggregateRoot root)
@@ -137,5 +140,25 @@ internal sealed class MockPeopleContext : IPeopleContext
     public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
     {
         return _eventStore.LoadStreamAsync(id, aggregateRoot).Result;
+    }
+
+    public void Add(IBaseProcessManager processManager)
+    {
+        _processManager.Add(processManager);
+    }
+
+    public void Remove(IBaseProcessManager processManager)
+    {
+        _processManager.Remove(processManager);
+    }
+
+    public async Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId)
+    {
+        return await Task.Run(() => _processManager.SingleOrDefault(x => x.CorrelationId == correlationId));
+    }
+
+    public IEnumerable<T> Set<T>()
+    { //can be sat up to work a collection of Object, allowing IBaseProcessManager, IBaseEvent, and IAggregateRoot
+        return _processManager.Where(x => x is T).Select(x => (T)x);
     }
 }

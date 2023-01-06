@@ -49,7 +49,7 @@ public class PeopleApiServices
         services.AddScoped<IProcessManager, FireProcessManager>();
         services.AddScoped<IProcessManager, HireProcessManager>();
         services.AddScoped<IProcessManager, UnrecogniseProcessManager>();
-        services.AddScoped<IBaseProcessManagerRepository<GenderRecogniseProcessManager>, MockProcessManagerRepository<GenderRecogniseProcessManager>>();
+        services.AddScoped<IBaseProcessManagerRepository<GenderRecogniseProcessManager>, MockProcessManagerRepository<GenderRecogniseProcessManager, IPeopleContext>>();
         services.AddScoped<IGenderRecogniseProcessRepository, GenderRecogniseProcessRepository>();
         services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
     }

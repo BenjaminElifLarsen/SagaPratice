@@ -1,31 +1,34 @@
 ﻿using Common.Events.Store.ProcessManager;
+using Common.RepositoryPattern;
 using Common.RepositoryPattern.ProcessManagers;
 
 namespace BaseRepository;
-public class MockProcessManagerRepository<TProcessManager> : IBaseProcessManagerRepository<TProcessManager> where TProcessManager : IBaseProcessManager
+public class MockProcessManagerRepository<TProcessManager, TBaseContext> : IBaseProcessManagerRepository<TProcessManager> where TProcessManager : IBaseProcessManager where TBaseContext : IBaseContext
 {
-    private static HashSet<TProcessManager> _processManagers; //move over to a context file when closer to finalise the new design regarding its implemntation.
-
-    public MockProcessManagerRepository()
+    private readonly TBaseContext _context; //move over to a context file when closer to finalise the new design regarding its implemntation.
+    private readonly IEnumerable<TProcessManager> _data;
+    public MockProcessManagerRepository(TBaseContext context)
     {
-        _processManagers = new();
+        _context = context;
+        _data = _context.Set<TProcessManager>();
     }
 
     public void Delete(Guid correlationId)
     {
-        _processManagers.Remove(_processManagers.SingleOrDefault(x => x.CorrelationId == correlationId));
+        var pm = _context.LoadProcessManagerAsync(correlationId).Result;
+        _context.Remove(pm);
     }
 
     public async Task<TProcessManager> LoadAsync(Guid correlationId)
     {
-        return await Task.Run(() => _processManagers.SingleOrDefault(x => x.CorrelationId == correlationId));
+        return await Task.Run(() => _data.SingleOrDefault(x => x.CorrelationId == correlationId));
     }
 
     public void Save(TProcessManager processManager)
     {
-        if (!_processManagers.Contains(processManager))
+        if (_context.LoadProcessManagerAsync(processManager.CorrelationId).Result is null)
         {
-            _processManagers.Add(processManager);
+            _context.Add(processManager);
         }
     }
 }

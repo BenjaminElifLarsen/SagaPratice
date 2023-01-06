@@ -7,15 +7,13 @@ public partial class GenderService
 {
     public async Task<Result> RecogniseGenderAsync(RecogniseGender command)
     {
-        _eventBus.RegisterHandler<RecognisedSucceeded>(Handle);
-        _eventBus.RegisterHandler<RecognisedFailed>(Handle);
         await Task.Run(() => _commandBus.Dispatch(command));
         while (!CanReturnResult) ;
-        _eventBus.UnregisterHandler<RecognisedSucceeded>(Handle);
-        _eventBus.UnregisterHandler<RecognisedFailed>(Handle);
+        //_eventBus.UnregisterHandler<RecognisedSucceeded>(Handle); //not really needed to be called since all references only exist as scoped, not singleton
+        //_eventBus.UnregisterHandler<RecognisedFailed>(Handle); //could put void Handle<StateEvent> over in contract and call the service in a middleware to set these up
         return _result;
     }
 
-    private void Handle(RecognisedSucceeded @event) => _result = new SuccessResultNoData();
-    private void Handle(RecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
+    public void Handle(RecognisedSucceeded @event) => _result = new SuccessResultNoData();
+    public void Handle(RecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
 }

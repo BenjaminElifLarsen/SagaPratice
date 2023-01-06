@@ -7,7 +7,7 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 internal sealed class PersonalInformationChangeProcessManager : IPersonalInformationChangeProcessManager
 {
-    private readonly IPeopleCommandBus _commandBus;
+    private readonly IPersonCommandBus _commandBus;
     private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
@@ -17,7 +17,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
     public bool Running => !_trackerCollection.AllFinishedOrFailed;
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
-    public PersonalInformationChangeProcessManager(IPeopleCommandBus commandBus) 
+    public PersonalInformationChangeProcessManager(IPersonCommandBus commandBus) 
     { //could log id
         ProcessManagerId = Guid.NewGuid();
         _commandBus = commandBus;

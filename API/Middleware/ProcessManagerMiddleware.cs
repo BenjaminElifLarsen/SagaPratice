@@ -39,7 +39,7 @@ public class ProcessManagerMiddleware
         {
             if (peopleDomain.Any(x => string.Equals(x, controllerName)))
             {
-                var selectedRegistry = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
+                var selectedRegistry = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
                 var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
                 selectedRegistry.SetUpRouting(changePM); //consider moving all related to the process managers over to their own middleware, this class should only care about process managers
                 var firePM = processManagers.SingleOrDefault(x => x is IFireProcessManager) as IFireProcessManager;

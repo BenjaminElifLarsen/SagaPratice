@@ -5,26 +5,30 @@ using Common.ResultPattern;
 using PeopleDomain.AL.Busses.Event;
 using PeopleDomain.IPL.Context;
 using PeopleDomain.IPL.Repositories.DomainModels;
+using PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 
 namespace PeopleDomain.IPL.Services;
 internal sealed class UnitOfWork : IUnitOfWork
 {
     private readonly IGenderRepository _genderRepository;
     private readonly IPersonRepository _personRepository;
-    private readonly IPeopleDomainEventBus _eventBus;
+    private readonly IPersonDomainEventBus _eventBus;
     private readonly IPeopleContext _context;
     private readonly IEnumerable<IProcessManager> _processManagers;
+    private readonly IGenderRecogniseProcessRepository _genderRecogniseRepository;
 
     public IGenderRepository GenderRepository => _genderRepository;
     public IPersonRepository PersonRepository => _personRepository;
+    public IGenderRecogniseProcessRepository GenderRecogniseProcessRepository => _genderRecogniseRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPeopleDomainEventBus eventBus, IPeopleContext context, IEnumerable<IProcessManager> processManagers)
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPeopleContext context, IEnumerable<IProcessManager> processManagers, IGenderRecogniseProcessRepository genderRecogniseRepository)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;
         _eventBus = eventBus;
         _context = context;
-        _processManagers = processManagers; 
+        _processManagers = processManagers;
+        _genderRecogniseRepository = genderRecogniseRepository;
     }
 
     private void Save(ProcesserFinished @event)

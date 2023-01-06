@@ -1,18 +1,11 @@
-﻿using Common.CQRS.Commands;
-using Common.Events.Base;
-using Common.ProcessManager;
-using Common.ResultPattern;
-using PeopleDomain.AL.Busses.Command;
-using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+﻿using PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PeopleDomain.DL.Events.Domain;
+using PersonDomain.AL.ProcessManagers;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise;
-internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
-{ //need a GenderProcessRouter and repositories for each gender pm 
+public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogniseProcessManager
+{ //need a GenderProcessRouter and repositories for each gender pm type
     //private readonly IPeopleCommandBus _commandBus;
-    private readonly List<string> _errors;
-    private readonly List<ICommand> _commands;
-    private readonly List<IBaseEvent> _events;
 
     //private readonly HashSet<Action<ProcesserFinished>> _handlers;
     /*
@@ -29,7 +22,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
      * each handler contain a siwtch case for State that decide what to do.
      * the pm should contains fields/properties for the different values it need, like ids, commands and such
      *  could also be useful for the cases where an handler transmit multiple commands, storing the amount and the different commandIds and then the event handlers can track which causationIds the events have and count the amount they receive
-     * 
+     *      so a dictionary of command type and collection of the Guids of the commandIds
      * after just eat it require process manager factory (the special router) and message router. So it seems like instead of an event handler, there should be a thing like GenderRecogniseRouter (and so on, for each process manager), which loads in the pm (or creates a new one) and handles the event be sending it to the pm and then saves the pm after it has handled it
      * 
      * 
@@ -37,25 +30,17 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
      * so when received an event, run code, save to context, commands are send. Some people state it could be a good idea to save commands in the context, but other say it does not matter
      */
 
-    public Guid ProcessManagerId { get; private set; }
-    public Guid CorrelationId { get; private set; }
     public RecogniseGenderState State { get; private set; }
-    public IEnumerable<ICommand> Commands => _commands;
-    public IEnumerable<IBaseEvent> Events => _events;
 
-    public GenderRecogniseProcessManager(/*IPeopleCommandBus commandBus*/)
+    public GenderRecogniseProcessManager(Guid correlationId /*IPeopleCommandBus commandBus*/) : base(correlationId)
     {
         //_commandBus = commandBus;
         ProcessManagerId = Guid.NewGuid();
-        _errors = new();
-        _commands = new();
-        _events = new();
         //_handlers = new();
         State = RecogniseGenderState.NotStarted;
-
     }
 
-    public override void Handle(GenderRecognisedSucceeded @event)
+    public void Handle(GenderRecognisedSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -63,8 +48,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
         {
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderRecognised;
-                _events.Add(new RecognisedSucceeded(@event.CorrelationId, @event.EventId));
-                //create the state change event response thing
+                AddStateEvent(new RecognisedSucceeded(@event.CorrelationId, @event.EventId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.
@@ -80,7 +64,7 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
 
     }
 
-    public override void Handle(GenderRecognisedFailed @event)
+    public void Handle(GenderRecognisedFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
@@ -88,8 +72,8 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
         {
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderFailedToRecognise;
-                _errors.AddRange(@event.Errors);
-                _events.Add(new RecognisedFailed(_errors,@event.CorrelationId, @event.CausationId));
+                AddErrors(@event.Errors);
+                AddStateEvent(new RecognisedFailed(Errors, @event.CorrelationId, @event.CausationId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.
@@ -114,14 +98,6 @@ internal sealed class GenderRecogniseProcessManager : RecogniseProcessManager
     //{
     //    _handlers.Add(handler);
     //}
-
-    public void SetUp(Guid correlationId)
-    {
-        if(CorrelationId == default)
-        {
-            CorrelationId = correlationId;
-        }
-    }
 
     public enum RecogniseGenderState
     {

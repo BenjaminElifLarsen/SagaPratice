@@ -10,13 +10,13 @@ using PeopleDomain.DL.Validation;
 using PeopleDomain.IPL.Services;
 
 namespace PeopleDomain.AL.Handlers.Command;
-internal sealed class PeopleCommandHandler : IPeopleCommandHandler
+internal sealed class PersonCommandHandler : IPersonCommandHandler
 {
     private readonly IPersonFactory _personFactory;
     private readonly IGenderFactory _genderFactory;
     private readonly IUnitOfWork _unitOfWork;
 
-    public PeopleCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IUnitOfWork unitOfWork)
+    public PersonCommandHandler(IPersonFactory personFactory, IGenderFactory genderFactory, IUnitOfWork unitOfWork)
     {
         _personFactory = personFactory;
         _genderFactory = genderFactory;

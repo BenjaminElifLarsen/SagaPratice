@@ -6,17 +6,18 @@ using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PeopleDomain.DL.CQRS.Commands;
 using PeopleDomain.DL.Events.Domain;
 
 namespace PeopleDomain.AL.Registries;
-public sealed class PeopleRegistry : IPeopleRegistry
+public sealed class PersonRegistry : IPersonRegistry
 {
-    private readonly IPeopleCommandBus _commandBus;
-    private readonly IPeopleDomainEventBus _eventBus;
-    private readonly IPeopleCommandHandler _commandHandler;
+    private readonly IPersonCommandBus _commandBus;
+    private readonly IPersonDomainEventBus _eventBus;
+    private readonly IPersonCommandHandler _commandHandler;
 
-    public PeopleRegistry(IPeopleCommandBus commandBus, IPeopleDomainEventBus eventBus, IPeopleCommandHandler commandHandler)
+    public PersonRegistry(IPersonCommandBus commandBus, IPersonDomainEventBus eventBus, IPersonCommandHandler commandHandler)
     {
         _commandBus = commandBus;
         _eventBus = eventBus;
@@ -77,5 +78,11 @@ public sealed class PeopleRegistry : IPeopleRegistry
     {
         _eventBus.RegisterHandler<GenderUnrecognisedSucceeded>(processManager.Handle);
         _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processManager.Handle);
+    }
+
+    public void SetUpRouting(IGenderRecogniseProcessRouter processRouter)
+    {
+        _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<GenderRecognisedFailed>(processRouter.Handle);
     }
 }

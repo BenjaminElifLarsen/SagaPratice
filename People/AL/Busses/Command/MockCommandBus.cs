@@ -3,7 +3,7 @@ using Common.ResultPattern;
 using System.Diagnostics;
 
 namespace PeopleDomain.AL.Busses.Command;
-internal sealed class MockCommandBus : IPeopleCommandBus
+internal sealed class MockCommandBus : IPersonCommandBus
 {
     private readonly Dictionary<Type, List<Action<ICommand>>> _routes;
 

@@ -7,7 +7,7 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.ProcessManagers.Person.Fire;
 internal sealed class FireProcessManager : IFireProcessManager
 {
-    private readonly IPeopleCommandBus _commandBus;
+    private readonly IPersonCommandBus _commandBus;
     private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
@@ -17,7 +17,7 @@ internal sealed class FireProcessManager : IFireProcessManager
     public bool Running => !_trackerCollection.AllFinishedOrFailed;
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
-    public FireProcessManager(IPeopleCommandBus commandBus)
+    public FireProcessManager(IPersonCommandBus commandBus)
     {
         ProcessManagerId = Guid.NewGuid();
         _commandBus = commandBus;

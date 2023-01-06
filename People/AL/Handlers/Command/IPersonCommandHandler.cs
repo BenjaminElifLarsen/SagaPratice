@@ -2,7 +2,7 @@
 using PeopleDomain.DL.CQRS.Commands;
 
 namespace PeopleDomain.AL.Handlers.Command;
-public interface IPeopleCommandHandler :
+public interface IPersonCommandHandler :
     ICommandHandler<HirePersonFromUser>,
     ICommandHandler<FirePersonFromUser>,
     ICommandHandler<ChangePersonalInformationFromUser>,

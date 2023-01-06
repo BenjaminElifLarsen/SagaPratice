@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.Events.Store.ProcessManager;
 using Common.ProcessManager;
 using Common.RepositoryPattern;
 using Common.RepositoryPattern.ProcessManagers;
@@ -13,6 +14,7 @@ using PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PeopleDomain.AL.ProcessManagers.Person.Fire;
 using PeopleDomain.AL.ProcessManagers.Person.Hire;
 using PeopleDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PeopleDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PeopleDomain.AL.Registries;
 using PeopleDomain.AL.Services.Genders;
 using PeopleDomain.AL.Services.People;
@@ -38,22 +40,22 @@ public class PeopleApiServices
         services.AddScoped<IPeopleService, PeopleService>();
         services.AddScoped<IGenderService, GenderService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IPeopleCommandHandler, PeopleCommandHandler>();
+        services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
         services.AddScoped<IPeopleEventHandler, PeopleEventHandler>();
-        services.AddScoped<IPeopleCommandBus, MockCommandBus>();
-        services.AddScoped<IPeopleDomainEventBus, MockDomainEventBus>();
-        services.AddScoped<IRoutingRegistry, PeopleRegistry>();
+        services.AddScoped<IPersonCommandBus, MockCommandBus>();
+        services.AddScoped<IPersonDomainEventBus, MockDomainEventBus>();
+        services.AddScoped<IRoutingRegistry, PersonRegistry>();
         services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>();
         services.AddScoped<IProcessManager, FireProcessManager>();
         services.AddScoped<IProcessManager, HireProcessManager>();
-        //services.AddScoped<IProcessManager, RecogniseProcessManager>();
         services.AddScoped<IProcessManager, UnrecogniseProcessManager>();
-        services.AddScoped<IBaseProcessManagerRepository<RecogniseProcessManager>, MockProcessManagerRepository<RecogniseProcessManager>>();
+        services.AddScoped<IBaseProcessManagerRepository<GenderRecogniseProcessManager>, MockProcessManagerRepository<GenderRecogniseProcessManager>>();
         services.AddScoped<IGenderRecogniseProcessRepository, GenderRecogniseProcessRepository>();
+        services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
     }
 
     public static void Seed(IServiceProvider provider)
     {
-        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPeopleContext>(), provider.CreateScope().ServiceProvider.GetService<IUnitOfWork>(), provider.CreateScope().ServiceProvider.GetService<IPeopleCommandBus>());
+        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPeopleContext>(), provider.CreateScope().ServiceProvider.GetService<IUnitOfWork>(), provider.CreateScope().ServiceProvider.GetService<IPersonCommandBus>());
     }
 }

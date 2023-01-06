@@ -5,8 +5,8 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.Handlers.Event;
 internal sealed class PeopleEventHandler : IPeopleEventHandler
 {
-    private readonly IPeopleCommandBus _commandBus;
-    public PeopleEventHandler(IPeopleCommandBus commandBus)
+    private readonly IPersonCommandBus _commandBus;
+    public PeopleEventHandler(IPersonCommandBus commandBus)
     {
         _commandBus = commandBus;
     }

@@ -6,7 +6,7 @@ using PeopleDomain.DL.Events.Domain;
 namespace PeopleDomain.AL.ProcessManagers.Gender.Unrecognise;
 internal sealed class UnrecogniseProcessManager : IUnrecogniseProcessManager
 {
-    private readonly IPeopleCommandBus _commandBus;
+    private readonly IPersonCommandBus _commandBus;
     private readonly EventStateCollection _trackerCollection;
     private readonly List<string> _errors;
     private readonly HashSet<Action<ProcesserFinished>> _handlers;
@@ -16,7 +16,7 @@ internal sealed class UnrecogniseProcessManager : IUnrecogniseProcessManager
     public bool Running => !_trackerCollection.AllFinishedOrFailed;
     public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
-    public UnrecogniseProcessManager(IPeopleCommandBus commandBus)
+    public UnrecogniseProcessManager(IPersonCommandBus commandBus)
     {
         _commandBus = commandBus;
         ProcessManagerId = Guid.NewGuid();

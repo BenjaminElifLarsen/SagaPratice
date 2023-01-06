@@ -3,7 +3,7 @@
 namespace PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 public interface IGenderRecogniseProcessRepository
 {
-    public Task<RecogniseProcessManager> LoadAsync(Guid correlationId);
-    public void Save(RecogniseProcessManager manager);
+    public Task<GenderRecogniseProcessManager> LoadAsync(Guid correlationId);
+    public void Save(GenderRecogniseProcessManager manager);
     public void Delete(Guid correlationId);
 }

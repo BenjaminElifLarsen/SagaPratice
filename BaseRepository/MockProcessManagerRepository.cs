@@ -2,7 +2,7 @@
 using Common.RepositoryPattern.ProcessManagers;
 
 namespace BaseRepository;
-public class MockProcessManagerRepository<TProcessManager> : IBaseProcessManagerRepository<TProcessManager> where TProcessManager : BaseProcessManager
+public class MockProcessManagerRepository<TProcessManager> : IBaseProcessManagerRepository<TProcessManager> where TProcessManager : IBaseProcessManager
 {
     private static HashSet<TProcessManager> _processManagers; //move over to a context file when closer to finalise the new design regarding its implemntation.
 

@@ -34,7 +34,7 @@ public class RegistryMiddleware
             }
             else if (peopleDomain.Any(x => string.Equals(x, controllerName)))
             {
-                var selected = registries.SingleOrDefault(x => x is IPeopleRegistry) as IPeopleRegistry;
+                var selected = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
                 selected.SetUpRouting();
             }
         }

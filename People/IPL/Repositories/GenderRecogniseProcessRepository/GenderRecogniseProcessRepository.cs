@@ -1,13 +1,12 @@
-﻿using BaseRepository;
-using Common.RepositoryPattern.ProcessManagers;
+﻿using Common.RepositoryPattern.ProcessManagers;
 using PeopleDomain.AL.ProcessManagers.Gender.Recognise;
 
 namespace PeopleDomain.IPL.Repositories.GenderRecogniseProcessRepository;
 internal sealed class GenderRecogniseProcessRepository : IGenderRecogniseProcessRepository
 {
-    private readonly IBaseProcessManagerRepository<RecogniseProcessManager> _repository;
+    private readonly IBaseProcessManagerRepository<GenderRecogniseProcessManager> _repository;
 
-    public GenderRecogniseProcessRepository(IBaseProcessManagerRepository<RecogniseProcessManager> repository)
+    public GenderRecogniseProcessRepository(IBaseProcessManagerRepository<GenderRecogniseProcessManager> repository)
     {
         _repository = repository;
     }
@@ -17,12 +16,12 @@ internal sealed class GenderRecogniseProcessRepository : IGenderRecogniseProcess
         _repository.Delete(correlationId);
     }
 
-    public async Task<RecogniseProcessManager> LoadAsync(Guid correlationId)
+    public async Task<GenderRecogniseProcessManager> LoadAsync(Guid correlationId)
     {
         return await Task.Run(() => _repository.LoadAsync(correlationId));
     }
 
-    public void Save(RecogniseProcessManager manager)
+    public void Save(GenderRecogniseProcessManager manager)
     {
         _repository.Save(manager);
     }

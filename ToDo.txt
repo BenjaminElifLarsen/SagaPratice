@@ -123,7 +123,7 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 		feels a little wierd that repositories are going to transmit data to the pms.
 			consider this (based partly on the just eat link):
 				an event is transmitted via the bus to a handler in a router (like GenderRecogniseRouter).
-				the handler contacts the repository to get a pm (either created or retreated)
+				the handler contacts the repository to get a pm (either created or retreated), so the event handler capture the event and gets the pm. 
 				the event handler then gives the pm the event and the pm acts upon it
 				the handler then saves the pm (need versioning in the pm and enforece concurrency checks in the repo [Version could be a Guid,  check if the current loaded one is the same as the one in the context or not])
 				after the save the repository will contact the infrastructure to transmit the commands via the bus (let the unit of work get the commands and publish them)

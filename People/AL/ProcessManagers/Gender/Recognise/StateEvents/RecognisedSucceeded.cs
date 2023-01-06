@@ -1,7 +1,7 @@
-﻿using Common.Events.System;
+﻿using Common.Events.State;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-public sealed record RecognisedSucceeded : SystemEvent
+public sealed record RecognisedSucceeded : StateEvent
 {
     public int GenderId { get; set; }
 

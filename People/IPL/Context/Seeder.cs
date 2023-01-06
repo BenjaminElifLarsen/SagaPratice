@@ -10,7 +10,7 @@ using PeopleDomain.IPL.Services;
 namespace PeopleDomain.IPL.Context;
 internal static class Seeder
 {
-    public static void MockSeedData(IPeopleContext peopleContext, IUnitOfWork unitOfWork, IPeopleCommandBus commandBus)
+    public static void MockSeedData(IPeopleContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus)
     {
         //var c1 = new RecogniseGender("She", "Her");
         //commandBus.Dispatch(c1);
@@ -20,7 +20,7 @@ internal static class Seeder
         ////1) run c1 and c2 such that they are added to the context via the command bus. 2) get gender id. 3) run c3 with the id
         //var gender = unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result.First(); //problem: command bus and event bus have not registrated any routes as this is done per requet rather than at startup
         //var c3 = new HirePersonFromUser("Triss", "Nib", gender.Id, new(1956,1,2)); //the new pm repository will need to handle registrating to event, so that should not be to big of a problem (the repo is called by the command handlers)
-        ////thus just need to figure out how to subscribe the commandhandler to the commandbus in this part of the code. For the commands just need to get the command bus as a parameter and call the specific setup method
+        ////thus just need to figure out how to subscribe the commandhandler to the commandbus in this part of the code. For the commands just need to get the people registry as a parameter and call the specific setup method
         //commandBus.Dispatch(c3);
 
         Gender g1 = new("She", "Her"); //could in the end convert this to run through the system as intended via the services

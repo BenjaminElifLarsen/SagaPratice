@@ -1,7 +1,7 @@
-﻿using Common.Events.System;
+﻿using Common.Events.State;
 
 namespace PeopleDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-public sealed record RecognisedFailed : SystemEvent
+public sealed record RecognisedFailed : StateEvent
 {
     public string VerbSubject { get; private set; }
     public string VerbObject { get; private set; }

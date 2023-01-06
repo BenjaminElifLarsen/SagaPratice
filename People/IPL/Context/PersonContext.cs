@@ -6,7 +6,7 @@ using Common.RepositoryPattern;
 using PersonDomain.DL.Models;
 
 namespace PersonDomain.IPL.Context;
-internal sealed class MockPeopleContext : IPeopleContext
+internal sealed class MockPeopleContext : IPersonContext
 {
     private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private readonly HashSet<SystemEvent> _events;
@@ -129,7 +129,7 @@ internal sealed class MockPeopleContext : IPeopleContext
 
     public void Remove(SystemEvent @event)
     {
-        _events.Add(@event);
+        _events.Remove(@event);
     }
 
     public void AddEvents(IAggregateRoot root)

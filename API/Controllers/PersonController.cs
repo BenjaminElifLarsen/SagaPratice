@@ -10,9 +10,9 @@ namespace API.Controllers;
 [ApiController]
 public class PersonController : ControllerBase
 {
-    private readonly IPeopleService _peopleService;
+    private readonly IPersonService _peopleService;
 
-	public PersonController(IPeopleService peopleService)
+	public PersonController(IPersonService peopleService)
 	{
 		_peopleService = peopleService;
     }

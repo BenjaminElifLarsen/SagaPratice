@@ -4,7 +4,7 @@ using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.DL.CQRS.Commands;
 
 namespace PersonDomain.AL.Services.People;
-public partial class PeopleService
+public partial class PersonService
 {
     public async Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command)
     {

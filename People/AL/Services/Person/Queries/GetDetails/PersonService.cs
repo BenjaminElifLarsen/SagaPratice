@@ -3,7 +3,7 @@ using PersonDomain.AL.Services.People.Queries;
 using PersonDomain.AL.Services.People.Queries.GetDetails;
 
 namespace PersonDomain.AL.Services.People;
-public partial class PeopleService
+public partial class PersonService
 {
     public async Task<Result<PersonDetails>> GetPersonDetailsAsync(Guid id)
     {

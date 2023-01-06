@@ -3,7 +3,7 @@ using PersonDomain.AL.ProcessManagers.Person.Fire;
 using PersonDomain.DL.CQRS.Commands;
 
 namespace PersonDomain.AL.Services.People;
-public partial class PeopleService
+public partial class PersonService
 {
     public async Task<Result> FirePersonAsync(FirePersonFromUser command)
     {

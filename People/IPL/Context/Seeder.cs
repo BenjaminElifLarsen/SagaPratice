@@ -10,7 +10,7 @@ using PersonDomain.IPL.Services;
 namespace PersonDomain.IPL.Context;
 internal static class Seeder
 {
-    public static void MockSeedData(IPeopleContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus)
+    public static void MockSeedData(IPersonContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus)
     {
         //var c1 = new RecogniseGender("She", "Her");
         //commandBus.Dispatch(c1);

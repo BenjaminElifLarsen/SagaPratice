@@ -4,7 +4,7 @@ using PersonDomain.AL.Services.People.Queries.GetList;
 using PersonDomain.DL.CQRS.Commands;
 
 namespace PersonDomain.AL.Services.People;
-public interface IPeopleService
+public interface IPersonService
 {
     Task<Result<IEnumerable<PersonListItem>>> GetPeopleListAsync();
     Task<Result<PersonDetails>> GetPersonDetailsAsync(Guid id);

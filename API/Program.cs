@@ -24,7 +24,7 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 VehicleApiServices.Add(builder.Services);
-PeopleApiServices.Add(builder.Services);
+PersonApiServices.Add(builder.Services);
 
 var app = builder.Build();
 
@@ -34,7 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     VehicleApiServices.Seed(app.Services);
-    PeopleApiServices.Seed(app.Services);
+    PersonApiServices.Seed(app.Services);
 }
 
 app.UseHttpsRedirection();

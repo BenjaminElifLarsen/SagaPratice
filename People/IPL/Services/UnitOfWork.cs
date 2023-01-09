@@ -1,11 +1,10 @@
-﻿using Common.Events.Domain;
-using Common.Events.System;
+﻿using Common.Events.System;
 using Common.ProcessManager;
 using Common.ResultPattern;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
-using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+using PersonDomain.IPL.Repositories.ProcesserManagers;
 
 namespace PersonDomain.IPL.Services;
 internal sealed class UnitOfWork : IUnitOfWork
@@ -32,8 +31,8 @@ internal sealed class UnitOfWork : IUnitOfWork
     }
 
     private void Save(ProcesserFinished @event) //might not be neeeded with the new design. Will still need to ensure if any part fails that data is not saved.
-    { //maybe don't let the command handlers save, save is a handler that listen to a very specific event 'ProcessManagerFinishedSuccessful' or a command called 'ContextSave' (and that command handler can create the event ContextSaved) or something like that, so like this method, but not using Result, just event type
-        if(@event.Result is SuccessResultNoData) //will have to becareful if threading at some point then. In case the service returns before the context has saved.
+    { //maybe don't let the command handlers save, save is a handler that listen to a very specific event 'ProcessManagerFinishedSuccessful' or a command called 'ContextSave' (created by the pm) (and that command handler can create the event ContextSaved) or something like that, so like this method, but not using Result, just event type
+        if(@event.Result is SuccessResultNoData) //will have to be careful if threading at some point then. In case the service returns before the context has saved.
         { 
             _context.Save(); 
         } 

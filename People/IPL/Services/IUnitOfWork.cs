@@ -1,6 +1,6 @@
 ﻿using Common.RepositoryPattern;
 using PersonDomain.IPL.Repositories.DomainModels;
-using PersonDomain.IPL.Repositories.GenderRecogniseProcessRepository;
+using PersonDomain.IPL.Repositories.ProcesserManagers;
 
 namespace PersonDomain.IPL.Services;
 public interface IUnitOfWork : IBaseUnitOfWork, IBaseEventUnitOfWork

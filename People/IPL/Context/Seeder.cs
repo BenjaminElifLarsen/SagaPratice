@@ -37,6 +37,13 @@ internal static class Seeder
         }
 
         Person p1 = new(Guid.Parse("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA"), "Triss", "Nib", new(1956, 1, 2), g1.Id);
+        Person p2 = new(Guid.Parse("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAB"), "Nia", "Nib", new(1993, 1, 2), g2.Id);
+        var p1Guid = Guid.NewGuid();
+        var p2Guid = Guid.NewGuid();
+        g1.AddDomainEvent(new PersonAddedToGenderSucceeded(g1, p1.Id, p1Guid, p1Guid));
+        g1.AddDomainEvent(new PersonAddedToGenderSucceeded(g1, p2.Id, p2Guid, p2Guid));
+        g1.AddDomainEvent(new PersonRemovedFromGenderSucceeded(g1, p2.Id, p2Guid, p2Guid));
+        g2.AddDomainEvent(new PersonAddedToGenderSucceeded(g2, p2.Id, p2Guid, p2Guid));
         if (!unitOfWork.PersonRepository.AllAsync(new PersonListItemQuery()).Result.Any())
         { //remember the create event and events for adding a gender to a person and other way around
             peopleContext.Add(p1); //or set up command and dispatch them

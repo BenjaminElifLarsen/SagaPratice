@@ -1,7 +1,9 @@
 ﻿using BaseRepository;
+using Common.Events.Store.Event;
 using Common.Events.Store.ProcessManager;
 using Common.ProcessManager;
 using Common.RepositoryPattern;
+using Common.RepositoryPattern.Events;
 using Common.RepositoryPattern.ProcessManagers;
 using Common.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,7 @@ using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
+using PersonDomain.IPL.Repositories.EventRepositories;
 using PersonDomain.IPL.Repositories.ProcesserManagers;
 using PersonDomain.IPL.Services;
 
@@ -52,6 +55,9 @@ public class PersonApiServices
         services.AddScoped<IBaseProcessManagerRepository<GenderRecogniseProcessManager>, MockProcessManagerRepository<GenderRecogniseProcessManager, IPersonContext>>();
         services.AddScoped<IGenderRecogniseProcessRepository, GenderRecogniseProcessRepository>();
         services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
+        services.AddSingleton<IEventStore<Guid>, MockEventStore>();
+        services.AddScoped<IBaseEventRepository<Guid>, MockEventRepository<Guid,IEventStore<Guid>>>(); //if similarly added to Operator domain, the dependency injector can inject the wrong mock repository, consider solulations
+        services.AddScoped<IGenderEventRepository, GenderEventRepository>();
     }
 
     public static void Seed(IServiceProvider provider)

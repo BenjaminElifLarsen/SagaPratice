@@ -2,8 +2,10 @@
 using Common.ProcessManager;
 using Common.ResultPattern;
 using PersonDomain.AL.Busses.Event;
+using PersonDomain.DL.Models;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
+using PersonDomain.IPL.Repositories.EventRepositories;
 using PersonDomain.IPL.Repositories.ProcesserManagers;
 
 namespace PersonDomain.IPL.Services;
@@ -15,12 +17,16 @@ internal sealed class UnitOfWork : IUnitOfWork
     private readonly IPersonContext _context;
     private readonly IEnumerable<IProcessManager> _processManagers;
     private readonly IGenderRecogniseProcessRepository _genderRecogniseRepository;
+    private readonly IGenderEventRepository _genderEventRepository;
 
     public IGenderRepository GenderRepository => _genderRepository;
     public IPersonRepository PersonRepository => _personRepository;
     public IGenderRecogniseProcessRepository GenderRecogniseProcessRepository => _genderRecogniseRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, IEnumerable<IProcessManager> processManagers, IGenderRecogniseProcessRepository genderRecogniseRepository)
+    public IGenderEventRepository GenderEventRepository => _genderEventRepository;
+
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, IEnumerable<IProcessManager> processManagers, 
+        IGenderRecogniseProcessRepository genderRecogniseRepository, IGenderEventRepository genderEventRepository)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;
@@ -28,6 +34,7 @@ internal sealed class UnitOfWork : IUnitOfWork
         _context = context;
         _processManagers = processManagers;
         _genderRecogniseRepository = genderRecogniseRepository;
+        _genderEventRepository = genderEventRepository;
     }
 
     private void Save(ProcesserFinished @event) //might not be neeeded with the new design. Will still need to ensure if any part fails that data is not saved.
@@ -74,6 +81,15 @@ internal sealed class UnitOfWork : IUnitOfWork
                 {
                     _eventBus.Publish(roots[i].Events.ToArray()[n]); //the add and update method in the repository should add them to the event store
                     //add to the context in the event store before removing them, but first save them when the unit of work saves (or should they be saved when the pm is saved
+                    //roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
+
+                }
+                if (roots[i] is Gender g)
+                {//dont like the none of the implementation of this method at all
+                    _genderEventRepository.AddEvents(g);
+                }
+                for ( int n = roots[i].Events.Count() -1; n >= 0; n--)
+                {
                     roots[i].RemoveDomainEvent(roots[i].Events.ToArray()[n]);
                 }
             }

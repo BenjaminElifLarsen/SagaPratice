@@ -132,15 +132,15 @@ internal sealed class MockPeopleContext : IPersonContext
         _events.Remove(@event);
     }
 
-    public void AddEvents(IAggregateRoot root)
-    {
-        _eventStore.AddEvents(root);
-    }
+    //public void AddEvents(IAggregateRoot root)
+    //{
+    //    _eventStore.AddEvents(root);
+    //}
 
-    public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
-    {
-        return _eventStore.LoadStreamAsync(id, aggregateRoot).Result;
-    }
+    //public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot)
+    //{
+    //    return _eventStore.LoadStreamAsync(id, aggregateRoot).Result;
+    //}
 
     public void Add(IBaseProcessManager processManager)
     {

@@ -10,6 +10,12 @@ internal class GenderEventRepository : IGenderEventRepository
     private readonly IBaseEventRepository<Guid> _eventRepository;
     private readonly IGenderFactory _factory;
 
+    public GenderEventRepository(IBaseEventRepository<Guid> eventRepository, IGenderFactory factory)
+    {
+        _eventRepository = eventRepository;
+        _factory = factory;
+    }
+
     public void AddEvents(Gender entity)
     {
         var events = new List<Event>();
@@ -35,16 +41,16 @@ internal class GenderEventRepository : IGenderEventRepository
         _eventRepository.AddEvents(events);
     }
 
-    public async Task<Gender> GetGenderAsync(Guid id)
+    public async Task<Gender> GetForOperationAsync(Guid id)
     {
-        var events = await _eventRepository.LoadEntityEventsAsync(id);
+        var events = await _eventRepository.LoadEntityEventsAsync(id, nameof(Gender));
         var entity = _factory.HydrateGender(events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x))));
         return entity;
     }
 
-    public async Task<Gender> GetGenderAtSpecificPointAsync(Guid id, DateTime timePoint)
+    public async Task<Gender> GetForOperationAtSpecificPointAsync(Guid id, DateTime timePoint)
     {
-        var events = await _eventRepository.LoadEntityEventsUptoAsync(id, timePoint);
+        var events = await _eventRepository.LoadEntityEventsUptoAsync(id, nameof(Gender), timePoint);
         var entity = _factory.HydrateGender(events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x))));
         return entity;
     }

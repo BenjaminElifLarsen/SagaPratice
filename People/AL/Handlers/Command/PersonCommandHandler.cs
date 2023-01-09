@@ -127,6 +127,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
     public void Handle(AddPersonToGender command)
     {
         var entity = _unitOfWork.GenderRepository.GetForOperationAsync(command.GenderId).Result; //events should not really return; // data. If something goes wrong another event can be created to inform about this (so sagas and such)
+        //var test = _unitOfWork.GenderEventRepository.GetGenderAsync(command.GenderId).Result;
         if (entity is null)
         {
             _unitOfWork.AddSystemEvent(new PersonAddedToGenderFailed(command.PersonId, command.GenderId, new string[] { $"Gender {command.GenderId} was not found." }, command.CorrelationId, command.CommandId)); ;

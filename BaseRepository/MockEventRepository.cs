@@ -1,11 +1,8 @@
-﻿using Common.Events.Domain;
-using Common.Events.Store.Event;
-using Common.MementoPattern;
-using Common.RepositoryPattern;
+﻿using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
 
 namespace BaseRepository;
-public class MockEventRepository<TId, TBaseContext> : IBaseEventRepository<TId> where TBaseContext : IBaseContext
+public class MockEventRepository<TId, TBaseContext> : IBaseEventRepository<TId> where TBaseContext : IEventStore<TId>
 {
     private readonly TBaseContext _context;
 
@@ -25,23 +22,26 @@ public class MockEventRepository<TId, TBaseContext> : IBaseEventRepository<TId> 
     //    throw new NotImplementedException();
     //}
 
-    public void AddEvents(IEnumerable<Event> events)
+    public void AddEvents(IEnumerable<Event<TId>> events)
     {
-        throw new NotImplementedException();
+        foreach(var e in events)
+        {
+            _context.AddEvent(e);
+        }
+    }
+
+    public async Task<IEnumerable<Event<TId>>> LoadEntityEventsAsync(TId id, string aggregateType)
+    {
+        return await _context.LoadStreamAsync(id, aggregateType);
+    }
+
+    public async Task<IEnumerable<Event<TId>>> LoadEntityEventsUptoAsync(TId id, string aggregateType, DateTime UpTo)
+    {
+        return await _context.LoadStreamAsync(id, aggregateType, UpTo);
     }
 
     //public void AddSnapshoot(IMemento memento)
     //{
     //    throw new NotImplementedException();
     //}
-
-    public Task<IEnumerable<Event<TId>>> LoadEntityEventsUptoAsync(TId id, DateTime UpTo)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Event<TId>>> LoadEntityEventsAsync(TId id)
-    {
-        throw new NotImplementedException();
-    }
 }

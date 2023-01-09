@@ -1,5 +1,6 @@
 ﻿using Common.Events.Domain;
 using Common.RepositoryPattern;
+using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.DL.Models;
 public sealed class Gender : IAggregateRoot
@@ -36,11 +37,13 @@ public sealed class Gender : IAggregateRoot
         _events = new();
     }
 
-    //public void UpdateName(string name)
-    //{ //does not make sense to change subject or object
-    //    _verbSubject = name;
-    //}
-
+    private Gender(Guid id) : this()
+    {
+        _id = id;
+        _people = new();
+        _events = new();
+    }
+    
     internal bool AddPerson(Guid person)
     {
         return _people.Add(new(person));
@@ -63,13 +66,6 @@ public sealed class Gender : IAggregateRoot
             _events.Remove(eventItem);
     }
 
-    //public IEnumerable<Person> GetSpecificPeople(params Expression<Func<Person, bool>>[] predicates)
-    //{ //if using IdReference this will not be useful 
-    //    var query = _people.AsQueryable();
-    //    query = predicates.Aggregate(query, (source, where) => source.Where(where));
-    //    return query;
-    //}
-
     public static bool operator ==(Gender left, Guid right)
     {
         return left.Id == right;
@@ -88,5 +84,16 @@ public sealed class Gender : IAggregateRoot
     public static bool operator !=(Gender left, Gender right)
     {
         return !(left == right);
+    }
+
+    internal static Gender Hydrate(Guid id, string subject, string @object)
+    {//not sure if it is best to take in the GenderRecognisedSUcceeded event or the needed arguments
+        //if taking in the event any changes to the needed values will not require changing the method signature,
+        //but by having the needed arguments rather than the event it is fit the rest of the switch case code in GenderFactory.HydrateGender 
+        return new Gender(id)
+        {
+            _verbSubject = subject,
+            _verbObject = @object
+        };
     }
 }

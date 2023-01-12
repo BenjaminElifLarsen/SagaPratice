@@ -24,7 +24,7 @@ using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
-using PersonDomain.IPL.Repositories.EventRepositories;
+using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 using PersonDomain.IPL.Repositories.ProcesserManagers;
 using PersonDomain.IPL.Services;
 

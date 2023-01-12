@@ -1,4 +1,5 @@
 ﻿using Common.CQRS.Queries;
+using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using PersonDomain.DL.Models;
 
 namespace PersonDomain.IPL.Repositories.DomainModels;

@@ -5,7 +5,7 @@ namespace BaseRepository;
 public class MockEventRepository<TId, TBaseContext> : IBaseEventRepository<TId> where TBaseContext : IEventStore<TId>
 {
     private readonly TBaseContext _context;
-
+    public IEnumerable<Event<Guid>> TestDeleteWhenDone => (_context as MockEventStore).DeleteWhenDoneWithTestingAnIdeaThanksALot;
     public MockEventRepository(TBaseContext context)
     {
         _context = context;

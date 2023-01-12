@@ -5,7 +5,7 @@ public class DataSet<T> : IEnumerable<T>
 { //as nice this could be, it woill be difficult to make it work with entiy frame work
     //will require to get the DbSet<T> from entity framework core and convert it to this while making sure it can still store in the context.
     //maybe just keep this for mock-ups and update the base context contract to take in what type of dbset it should return
-    private readonly HashSet<T> _set;
+    private readonly HashSet<T> _set; //dbset should be able to be arquired via the context.Set<T>
 
     public DataSet(IEnumerable<T> data)
     {

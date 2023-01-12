@@ -20,5 +20,5 @@ public interface IBaseContext //not tested yet against ORMs, only in-memory coll
     public void Add(IBaseProcessManager processManager);
     public void Remove(IBaseProcessManager processManager);
     public Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId);
-    public IEnumerable<T> Set<T>(); //just here for some testing, will need a class that permit basic CRUD, but need to figure out a good way to make it work together with ORMS like entity framework
+    public IEnumerable<T> Set<T>();
 }

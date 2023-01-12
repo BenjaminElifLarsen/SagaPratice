@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.Events.Store.Event;
 using PersonDomain.DL.Models;
-using PersonDomain.IPL.Repositories.EventRepositories;
+using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 
 namespace PersonDomain.DL.Events.Domain;
 public sealed record GenderRecognisedSucceeded : DomainEvent

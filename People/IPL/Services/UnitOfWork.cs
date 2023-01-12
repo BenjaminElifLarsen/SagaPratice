@@ -5,7 +5,8 @@ using PersonDomain.AL.Busses.Event;
 using PersonDomain.DL.Models;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
-using PersonDomain.IPL.Repositories.EventRepositories;
+using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
+using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 using PersonDomain.IPL.Repositories.ProcesserManagers;
 
 namespace PersonDomain.IPL.Services;
@@ -18,12 +19,15 @@ internal sealed class UnitOfWork : IUnitOfWork
     private readonly IEnumerable<IProcessManager> _processManagers;
     private readonly IGenderRecogniseProcessRepository _genderRecogniseRepository;
     private readonly IGenderEventRepository _genderEventRepository;
+    private readonly IPersonEventRepository _personEventRepository;
 
     public IGenderRepository GenderRepository => _genderRepository;
     public IPersonRepository PersonRepository => _personRepository;
     public IGenderRecogniseProcessRepository GenderRecogniseProcessRepository => _genderRecogniseRepository;
 
     public IGenderEventRepository GenderEventRepository => _genderEventRepository;
+
+    public IPersonEventRepository PersonEventRepository => _personEventRepository;
 
     public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, IEnumerable<IProcessManager> processManagers, 
         IGenderRecogniseProcessRepository genderRecogniseRepository, IGenderEventRepository genderEventRepository)
@@ -87,6 +91,10 @@ internal sealed class UnitOfWork : IUnitOfWork
                 if (roots[i] is Gender g)
                 {//dont like the none of the implementation of this method at all
                     _genderEventRepository.AddEvents(g);
+                }
+                if (roots[i] is Person p)
+                {
+                    _personEventRepository.AddEvents(p);
                 }
                 for ( int n = roots[i].Events.Count() -1; n >= 0; n--)
                 {

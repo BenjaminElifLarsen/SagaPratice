@@ -1,4 +1,4 @@
-﻿namespace PersonDomain.IPL.Repositories.EventRepositories;
+﻿namespace PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 internal enum GenderPropertyId
 {
     Id = 1,

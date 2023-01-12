@@ -1,6 +1,6 @@
 ﻿using PersonDomain.DL.Models;
 
-namespace PersonDomain.IPL.Repositories.EventRepositories;
+namespace PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 public interface IGenderEventRepository
 {
     public Task<Gender> GetForOperationAsync(Guid id);

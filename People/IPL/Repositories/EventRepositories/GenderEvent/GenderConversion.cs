@@ -2,7 +2,7 @@
 using Common.Events.Store.Event;
 using PersonDomain.DL.Events.Domain;
 
-namespace PersonDomain.IPL.Repositories.EventRepositories;
+namespace PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 internal class GenderConversion : IGenderConversion
 {
     public static IEnumerable<DataPoint> Get(GenderRecognisedSucceeded @event)

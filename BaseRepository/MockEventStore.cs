@@ -9,7 +9,7 @@ public class MockEventStore : IEventStore<Guid>
     private readonly IList<Snapshot> _snapshots;
 
     private readonly ushort _amountOfEventsBeforeSnapshop = 10;
-
+    public IEnumerable<Event<Guid>> DeleteWhenDoneWithTestingAnIdeaThanksALot => _events;
     public MockEventStore()
     {
         _events = new List<Event<Guid>>();

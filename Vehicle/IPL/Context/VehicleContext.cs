@@ -3,6 +3,7 @@ using Common.Events.Store.Event;
 using Common.Events.Store.ProcessManager;
 using Common.Events.System;
 using Common.RepositoryPattern;
+using System.Xml.Linq;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;
@@ -11,8 +12,9 @@ using VehicleDomain.DL.Models.Vehicles;
 namespace VehicleDomain.IPL.Context;
 internal class MockVehicleContext : IVehicleContext
 {
-    private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
+    //private readonly HashSet<EntityState<IAggregateRoot>> _contextData;
     private readonly HashSet<SystemEvent> _events;
+    private readonly HashSet<EntityState<object>> _data;
     private DateOnly _date;
     public bool Filter { get; set; }
 
@@ -25,17 +27,17 @@ internal class MockVehicleContext : IVehicleContext
             else return true;
         };
     }
-    public IEnumerable<Operator> Operators => _contextData.Where(x => x.Entity is Operator).Select(x => x.Entity as Operator);
-    public IEnumerable<VehicleInformation> VehicleInformations => _contextData.Where(x => x.Entity is VehicleInformation).Select(x => x.Entity as VehicleInformation);
-    public IEnumerable<LicenseType> LicenseTypes => _contextData.Where(x => x.Entity is LicenseType).Select(x => x.Entity as LicenseType);
-    public IEnumerable<Vehicle> Vehicles => _contextData.Where(x => x.Entity is Vehicle).Select(x => x.Entity as Vehicle);
+    public IEnumerable<Operator> Operators => _data.Where(x => x.Entity is Operator).Select(x => x.Entity as Operator);
+    public IEnumerable<VehicleInformation> VehicleInformations => _data.Where(x => x.Entity is VehicleInformation).Select(x => x.Entity as VehicleInformation);
+    public IEnumerable<LicenseType> LicenseTypes => _data.Where(x => x.Entity is LicenseType).Select(x => x.Entity as LicenseType);
+    public IEnumerable<Vehicle> Vehicles => _data.Where(x => x.Entity is Vehicle).Select(x => x.Entity as Vehicle);
 
-    IEnumerable<Operator> IContextData<Operator>.GetAll => Operators.Where(Filtering<Operator>());
-    IEnumerable<VehicleInformation> IContextData<VehicleInformation>.GetAll => VehicleInformations.Where(Filtering<VehicleInformation>());
-    IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
-    IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
+    //IEnumerable<Operator> IContextData<Operator>.GetAll => Operators.Where(Filtering<Operator>());
+    //IEnumerable<VehicleInformation> IContextData<VehicleInformation>.GetAll => VehicleInformations.Where(Filtering<VehicleInformation>());
+    //IEnumerable<LicenseType> IContextData<LicenseType>.GetAll => LicenseTypes.Where(Filtering<LicenseType>());
+    //IEnumerable<Vehicle> IContextData<Vehicle>.GetAll => Vehicles.Where(Filtering<Vehicle>());
 
-    public IEnumerable<IAggregateRoot> GetTracked => _contextData.Select(x => x.Entity).ToArray();
+    public IEnumerable<IAggregateRoot> GetTracked => Set<IAggregateRoot>();
 
     public IEnumerable<SystemEvent> SystemEvents => _events;
 
@@ -43,20 +45,20 @@ internal class MockVehicleContext : IVehicleContext
     {
         var dateTime = DateTime.Now; //would be better to have a method that calculates and returns the current date as this could cause a problem if operated around midnight. 
         _date = new(dateTime.Year, dateTime.Month, dateTime.Day);
-        _contextData = new();
+        _data = new();
         Filter = true;
         _events = new();
     }
 
     public void Add(IAggregateRoot root)
     {
-        if (!_contextData.Any(x => x.Entity == root))
-            _contextData.Add(new(root, States.Add));
+        if (!_data.Any(x => x.Entity == root))
+            _data.Add(new(root, States.Add));
     }
 
     public void Update(IAggregateRoot root)
     {
-        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        var entity = _data.SingleOrDefault(x => x.Entity == root);
         if (entity is not null)
         {
             entity.State = States.Update;
@@ -65,7 +67,7 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Remove(IAggregateRoot root)
     {
-        var entity = _contextData.SingleOrDefault(x => x.Entity == root);
+        var entity = _data.SingleOrDefault(x => x.Entity == root);
         if (entity is not null)
         {
             entity.State = States.Remove;
@@ -79,7 +81,7 @@ internal class MockVehicleContext : IVehicleContext
 
     public int Save()
     {
-        int amount = _contextData.Count(x => x.State != States.Tracked);
+        int amount = _data.Count(x => x.State != States.Tracked);
         Update();
         Add();
         Remove();
@@ -88,7 +90,7 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Update()
     {
-        var entitiesToUpdate = _contextData.Where(x => x.State == States.Update).ToArray();
+        var entitiesToUpdate = _data.Where(x => x.State == States.Update).ToArray();
         for (int i = 0; i < entitiesToUpdate.Length; i++)
         {
             entitiesToUpdate[i].State = States.Tracked;
@@ -97,7 +99,7 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Add()
     {
-        var entitesToAdd = _contextData.Where(x => x.State == States.Add).ToArray();
+        var entitesToAdd = _data.Where(x => x.State == States.Add).ToArray();
         for (int i = 0; i < entitesToAdd.Length; i++)
         {
             entitesToAdd[i].State = States.Tracked;
@@ -106,7 +108,7 @@ internal class MockVehicleContext : IVehicleContext
 
     public void Remove()
     {
-        var entitiesToRemove = _contextData.Where(x => x.State == States.Remove).ToArray();
+        var entitiesToRemove = _data.Where(x => x.State == States.Remove).ToArray();
         for (int i = 0; i < entitiesToRemove.Length; i++)
         {
             entitiesToRemove[i].State = States.Tracked;
@@ -121,7 +123,7 @@ internal class MockVehicleContext : IVehicleContext
             }
             else
             {
-                _contextData.Remove(entitiesToRemove[i]);
+                _data.Remove(entitiesToRemove[i]);
             }
         }
     }
@@ -163,6 +165,6 @@ internal class MockVehicleContext : IVehicleContext
 
     public IEnumerable<T> Set<T>()
     {
-        throw new NotImplementedException();
+        return _data.Where(x => x is T).Select(x => (T)x.Entity);
     }
 }

@@ -34,8 +34,8 @@ public class PersonApiServices
     public static void Add(IServiceCollection services)
     {
         services.AddSingleton<IPersonContext, MockPeopleContext>(); // Singleton because the data is stored in-memory.
-        services.AddScoped<IBaseRepository<Gender>, MockBaseRepository<Gender, IPersonContext, IPersonContext>>();
-        services.AddScoped<IBaseRepository<Person>, MockBaseRepository<Person, IPersonContext, IPersonContext>>();
+        services.AddScoped<IBaseRepository<Gender>, MockBaseRepository<Gender, IPersonContext>>();
+        services.AddScoped<IBaseRepository<Person>, MockBaseRepository<Person, IPersonContext>>();
         services.AddScoped<IGenderRepository, GenderRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGenderFactory, GenderFactory>();

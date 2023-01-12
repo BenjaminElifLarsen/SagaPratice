@@ -6,10 +6,10 @@ using VehicleDomain.DL.Models.VehicleInformations;
 using VehicleDomain.DL.Models.Vehicles;
 
 namespace VehicleDomain.IPL.Context;
-public interface IVehicleContext : IBaseContext, 
-    IContextData<Operator>,
-    IContextData<LicenseType>,
-    IContextData<VehicleInformation>,
-    IContextData<Vehicle>
+public interface IVehicleContext : IBaseContext//, 
+    //IContextData<Operator>,
+    //IContextData<LicenseType>,
+    //IContextData<VehicleInformation>,
+    //IContextData<Vehicle>
 {
 }

@@ -4,14 +4,14 @@ using System.Linq.Expressions;
 
 namespace BaseRepository;
 
-public class MockBaseRepository<TEntity, TContext, TBaseContext> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot where TContext : IContextData<TEntity> where TBaseContext : IBaseContext
+public class MockBaseRepository<TEntity, TBaseContext> : IBaseRepository<TEntity> where TEntity : class, IAggregateRoot where TBaseContext : IBaseContext
 {
-    private readonly TContext _dataContext;
     private readonly TBaseContext _context;
-    public MockBaseRepository(TContext dataContext, TBaseContext context)
+    private readonly IEnumerable<TEntity> _data;
+    public MockBaseRepository(TBaseContext context)
     {
-        _dataContext = dataContext;
         _context = context;
+        _data = _context.Set<TEntity>();
     }
 
     public void Create(TEntity entity)
@@ -31,32 +31,32 @@ public class MockBaseRepository<TEntity, TContext, TBaseContext> : IBaseReposito
 
     public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<IEnumerable<TProjection>>(() => _dataContext.GetAll.AsQueryable().Select(query.Map()).ToArray());
+        return await Task.Run<IEnumerable<TProjection>>(() => _data.AsQueryable().Select(query.Map()).ToArray());
     }
 
     public async Task<IEnumerable<TProjection>> AllByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<IEnumerable<TProjection>>(() => _dataContext.GetAll.AsQueryable().Where(predicate).Select(query.Map()).ToArray());
+        return await Task.Run<IEnumerable<TProjection>>(() => _data.AsQueryable().Where(predicate).Select(query.Map()).ToArray());
     }
 
     public async Task<IEnumerable<TEntity>> AllByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await Task.Run<IEnumerable<TEntity>>(() => _dataContext.GetAll.AsQueryable().Where(predicate).ToArray());
+        return await Task.Run<IEnumerable<TEntity>>(() => _data.AsQueryable().Where(predicate).ToArray());
     }
 
     public async Task<TProjection> FindByPredicateAsync<TProjection>(Expression<Func<TEntity, bool>> predicate, BaseQuery<TEntity, TProjection> query) where TProjection : BaseReadModel
     {
-        return await Task.Run<TProjection>(() => _dataContext.GetAll.AsQueryable().Where(predicate).Select(query.Map()).SingleOrDefault());
+        return await Task.Run<TProjection>(() => _data.AsQueryable().Where(predicate).Select(query.Map()).SingleOrDefault());
     }
 
     public async Task<TEntity> FindByPredicateForOperationAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await Task.Run<TEntity>(() => _dataContext.GetAll.AsQueryable().Where(predicate).SingleOrDefault());
+        return await Task.Run<TEntity>(() => _data.AsQueryable().Where(predicate).SingleOrDefault());
     }
 
     public async Task<bool> IsUniqueAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return await Task.Run(() => !_dataContext.GetAll.AsQueryable().Any(predicate));
+        return await Task.Run(() => !_data.AsQueryable().Any(predicate));
     }
 
     //public int SaveChanges()

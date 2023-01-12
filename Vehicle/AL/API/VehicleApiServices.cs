@@ -27,10 +27,10 @@ public class VehicleApiServices
     public static void Add(IServiceCollection services)
     {
         services.AddSingleton<IVehicleContext, MockVehicleContext>();
-        services.AddScoped<IBaseRepository<Operator>, MockBaseRepository<Operator, IVehicleContext, IVehicleContext>>();
-        services.AddScoped<IBaseRepository<Vehicle>, MockBaseRepository<Vehicle, IVehicleContext, IVehicleContext>>();
-        services.AddScoped<IBaseRepository<LicenseType>, MockBaseRepository<LicenseType, IVehicleContext, IVehicleContext>>();
-        services.AddScoped<IBaseRepository<VehicleInformation>, MockBaseRepository<VehicleInformation, IVehicleContext, IVehicleContext>>();
+        services.AddScoped<IBaseRepository<Operator>, MockBaseRepository<Operator, IVehicleContext>>();
+        services.AddScoped<IBaseRepository<Vehicle>, MockBaseRepository<Vehicle, IVehicleContext>>();
+        services.AddScoped<IBaseRepository<LicenseType>, MockBaseRepository<LicenseType, IVehicleContext>>();
+        services.AddScoped<IBaseRepository<VehicleInformation>, MockBaseRepository<VehicleInformation, IVehicleContext>>();
         services.AddScoped<IOperatorRepository, OperatorRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<ILicenseTypeRepository, LicenseTypeRepository>();

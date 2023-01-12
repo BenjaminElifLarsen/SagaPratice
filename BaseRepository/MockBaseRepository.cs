@@ -58,33 +58,6 @@ public class MockBaseRepository<TEntity, TBaseContext> : IBaseRepository<TEntity
     {
         return await Task.Run(() => !_data.AsQueryable().Any(predicate));
     }
-
-    //public int SaveChanges()
-    //{
-    //    //if (_entities.Any(x => x.State == States.Unknown))
-    //    //{
-    //    //    throw new Exception("Entity in unknown state.");
-    //    //}
-    //    //if (_entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e && e.DeletedFrom is null).Any())
-    //    //{
-    //    //    throw new Exception("ISoftDeleteDate entity deleted incorrectly, call void Delete(DateOnly) method.");
-    //    //}
-    //    //foreach (var entity in _entities.Where(x => x.State == States.Remove && x.Entity is ISoftDeleteDate e))
-    //    //{
-    //    //    entity.State = States.Update;
-    //    //}
-    //    return _context.Save();
-    //}
-
-    //public async Task<IEnumerable<TEntity>> AllTrackedEntitiesAsync()
-    //{
-    //    return await Task.Run(() => _context.GetAllTracked);
-    //}
-
-    //public async Task<IEnumerable<IDomainEvent>> AllEventsAsync()
-    //{
-    //    return await Task.Run(() => _context.AllTrackedEvents);
-    //}
 }
 
 public record EntityState<T>
@@ -96,15 +69,6 @@ public record EntityState<T>
         Entity = entity;
         State = state;
     }
-
-    //public override bool Equals(object obj)
-    //{
-    //    if(obj is not EntityState<T>) return false;
-
-    //    EntityState<T> o = obj as EntityState<T>;
-
-    //    return Entity.Equals(o.Entity);
-    //}
 
     public override int GetHashCode()
     { // Overwritten to ensure HashSet work as changing states would change the hash code.

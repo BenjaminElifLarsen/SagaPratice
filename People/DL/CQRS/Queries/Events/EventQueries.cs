@@ -1,4 +1,5 @@
-﻿using Common.Events.Store.Event;
+﻿using BaseRepository;
+using Common.Events.Store.Event;
 using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using System.Linq.Expressions;
 
@@ -10,10 +11,10 @@ internal class GenderSubjectQuery
     //    //need to combine the events together
     //    //maybe it could be a good idea not to consider how cqrs is done with a domain model fully persistanced in the context
     //}
-
+    
+    //could return the events and hydrate a different class than the domain model
 }
 
 internal class PersonGenderQuery
 {
-
 }

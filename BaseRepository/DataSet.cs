@@ -2,33 +2,39 @@
 
 namespace BaseRepository;
 public class DataSet<T> : IEnumerable<T>
-{
-    HashSet<T> set;
+{ //as nice this could be, it woill be difficult to make it work with entiy frame work
+    //will require to get the DbSet<T> from entity framework core and convert it to this while making sure it can still store in the context.
+    //maybe just keep this for mock-ups and update the base context contract to take in what type of dbset it should return
+    private readonly HashSet<T> _set;
+
+    public DataSet(IEnumerable<T> data)
+    {
+        _set = new(data);
+    }
+
     public void Add(T entity)
     {
-        set.Add(entity);
+        _set.Add(entity);
     }
+
     public void Remove(T entity)
     {
-        set.Remove(entity);
-    }
-    public HashSet<T> All()
-    {
-        return set;
+        _set.Remove(entity);
     }
 
     public void Update(T entity)
     {
-
+        //not really needed right now, implement later
+        throw new NotImplementedException();
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        return set.GetEnumerator();
+        return _set.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return set.GetEnumerator();
+        return _set.GetEnumerator();
     }
 }

@@ -49,7 +49,7 @@ internal static class Seeder
         p2.AddDomainEvent(new PersonChangedGender(p2, p2Guid, p2Guid));
         if (!unitOfWork.PersonRepository.AllAsync(new PersonListItemQuery()).Result.Any())
         { //remember the create event and events for adding a gender to a person and other way around
-            peopleContext.Add(p1); //or set up command and dispatch them
+            peopleContext.Add(p1); //or set up commands and dispatch them
             peopleContext.Add(p2);
             g1.AddPerson(p1.Id);
             g2.AddPerson(p2.Id);

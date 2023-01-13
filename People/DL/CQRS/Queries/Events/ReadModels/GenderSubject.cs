@@ -3,7 +3,7 @@ using Common.Events.Domain;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.DL.CQRS.Queries.Events.ReadModels;
-public sealed record GenderSubject : BaseReadModel
+public sealed record GenderSubject : BaseReadModel, IProjection
 {
     public string Subject { get; private set; }
 	public int TestAmountOfPeopleRemovedFromGender { get; private set; }
@@ -18,7 +18,7 @@ public sealed record GenderSubject : BaseReadModel
 	}
 
 	public static GenderSubject? Projection(IEnumerable<DomainEvent> events)
-	{
+	{ //maybe an extension method that can convert the above list to a given model via a 'projection' (similar to the hydrate method) method
 		GenderSubject? state = null;
 		foreach(var e in events) 
 		{
@@ -32,10 +32,12 @@ public sealed record GenderSubject : BaseReadModel
 					state = null;
 					break;
 
-				case nameof(PersonAddedToGenderSucceeded): break;
+				case nameof(PersonAddedToGenderSucceeded):
+                    state.TestAmountOfPeopleRemovedFromGender++; 
+					break;
 
 				case nameof(PersonRemovedFromGenderSucceeded):
-					state.TestAmountOfPeopleRemovedFromGender++;
+					state.TestAmountOfPeopleRemovedFromGender--;
 					break;
 
 				default:

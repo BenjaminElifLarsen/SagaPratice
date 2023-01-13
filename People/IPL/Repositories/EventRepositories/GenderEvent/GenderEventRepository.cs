@@ -1,5 +1,6 @@
 ﻿using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
+using PersonDomain.DL.CQRS.Queries.Events;
 using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
@@ -54,6 +55,14 @@ internal class GenderEventRepository : IGenderEventRepository
         var events = await _eventRepository.LoadEntityEventsUptoAsync(id, nameof(Gender), timePoint);
         var entity = _factory.HydrateGender(events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x))));
         return entity;
+    }
+
+    public T Test<T>(Guid id, IQueryBaseTest<T> query) where T : IProjection
+    {
+        var events = _eventRepository.LoadEntityEventsAsync(id, nameof(Gender)).Result;
+        var domainEvents = events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x)));
+        var projection = domainEvents.Projection(query);
+        return projection;
     }
 }
 

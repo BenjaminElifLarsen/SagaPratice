@@ -5,7 +5,6 @@ using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 
 namespace PersonDomain.DL.CQRS.Queries.Events;
 internal class GenderSubjectQuery
@@ -51,4 +50,42 @@ internal class GenderSubjectQuery
 
 internal class PersonGenderQuery
 {
+}
+
+public interface IQueryBaseTest<T> where T : IProjection
+{
+    public T Projection(IEnumerable<DomainEvent> events);
+}
+public interface IProjection
+{
+
+}
+
+internal class QueryBaseTest : IQueryBaseTest<GenderSubject>
+{
+    public GenderSubject Projection(IEnumerable<DomainEvent> events)
+    {
+        return GenderSubject.Projection(events);
+        //GenderSubject? testing = default;
+        //foreach(var e in events)
+        //{
+        //    switch(e.EventType)
+        //    {
+        //        case nameof(GenderRecognisedSucceeded):
+        //            var gr = e as GenderRecognisedSucceeded;
+        //            if (testing != default) throw new Exception($"Error: Duplicated {nameof(GenderRecognisedSucceeded)}.");
+        //            testing = new(gr.Subject);
+        //            break;
+        //    }
+        //}
+        //return testing;
+    }
+}
+
+internal static class TestExtension
+{
+    public static T Projection<T>(this IEnumerable<DomainEvent> events, IQueryBaseTest<T> query) where T : IProjection
+    {
+        return query.Projection(events);
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using Common.ResultPattern;
-using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.DL.CQRS.Commands;
 
 namespace PersonDomain.AL.Services.Genders;
@@ -13,7 +12,4 @@ public partial class GenderService
         //_eventBus.UnregisterHandler<RecognisedFailed>(Handle); //could put void Handle<StateEvent> over in contract and call the service in a middleware to set these up
         return _result;
     }
-
-    public void Handle(RecognisedSucceeded @event) => _result = new SuccessResultNoData();
-    public void Handle(RecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
 }

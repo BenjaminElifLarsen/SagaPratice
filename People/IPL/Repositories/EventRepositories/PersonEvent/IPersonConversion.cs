@@ -1,14 +1,14 @@
-﻿using Common.Events.Domain;
-using Common.Events.Store.Event;
+﻿using Common.Events.Conversion;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
-internal interface IPersonConversion
+internal interface IPersonConversion : 
+    ISetEvent,
+    IGetEvent<PersonHiredSucceeded>,
+    IGetEvent<PersonFiredSucceeded>,
+    IGetEvent<PersonChangedGender>,
+    IGetEvent<PersonChangedBirth>,
+    IGetEvent<PersonChangedLastName>,
+    IGetEvent<PersonChangedFirstName>
 {
-    public static abstract DomainEvent Set(Event @event);
-    public static abstract IEnumerable<DataPoint> Get(PersonHiredSucceeded @event);
-    public static abstract IEnumerable<DataPoint> Get(PersonFiredSucceeded @event);
-    public static abstract IEnumerable<DataPoint> Get(PersonPersonalInformationChangedSuccessed @event);
-    public static abstract IEnumerable<DataPoint> Get(PersonChangedGender @event);
-
 }

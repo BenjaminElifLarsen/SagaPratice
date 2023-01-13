@@ -25,6 +25,7 @@ using PersonDomain.DL.Models;
 using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
 using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
+using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 using PersonDomain.IPL.Repositories.ProcesserManagers;
 using PersonDomain.IPL.Services;
 
@@ -58,6 +59,7 @@ public class PersonApiServices
         services.AddSingleton<IEventStore<Guid>, MockEventStore>();
         services.AddScoped<IBaseEventRepository<Guid>, MockEventRepository<Guid,IEventStore<Guid>>>(); //if similarly added to Operator domain, the dependency injector can inject the wrong mock repository, consider solulations
         services.AddScoped<IGenderEventRepository, GenderEventRepository>();
+        services.AddScoped<IPersonEventRepository, PersonEventRepository>();
     }
 
     public static void Seed(IServiceProvider provider)

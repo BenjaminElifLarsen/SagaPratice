@@ -30,7 +30,7 @@ internal sealed class UnitOfWork : IUnitOfWork
     public IPersonEventRepository PersonEventRepository => _personEventRepository;
 
     public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, IEnumerable<IProcessManager> processManagers, 
-        IGenderRecogniseProcessRepository genderRecogniseRepository, IGenderEventRepository genderEventRepository)
+        IGenderRecogniseProcessRepository genderRecogniseRepository, IGenderEventRepository genderEventRepository, IPersonEventRepository personEventRepository)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;
@@ -39,6 +39,8 @@ internal sealed class UnitOfWork : IUnitOfWork
         _processManagers = processManagers;
         _genderRecogniseRepository = genderRecogniseRepository;
         _genderEventRepository = genderEventRepository;
+
+        _personEventRepository = personEventRepository;
     }
 
     private void Save(ProcesserFinished @event) //might not be neeeded with the new design. Will still need to ensure if any part fails that data is not saved.

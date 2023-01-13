@@ -80,21 +80,25 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
 
         if (command.FirstName is not null)
         {
-            entity.ReplaceFistName(command.FirstName.FirstName);
+            entity.ReplaceFirstName(command.FirstName.FirstName);
+            entity.AddDomainEvent(new PersonChangedFirstName(entity, command.CorrelationId, command.CausationId));
         }
         if (command.LastName is not null)
         {
             entity.ReplaceLastName(command.LastName.LastName);
+            entity.AddDomainEvent(new PersonChangedLastName(entity, command.CorrelationId, command.CausationId));
         }
         if (command.Brith is not null)
         { //integration event
             entity.UpdateBirth(command.Brith.Birth);
+            entity.AddDomainEvent(new PersonChangedBirth(entity, command.CorrelationId, command.CausationId));
         }
         if (command.Gender is not null)
         {
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(command.Gender.Gender);
-            entity.AddDomainEvent(new PersonChangedGender(entity, oldGender, command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new PersonReplacedGender(entity, oldGender, command.CorrelationId, command.CommandId));
+            entity.AddDomainEvent(new PersonChangedGender(entity, command.CorrelationId, command.CommandId));
         }
 
         var firstNameChanged = command.FirstName is not null;

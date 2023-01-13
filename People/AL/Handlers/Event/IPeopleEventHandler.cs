@@ -6,7 +6,7 @@ namespace PersonDomain.AL.Handlers.Event;
 public interface IPeopleEventHandler :
     IEventHandler<PersonHiredSucceeded>,
     IEventHandler<PersonFiredSucceeded>,
-    IEventHandler<PersonChangedGender>,
+    IEventHandler<PersonReplacedGender>,
     IEventHandler<PersonAddedToGenderSucceeded>,
     IEventHandler<PersonRemovedFromGenderSucceeded>,
     IEventHandler<GenderRecognisedSucceeded>,

@@ -59,6 +59,8 @@ internal sealed class GenderFactory : IGenderFactory
                     if (entity is null) throw new Exception("Event Error, cannot default default");
                     entity = default;
                     break;
+
+                default: throw new Exception("Unknown event");
             }
         }
         return entity;

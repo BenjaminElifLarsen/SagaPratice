@@ -5,6 +5,7 @@ using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.Services.Genders;
+using PersonDomain.AL.Services.People;
 
 namespace PersonDomain.AL.Registries;
 public interface IPersonRegistry : IRoutingRegistry
@@ -16,4 +17,5 @@ public interface IPersonRegistry : IRoutingRegistry
     public void SetUpRouting(IUnrecogniseProcessManager processManager);
     public void SetUpRouting(IGenderRecogniseProcessRouter processRouter);
     public void SetUpRouting(IGenderService service);
+    public void SetUpRouting(IPersonService service);
 }

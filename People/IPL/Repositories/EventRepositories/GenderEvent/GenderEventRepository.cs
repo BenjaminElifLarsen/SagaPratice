@@ -1,13 +1,9 @@
-﻿using BaseRepository;
-using Common.Events.Store.Event;
+﻿using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
-using PersonDomain.DL.CQRS.Queries;
-using PersonDomain.DL.CQRS.Queries.Events;
 using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
-using System.Linq;
 
 namespace PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 internal class GenderEventRepository : IGenderEventRepository
@@ -58,19 +54,6 @@ internal class GenderEventRepository : IGenderEventRepository
         var events = await _eventRepository.LoadEntityEventsUptoAsync(id, nameof(Gender), timePoint);
         var entity = _factory.HydrateGender(events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x))));
         return entity;
-    }
-
-    public GenderSubject TestDeleteLater(Guid id)
-    {
-        var events = _eventRepository.LoadEntityEventsAsync(id, nameof(Gender)).Result;
-        return GenderSubject.Projection(events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x))));
-        //GenderSubject test = null;
-        //(_eventRepository as MockEventRepository<Guid, IEventStore<Guid>>).TestDeleteWhenDone
-        //    .AsQueryable()
-        //    .Where(x => x.AggregateId == id)
-        //    .Select(new GenderSubjectQuery().Projection());
-        //return test; //might be best to get all the events and then handle them in the backend rather than in the context
-        ////so get the events, convert them, and then project them into the new state. 
     }
 }
 

@@ -4,7 +4,7 @@ using PersonDomain.DL.Models;
 
 namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonPersonalInformationChangedSuccessed : DomainEvent
-{
+{ //mayhaps it should be a system event and then let the other events be the stored (so PersonGenderChanged etc.)
     public bool FirstNameWasChanged { get; private set; }
     public bool LastNameWasChanged { get; private set; }
     public bool BirthWasChanged { get; private set; }
@@ -16,7 +16,8 @@ public sealed record PersonPersonalInformationChangedSuccessed : DomainEvent
         FirstNameWasChanged = firstNameChanged;
         LastNameWasChanged = lastNameChanged;
         BirthWasChanged = birthChanged;
-        GenderWasChanged = genderChanged;    }
+        GenderWasChanged = genderChanged;    
+    }
 }
 
 public sealed record PersonPersonalInformationChangedFailed : SystemEvent
@@ -27,7 +28,8 @@ public sealed record PersonPersonalInformationChangedFailed : SystemEvent
 
     public Guid AggregateId { get; private set; }
 
-    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId) : base(correlationId, causationId)
+    public PersonPersonalInformationChangedFailed(Person aggregate, IEnumerable<string> errors, Guid correlationId, Guid causationId) 
+        : base(correlationId, causationId)
     {
         AggregateType = aggregate.GetType().Name;
         AggregateId = aggregate.Id;

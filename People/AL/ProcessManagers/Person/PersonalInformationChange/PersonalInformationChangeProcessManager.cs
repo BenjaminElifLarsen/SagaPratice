@@ -30,7 +30,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
     { //could log the corelationId together with the ProcessManagerId
         if(CorrelationId == default) {
             CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<PersonChangedGender>(true, DomainEventType.Succeeder);
+            _trackerCollection.AddEventTracker<PersonReplacedGender>(true, DomainEventType.Succeeder);
             _trackerCollection.AddEventTracker<PersonPersonalInformationChangedSuccessed>(true, DomainEventType.Succeeder);
             _trackerCollection.AddEventTracker<PersonPersonalInformationChangedFailed>(false, DomainEventType.Failer);
         }
@@ -62,7 +62,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         _trackerCollection.RemoveEvent<PersonPersonalInformationChangedFailed>();
         if (!@event.GenderWasChanged) 
         {
-            _trackerCollection.RemoveEvent<PersonChangedGender>();
+            _trackerCollection.RemoveEvent<PersonReplacedGender>();
         }
         PublishEventIfPossible();
     }
@@ -74,7 +74,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         _trackerCollection.CompleteEvent<PersonPersonalInformationChangedFailed>();
         _trackerCollection.FailEvent<PersonPersonalInformationChangedSuccessed>();
 
-        _trackerCollection.RemoveEvent<PersonChangedGender>();
+        _trackerCollection.RemoveEvent<PersonReplacedGender>();
 
         _errors.AddRange(@event.Errors);
         PublishEventIfPossible();
@@ -118,7 +118,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         PublishEventIfPossible();
     }
 
-    public void Handle(PersonChangedGender @event)
+    public void Handle(PersonReplacedGender @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
@@ -127,7 +127,7 @@ internal sealed class PersonalInformationChangeProcessManager : IPersonalInforma
         _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true, DomainEventType.Succeeder);
         _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false, DomainEventType.Failer);
 
-        _trackerCollection.CompleteEvent<PersonChangedGender>();
+        _trackerCollection.CompleteEvent<PersonReplacedGender>();
 
         _commandBus.Dispatch(new AddPersonToGender(@event.AggregateId, @event.NewGenderId, @event.CorrelationId, @event.EventId));
         _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.OldGenderId, @event.CorrelationId, @event.EventId));

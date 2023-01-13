@@ -21,7 +21,7 @@ internal sealed class PeopleEventHandler : IPeopleEventHandler
         _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
     }
 
-    public void Handle(PersonChangedGender @event)
+    public void Handle(PersonReplacedGender @event)
     {
         _commandBus.Dispatch(new ChangePersonGender(@event.AggregateId, @event.NewGenderId, @event.OldGenderId, @event.CorrelationId, @event.EventId));
     }

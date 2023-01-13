@@ -7,7 +7,7 @@ public interface IPersonalInformationChangeProcessManager : IProcessManager,
     IProcessManagerEventHandler<PersonPersonalInformationChangedFailed>,
     IProcessManagerEventHandler<PersonAddedToGenderSucceeded>,
     IProcessManagerEventHandler<PersonRemovedFromGenderSucceeded>,
-    IProcessManagerEventHandler<PersonChangedGender>, 
+    IProcessManagerEventHandler<PersonReplacedGender>, 
     IProcessManagerEventHandler<PersonAddedToGenderFailed>,
     IProcessManagerEventHandler<PersonRemovedFromGenderFailed>
 {

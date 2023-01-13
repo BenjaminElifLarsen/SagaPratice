@@ -138,3 +138,7 @@ let factory (or something like it) set the id of newly created objects
 
 it does not make sense to store the system events in the 'context'. Figure out a better way to store them before they are published.
 	could make it such that the command handlers can publish system events. Spend some time reading up to see what others have done 
+
+
+maybe have a query handler just like the command handler, so Result<TResponseType> Handle<TRequestType,TResponseType>(TRequestType query);
+

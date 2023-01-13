@@ -1,7 +1,7 @@
-﻿using Common.CQRS.Commands;
-using Common.ProcessManager;
+﻿using Common.ProcessManager;
 using Common.ResultPattern;
 using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.IPL.Services;
 
 namespace PersonDomain.AL.Services.People;
@@ -21,4 +21,6 @@ public sealed partial class PersonService : IPersonService
 
     private void Handler(ProcesserFinished @event) => _result = @event.Result;
     private bool CanReturnResult => _result is not null;
+    public void Handle(RecognisedSucceeded @event) => _result = new SuccessResultNoData();
+    public void Handle(RecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
 }

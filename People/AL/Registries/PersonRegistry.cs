@@ -9,6 +9,7 @@ using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.Services.Genders;
+using PersonDomain.AL.Services.People;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
 
@@ -51,7 +52,7 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handle);
         _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handle);
         _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonChangedGender>(processManager.Handle);
+        _eventBus.RegisterHandler<PersonReplacedGender>(processManager.Handle);
     }
 
     public void SetUpRouting(IFireProcessManager processManager)
@@ -89,6 +90,12 @@ public sealed class PersonRegistry : IPersonRegistry
     }
 
     public void SetUpRouting(IGenderService service)
+    {
+        _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
+    }
+
+    public void SetUpRouting(IPersonService service)
     {
         _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
         _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);

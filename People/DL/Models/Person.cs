@@ -11,7 +11,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
     private DateOnly _birth;
     private IdReference _gender;
     private DateOnly? _deletedFrom;
-    private readonly HashSet<DomainEvent> _events;
+    private readonly HashSet<DomainEvent> _events; //should the models really care about events? Kinds of corrupts the purity, since they got idea of how parts of the rest of the system work.
 
     internal string FirstName { get => _firstName; private set => _firstName = value; }
     internal string LastName { get => _lastName; private set => _lastName = value; }
@@ -29,14 +29,13 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _events = new();
     }
 
-    internal Person(string firstName, string lastName, DateOnly birth, Guid gender)
+    internal Person(string firstName, string lastName, DateOnly birth, Guid gender) : this()
     {
         _id = Guid.NewGuid();
         _firstName = firstName;
         _lastName = lastName;
         _birth = birth;
         _gender = gender;
-        _events = new();
     }
 
     internal Person(Guid id, string firstName, string lastName, DateOnly birth, Guid gender) : this(firstName, lastName, birth, gender)
@@ -44,7 +43,7 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         _id = id;
     }
 
-    internal void ReplaceFistName(string firstName)
+    internal void ReplaceFirstName(string firstName)
     {
         _firstName = firstName;
     }
@@ -99,5 +98,10 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
     public static bool operator !=(Person left, Person right)
     {
         return !(left == right);
+    }
+
+    internal static Person Hydrate(Guid id, Guid gender, string lastName, string firstName, DateOnly birth)
+    {
+        return new Person(id, firstName, lastName, birth, gender);
     }
 }

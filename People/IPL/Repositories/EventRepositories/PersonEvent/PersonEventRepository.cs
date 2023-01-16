@@ -1,5 +1,7 @@
-﻿using Common.Events.Store.Event;
+﻿using Common.Events.Projection;
+using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
+using PersonDomain.DL.CQRS.Queries.Events;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
@@ -53,5 +55,12 @@ internal class PersonEventRepository : IPersonEventRepository
         var events = await _eventRepository.LoadEntityEventsAsync(id, nameof(Person));
         var entity = _factory.HydratePerson(events.Select(x => PersonConversion.Set(Event.EventFromGeneric(x))));
         return entity;
+    }
+
+    public T Test<T>(Guid id, IViewQuery<T> query) where T : IProjection
+    {
+        var events = _eventRepository.LoadEntityEventsAsync(id, nameof(Person)).Result;
+        var domainEvents = events.Select(x => PersonConversion.Set(Event.EventFromGeneric(x)));
+        return  domainEvents.Projection(query);
     }
 }

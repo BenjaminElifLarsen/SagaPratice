@@ -1,20 +1,24 @@
 ﻿using Common.CQRS.Queries;
 using Common.Events.Domain;
+using Common.Events.Projection;
 using PersonDomain.DL.Events.Domain;
+using PersonDomain.DL.Models;
 
 namespace PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 public sealed record GenderSubject : BaseReadModel, IProjection
 {
     public string Subject { get; private set; }
 	public int TestAmountOfPeopleRemovedFromGender { get; private set; }
-	public GenderSubject(string subject)
-	{
-		Subject = subject;
-	}
+	public int TestAmountOfPeopleAddedToGender { get; private set; }
 
 	private GenderSubject()
 	{
 
+	}
+
+	public GenderSubject(string subject)
+	{
+		Subject = subject;
 	}
 
 	public static GenderSubject? Projection(IEnumerable<DomainEvent> events)
@@ -33,16 +37,17 @@ public sealed record GenderSubject : BaseReadModel, IProjection
 					break;
 
 				case nameof(PersonAddedToGenderSucceeded):
-                    state.TestAmountOfPeopleRemovedFromGender++; 
+                    state.TestAmountOfPeopleAddedToGender++; 
 					break;
 
 				case nameof(PersonRemovedFromGenderSucceeded):
-					state.TestAmountOfPeopleRemovedFromGender--;
+					state.TestAmountOfPeopleRemovedFromGender++;
 					break;
 
 				default:
-					throw new Exception("Wrong events");
-					//break;//have the other gender event, hitting this one is an expection
+					if(e.AggregateType != nameof(Gender))
+						throw new Exception("Wrong events");
+					break;
 			}
 		}
 		return state;

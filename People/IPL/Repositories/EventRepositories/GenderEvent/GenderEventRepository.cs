@@ -1,4 +1,5 @@
-﻿using Common.Events.Store.Event;
+﻿using Common.Events.Projection;
+using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
 using PersonDomain.DL.CQRS.Queries.Events;
 using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
@@ -57,7 +58,7 @@ internal class GenderEventRepository : IGenderEventRepository
         return entity;
     }
 
-    public T Test<T>(Guid id, IQueryBaseTest<T> query) where T : IProjection
+    public T Test<T>(Guid id, IViewQuery<T> query) where T : IProjection
     {
         var events = _eventRepository.LoadEntityEventsAsync(id, nameof(Gender)).Result;
         var domainEvents = events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x)));

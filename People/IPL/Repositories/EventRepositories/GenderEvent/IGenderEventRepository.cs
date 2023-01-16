@@ -1,4 +1,5 @@
-﻿using PersonDomain.DL.CQRS.Queries.Events;
+﻿using Common.Events.Projection;
+using PersonDomain.DL.CQRS.Queries.Events;
 using PersonDomain.DL.Models;
 
 namespace PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
@@ -20,5 +21,5 @@ public interface IGenderEventRepository
      *      
      *      
      */
-    public T Test<T>(Guid id, IQueryBaseTest<T> query) where T : IProjection;
+    public T Test<T>(Guid id, IViewQuery<T> query) where T : IProjection;
 }

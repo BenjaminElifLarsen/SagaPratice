@@ -18,7 +18,7 @@ internal sealed class MockPeopleContext : IPersonContext
 
     public bool Filter { get; set; }
 
-    private Func<TEntity, bool> Filtering<TEntity>()
+    private Func<T, bool> Filtering<T>()
     {
         return x => {
             if (!Filter) return true;
@@ -32,7 +32,7 @@ internal sealed class MockPeopleContext : IPersonContext
     public IEnumerable<Person> People => Set<Person>();//_contextData.Where(x => x.Entity is Person).Select(x => x.Entity as Person);
     //IEnumerable<Gender> IContextData<Gender>.GetAll => Genders.Where(Filtering<Gender>());
     //IEnumerable<Person> IContextData<Person>.GetAll => People.Where(Filtering<Person>());
-    public IEnumerable<IAggregateRoot> GetTracked => Set<IAggregateRoot>();//_contextData.Select(x => x.Entity).ToArray();
+    public IEnumerable<IAggregateRoot> GetTracked  { get { Filter = false; var d = Set<IAggregateRoot>().ToArray(); Filter = true; return d; } }//_contextData.Select(x => x.Entity).ToArray();
     public IEnumerable<SystemEvent> SystemEvents => _events;
 
     public MockPeopleContext()
@@ -160,7 +160,7 @@ internal sealed class MockPeopleContext : IPersonContext
 
     public IEnumerable<T> Set<T>()
     { //can be sat up to work a collection of Object, allowing IBaseProcessManager, IBaseEvent, and IAggregateRoot
-        return _data.Where(x => x.Entity is T).Select(x => (T)x.Entity);
+        return _data.Where(x => x.Entity is T).Select(x => (T)x.Entity).Where(Filtering<T>());
         //return _data.Where(x => x is EntityState<T>).Select(x => (T)x.Entity);
     }
 }

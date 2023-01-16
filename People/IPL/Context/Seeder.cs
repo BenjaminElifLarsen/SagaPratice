@@ -1,5 +1,4 @@
-﻿using BaseRepository;
-using PersonDomain.AL.Busses.Command;
+﻿using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Services.People.Queries;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.CQRS.Queries;
@@ -80,7 +79,6 @@ internal static class Seeder
             g4.AddPerson(p2.Id);
         }
 
-        //peopleContext.Save(); //this does not run any events, will need the unit of work for that
         unitOfWork.Save();
     }
 }

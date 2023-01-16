@@ -71,6 +71,11 @@ public class MockEventStore : IEventStore<Guid>
         return await Task.Run(() => _events.Where(x => x.AggregateId == id && x.AggregateType == aggregateType && x.Timestamp <= tick).OrderBy(x => x.Version));
     }
 
+    public async Task<IEnumerable<Event<Guid>>> LoadStreamAsync(string aggregateType)
+    {
+        return await Task.Run(() => _events.Where(x => x.AggregateType == aggregateType).OrderBy(x => x.Version));
+    }
+
     //public void Save()
     //{
     //    throw new NotImplementedException();

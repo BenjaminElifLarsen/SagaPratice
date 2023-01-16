@@ -1,8 +1,6 @@
 ﻿using Common.Events.Projection;
 using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
-using PersonDomain.DL.CQRS.Queries.Events;
-using PersonDomain.DL.CQRS.Queries.Events.ReadModels;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
@@ -58,12 +56,18 @@ internal class GenderEventRepository : IGenderEventRepository
         return entity;
     }
 
-    public T Test<T>(Guid id, IViewQuery<T> query) where T : IProjection
+    public async Task<IEnumerable<TProjection>> AllAsync<TProjection>(IViewMultiQuery<TProjection> query) where TProjection : IMultiProjection<TProjection>
     {
-        var events = _eventRepository.LoadEntityEventsAsync(id, nameof(Gender)).Result;
+        var events = await _eventRepository.LoadAllEvents(nameof(Gender));
         var domainEvents = events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x)));
-        var projection = domainEvents.Projection(query);
-        return projection;
+        return domainEvents.ProjectionMulti(query);
+    }
+
+    public async Task<TProjection> GetAsync<TProjection>(Guid id, IViewSingleQuery<TProjection> query) where TProjection : ISingleProjection<TProjection>
+    {
+        var events = await _eventRepository.LoadEntityEventsAsync(id, nameof(Gender));
+        var domainEvents = events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x)));
+        return domainEvents.ProjectionSingle(query);
     }
 }
 

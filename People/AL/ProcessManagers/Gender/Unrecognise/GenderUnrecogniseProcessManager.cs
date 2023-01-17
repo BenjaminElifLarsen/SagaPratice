@@ -1,6 +1,6 @@
 ﻿using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.DL.Events.Domain;
-using static PersonDomain.AL.ProcessManagers.Gender.Recognise.GenderRecogniseProcessManager;
+using static PersonDomain.AL.ProcessManagers.Gender.Unrecognise.GenderUnrecogniseProcessManager.UnrecogniseGenderState;
 
 namespace PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGenderUnrecogniseProcessManager
@@ -9,7 +9,7 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
     public GenderUnrecogniseProcessManager(Guid correlationId) : base(correlationId)
     {
         ProcessManagerId = Guid.NewGuid();
-        State = UnrecogniseGenderState.NotStarted;
+        State = NotStarted;
     }
 
     public void Handle(GenderUnrecognisedSucceeded @event)
@@ -18,20 +18,19 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
 
         switch(State)
         {
-            case UnrecogniseGenderState.NotStarted:
-                State = UnrecogniseGenderState.GenderUnrecognised;
+            case NotStarted:
+                State = GenderUnrecognised;
                 AddStateEvent(new UnrecognisedSucceeded(@event.CorrelationId, @event.EventId));
                 break;
 
-            case UnrecogniseGenderState.GenderUnrecognised:
+            case GenderUnrecognised:
                 break;
 
-            case UnrecogniseGenderState.GenderFailedToUnrecognise: break;
+            case GenderFailedToUnrecognise: break;
 
             default:
                 break;
         }
-
     }
 
     public void Handle(GenderUnrecognisedFailed @event)
@@ -40,16 +39,16 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
 
         switch (State)
         {
-            case UnrecogniseGenderState.NotStarted:
-                State = UnrecogniseGenderState.GenderFailedToUnrecognise;
+            case NotStarted:
+                State = GenderFailedToUnrecognise;
                 AddErrors(@event.Errors);
                 AddStateEvent(new UnrecognisedFailed(Errors, @event.CorrelationId, @event.EventId));
                 break;
 
-            case UnrecogniseGenderState.GenderUnrecognised:
+            case GenderUnrecognised:
                 break;
 
-            case UnrecogniseGenderState.GenderFailedToUnrecognise:
+            case GenderFailedToUnrecognise:
                 break;
 
             default: break;

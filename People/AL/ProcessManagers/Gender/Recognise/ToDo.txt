@@ -7,3 +7,4 @@
 	6) Need to ensure that the newly created (or retrived for that matter) pm are subscribed to the correct events
 
 	update PersonReplacedGender and PersonalInformationChanged to system event
+	move them to another location than the domain event folder in DL

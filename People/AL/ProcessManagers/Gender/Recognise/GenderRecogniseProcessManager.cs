@@ -1,6 +1,5 @@
 ﻿using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.DL.Events.Domain;
-using PersonDomain.AL.ProcessManagers;
 
 namespace PersonDomain.AL.ProcessManagers.Gender.Recognise;
 public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogniseProcessManager

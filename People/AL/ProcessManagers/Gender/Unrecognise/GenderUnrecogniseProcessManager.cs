@@ -26,7 +26,8 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
             case GenderUnrecognised:
                 break;
 
-            case GenderFailedToUnrecognise: break;
+            case GenderFailedToUnrecognise: 
+                break;
 
             default:
                 break;

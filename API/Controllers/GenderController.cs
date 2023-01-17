@@ -28,6 +28,15 @@ public class GenderController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
+    [Route(nameof(GendersOverTime))]
+    public async Task<IActionResult> GendersOverTime()
+    {
+        var result = await _genderService.GetGenderDataPointsOverTimeAsync();
+        return this.FromResult(result);
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
     [Route("Details")]
     public async Task<IActionResult> Details([FromQuery] Guid id)
     {

@@ -7,7 +7,6 @@ using PersonDomain.DL.Events.Conversion;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
-using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent.Factories;
 
 namespace PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 internal class PersonEventRepository : IPersonEventRepository

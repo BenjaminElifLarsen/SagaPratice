@@ -21,7 +21,7 @@ internal class GenderEventRepository : IGenderEventRepository
     {
         var events = new List<Event>();
         foreach (var e in entity.Events)
-        { //consider a good way and where to convert the data into the int/property combinations
+        { 
             events.Add(e.ConvertToEvent());
         }
         _eventRepository.AddEvents(events);

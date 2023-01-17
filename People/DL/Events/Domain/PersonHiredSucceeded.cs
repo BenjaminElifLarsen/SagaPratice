@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.Events.Store.Event;
+using PersonDomain.DL.Events.Conversion;
 using PersonDomain.DL.Models;
-using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 
 namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonHiredSucceeded : DomainEvent
@@ -27,5 +27,10 @@ public sealed record PersonHiredSucceeded : DomainEvent
         FirstName = e.Data.Single(x => x == PersonPropertyId.FirstName).Value;
         LastName = e.Data.Single(x => x == PersonPropertyId.LastName).Value;
         Birth = new(long.Parse(e.Data.Single(x => x == PersonPropertyId.Birth).Value));
+    }
+
+    public override Event ConvertToEvent()
+    {
+        return new Event(this, PersonConversion.Get(this), Common.Events.Store.Event.EventType.Create);
     }
 }

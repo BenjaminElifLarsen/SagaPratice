@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
 public sealed record OperatorLicenseRetracted : DomainEvent
@@ -10,5 +11,10 @@ public sealed record OperatorLicenseRetracted : DomainEvent
     {
         LicenseTypeId = license.Type;
         VehicleIds = aggregate.Vehicles;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

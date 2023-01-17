@@ -1,6 +1,7 @@
 ﻿using Common.Events.Projection;
 using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
+using PersonDomain.DL.Events.Conversion;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
@@ -60,7 +61,7 @@ internal class GenderEventRepository : IGenderEventRepository
     {
         var events = await _eventRepository.LoadAllEvents(nameof(Gender));
         var domainEvents = events.Select(x => GenderConversion.Set(Event.EventFromGeneric(x)));
-        return domainEvents.ProjectionMulti(query);
+        return domainEvents.ProjectionMultiple(query);
     }
 
     public async Task<TProjection> GetAsync<TProjection>(Guid id, IViewSingleQuery<TProjection> query) where TProjection : ISingleProjection<TProjection>

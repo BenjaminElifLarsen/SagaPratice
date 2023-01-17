@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 [Obsolete("Might be removed in a future version", true)]
@@ -12,5 +13,10 @@ internal sealed record LicenseTypeAgeRequirementValidated : DomainEvent
     {
         OperatorIdsNotFound = operatorIdsNotFound;
         OperatorIdsNotValid = operatorIdsNotValid;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -2,7 +2,7 @@
 using Common.Events.Store.Event;
 using PersonDomain.DL.Events.Domain;
 
-namespace PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
+namespace PersonDomain.DL.Events.Conversion;
 internal class PersonConversion : IPersonConversion
 {
     public static IEnumerable<DataPoint> Get(PersonHiredSucceeded @event)

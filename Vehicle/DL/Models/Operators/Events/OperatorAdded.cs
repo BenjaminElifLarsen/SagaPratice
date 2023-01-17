@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
@@ -7,5 +8,10 @@ public sealed record OperatorAdded : DomainEvent
     public OperatorAdded(IAggregateRoot aggregate, Guid correlationId, Guid causationId) 
         : base(aggregate, correlationId, causationId)
     {
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

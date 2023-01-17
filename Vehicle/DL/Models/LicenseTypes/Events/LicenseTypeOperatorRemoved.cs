@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 public sealed record LicenseTypeOperatorRemoved : DomainEvent
@@ -8,5 +9,10 @@ public sealed record LicenseTypeOperatorRemoved : DomainEvent
         : base(aggregate, correlationId, causationId)
     {
         OperatorId = operatorId;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,6 +1,6 @@
-﻿using Common.Events.Domain;
+﻿using Common.Events.Base;
 
 namespace VehicleDomain.AL.Busses.Event;
-public interface IVehicleDomainEventBus : IDomainEventBus
+public interface IVehicleDomainEventBus : IEventBus
 {
 }

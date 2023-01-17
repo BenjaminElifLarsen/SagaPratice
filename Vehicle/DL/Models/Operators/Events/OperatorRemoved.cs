@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
 public sealed record OperatorRemoved : DomainEvent
@@ -12,5 +13,10 @@ public sealed record OperatorRemoved : DomainEvent
     {
         VehicleIds = aggregate.Vehicles;
         LicenseTypeIds = aggregate.Licenses.Select(x => x.Type);
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

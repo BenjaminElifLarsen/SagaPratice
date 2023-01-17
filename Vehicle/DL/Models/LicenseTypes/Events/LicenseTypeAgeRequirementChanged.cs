@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 public sealed record LicenseTypeAgeRequirementChanged : DomainEvent
@@ -12,5 +13,10 @@ public sealed record LicenseTypeAgeRequirementChanged : DomainEvent
     {
         NewAgeRequirement = aggregate.AgeRequirementInYears;
         OperatorIds = aggregate.Operators;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

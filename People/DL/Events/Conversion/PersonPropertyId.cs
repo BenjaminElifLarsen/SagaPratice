@@ -1,4 +1,4 @@
-﻿namespace PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
+﻿namespace PersonDomain.DL.Events.Conversion;
 internal enum PersonPropertyId
 {
     Id = 1,

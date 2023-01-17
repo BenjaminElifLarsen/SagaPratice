@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.Vehicles.Events;
 public sealed record VehicleRemovedOperator : DomainEvent
@@ -9,5 +10,10 @@ public sealed record VehicleRemovedOperator : DomainEvent
         : base(aggregate, correlationId, causationId)
     {
         OperatorId = operatorId;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

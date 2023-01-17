@@ -1,4 +1,5 @@
 ﻿using Common.Events.Domain;
+using Common.Events.Store.Event;
 
 namespace VehicleDomain.DL.Models.LicenseTypes.Events;
 public sealed record LicenseTypeAlteredSucceeded : DomainEvent
@@ -15,5 +16,10 @@ public sealed record LicenseTypeAlteredSucceeded : DomainEvent
         TypeChanged = typeChanged;
         AgeRequirementChanged = ageRequirementChanged;
         RenewPeriodChanged = renewPeriodChanged;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        throw new NotImplementedException();
     }
 }

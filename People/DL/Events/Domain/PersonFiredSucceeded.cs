@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.Events.Store.Event;
+using PersonDomain.DL.Events.Conversion;
 using PersonDomain.DL.Models;
-using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 
 namespace PersonDomain.DL.Events.Domain;
 public sealed record PersonFiredSucceeded : DomainEvent
@@ -22,5 +22,10 @@ public sealed record PersonFiredSucceeded : DomainEvent
         GenderId = Guid.Parse(e.Data.Single(x => x == PersonPropertyId.Gender).Value);
         var deleteDateTime = new DateTime(long.Parse(e.Data.Single(x => x == PersonPropertyId.DeletedFrom).Value));
         DeletedFrom = new(deleteDateTime.Year,deleteDateTime.Month,deleteDateTime.Day);
+    }
+
+    public override Event ConvertToEvent()
+    {
+        return new Event(this, PersonConversion.Get(this), Common.Events.Store.Event.EventType.Remove);
     }
 }

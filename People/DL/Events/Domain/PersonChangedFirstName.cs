@@ -1,7 +1,7 @@
 ﻿using Common.Events.Domain;
 using Common.Events.Store.Event;
+using PersonDomain.DL.Events.Conversion;
 using PersonDomain.DL.Models;
-using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
 
 namespace PersonDomain.DL.Events.Domain;
 internal sealed record PersonChangedFirstName : DomainEvent
@@ -16,5 +16,10 @@ internal sealed record PersonChangedFirstName : DomainEvent
     public PersonChangedFirstName(Person aggregate, Guid correlationId, Guid causationId) : base(aggregate, correlationId, causationId)
     {
         FirstName = aggregate.FirstName;
+    }
+
+    public override Event ConvertToEvent()
+    {
+        return new Event(this, PersonConversion.Get(this), Common.Events.Store.Event.EventType.Modify);
     }
 }

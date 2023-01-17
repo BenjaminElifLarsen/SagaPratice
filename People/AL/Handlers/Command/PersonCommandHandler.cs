@@ -73,7 +73,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
         BinaryFlag flag = new PersonChangePersonalInformationValidator(command, validationData).Validate();
         if (!flag)
         { //have event
-            _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(entity, PersonErrorConversion.Convert(flag), command.CorrelationId, command.CommandId));
+            _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(PersonErrorConversion.Convert(flag), command.CorrelationId, command.CommandId));
             _unitOfWork.Save(); //not really happy with this design. Mayhaps also have a call that permit publishing evnets. Then again if events is going to be saved, maybe it make sense??
             return; // new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
         }
@@ -97,7 +97,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
         {
             var oldGender = entity.Gender;
             entity.UpdateGenderIdentification(command.Gender.Gender);
-            entity.AddDomainEvent(new PersonReplacedGender(entity, oldGender, command.CorrelationId, command.CommandId));
+            //entity.AddDomainEvent(new PersonReplacedGender(entity, oldGender, command.CorrelationId, command.CommandId));
             entity.AddDomainEvent(new PersonChangedGender(entity, command.CorrelationId, command.CommandId));
         }
 
@@ -105,7 +105,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
         var lastNameChanged = command.LastName is not null;
         var birthChanged = command.Brith is not null;
         var genderChanged = command.Gender is not null;
-        entity.AddDomainEvent(new PersonPersonalInformationChangedSuccessed(entity, firstNameChanged, lastNameChanged, birthChanged, genderChanged, command.CorrelationId, command.CommandId));
+        //entity.AddDomainEvent(new PersonPersonalInformationChangedSuccessed(entity, firstNameChanged, lastNameChanged, birthChanged, genderChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);
         _unitOfWork.Save();
         return; // new SuccessResultNoData();

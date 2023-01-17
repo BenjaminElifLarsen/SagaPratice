@@ -1,5 +1,4 @@
 ﻿using Common.CQRS.Commands;
-using Common.ResultPattern;
 using System.Diagnostics;
 
 namespace PersonDomain.AL.Busses.Command;

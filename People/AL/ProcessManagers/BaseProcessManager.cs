@@ -1,7 +1,7 @@
 ﻿using Common.CQRS.Commands;
 using Common.Events.State;
 using Common.Events.Store.Event;
-using Common.Events.Store.ProcessManager;
+using Common.ProcessManager;
 
 namespace PersonDomain.AL.ProcessManagers;
 public class BaseProcessManager : IBaseProcessManager

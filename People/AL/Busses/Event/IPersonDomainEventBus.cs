@@ -2,6 +2,6 @@
 using Common.Events.Domain;
 
 namespace PersonDomain.AL.Busses.Event;
-public interface IPersonDomainEventBus : /*IDomainEventBus,*/ IApplicationBus
+public interface IPersonDomainEventBus : /*IDomainEventBus,*/ IEventBus
 {
 }

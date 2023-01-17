@@ -1,0 +1,69 @@
+﻿using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
+using PersonDomain.DL.Events.Domain;
+using static PersonDomain.AL.ProcessManagers.Gender.Recognise.GenderRecogniseProcessManager;
+
+namespace PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
+public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGenderUnrecogniseProcessManager
+{
+    public UnrecogniseGenderState State { get; private set; }
+    public GenderUnrecogniseProcessManager(Guid correlationId) : base(correlationId)
+    {
+        ProcessManagerId = Guid.NewGuid();
+        State = UnrecogniseGenderState.NotStarted;
+    }
+
+    public void Handle(GenderUnrecognisedSucceeded @event)
+    {
+        if (@event.CorrelationId != CorrelationId) return;
+
+        switch(State)
+        {
+            case UnrecogniseGenderState.NotStarted:
+                State = UnrecogniseGenderState.GenderUnrecognised;
+                AddStateEvent(new UnrecognisedSucceeded(@event.CorrelationId, @event.EventId));
+                break;
+
+            case UnrecogniseGenderState.GenderUnrecognised:
+                break;
+
+            case UnrecogniseGenderState.GenderFailedToUnrecognise: break;
+
+            default:
+                break;
+        }
+
+    }
+
+    public void Handle(GenderUnrecognisedFailed @event)
+    {
+        if (@event.CorrelationId != CorrelationId) return;
+
+        switch (State)
+        {
+            case UnrecogniseGenderState.NotStarted:
+                State = UnrecogniseGenderState.GenderFailedToUnrecognise;
+                AddErrors(@event.Errors);
+                AddStateEvent(new UnrecognisedFailed(Errors, @event.CorrelationId, @event.EventId));
+                break;
+
+            case UnrecogniseGenderState.GenderUnrecognised:
+                break;
+
+            case UnrecogniseGenderState.GenderFailedToUnrecognise:
+                break;
+
+            default: break;
+        }
+    }
+
+    public enum UnrecogniseGenderState
+    {
+        NotStarted = 1,
+        GenderUnrecognised = 2,
+        GenderFailedToUnrecognise = 3,
+
+        Unknown = 0,
+    }
+
+
+}

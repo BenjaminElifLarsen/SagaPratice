@@ -1,6 +1,6 @@
 ﻿using Common.Events.Store.Event;
-using Common.Events.Store.ProcessManager;
 using Common.Events.System;
+using Common.ProcessManager;
 
 namespace Common.RepositoryPattern;
 public interface IBaseContext //not tested yet against ORMs, only in-memory collections

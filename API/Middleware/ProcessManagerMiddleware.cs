@@ -48,8 +48,8 @@ public class ProcessManagerMiddleware
                 selectedRegistry.SetUpRouting(hirePM);
                 //var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;
                 //selectedRegistry.SetUpRouting(regPM);
-                var unregPM = processManagers.SingleOrDefault(x => x is IUnrecogniseProcessManager) as IUnrecogniseProcessManager;
-                selectedRegistry.SetUpRouting(unregPM);
+                //var unregPM = processManagers.SingleOrDefault(x => x is IGenderUnrecogniseProcessManager) as IGenderUnrecogniseProcessManager;
+                //selectedRegistry.SetUpRouting(unregPM);
             }
             else if (vehicleDomain.Any(x => string.Equals(x, controllerName)))
             {

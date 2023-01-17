@@ -3,6 +3,7 @@ using Common.ResultPattern;
 using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.IPL.Services;
 
 namespace PersonDomain.AL.Services.Genders;
@@ -24,4 +25,6 @@ public sealed partial class GenderService : IGenderService
     private bool CanReturnResult => _result is not null;
     public void Handle(RecognisedSucceeded @event) => _result = new SuccessResultNoData();
     public void Handle(RecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
+    public void Handle(UnrecognisedSucceeded @event) => _result = new SuccessResultNoData();
+    public void Handle(UnrecognisedFailed @event) => _result = new InvalidResultNoData(@event.Errors.ToArray());
 }

@@ -1,7 +1,7 @@
 ﻿using BaseRepository;
 using Common.Events.Store.Event;
-using Common.Events.Store.ProcessManager;
 using Common.Events.System;
+using Common.ProcessManager;
 using Common.RepositoryPattern;
 using PersonDomain.DL.Models;
 

@@ -1,4 +1,4 @@
-﻿using Common.Events.Store.ProcessManager;
+﻿using Common.ProcessManager;
 using Common.RepositoryPattern;
 using Common.RepositoryPattern.ProcessManagers;
 

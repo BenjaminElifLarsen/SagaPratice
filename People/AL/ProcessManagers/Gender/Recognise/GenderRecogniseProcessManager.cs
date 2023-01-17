@@ -73,7 +73,7 @@ public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogni
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderFailedToRecognise;
                 AddErrors(@event.Errors);
-                AddStateEvent(new RecognisedFailed(Errors, @event.CorrelationId, @event.CausationId));
+                AddStateEvent(new RecognisedFailed(Errors, @event.CorrelationId, @event.EventId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.

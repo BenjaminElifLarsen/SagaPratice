@@ -14,6 +14,6 @@ public interface IPersonService
     Task<Result> HirePersonAsync(HirePersonFromUser command);
     Task<Result> FirePersonAsync(FirePersonFromUser command);
     Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command);
-    void Handle(RecognisedSucceeded @event);
-    void Handle(RecognisedFailed @event);
+    //void Handle(RecognisedSucceeded @event); //these two are related to gender, not person
+    //void Handle(RecognisedFailed @event);
 }

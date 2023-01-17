@@ -62,20 +62,20 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
     {
         var entity = _unitOfWork.PersonRepository.GetForOperationAsync(command.Id).Result;
         if (entity is null)
-        { //for any command that is triggered by an event should cause an expection as entity is null should not happen if the first command handler is implemented correctly.
+        { 
             _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(new string[] { "Not found." }, command.CorrelationId, command.CommandId));
-            _unitOfWork.Save(); //consider calling something else like 'ProcessEvents'
-            return; // new InvalidResultNoData("Not found"); //what to do with create commands? there are no aggregate roots if they fail. Maybe have event ctor with aggregate id = 0 and aggregatetype 'hardcoded' typeof(Person).name 
+            _unitOfWork.Save(); //consider calling something else like 'ProcessEvents' as no saving is happening
+            return; 
         }
 
         var genderIds = _unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result;
         var validationData = new PersonValidationData(genderIds);
         BinaryFlag flag = new PersonChangePersonalInformationValidator(command, validationData).Validate();
         if (!flag)
-        { //have event
+        { 
             _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedFailed(PersonErrorConversion.Convert(flag), command.CorrelationId, command.CommandId));
-            _unitOfWork.Save(); //not really happy with this design. Mayhaps also have a call that permit publishing evnets. Then again if events is going to be saved, maybe it make sense??
-            return; // new InvalidResultNoData(PersonErrorConversion.Convert(flag).ToArray());
+            _unitOfWork.Save(); 
+            return; 
         }
 
         if (command.FirstName is not null)

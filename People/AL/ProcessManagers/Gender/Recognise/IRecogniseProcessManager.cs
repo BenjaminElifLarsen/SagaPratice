@@ -1,5 +1,5 @@
 ﻿using Common.Events.Bus;
-using Common.Events.Store.ProcessManager;
+using Common.ProcessManager;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.AL.ProcessManagers.Gender.Recognise;

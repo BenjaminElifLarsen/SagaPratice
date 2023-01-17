@@ -1,13 +1,16 @@
-﻿using PersonDomain.AL.Busses.Command;
+﻿using Common.ProcessManager;
+using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.Handlers.Command;
 using PersonDomain.AL.ProcessManagers.Gender.Recognise;
 using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Fire;
 using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
 using PersonDomain.AL.Services.Genders;
 using PersonDomain.AL.Services.People;
 using PersonDomain.DL.CQRS.Commands;
@@ -77,11 +80,11 @@ public sealed class PersonRegistry : IPersonRegistry
     //    _eventBus.RegisterHandler<GenderRecognisedFailed>(processManager.Handler);
     //}
 
-    public void SetUpRouting(IUnrecogniseProcessManager processManager)
-    {
-        _eventBus.RegisterHandler<GenderUnrecognisedSucceeded>(processManager.Handle);
-        _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processManager.Handle);
-    }
+    //public void SetUpRouting(IGenderUnrecogniseProcessManager processManager)
+    //{
+    //    _eventBus.RegisterHandler<GenderUnrecognisedSucceeded>(processManager.Handle);
+    //    _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processManager.Handle);
+    //}
 
     public void SetUpRouting(IGenderRecogniseProcessRouter processRouter)
     {
@@ -89,15 +92,23 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<GenderRecognisedFailed>(processRouter.Handle);
     }
 
+    public void SetUpRouting(IGenderUnrecogniseProcessRouter processRouter)
+    {
+        _eventBus.RegisterHandler<GenderUnrecognisedSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<GenderUnrecognisedFailed>(processRouter.Handle);
+    }
+
     public void SetUpRouting(IGenderService service)
     {
         _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
         _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
+        _eventBus.RegisterHandler<UnrecognisedSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<UnrecognisedFailed>(service.Handle);
     }
 
     public void SetUpRouting(IPersonService service)
     {
-        _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
-        _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
+        //_eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
+        //_eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
     }
 }

@@ -2,7 +2,6 @@
 using Common.Events.Store.Event;
 using Common.RepositoryPattern.Events;
 using PersonDomain.DL.Events.Conversion;
-using PersonDomain.DL.Events.Domain;
 using PersonDomain.DL.Factories;
 using PersonDomain.DL.Models;
 
@@ -23,22 +22,7 @@ internal class GenderEventRepository : IGenderEventRepository
         var events = new List<Event>();
         foreach (var e in entity.Events)
         { //consider a good way and where to convert the data into the int/property combinations
-            if (e is GenderRecognisedSucceeded gr)
-            {
-                events.Add(new Event(e, GenderConversion.Get(gr), EventType.Create));
-            }
-            else if (e is GenderUnrecognisedSucceeded gu)
-            {
-                events.Add(new Event(e, GenderConversion.Get(gu), EventType.Remove));
-            }
-            else if (e is PersonAddedToGenderSucceeded pa)
-            {
-                events.Add(new Event(e, GenderConversion.Get(pa), EventType.Modify));
-            }
-            else if (e is PersonRemovedFromGenderSucceeded pr)
-            {
-                events.Add(new Event(e, GenderConversion.Get(pr), EventType.Modify));
-            }
+            events.Add(e.ConvertToEvent());
         }
         _eventRepository.AddEvents(events);
     }

@@ -5,7 +5,7 @@ using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.AL.ProcessManagers.Person.Fire;
-internal sealed class FireProcessManager : IFireProcessManager
+internal sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
 {
     private readonly IPersonCommandBus _commandBus;
     private readonly EventStateCollection _trackerCollection;

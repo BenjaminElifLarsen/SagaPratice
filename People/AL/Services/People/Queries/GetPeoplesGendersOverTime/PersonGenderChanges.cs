@@ -46,7 +46,12 @@ public sealed record PersonGenderChanges : ISingleProjection<PersonGenderChanges
                     break;
 
                 case nameof(PersonFiredSucceeded):
-                    state = null;
+                    var pf = e as PersonFiredSucceeded;
+                    var deleteDate = new DateTime(pf.DeletedFrom.Year, pf.DeletedFrom.Month, pf.DeletedFrom.Day);
+                    if (DateTime.Now >= deleteDate)
+                    {
+                        state = null;
+                    }
                     break;
 
                 default:
@@ -70,6 +75,7 @@ public sealed record PersonGenderChanges : ISingleProjection<PersonGenderChanges
                     var ph = e as PersonHiredSucceeded;
                     state = new(ph.AggregateId);
                     state.AddGender(ph.GenderId, ph.TimeStampRecorded);
+                    states.Add(e.AggregateId, state); //if moving this (and the one in PersonFiredSucceeded) out it is possible to convrt the switch case to a method for DRY
                     break;
 
                 case nameof(PersonChangedGender):
@@ -77,21 +83,19 @@ public sealed record PersonGenderChanges : ISingleProjection<PersonGenderChanges
                     break;
 
                 case nameof(PersonFiredSucceeded):
-                    state = null;
+                    var pf = e as PersonFiredSucceeded;
+                    var deleteDate = pf.DeletedFrom.ToDateTime(new TimeOnly());
+                    if (DateTime.Now >= deleteDate)
+                    {
+                        state = null;
+                        states.Remove(e.AggregateId);
+                    }
                     break;
 
                 default:
                     if (e.AggregateType != nameof(Person))
                         throw new Exception("Wrong events");
                     break;
-            }
-            if (!found)
-            {
-                states.Add(e.AggregateId, state);
-            }
-            if(found && state is null)
-            {
-                states.Remove(e.AggregateId);
             }
         }
         return states.Values.Where(x => x is not null);

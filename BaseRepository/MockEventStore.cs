@@ -20,6 +20,7 @@ public class MockEventStore : IEventStore<Guid>
     public void AddEvent(Event<Guid> @event)
     {
         var entity = GetAggregate(@event);
+        @event.SetVersion(entity.Version + 1);
         _events.Add(@event); //not sure the current way to set Common.Vents.Store.Event version is the best as it depends on the IAggregateRoot event collection 
         entity.UpdateVersion(@event.Version);
     }

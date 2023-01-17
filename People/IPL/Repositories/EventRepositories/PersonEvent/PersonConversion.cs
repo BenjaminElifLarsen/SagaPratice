@@ -20,7 +20,8 @@ internal class PersonConversion : IPersonConversion
     {
         return new List<DataPoint>
         {
-            new((int)PersonPropertyId.Gender, @event.GenderId.ToString())
+            new((int)PersonPropertyId.Gender, @event.GenderId.ToString()),
+            new((int)PersonPropertyId.DeletedFrom, @event.DeletedFrom.ToDateTime(new TimeOnly()).Ticks.ToString()),
         };
     }
 

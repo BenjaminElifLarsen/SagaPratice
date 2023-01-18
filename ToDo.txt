@@ -1,7 +1,5 @@
 When figured out how to best do Saga, make generic version or similar and add to Common project and then push the Common project.
 
-since dealing with events for the saga, maybe look into event sourcing at the same time.
-
 consider based your solution on the Domain Events section from https://vaadin.com/blog/ddd-part-2-tactical-domain-driven-design#_guideline_2_refer_to_other_aggregates_by_id
 but code to work with the idea of no service can run all the time
 also look at Domain Services
@@ -13,9 +11,6 @@ two users, one with permission for everything, the other only for some aggregate
 set up hasher and salter in security project. Project should have an user model (not all people are users), with id, password (hashed and salted) and username/email.
 
 split up some classes/interfaces to better follow the single responsibility principle.
-
-Consider how events with data can best be stored in a context, like a mssql database, given each event got their own Data type.
-Could store them as a json string.
 
 consider moving the repos in Vehicle.DL into the IPL 
 	figure out what layer would be best for the busses.
@@ -57,27 +52,13 @@ an event:
 
 move Operator queries over to their service.
 
-
-
 License Type need to deal with CanBeIssedFrom, update specifications, ctor, factory, and error(handling)
-
-
-have something similar to the middleware to empty the registry
 
 instead of From{Thing} for commands, have By{Thing}
 
 
 if a command fails it should trigger a failer event. Can also have 'partial' completed events, so a handler can transmit success and failer events at the same time, if the bl permits that.
-
-read up more on process managers, got one to work, but not super happy with how it is done and are sure they can be done much better.
-	some people mention state machine for pms 
-
-remember to seal the new events and commands
-
-remove, for events, the int version parameter on all ctors that take in a class that implements IAggregateRoot
-	as the Version can be got from the event collection.
-
-because of the pms the CommandHandler<> has no reason for a return value. 
+ 
 
 add better states to the pms and persist them in a database
 https://tech.justeattakeaway.com/2015/05/26/process-managers/
@@ -86,28 +67,6 @@ the old ones should be fine for a basic system like this, but those described in
 	consider it for the buying and selling of vehicles, e.g. a vehicle is first sold when someone has 'ordered' to buy it (which prevents others from buying it) and then payed for it within a timelimit.
 
 look into a better way to handle events regarding storage and aggregates
-https://stackoverflow.com/questions/12362641/relation-between-command-handlers-aggregates-the-repository-and-the-event-stor?rq=1
-maybe slip the domain evnets into two groups, both inherit from an Event record/contract
-	DomainEvent (similar or fully the same as the current in design)
-		appended to their aggregate, only about modifications to the aggregate
-	SystemEvent (consider a better name)
-		used for retrieving information like if a entity with a specific id exist, checking stuff like permission and such, non-modifying responses
-		these are always orphan events as they don't really belong to an event when looking at what normmally is meant
-	The event storage will store the domain events 
-	The system events will be discarded when used
-	Have a ctor that takes in events from the storage to create an aggregate 
-	Maybe have the current design in one domain and this new design in another to better compare them
-		people for the old 
-		vehicle for the new (as vehicle is not done yet)
-	will require a new repo contract, aggregate root contract, and process manager event handler contract
-		(process manager event handler need to be modified to take in Event rather than DomainEvent)
-	when working on the event store, remember memento pattern
-	store should be interacted with through repos 
-		consider how to best to modify the read queries (cqrs) to work with events 
-	Consider what to do with the Data aspect of the domain events (either keep it like it is or make it such that Data properties are properties on the event implementation itself)
-		the only point where a generic domain event's data matter is when it is needed to encode and decode regarding to JSON for storage
-	have a second command handler design for the vehicle domain, where commandHandler<>.Handle(...) return void
-	not sure ORMs like EntityFramework Core would be able to do its job correct/best way if using interfaces for the events.
 
 	maybe update all boundared contexes to the new design, firstly people as it is the more simple one
 		keep the current working version, while implementing the new, event, ones
@@ -119,17 +78,6 @@ maybe slip the domain evnets into two groups, both inherit from an Event record/
 	when loading the events to hydrate an entity figure out where to do it, e.g. public ctor or a new method in the factory? 
 	update the seeders to work fully using events
 
-	will need to alter the entire pm middleware, might not even be needed, if repositories are going to handle the pms instead
-		feels a little wierd that repositories are going to transmit data to the pms.
-			consider this (based partly on the just eat link):
-				an event is transmitted via the bus to a handler in a router (like GenderRecogniseRouter).
-				the handler contacts the repository to get a pm (either created or retreated), so the event handler capture the event and gets the pm. 
-				the event handler then gives the pm the event and the pm acts upon it
-				the handler then saves the pm (need versioning in the pm and enforece concurrency checks in the repo [Version could be a Guid,  check if the current loaded one is the same as the one in the context or not])
-				after the save the repository will contact the infrastructure to transmit the commands via the bus (let the unit of work get the commands and publish them)
-				
-				both the pm and the event need to be saved via their respective repos.
-					Consider if events should be saved as the same time as entities. The point of the event store is not to store the entity itself, from reading it at least some so, but need to ensure entities/events are valid. If saving events before a pm is done need to handle any errors that appear (via events that reverse the, now, 'failed' events)
 
 regarding some evnets/commands and process managers maybe some split a little to much. E.g. instead of splitting check permission and start vehicle into two, maybe it could be just one command handler that can generate different domain- and systemevents
 
@@ -138,7 +86,3 @@ let factory (or something like it) set the id of newly created objects
 
 it does not make sense to store the system events in the 'context'. Figure out a better way to store them before they are published.
 	could make it such that the command handlers can publish system events. Spend some time reading up to see what others have done 
-
-
-maybe have a query handler just like the command handler, so Result<TResponseType> Handle<TRequestType,TResponseType>(TRequestType query);
-

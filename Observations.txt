@@ -19,4 +19,19 @@ If having multiple implications under the same service problems arise with the D
 	This means that for contracts in the Common module it will require having a 'specialised' contract in each domain and this contract being used as a service instead of the one in Common.
 
 
+Regarding IServiceProvider it is important to store IServiceProvider.CreateScope().ServiceProvider in a variable as calling CreateScope().ServiceProvider.GetService<T>() multiple 
+	times will create fully new services, which if depends on other services these will not have knowledge of services created via other CreateScope()... or depedency injected by the system.
+	If storing the IServiceProvider.CreateScope().ServiceProvider all created instances that depends on other created instances will use each other rather than fully new ones. 
+	E.g. this will work, the concreate implementation of IRoutingRegistry will use the same IPersonCommandBus as the one created as a parameter.
+		var serviceProvider = provider.CreateScope().ServiceProvider;
+			Seeder.MockSeedData(serviceProvider.GetService<IPersonContext>(), 
+				serviceProvider.GetService<IUnitOfWork>(), 
+				serviceProvider.GetService<IPersonCommandBus>(),
+				serviceProvider.GetService<IEnumerable<IRoutingRegistry>>(),
+				serviceProvider.GetService<IEnumerable<IProcessManagerRouter>>());
+	If instead of storing the IServiceProvider.CreateScope().ServiceProvider as a variable and replacing serviceProvider in each line with provider.CreateScope().ServiceProvider,
+		the the IRoutingRegistry's IPersonCommandBus and the IPersonCommandBus parameter will be different objects, thus the routing is sat up in one IPersonCommandBus and the dispatch in the other is called, which does not know any routes. 
+
+
+
 

@@ -42,8 +42,8 @@ public class ProcessManagerMiddleware
                 var selectedRegistry = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
                 var changePM = processManagers.SingleOrDefault(x => x is IPersonalInformationChangeProcessManager) as IPersonalInformationChangeProcessManager;
                 selectedRegistry.SetUpRouting(changePM); //consider moving all related to the process managers over to their own middleware, this class should only care about process managers
-                var firePM = processManagers.SingleOrDefault(x => x is IFireProcessManager) as IFireProcessManager;
-                selectedRegistry.SetUpRouting(firePM);
+                //var firePM = processManagers.SingleOrDefault(x => x is IFireProcessManager) as IFireProcessManager;
+                //selectedRegistry.SetUpRouting(firePM);
                 var hirePM = processManagers.SingleOrDefault(x => x is IHireProcessManager) as IHireProcessManager;
                 selectedRegistry.SetUpRouting(hirePM);
                 //var regPM = processManagers.SingleOrDefault(x => x is IRecogniseProcessManager) as IRecogniseProcessManager;

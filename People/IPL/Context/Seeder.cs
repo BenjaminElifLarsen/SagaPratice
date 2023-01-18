@@ -1,4 +1,8 @@
-﻿using PersonDomain.AL.Busses.Command;
+﻿using Common.ProcessManager;
+using Common.Routing;
+using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
+using PersonDomain.AL.Registries;
 using PersonDomain.AL.Services.People.Queries;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.CQRS.Queries;
@@ -9,18 +13,29 @@ using PersonDomain.IPL.Services;
 namespace PersonDomain.IPL.Context;
 internal static class Seeder
 {
-    public static void MockSeedData(IPersonContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus)
+    public static void MockSeedData(IPersonContext peopleContext, IUnitOfWork unitOfWork, IPersonCommandBus commandBus, IEnumerable<IRoutingRegistry> registries, IEnumerable<IProcessManagerRouter> pmRoutes)
     {
+        //var selected = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
+        //selected.SetUpRouting();
+        //var genderRecognise = pmRoutes.SingleOrDefault(x => x is IGenderRecogniseProcessRouter) as IGenderRecogniseProcessRouter;
+        //selected.SetUpRouting(genderRecognise);
         //var c1 = new RecogniseGender("She", "Her");
         //commandBus.Dispatch(c1);
-        //var c2 = new RecogniseGender("She", "They");
+        //var c2 = new RecogniseGender("She", "Them");
         //commandBus.Dispatch(c2);
-
-        ////1) run c1 and c2 such that they are added to the context via the command bus. 2) get gender id. 3) run c3 with the id
-        //var gender = unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result.First(); //problem: command bus and event bus have not registrated any routes as this is done per requet rather than at startup
-        //var c3 = new HirePersonFromUser("Triss", "Nib", gender.Id, new(1956,1,2)); //the new pm repository will need to handle registrating to event, so that should not be to big of a problem (the repo is called by the command handlers)
-        ////thus just need to figure out how to subscribe the commandhandler to the commandbus in this part of the code. For the commands just need to get the people registry as a parameter and call the specific setup method
+        //var c3 = new RecogniseGender("He", "Him");
         //commandBus.Dispatch(c3);
+        //var c4 = new RecogniseGender("They", "Them");
+        //commandBus.Dispatch(c4);
+
+        //////1) run c1 and c2 such that they are added to the context via the command bus. 2) get gender id. 3) run c3 with the id
+        ////var gender = unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result.First(); //problem: command bus and event bus have not registrated any routes as this is done per requet rather than at startup
+        ////var c5 = new HirePersonFromUser("Triss", "Nib", gender.Id, new(1956, 1, 2)); //the new pm repository will need to handle registrating to event, so that should not be to big of a problem (the repo is called by the command handlers)
+        //////thus just need to figure out how to subscribe the commandhandler to the commandbus in this part of the code. For the commands just need to get the people registry as a parameter and call the specific setup method
+        ////commandBus.Dispatch(c5);
+        //var genders = unitOfWork.GenderRepository.AllAsync(new GenderIdQuery()).Result;
+
+        //above code is currently working, but before it can be fully taken in use it requires the hire process manager to have been updated to the new design.
 
         Gender g1 = new("She", "Her"); //could in the end convert this to run through the system as intended via the services
         Gender g2 = new("He", "Them");

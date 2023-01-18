@@ -89,7 +89,7 @@ public class PersonApiServices
     private static void ProcessManagers(IServiceCollection services)
     {
         services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>(); //old design
-        services.AddScoped<IProcessManager, FireProcessManager>(); //old design
+        //services.AddScoped<IProcessManager, FireProcessManager>(); //old design
         services.AddScoped<IProcessManager, HireProcessManager>(); //old design
 
 
@@ -106,6 +106,11 @@ public class PersonApiServices
 
     public static void Seed(IServiceProvider provider)
     {
-        Seeder.MockSeedData(provider.CreateScope().ServiceProvider.GetService<IPersonContext>(), provider.CreateScope().ServiceProvider.GetService<IUnitOfWork>(), provider.CreateScope().ServiceProvider.GetService<IPersonCommandBus>());
+        var test = provider.CreateScope().ServiceProvider;
+        Seeder.MockSeedData(test.GetService<IPersonContext>(), 
+            test.GetService<IUnitOfWork>(), 
+            test.GetService<IPersonCommandBus>(),
+            test.GetService<IEnumerable<IRoutingRegistry>>(),
+            test.GetService<IEnumerable<IProcessManagerRouter>>());
     }
 }

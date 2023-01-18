@@ -58,13 +58,13 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<PersonReplacedGender>(processManager.Handle);
     }
 
-    public void SetUpRouting(IFireProcessManager processManager)
-    {
-        _eventBus.RegisterHandler<PersonFiredSucceeded>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonFiredFailed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handle);
-    }
+    //public void SetUpRouting(IFireProcessManager processManager)
+    //{
+    //    _eventBus.RegisterHandler<PersonFiredSucceeded>(processManager.Handle);
+    //    _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handle);
+    //    _eventBus.RegisterHandler<PersonFiredFailed>(processManager.Handle);
+    //    _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handle);
+    //}
 
     public void SetUpRouting(IHireProcessManager processManager)
     {

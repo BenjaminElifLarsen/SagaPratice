@@ -12,7 +12,7 @@ namespace PersonDomain.AL.Registries;
 public interface IPersonRegistry : IRoutingRegistry
 {
     public void SetUpRouting(IPersonalInformationChangeProcessManager processManager);
-    public void SetUpRouting(IFireProcessManager processManager);
+    //public void SetUpRouting(IFireProcessManager processManager);
     public void SetUpRouting(IHireProcessManager processManager);
     //public void SetUpRouting(IGenderUnrecogniseProcessManager processManager);
     public void SetUpRouting(IGenderRecogniseProcessRouter processRouter);

@@ -16,7 +16,7 @@ public class RegistryMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries, IEnumerable<IProcessManager> processManagers)
+    public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries)
     {
         var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
         var vehicleDomain = new string[] { nameof(OperatorController), nameof(VehicleController), nameof(VehicleInformationController), nameof(LicenseTypeController) };

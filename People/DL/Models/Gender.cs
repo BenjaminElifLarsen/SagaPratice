@@ -87,9 +87,7 @@ public sealed class Gender : IAggregateRoot
     }
 
     internal static Gender Hydrate(Guid id, string subject, string @object)
-    {//not sure if it is best to take in the GenderRecognisedSUcceeded event or the needed arguments
-        //if taking in the event any changes to the needed values will not require changing the method signature,
-        //but by having the needed arguments rather than the event it is fit the rest of the switch case code in GenderFactory.HydrateGender 
+    {
         return new Gender(id)
         {
             _verbSubject = subject,

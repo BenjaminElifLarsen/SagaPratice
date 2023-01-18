@@ -1,6 +1,6 @@
 ﻿using PersonDomain.AL.ProcessManagers.Person.Fire;
 
-namespace PersonDomain.IPL.Repositories.ProcesserManagers;
+namespace PersonDomain.IPL.Repositories.ProcesserManagers.People;
 public interface IPersonFireProcessRepository
 {
     public Task<FireProcessManager> LoadAsync(Guid correlationId);

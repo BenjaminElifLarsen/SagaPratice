@@ -1,106 +1,139 @@
-﻿using Common.ProcessManager;
-using Common.ResultPattern;
-using PersonDomain.AL.Busses.Command;
+﻿using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
+using static PersonDomain.AL.ProcessManagers.Person.Hire.HireProcessManager.HirePersonState;
 
 namespace PersonDomain.AL.ProcessManagers.Person.Hire;
-internal sealed class HireProcessManager : IHireProcessManager
+public sealed class HireProcessManager : BaseProcessManager, IHireProcessManager
 {
-    private readonly IPersonCommandBus _commandBus;
-    private readonly EventStateCollection _trackerCollection;
-    private readonly List<string> _errors;
-    private readonly HashSet<Action<ProcesserFinished>> _handlers;
+    public HirePersonState State { get; private set; }
 
-    public Guid ProcessManagerId { get; private set; }
-
-    public Guid CorrelationId { get; private set; }
-
-    public bool Running => !_trackerCollection.AllFinishedOrFailed;
-
-    public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
-
-    public HireProcessManager(IPersonCommandBus commandBus)
+    public HireProcessManager(Guid correlationId) : base(correlationId)
     {
         ProcessManagerId = Guid.NewGuid();
-        _commandBus = commandBus;
-        _handlers = new();
-        _errors = new();
-        _trackerCollection = new();
+        State = NotStarted;
     }
 
     public void Handle(PersonHiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.CompleteEvent<PersonHiredSucceeded>();
-        _trackerCollection.RemoveEvent<PersonHiredFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                State = PersonHired;
+                AddCommand(new AddPersonToGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
+                AddStateEvent(new HiredSucceeded(@event.CorrelationId, @event.EventId));
+                break;
 
-        _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true, DomainEventType.Succeeder);
-        _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false, DomainEventType.Failer);
+            case PersonHired: 
+                break;
 
-        _commandBus.Dispatch(new AddPersonToGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
+            case PersonFailedToBeHired: 
+                break;
 
-        PublishEventIfPossible();
+            case PersonAddedToGender: 
+                break;
+
+            case PersonFailedToBeAddedToGender: 
+                break;
+
+            default: break;
+        }
     }
 
     public void Handle(PersonHiredFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.FailEvent<PersonHiredSucceeded>();
-        _trackerCollection.CompleteEvent<PersonHiredFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                State = PersonFailedToBeHired;
+                AddErrors(@event.Errors);
+                AddStateEvent(new HiredFailed(Errors, @event.CorrelationId, @event.EventId));
+                break;
 
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
+            case PersonHired:
+                break;
+
+            case PersonFailedToBeHired:
+                break;
+
+            case PersonAddedToGender:
+                break;
+
+            case PersonFailedToBeAddedToGender:
+                break;
+
+            default: break;
+        }
     }
 
     public void Handle(PersonAddedToGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.CompleteEvent<PersonAddedToGenderSucceeded>();
-        _trackerCollection.RemoveEvent<PersonAddedToGenderFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                break;
 
-        PublishEventIfPossible();
+            case PersonHired:
+                State = PersonAddedToGender;
+                AddStateEvent(new AddedToGenderSucceeded(@event.CorrelationId, @event.EventId));
+                break;
+
+            case PersonFailedToBeHired:
+                break;
+
+            case PersonAddedToGender:
+                break;
+
+            case PersonFailedToBeAddedToGender:
+                break;
+
+            default: break;
+        }
     }
 
     public void Handle(PersonAddedToGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.FailEvent<PersonAddedToGenderSucceeded>();
-        _trackerCollection.CompleteEvent<PersonAddedToGenderFailed>();
-
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
-    }
-
-    public void PublishEventIfPossible()
-    {
-        if (_trackerCollection.AllFinishedOrFailed)
+        switch (State)
         {
-            Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result, ProcessManagerId);
-            foreach (var handler in _handlers)
-            {
-                handler.Invoke(@event);
-            }
+            case NotStarted:
+                break;
+
+            case PersonHired:
+                State = PersonFailedToBeAddedToGender;
+                AddErrors(@event.Errors);
+                AddStateEvent(new AddedToGenderFailed(Errors, @event.CorrelationId, @event.EventId));
+                break;
+
+            case PersonFailedToBeHired:
+                break;
+
+            case PersonAddedToGender:
+                break;
+
+            case PersonFailedToBeAddedToGender:
+                break;
+
+            default: break;
         }
     }
 
-    public void RegistrateHandler(Action<ProcesserFinished> handler)
+    public enum HirePersonState
     {
-        _handlers.Add(handler);
-    }
+        NotStarted = 1,
+        PersonHired = 2,
+        PersonFailedToBeHired = 3,
+        PersonAddedToGender = 4,
+        PersonFailedToBeAddedToGender = 5,
 
-    public void SetUp(Guid correlationId)
-    {
-        if(CorrelationId == default)
-        {
-            CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<PersonHiredSucceeded>(true, DomainEventType.Succeeder);
-            _trackerCollection.AddEventTracker<PersonHiredFailed>(false, DomainEventType.Failer);
-        }
+        Unknown = 0
     }
 }

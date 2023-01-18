@@ -1,24 +1,24 @@
 ﻿using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
-using PersonDomain.AL.ProcessManagers.Person.Fire;
+using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.DL.Events.Domain;
 using PersonDomain.IPL.Repositories.ProcesserManagers.People;
 
-namespace PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
-internal class PersonFireProcessRouter : IPersonFireProcessRouter
+namespace PersonDomain.AL.ProcessManagers.Routers.PersonHireProcessRouter;
+internal class PersonHireProcessRouter : IPersonHireProcessRouter
 {
-    private readonly IPersonFireProcessRepository _repository;
-    private readonly IPersonCommandBus _commandBus;
-    private readonly IPersonDomainEventBus _eventBus;
+    public readonly IPersonHireProcessRepository _repository;
+    public readonly IPersonCommandBus _commandBus;
+    public readonly IPersonDomainEventBus _eventBus;
 
-    public PersonFireProcessRouter(IPersonFireProcessRepository repository, IPersonCommandBus commandBus, IPersonDomainEventBus eventBus)
+    public PersonHireProcessRouter(IPersonHireProcessRepository repository, IPersonCommandBus commandBus, IPersonDomainEventBus eventBus)
     {
         _repository = repository;
         _commandBus = commandBus;
         _eventBus = eventBus;
     }
 
-    public void Handle(PersonFiredSucceeded @event)
+    public void Handle(PersonHiredSucceeded @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
         pm ??= new(@event.CorrelationId);
@@ -27,7 +27,7 @@ internal class PersonFireProcessRouter : IPersonFireProcessRouter
         Transmit(pm);
     }
 
-    public void Handle(PersonFiredFailed @event)
+    public void Handle(PersonHiredFailed @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
         pm ??= new(@event.CorrelationId);
@@ -36,7 +36,7 @@ internal class PersonFireProcessRouter : IPersonFireProcessRouter
         Transmit(pm);
     }
 
-    public void Handle(PersonRemovedFromGenderSucceeded @event)
+    public void Handle(PersonAddedToGenderSucceeded @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
         pm ??= new(@event.CorrelationId);
@@ -45,16 +45,16 @@ internal class PersonFireProcessRouter : IPersonFireProcessRouter
         Transmit(pm);
     }
 
-    public void Handle(PersonRemovedFromGenderFailed @event)
+    public void Handle(PersonAddedToGenderFailed @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
-        pm ??= new(@event.CorrelationId);
+        pm ??= new(@event.CorrelationId); //the assignment of a new object should never happen in anything but the start event, consider removing these and throw if pm is null
         pm.Handle(@event);
         _repository.Save(pm);
         Transmit(pm);
     }
 
-    private void Transmit(FireProcessManager pm)
+    private void Transmit(HireProcessManager pm)
     {
         foreach (var c in pm.Commands)
         {

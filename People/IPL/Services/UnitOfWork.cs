@@ -7,7 +7,7 @@ using PersonDomain.IPL.Context;
 using PersonDomain.IPL.Repositories.DomainModels;
 using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
-using PersonDomain.IPL.Repositories.ProcesserManagers;
+using PersonDomain.IPL.Repositories.ProcesserManagers.Genders;
 
 namespace PersonDomain.IPL.Services;
 internal sealed class UnitOfWork : IUnitOfWork

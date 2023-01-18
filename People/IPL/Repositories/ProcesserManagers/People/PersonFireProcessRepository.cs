@@ -1,7 +1,7 @@
 ﻿using Common.RepositoryPattern.ProcessManagers;
 using PersonDomain.AL.ProcessManagers.Person.Fire;
 
-namespace PersonDomain.IPL.Repositories.ProcesserManagers;
+namespace PersonDomain.IPL.Repositories.ProcesserManagers.People;
 internal class PersonFireProcessRepository : IPersonFireProcessRepository
 {
     private readonly IBaseProcessManagerRepository<FireProcessManager> _repository;

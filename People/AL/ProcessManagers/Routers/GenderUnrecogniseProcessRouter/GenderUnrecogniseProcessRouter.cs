@@ -2,7 +2,7 @@
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PersonDomain.DL.Events.Domain;
-using PersonDomain.IPL.Repositories.ProcesserManagers;
+using PersonDomain.IPL.Repositories.ProcesserManagers.Genders;
 
 namespace PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
 internal class GenderUnrecogniseProcessRouter : IGenderUnrecogniseProcessRouter

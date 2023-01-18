@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonHireProcessRouter;
 using PersonDomain.AL.Registries;
 
 namespace API.Middleware;
@@ -27,11 +28,11 @@ public class ProcessManagerRouterMiddleware
         var controllerActionDescriptor = context.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>();
         var controllerName = controllerActionDescriptor.ControllerTypeInfo.Name;
         var method = context.Request.Method;
-
+        var actionName = controllerActionDescriptor.ActionName;
         if(methodsToRunOn.Any(x => string.Equals(x, method)))
         {
             if(peopleDomain.Any(x => string.Equals(x, controllerName)))
-            {
+            { //improve upon this at some point
                 var selectedRegistry = registries.Single(x => x is IPersonRegistry) as IPersonRegistry;
                 var genderRecognise = pmRoutes.Single(x => x is IGenderRecogniseProcessRouter) as IGenderRecogniseProcessRouter;
                 selectedRegistry.SetUpRouting(genderRecognise);
@@ -39,6 +40,11 @@ public class ProcessManagerRouterMiddleware
                 selectedRegistry.SetUpRouting(genderUnrecognise);
                 var personFire = pmRoutes.Single(x => x is IPersonFireProcessRouter) as IPersonFireProcessRouter;
                 selectedRegistry.SetUpRouting(personFire);
+                if(nameof(PersonController.Hire) == actionName) //use switch case
+                {
+                    var personHire = pmRoutes.Single(x => x is IPersonHireProcessRouter) as IPersonHireProcessRouter;
+                    selectedRegistry.SetUpRouting(personHire);
+                }
             }
         }
 

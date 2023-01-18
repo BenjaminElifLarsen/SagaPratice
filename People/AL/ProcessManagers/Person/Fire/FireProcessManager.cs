@@ -7,7 +7,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
 {
     public FirePersonState State { get; private set; }
 
-    public FireProcessManager(Guid id) : base(id)
+    public FireProcessManager(Guid correlationId) : base(correlationId)
     {
         ProcessManagerId = Guid.NewGuid();
         State = NotStarted;
@@ -28,7 +28,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
             case PersonFired:
                 break;
 
-            case PersonFailedTobeFired: 
+            case PersonFailedToBeFired: 
                 break;
 
             case PersonRemovedFromGender: 
@@ -48,7 +48,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
         switch (State)
         {
             case NotStarted:
-                State = PersonFailedTobeFired;
+                State = PersonFailedToBeFired;
                 AddErrors(@event.Errors);
                 AddStateEvent(new StateEvents.FiredFailed(Errors, @event.CorrelationId, @event.EventId));
                 break;
@@ -56,7 +56,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
             case PersonFired:
                 break;
 
-            case PersonFailedTobeFired:
+            case PersonFailedToBeFired:
                 break;
 
             case PersonRemovedFromGender:
@@ -83,7 +83,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
                 AddStateEvent(new StateEvents.RemovedFromGenderSucceeded(@event.CorrelationId, @event.EventId));
                 break;
 
-            case PersonFailedTobeFired:
+            case PersonFailedToBeFired:
                 break;
 
             case PersonRemovedFromGender:
@@ -114,7 +114,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
                 AddStateEvent(new StateEvents.RemovedFromGenderFailed(Errors, @event.CorrelationId, @event.EventId));
                 break;
 
-            case PersonFailedTobeFired:
+            case PersonFailedToBeFired:
                 break;
 
             case PersonRemovedFromGender:
@@ -131,7 +131,7 @@ public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
     {
         NotStarted = 1,
         PersonFired = 2,
-        PersonFailedTobeFired = 3,
+        PersonFailedToBeFired = 3,
         PersonRemovedFromGender = 4,
         PersonFailedToBeRemovedFromGender = 5,
 

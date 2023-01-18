@@ -2,7 +2,7 @@
 using PersonDomain.IPL.Repositories.DomainModels;
 using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;
-using PersonDomain.IPL.Repositories.ProcesserManagers;
+using PersonDomain.IPL.Repositories.ProcesserManagers.Genders;
 
 namespace PersonDomain.IPL.Services;
 public interface IUnitOfWork : IBaseUnitOfWork, IBaseEventUnitOfWork

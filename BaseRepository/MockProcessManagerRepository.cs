@@ -15,7 +15,7 @@ public class MockProcessManagerRepository<TProcessManager, TBaseContext> : IBase
 
     public void Delete(Guid correlationId)
     {
-        var pm = _context.LoadProcessManagerAsync(correlationId).Result;
+        var pm = LoadAsync(correlationId).Result;
         _context.Remove(pm);
     }
 
@@ -26,7 +26,7 @@ public class MockProcessManagerRepository<TProcessManager, TBaseContext> : IBase
 
     public void Save(TProcessManager processManager)
     {
-        if (_context.LoadProcessManagerAsync(processManager.CorrelationId).Result is null)
+        if (LoadAsync(processManager.CorrelationId).Result is null)
         {
             _context.Add(processManager);
         }

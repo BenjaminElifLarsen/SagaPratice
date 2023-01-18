@@ -7,10 +7,12 @@ using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Fire;
+using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.Services.Genders;
 using PersonDomain.AL.Services.People;
 using PersonDomain.DL.CQRS.Commands;
@@ -108,7 +110,17 @@ public sealed class PersonRegistry : IPersonRegistry
 
     public void SetUpRouting(IPersonService service)
     {
-        //_eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
-        //_eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
+        _eventBus.RegisterHandler<FiredSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<FiredFailed>(service.Handle);
+        _eventBus.RegisterHandler<RemovedFromGenderSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<RemovedFromGenderFailed>(service.Handle);
+    }
+
+    public void SetUpRouting(IPersonFireProcessRouter processRouter)
+    {
+        _eventBus.RegisterHandler<PersonFiredSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonFiredFailed>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processRouter.Handle);
     }
 }

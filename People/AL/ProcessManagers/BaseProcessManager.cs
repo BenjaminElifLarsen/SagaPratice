@@ -32,8 +32,9 @@ public class BaseProcessManager : IBaseProcessManager
         Versioning = Guid.NewGuid();
     }
     protected void AddStateEvent(StateEvent @event) => _events.Add(@event);
-
+    public void RemoveAllEvents() => _events.Clear();
     protected void AddCommand(ICommand command) => _commands.Add(command);
-
+    public void RemoveAllCommands() => _commands.Clear();
     protected void AddErrors(IEnumerable<string> errors) => _errors.AddRange(errors);
+
 }

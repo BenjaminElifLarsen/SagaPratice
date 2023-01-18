@@ -21,7 +21,7 @@ internal class GenderUnrecogniseProcessRouter : IGenderUnrecogniseProcessRouter
     public void Handle(GenderUnrecognisedSucceeded @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
-        pm ??= new GenderUnrecogniseProcessManager(@event.CorrelationId);
+        pm ??= new(@event.CorrelationId);
         pm.Handle(@event);
         _repository.Save(pm);
         Transmit(pm);
@@ -30,7 +30,7 @@ internal class GenderUnrecogniseProcessRouter : IGenderUnrecogniseProcessRouter
     public void Handle(GenderUnrecognisedFailed @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
-        pm ??= new GenderUnrecogniseProcessManager(@event.CorrelationId);
+        pm ??= new(@event.CorrelationId);
         pm.Handle(@event);
         _repository.Save(pm);
         Transmit(pm);

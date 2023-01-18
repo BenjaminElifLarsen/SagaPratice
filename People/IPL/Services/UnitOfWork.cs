@@ -58,8 +58,8 @@ internal sealed class UnitOfWork : IUnitOfWork
         {
             pm?.RegistrateHandler(Save);
         }
-        ProcessEvents();
-        if (pm is null) 
+        ProcessEvents(); //how does the system handle if one command succeed, but a follow-up commands fail? E.g. firing a person, but they cannot be removed from gender. Test this by modifying the remove person from gender command handler to always return a fail event
+        if (pm is null) //the old design chekced the result type, but this does not have that. Maybe a property in StateEvent and some code checks if any stateEvent is a failer.
         {
             _context.Save();
         }

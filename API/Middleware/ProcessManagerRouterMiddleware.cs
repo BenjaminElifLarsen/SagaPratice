@@ -4,6 +4,7 @@ using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.Registries;
 
 namespace API.Middleware;
@@ -31,11 +32,13 @@ public class ProcessManagerRouterMiddleware
         {
             if(peopleDomain.Any(x => string.Equals(x, controllerName)))
             {
-                var selectedRegistry = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
-                var genderRecognise = pmRoutes.SingleOrDefault(x => x is IGenderRecogniseProcessRouter) as IGenderRecogniseProcessRouter;
+                var selectedRegistry = registries.Single(x => x is IPersonRegistry) as IPersonRegistry;
+                var genderRecognise = pmRoutes.Single(x => x is IGenderRecogniseProcessRouter) as IGenderRecogniseProcessRouter;
                 selectedRegistry.SetUpRouting(genderRecognise);
-                var genderUnrecognise = pmRoutes.SingleOrDefault(x => x is IGenderUnrecogniseProcessRouter) as IGenderUnrecogniseProcessRouter;
+                var genderUnrecognise = pmRoutes.Single(x => x is IGenderUnrecogniseProcessRouter) as IGenderUnrecogniseProcessRouter;
                 selectedRegistry.SetUpRouting(genderUnrecognise);
+                var personFire = pmRoutes.Single(x => x is IPersonFireProcessRouter) as IPersonFireProcessRouter;
+                selectedRegistry.SetUpRouting(personFire);
             }
         }
 

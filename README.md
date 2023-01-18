@@ -29,6 +29,7 @@ Do note that the id generation code could be considered to break the domain mode
 
 The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough.
 
+Regarding expection handling, expection throwing, and such, these are not really been implemented yet as the focus is on learning new competencies.
 
 ### Comment Design
 

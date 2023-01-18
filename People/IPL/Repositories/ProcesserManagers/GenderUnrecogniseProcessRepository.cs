@@ -1,5 +1,4 @@
 ﻿using Common.RepositoryPattern.ProcessManagers;
-using PersonDomain.AL.ProcessManagers.Gender.Recognise;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 
 namespace PersonDomain.IPL.Repositories.ProcesserManagers;

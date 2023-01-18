@@ -19,6 +19,6 @@ public interface IBaseContext //not tested yet against ORMs, only in-memory coll
     //public IEnumerable<Event> LoadStream(Guid id, string aggregateRoot);
     public void Add(IBaseProcessManager processManager);
     public void Remove(IBaseProcessManager processManager);
-    public Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId);
+    //public Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId);
     public IEnumerable<T> Set<T>();
 }

@@ -1,103 +1,140 @@
-﻿using Common.ProcessManager;
-using Common.ResultPattern;
-using PersonDomain.AL.Busses.Command;
-using PersonDomain.DL.CQRS.Commands;
+﻿using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
+using static PersonDomain.AL.ProcessManagers.Person.Fire.FireProcessManager.FirePersonState;
 
 namespace PersonDomain.AL.ProcessManagers.Person.Fire;
-internal sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
+public sealed class FireProcessManager : BaseProcessManager, IFireProcessManager
 {
-    private readonly IPersonCommandBus _commandBus;
-    private readonly EventStateCollection _trackerCollection;
-    private readonly List<string> _errors;
-    private readonly HashSet<Action<ProcesserFinished>> _handlers;
+    public FirePersonState State { get; private set; }
 
-    public Guid ProcessManagerId { get; private set; }
-    public Guid CorrelationId { get; private set; }
-    public bool Running => !_trackerCollection.AllFinishedOrFailed;
-    public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
-
-    public FireProcessManager(IPersonCommandBus commandBus)
+    public FireProcessManager(Guid id) : base(id)
     {
         ProcessManagerId = Guid.NewGuid();
-        _commandBus = commandBus;
-        _handlers = new();
-        _errors = new();
-        _trackerCollection = new();
-    }
-
-    public void SetUp(Guid correlationId)
-    {
-        if(CorrelationId == default)
-        {
-            CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<PersonFiredSucceeded>(true, DomainEventType.Succeeder);
-            _trackerCollection.AddEventTracker<PersonFiredFailed>(false, DomainEventType.Failer);
-        }
+        State = NotStarted;
     }
 
     public void Handle(PersonFiredSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.CompleteEvent<PersonFiredSucceeded>();
-        _trackerCollection.RemoveEvent<PersonFiredFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                State = PersonFired;
+                AddCommand(new RemovePersonFromGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
+                AddStateEvent(new StateEvents.FiredSucceeded(@event.CorrelationId, @event.EventId));
+                break;
 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true, DomainEventType.Succeeder); 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false, DomainEventType.Failer);
+            case PersonFired:
+                break;
 
-        _commandBus.Dispatch(new RemovePersonFromGender(@event.AggregateId, @event.GenderId, @event.CorrelationId, @event.EventId));
+            case PersonFailedTobeFired: 
+                break;
 
-        PublishEventIfPossible();
+            case PersonRemovedFromGender: 
+                break;
+
+            case PersonFailedToBeRemovedFromGender: 
+                break;
+
+            default: break;
+        }
     }
 
     public void Handle(PersonFiredFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.FailEvent<PersonFiredSucceeded>();
-        _trackerCollection.CompleteEvent<PersonFiredFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                State = PersonFailedTobeFired;
+                AddErrors(@event.Errors);
+                AddStateEvent(new StateEvents.FiredFailed(Errors, @event.CorrelationId, @event.EventId));
+                break;
 
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
+            case PersonFired:
+                break;
+
+            case PersonFailedTobeFired:
+                break;
+
+            case PersonRemovedFromGender:
+                break;
+
+            case PersonFailedToBeRemovedFromGender:
+                break;
+
+            default: break;
+        }
     }
 
     public void Handle(PersonRemovedFromGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.CompleteEvent<PersonRemovedFromGenderSucceeded>();
-        _trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
+        switch (State)
+        {
+            case NotStarted:
+                break;
 
-        PublishEventIfPossible();
+            case PersonFired:
+                State = PersonRemovedFromGender;
+                AddStateEvent(new StateEvents.RemovedFromGenderSucceeded(@event.CorrelationId, @event.EventId));
+                break;
+
+            case PersonFailedTobeFired:
+                break;
+
+            case PersonRemovedFromGender:
+                break;
+
+            case PersonFailedToBeRemovedFromGender:
+                break;
+
+            default: break;
+        }
+
+        //_trackerCollection.CompleteEvent<PersonRemovedFromGenderSucceeded>();
+        //_trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
     }
 
     public void Handle(PersonRemovedFromGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) return;
 
-        _trackerCollection.FailEvent<PersonRemovedFromGenderSucceeded>();
-        _trackerCollection.CompleteEvent<PersonRemovedFromGenderFailed>();
-
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
-    }
-
-    public void PublishEventIfPossible()
-    {
-        if (_trackerCollection.AllFinishedOrFailed)
+        switch (State)
         {
-            Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result, ProcessManagerId);
-            foreach (var handler in _handlers)
-            {
-                handler.Invoke(@event);
-            }
+            case NotStarted:
+                break;
+
+            case PersonFired:
+                State = PersonFailedToBeRemovedFromGender;
+                AddErrors(@event.Errors);
+                AddStateEvent(new StateEvents.RemovedFromGenderFailed(Errors, @event.CorrelationId, @event.EventId));
+                break;
+
+            case PersonFailedTobeFired:
+                break;
+
+            case PersonRemovedFromGender:
+                break;
+
+            case PersonFailedToBeRemovedFromGender:
+                break;
+
+            default: break;
         }
     }
 
-    public void RegistrateHandler(Action<ProcesserFinished> handler)
+    public enum FirePersonState
     {
-        _handlers.Add(handler);
+        NotStarted = 1,
+        PersonFired = 2,
+        PersonFailedTobeFired = 3,
+        PersonRemovedFromGender = 4,
+        PersonFailedToBeRemovedFromGender = 5,
+
+        Unknown = 0
     }
 }

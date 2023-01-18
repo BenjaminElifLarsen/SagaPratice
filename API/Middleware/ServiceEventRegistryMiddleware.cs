@@ -3,6 +3,7 @@ using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PersonDomain.AL.Registries;
 using PersonDomain.AL.Services.Genders;
+using PersonDomain.AL.Services.People;
 
 namespace API.Middleware;
 
@@ -15,7 +16,7 @@ public class ServiceEventRegistryMiddleware
 		_next = next;
 	}
 
-	public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries, IGenderService genderService)
+	public async Task Invoke(HttpContext context, IEnumerable<IRoutingRegistry> registries, IGenderService genderService, IPersonService personService)
     {
         var methodsToRunOn = new string[] { "POST", "PUT", "PATCH" };
         var vehicleDomain = new string[] { nameof(OperatorController), nameof(VehicleController), nameof(VehicleInformationController), nameof(LicenseTypeController) };
@@ -30,8 +31,12 @@ public class ServiceEventRegistryMiddleware
             switch (controllerName)
             {
                 case nameof(GenderController):
-                    var selected = registries.SingleOrDefault(x => x is IPersonRegistry) as IPersonRegistry;
+                    var selected = registries.Single(x => x is IPersonRegistry) as IPersonRegistry;
                     selected.SetUpRouting(genderService);
+                    break;
+                case nameof(PersonController):
+                    selected = registries.Single(x => x is IPersonRegistry) as IPersonRegistry;
+                    selected.SetUpRouting(personService);
                     break;
             }
         }

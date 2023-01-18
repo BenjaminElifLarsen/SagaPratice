@@ -145,12 +145,17 @@ internal sealed class MockPeopleContext : IPersonContext
 
     public void Add(IBaseProcessManager processManager)
     {
-        _processManager.Add(processManager);
+        if (!_data.Any(x => x.Entity == processManager))
+            _data.Add(new(processManager, States.Add));
     }
 
     public void Remove(IBaseProcessManager processManager)
     {
-        _processManager.Remove(processManager);
+        var entity = _data.SingleOrDefault(x => x.Entity == processManager);
+        if (entity is not null)
+        {
+            entity.State = States.Remove;
+        }
     }
 
     public async Task<IBaseProcessManager> LoadProcessManagerAsync(Guid correlationId)

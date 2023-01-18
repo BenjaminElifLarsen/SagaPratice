@@ -17,6 +17,7 @@ using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.Registries;
 using PersonDomain.AL.Services.Genders;
 using PersonDomain.AL.Services.People;
@@ -98,9 +99,14 @@ public class PersonApiServices
 
         services.AddScoped<IBaseProcessManagerRepository<GenderUnrecogniseProcessManager>, MockProcessManagerRepository<GenderUnrecogniseProcessManager, IPersonContext>>();
         services.AddScoped<IGenderUnrecogniseProcessRepository, GenderUnrecogniseProcessRepository>();
-        
+
+        services.AddScoped<IBaseProcessManagerRepository<FireProcessManager>, MockProcessManagerRepository<FireProcessManager, IPersonContext>>();
+        services.AddScoped<IPersonFireProcessRepository, PersonFireProcessRepository>();
+
         services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
         services.AddScoped<IProcessManagerRouter, GenderUnrecogniseProcessRouter>();
+        services.AddScoped<IProcessManagerRouter, PersonFireProcessRouter>();
+
     }
 
 

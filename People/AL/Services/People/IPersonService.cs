@@ -1,5 +1,5 @@
 ﻿using Common.ResultPattern;
-using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.Services.People.Queries.GetDetails;
 using PersonDomain.AL.Services.People.Queries.GetList;
 using PersonDomain.AL.Services.People.Queries.GetPeoplesGendersOverTime;
@@ -16,4 +16,8 @@ public interface IPersonService
     Task<Result> ChangePersonalInformationAsync(ChangePersonalInformationFromUser command);
     //void Handle(RecognisedSucceeded @event); //these two are related to gender, not person
     //void Handle(RecognisedFailed @event);
+    void Handle(FiredSucceeded @event);
+    void Handle(FiredFailed @event);
+    void Handle(RemovedFromGenderSucceeded @event);
+    void Handle(RemovedFromGenderFailed @event);
 }

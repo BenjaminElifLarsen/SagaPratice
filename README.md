@@ -8,24 +8,26 @@ Originally created for praticing sagas, it was decided to expand the area of pra
 The folder structure differer between the People domain and the Vehicle domain.
 The people domain is structured by type, where Vehicle is grouped by process and aggregate.
 
-Regarding the command names the ...From{Value} is used to help to distint who/what the command is sent from e.g. Value could User, a System, or by an Event.
+Regarding the command names the ...From{Value} is used to help to distint who/what the command is sent from e.g. Value could User, a System, or by an Event (This naming policy will change).
 
-Most of the things praticed in this project were the first time and should thus be considered to be rough versions of what could come later.
+Most of the things praticed in this project are the first time experiencing and should thus be considered to be rough versions of what will come later.
 
+## Refactoring Notes
+
+As I learn more about the different learning subjects I start refactoring code. Most of the time the refactoring will happen in the People domain first as this domain is, for the most part, more simple than the Vehicle domain.
 
 ## Git
 
 This project contains a GIT submodule (the module 'Common'). It is very important to ensure the correct version of Common is used as Common is designed for use in multiple projects. 
 If pulling this project down it should pull the correct version of Common.
 
+Not that it has an impact on the software, but the Git CLI was used.
 
 ## Notes
 
-All models are using int for their ids, which is fine for most models. The Person and operator models should be using GUIDs. 
-The reason for this is to make it harder to guess the id of them and trying to access their information.
-
 Regarding the trilemma of domain model purity, application performance, and domain model completeness, it was decided to focus on domain model purity by placing all external reads and writes outside the domain models.
-Do note that the id generation code could be considered to break the domain model purity, but it is only there because of the mock storage and not wanting to write code, yet, that used reflection to find the id fields and fill them out when 'saving' a created entity to the context.
+
+Given the use of GUIDs for ids each domain model calculates their own Id. This is, from reading, considered a common pratice for DDD and events.
 
 The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough.
 

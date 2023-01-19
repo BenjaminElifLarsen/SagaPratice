@@ -1,137 +1,254 @@
-﻿using Common.ProcessManager;
-using Common.ResultPattern;
+﻿using Common.BinaryFlags;
 using PersonDomain.AL.Busses.Command;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
+using static PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.PersonalInformationChangeProcessManager.ChangePersonStates;
 
 namespace PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-internal sealed class PersonalInformationChangeProcessManager : IPersonalInformationChangeProcessManager
+internal sealed class PersonalInformationChangeProcessManager : BaseProcessManager, IPersonalInformationChangeProcessManager
 {
-    private readonly IPersonCommandBus _commandBus;
-    private readonly EventStateCollection _trackerCollection;
-    private readonly List<string> _errors;
-    private readonly HashSet<Action<ProcesserFinished>> _handlers;
+    private bool? _genderRemovedProcessed;
+    private bool? _genderAddedProccessed;
+    //private bool _genderChanged; //sat by PersonPersonalInformationChangedSuccessed.GenderWasChanged. 
+    ////If false the PersonPersonalInformationChangedSuccessed handler can send out a 'finished' event else wait on gender added and gender removed has passed (need to check if they already have been handled or not)
+    private BinaryFlag _binaryFlag; // In a relational database, like MSSQL, this would be stored as a numerical value.
 
-    public Guid ProcessManagerId { get; private set; }
-    public Guid CorrelationId { get; private set; }
-    public bool Running => !_trackerCollection.AllFinishedOrFailed;
-    public bool FinishedSuccessful => _trackerCollection.AllRequiredSucceded;
 
-    public PersonalInformationChangeProcessManager(IPersonCommandBus commandBus) 
+    public PersonalInformationChangeProcessManager(Guid correlationId) : base(correlationId) 
     { //could log id
         ProcessManagerId = Guid.NewGuid();
-        _commandBus = commandBus;
-        _handlers = new();
-        _errors = new();
-        _trackerCollection = new();
-    }
+        _binaryFlag = new(NotStarted);
 
-    public void SetUp(Guid correlationId)
-    { //could log the corelationId together with the ProcessManagerId
-        if(CorrelationId == default) {
-            CorrelationId = correlationId;
-            _trackerCollection.AddEventTracker<PersonReplacedGender>(true, DomainEventType.Succeeder);
-            _trackerCollection.AddEventTracker<PersonPersonalInformationChangedSuccessed>(true, DomainEventType.Succeeder);
-            _trackerCollection.AddEventTracker<PersonPersonalInformationChangedFailed>(false, DomainEventType.Failer);
-        }
-    }
+    } //will need to handle state for removing gender event and adding gender event
 
-    public void RegistrateHandler(Action<ProcesserFinished> handler)
-    {
-        _handlers.Add(handler); //improve this to ensure the same instance of a method cannot be registrated multiple times
-    }
-
-    public void PublishEventIfPossible() 
-    { //not to happy with this one, name and implementation, feel like it could be done better
-        if (_trackerCollection.AllFinishedOrFailed)
-        {
-            Result result = !_trackerCollection.Failed ? new SuccessResultNoData() : new InvalidResultNoData(_errors.ToArray());
-            ProcesserFinished @event = new(result, ProcessManagerId);
-            foreach(var handler in _handlers)
-            {
-                handler.Invoke(@event);
-            }
-        }
-    }
+    /*
+     * makes it such that information change transmit an event and so does the handlers for gender operations
+     * then the caller should wait for response from both group, InformationChanged(Failed/Succeeded) and GenderReplaced(Failed/Succeeded)
+     */
 
     public void Handle(PersonPersonalInformationChangedSuccessed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; } 
 
-        _trackerCollection.CompleteEvent<PersonPersonalInformationChangedSuccessed>();
-        _trackerCollection.RemoveEvent<PersonPersonalInformationChangedFailed>();
-        if (!@event.GenderWasChanged) 
+        //switch(_binaryFlag)
+        //{
+        //    case (long)NotStarted: //will not work as it does not check against the flag. This might be a case of an if-else structure solution is needed, yet it will break with the design of the other pms
+        //        break; //this need to be well solved as the vehicle pms will require the solution a lot
+        //}
+
+        if(_binaryFlag == NotStarted)
         {
-            _trackerCollection.RemoveEvent<PersonReplacedGender>();
+            _binaryFlag -= NotStarted;
+            Processing();
+            //if the binary flag only contains ChangedInformation the pm should place an event to let the caller know it is done with the processing
         }
-        PublishEventIfPossible();
+        else if(_binaryFlag == ChangedGender)
+        {
+            Processing();
+            //if the binary flag only contains ChangedGender and ChangedInformation and the gender operation booleans are true the pm should place an event for the caller
+            //above statement is the logic of this event reaching the pm after the gender replacement event and the events for adding/removing genders have been processsed
+            //if both gender operations succeeded it should place one specific event else another
+        }
+        else
+        {
+            //log
+        }
+        void Processing()
+        {
+            _binaryFlag += ChangedInformation;
+            if (@event.GenderWasChanged)
+            {
+                //_genderChanged = true; 
+                _genderAddedProccessed ??= false; // Gender specific operation event has not been processed yet, let the pm know that it need to wait on gender operation.
+                _genderRemovedProcessed ??= false; //should this handler be able to set the waiting on gender states? That woud cause problems with the Handler(PersonReplacedGender).Processing()
+                //currently these will be used for the purpose of letting this handler know if it can place an state event or not
+            }
+        }
     }
 
     public void Handle(PersonPersonalInformationChangedFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.CompleteEvent<PersonPersonalInformationChangedFailed>();
-        _trackerCollection.FailEvent<PersonPersonalInformationChangedSuccessed>();
+        if (_binaryFlag == NotStarted)
+        {
+            _binaryFlag -= NotStarted;
+            _binaryFlag += FailedToChangeInformation;
+            AddErrors(@event.Errors);
+        }
+        else
+        {
 
-        _trackerCollection.RemoveEvent<PersonReplacedGender>();
+        }
 
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
+        //_trackerCollection.CompleteEvent<PersonPersonalInformationChangedFailed>();
+        //_trackerCollection.FailEvent<PersonPersonalInformationChangedSuccessed>();
+
+        //_trackerCollection.RemoveEvent<PersonReplacedGender>();
+
+        //_errors.AddRange(@event.Errors);
+        //PublishEventIfPossible();
     }
 
     public void Handle(PersonAddedToGenderSucceeded @event)
     {
         if(@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.CompleteEvent<PersonAddedToGenderSucceeded>(); 
-        _trackerCollection.RemoveEvent<PersonAddedToGenderFailed>();
-        PublishEventIfPossible();
+        if (_binaryFlag == ChangedGender && _binaryFlag != AddedToGender)
+        {
+            Processing(); 
+        }
+        else
+        {
+
+        }
+
+        void Processing()
+        {
+            _genderAddedProccessed = true;
+            _binaryFlag -= WaitingOnGenderAdding;
+            _binaryFlag += AddedToGender;
+            if(_binaryFlag != WaitingOnGenderRemoving && _binaryFlag == ChangedInformation)
+            {
+                //transmit an event, event depends on if the removal failed or succeeded
+            }
+        }
     }
 
     public void Handle(PersonAddedToGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.CompleteEvent<PersonAddedToGenderFailed>();
-        _trackerCollection.FailEvent<PersonAddedToGenderSucceeded>();
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
+        if (_binaryFlag == ChangedGender && _binaryFlag != FailedToBeAddedToGender)
+        {
+            Processing();
+        }
+        else
+        {
+
+        }
+
+        void Processing()
+        {
+            _genderAddedProccessed = true;
+            _binaryFlag -= WaitingOnGenderAdding;
+            _binaryFlag += FailedToBeAddedToGender;
+            AddErrors(@event.Errors);
+            if (_binaryFlag != WaitingOnGenderRemoving && _binaryFlag == ChangedInformation)
+            {
+                //transmit an failer state event, does it matter to wait on the gender removal?
+            }
+        }
     }
 
     public void Handle(PersonRemovedFromGenderSucceeded @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.CompleteEvent<PersonRemovedFromGenderSucceeded>();
-        _trackerCollection.RemoveEvent<PersonRemovedFromGenderFailed>();
-        PublishEventIfPossible();
+        if (_binaryFlag == ChangedGender && _binaryFlag != RemovedFromGender)
+        {
+
+        }
+        else
+        {
+
+        }
+
+        void Processing()
+        {
+            _genderRemovedProcessed = true;
+            _binaryFlag -= WaitingOnGenderRemoving;
+            _binaryFlag += RemovedFromGender;
+            if (_binaryFlag != WaitingOnGenderAdding && _binaryFlag == ChangedInformation)
+            {
+                if(_binaryFlag == AddedToGender)
+                {
+
+                }
+                else if(_binaryFlag == FailedToBeAddedToGender)
+                {
+
+                }
+                //transmit an failer state event, does it matter to wait on the gender removal?
+            }
+        }
     }
 
     public void Handle(PersonRemovedFromGenderFailed @event)
     {
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.CompleteEvent<PersonRemovedFromGenderFailed>();
-        _trackerCollection.FailEvent<PersonRemovedFromGenderSucceeded>();
-        _errors.AddRange(@event.Errors);
-        PublishEventIfPossible();
+        if (_binaryFlag == ChangedGender && _binaryFlag != FailedToBeRemovedFromGender)
+        {
+            Processing();
+        }
+        else
+        {
+
+        }
+
+        void Processing()
+        {
+            _genderRemovedProcessed = true;
+            _binaryFlag -= WaitingOnGenderRemoving;
+            _binaryFlag += FailedToBeRemovedFromGender;
+            AddErrors(@event.Errors);
+            if (_binaryFlag != WaitingOnGenderAdding && _binaryFlag == ChangedInformation)
+            {
+                //transmit an failer state event, does it matter to wait on the gender removal?
+            }
+        }
     }
 
-    public void Handle(PersonReplacedGender @event)
-    {
+    public void Handle(PersonReplacedGender @event) //most likely a very good idea to create UML diagram for this entire pm
+    { //currently either this or the PersonPersonalInformationChangedSuccessed can reach the pm first
         if (@event.CorrelationId != CorrelationId) { return; }
 
-        _trackerCollection.AddEventTracker<PersonAddedToGenderSucceeded>(true, DomainEventType.Succeeder);
-        _trackerCollection.AddEventTracker<PersonAddedToGenderFailed>(false, DomainEventType.Failer); 
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderSucceeded>(true, DomainEventType.Succeeder);
-        _trackerCollection.AddEventTracker<PersonRemovedFromGenderFailed>(false, DomainEventType.Failer);
+        if (_binaryFlag == NotStarted)
+        {
+            _binaryFlag -= NotStarted;
+            Processing();
+        }
+        else if (_binaryFlag == ChangedInformation && _binaryFlag != ChangedGender)
+        {
+            Processing();
+        }
+        else
+        {
 
-        _trackerCollection.CompleteEvent<PersonReplacedGender>();
+        }
 
-        _commandBus.Dispatch(new AddPersonToGender(@event.PersonId, @event.NewGenderId, @event.CorrelationId, @event.EventId));
-        _commandBus.Dispatch(new RemovePersonFromGender(@event.PersonId, @event.OldGenderId, @event.CorrelationId, @event.EventId));
-        PublishEventIfPossible();
+        void Processing()
+        {
+            _binaryFlag += ChangedGender;
+            if (_binaryFlag != WaitingOnGenderAdding && _genderAddedProccessed != true)
+            {
+                AddCommand(new AddPersonToGender(@event.PersonId, @event.NewGenderId, @event.CorrelationId, @event.EventId));
+                _binaryFlag += WaitingOnGenderAdding;
+                _genderAddedProccessed = false;
+            }
+            if (_binaryFlag != WaitingOnGenderRemoving && _genderRemovedProcessed != true)
+            {
+                AddCommand(new RemovePersonFromGender(@event.PersonId, @event.OldGenderId, @event.CorrelationId, @event.EventId));
+                _binaryFlag += WaitingOnGenderRemoving;
+                _genderRemovedProcessed = false;
+            }
+        }
     }
 
+    public enum ChangePersonStates
+    {
+        NotStarted = 0b1,
+        ChangedInformation = 0b10,
+        FailedToChangeInformation = 0b100,
+        ChangedGender = 0b1000,
+        AddedToGender = 0b10000,
+        FailedToBeAddedToGender = 0b100000,
+        RemovedFromGender = 0b1000000,
+        FailedToBeRemovedFromGender = 0b10000000,
+        WaitingOnGenderAdding = 0b100000000,
+        WaitingOnGenderRemoving = 0b1000000000,
+
+        Unknown = 0
+    }
 }

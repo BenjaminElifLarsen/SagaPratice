@@ -3,6 +3,7 @@ using Common.ResultPattern;
 using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvent;
 using PersonDomain.IPL.Services;
 
 namespace PersonDomain.AL.Services.People;

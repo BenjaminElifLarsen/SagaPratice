@@ -2,7 +2,7 @@
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-public interface IPersonalInformationChangeProcessManager : IProcessManager,
+public interface IPersonalInformationChangeProcessManager : IBaseProcessManager,
     IProcessManagerEventHandler<PersonPersonalInformationChangedSuccessed>,
     IProcessManagerEventHandler<PersonPersonalInformationChangedFailed>,
     IProcessManagerEventHandler<PersonAddedToGenderSucceeded>,

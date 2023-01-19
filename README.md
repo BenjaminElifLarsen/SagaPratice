@@ -33,6 +33,17 @@ The mock base repository and mock contextes were quickly programmed as they were
 
 Regarding expection handling, expection throwing, and such, these are not really been implemented yet as the focus is on learning new competencies.
 
+### Repository Design
+
+It is important to notice that all repositories in the different domains are used as abstractions over the repository in the BaseRepository project. 
+The mock repositories in that project are fully generic (as is their contracts) and designed to fulfill any requirements that might be needed by the abstraction layer repositories.
+This also means that if changing data context, like going from inline-memory to a SQL-database, all that need to be changed are the concreate implementations and maybe the builder.Services over in the API project. 
+
+
+### Security
+
+Currently the software contains no security on the endpoints, but it is planned to add security policy on the endspoints that will require the request to contain a valid JWT. 
+
 ### Comment Design
 
 Regarding comments in the code, there are two types; permanents and temporals. 

@@ -11,6 +11,7 @@ using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvent;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;

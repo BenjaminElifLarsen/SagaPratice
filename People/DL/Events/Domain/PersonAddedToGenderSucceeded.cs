@@ -17,7 +17,7 @@ public sealed record PersonAddedToGenderSucceeded : DomainEvent
     public PersonAddedToGenderSucceeded(Event e) : base(e)
     {
         if (e is null || e.Data is null) throw new ArgumentNullException(nameof(e));
-        PersonId = Guid.Parse(e.Data.SingleOrDefault(x => x == GenderPropertyId.PersonId).Value);
+        PersonId = Guid.Parse(e.Data.Single(x => x == GenderPropertyId.PersonId).Value);
     }
     public override Event ConvertToEvent()
     {

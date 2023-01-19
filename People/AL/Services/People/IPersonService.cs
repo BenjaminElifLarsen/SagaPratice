@@ -1,6 +1,7 @@
 ﻿using Common.ResultPattern;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvent;
 using PersonDomain.AL.Services.People.Queries.GetDetails;
 using PersonDomain.AL.Services.People.Queries.GetList;
 using PersonDomain.AL.Services.People.Queries.GetPeoplesGendersOverTime;

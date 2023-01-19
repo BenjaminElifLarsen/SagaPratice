@@ -1,10 +1,10 @@
 ﻿When done with the refracting so the program can start up again:
 	1) Work on GenderRecogniseProcessRouter (consider a new name)
-	2) Work on the pm and event repo to ensure they are fully done.
-	3) Update the service to use the new design
-	4) Update PeopleApiServices (and rename to PersonApiServices)
-	5) Work on middleware to ensure the Router is ready and services subscribe to the state events via the event bus
-	6) Need to ensure that the newly created (or retrived for that matter) pm are subscribed to the correct events
+	2) Work on the pm and event repo to ensure they are fully done. --done
+	3) Update the service to use the new design --done
+	4) Update PeopleApiServices (and rename to PersonApiServices) --done
+	5) Work on middleware to ensure the Router is ready and services subscribe to the state events via the event bus --done
+	6) Need to ensure that the newly created (or retrived for that matter) pm are subscribed to the correct events --done
 
-	update PersonReplacedGender and PersonalInformationChanged to system event
+	update PersonReplacedGender and PersonalInformationChanged to system event --done
 	move them to another location than the domain event folder in DL

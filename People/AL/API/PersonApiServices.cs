@@ -17,6 +17,7 @@ using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonChangeInformationProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonHireProcessRouter;
 using PersonDomain.AL.Registries;
@@ -91,9 +92,6 @@ public class PersonApiServices
 
     private static void ProcessManagers(IServiceCollection services)
     {
-        services.AddScoped<IProcessManager, PersonalInformationChangeProcessManager>(); //old design
-
-
         services.AddScoped<IBaseProcessManagerRepository<GenderRecogniseProcessManager>, MockProcessManagerRepository<GenderRecogniseProcessManager, IPersonContext>>();
         services.AddScoped<IGenderRecogniseProcessRepository, GenderRecogniseProcessRepository>();
 
@@ -106,10 +104,20 @@ public class PersonApiServices
         services.AddScoped<IBaseProcessManagerRepository<HireProcessManager>, MockProcessManagerRepository<HireProcessManager, IPersonContext>>();
         services.AddScoped<IPersonHireProcessRepository, PersonHireProcessRepository>();
 
+        services.AddScoped<IBaseProcessManagerRepository<PersonalInformationChangeProcessManager>, MockProcessManagerRepository<PersonalInformationChangeProcessManager, IPersonContext>>();
+        services.AddScoped<IPersonChangeProcessRepository, PersonChangeProcessRepository>();
+
+        //services.AddScoped<IGenderRecogniseProcessRouter, GenderRecogniseProcessRouter>();
+        //services.AddScoped<IGenderUnrecogniseProcessRouter, GenderUnrecogniseProcessRouter>();
+        //services.AddScoped<IPersonFireProcessRouter, PersonFireProcessRouter>();
+        //services.AddScoped<IPersonHireProcessRouter, PersonHireProcessRouter>();
+        //services.AddScoped<IPersonChangeInformationProcessRouter, PersonChangeInformationProcessRouter>();
+
         services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
         services.AddScoped<IProcessManagerRouter, GenderUnrecogniseProcessRouter>();
         services.AddScoped<IProcessManagerRouter, PersonFireProcessRouter>();
         services.AddScoped<IProcessManagerRouter, PersonHireProcessRouter>();
+        services.AddScoped<IProcessManagerRouter, PersonChangeInformationProcessRouter>();
     }
 
 

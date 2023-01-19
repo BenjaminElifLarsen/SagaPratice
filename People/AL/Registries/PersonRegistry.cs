@@ -1,19 +1,14 @@
-﻿using Common.ProcessManager;
-using PersonDomain.AL.Busses.Command;
+﻿using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.Handlers.Command;
-using PersonDomain.AL.ProcessManagers.Gender.Recognise;
 using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PersonDomain.AL.ProcessManagers.Gender.Unrecognise;
 using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
-using PersonDomain.AL.ProcessManagers.Person.Fire;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
-using PersonDomain.AL.ProcessManagers.Person.Hire;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
-using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvent;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvents;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonChangeInformationProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonHireProcessRouter;
 using PersonDomain.AL.Services.Genders;
@@ -52,17 +47,6 @@ public sealed class PersonRegistry : IPersonRegistry
         _commandBus.RegisterHandler<UnrecogniseGender>(_commandHandler.Handle);
     }
 
-    public void SetUpRouting(IPersonalInformationChangeProcessManager processManager)
-    {
-        _eventBus.RegisterHandler<PersonPersonalInformationChangedSuccessed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonPersonalInformationChangedFailed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonAddedToGenderSucceeded>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processManager.Handle);
-        _eventBus.RegisterHandler<PersonReplacedGender>(processManager.Handle);
-    }
-
     public void SetUpRouting(IGenderRecogniseProcessRouter processRouter)
     {
         _eventBus.RegisterHandler<GenderRecognisedSucceeded>(processRouter.Handle);
@@ -93,6 +77,10 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<HiredFailed>(service.Handle);
         _eventBus.RegisterHandler<AddedToGenderSucceeded>(service.Handle);
         _eventBus.RegisterHandler<AddedToGenderFailed>(service.Handle);
+        _eventBus.RegisterHandler<GenderReplacedSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<GenderReplacedFailed>(service.Handle);
+        _eventBus.RegisterHandler<InformationChangedSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<InformationChangedFailed>(service.Handle);
     }
 
     public void SetUpRouting(IPersonFireProcessRouter processRouter)
@@ -109,5 +97,16 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<PersonHiredFailed>(processRouter.Handle);
         _eventBus.RegisterHandler<PersonAddedToGenderSucceeded>(processRouter.Handle);
         _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processRouter.Handle);
+    }
+
+    public void SetUpRouting(IPersonChangeInformationProcessRouter processRouter)
+    {
+        _eventBus.RegisterHandler<PersonPersonalInformationChangedSuccessed>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonPersonalInformationChangedFailed>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonAddedToGenderSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonAddedToGenderFailed>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processRouter.Handle);
+        _eventBus.RegisterHandler<PersonReplacedGender>(processRouter.Handle);
     }
 }

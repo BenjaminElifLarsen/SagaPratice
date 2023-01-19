@@ -18,7 +18,7 @@ internal class PersonHireProcessRepository : IPersonHireProcessRepository
 
     public async Task<HireProcessManager> LoadAsync(Guid correlationId)
     {
-        return await Task.Run(() => _repository.LoadAsync(correlationId));
+        return await _repository.LoadAsync(correlationId);
     }
 
     public void Save(HireProcessManager manager)

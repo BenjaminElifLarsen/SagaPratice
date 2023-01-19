@@ -1,14 +1,16 @@
 ﻿using Common.BinaryFlags;
-using PersonDomain.AL.Busses.Command;
+using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvents;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
 using static PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.PersonalInformationChangeProcessManager.ChangePersonStates;
 
 namespace PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange;
-internal sealed class PersonalInformationChangeProcessManager : BaseProcessManager, IPersonalInformationChangeProcessManager
+public sealed class PersonalInformationChangeProcessManager : BaseProcessManager, IPersonalInformationChangeProcessManager
 {
     private bool? _genderRemovedProcessed;
     private bool? _genderAddedProccessed;
+    private bool? _informationChangedProcessed;
     //private bool _genderChanged; //sat by PersonPersonalInformationChangedSuccessed.GenderWasChanged. 
     ////If false the PersonPersonalInformationChangedSuccessed handler can send out a 'finished' event else wait on gender added and gender removed has passed (need to check if they already have been handled or not)
     private BinaryFlag _binaryFlag; // In a relational database, like MSSQL, this would be stored as a numerical value.
@@ -63,6 +65,11 @@ internal sealed class PersonalInformationChangeProcessManager : BaseProcessManag
                 _genderRemovedProcessed ??= false; //should this handler be able to set the waiting on gender states? That woud cause problems with the Handler(PersonReplacedGender).Processing()
                 //currently these will be used for the purpose of letting this handler know if it can place an state event or not
             }
+            if(_informationChangedProcessed != true)
+            {
+                _informationChangedProcessed = true;
+                AddStateEvent(new InformationChangedSucceeded(@event.GenderWasChanged, CorrelationId, @event.EventId));
+            }
         }
     }
 
@@ -75,19 +82,12 @@ internal sealed class PersonalInformationChangeProcessManager : BaseProcessManag
             _binaryFlag -= NotStarted;
             _binaryFlag += FailedToChangeInformation;
             AddErrors(@event.Errors);
+            AddStateEvent(new InformationChangedFailed(Errors, CorrelationId, @event.EventId));
         }
         else
         {
 
         }
-
-        //_trackerCollection.CompleteEvent<PersonPersonalInformationChangedFailed>();
-        //_trackerCollection.FailEvent<PersonPersonalInformationChangedSuccessed>();
-
-        //_trackerCollection.RemoveEvent<PersonReplacedGender>();
-
-        //_errors.AddRange(@event.Errors);
-        //PublishEventIfPossible();
     }
 
     public void Handle(PersonAddedToGenderSucceeded @event)
@@ -111,6 +111,14 @@ internal sealed class PersonalInformationChangeProcessManager : BaseProcessManag
             if(_binaryFlag != WaitingOnGenderRemoving && _binaryFlag == ChangedInformation)
             {
                 //transmit an event, event depends on if the removal failed or succeeded
+                if (_binaryFlag == RemovedFromGender)
+                {
+                    AddStateEvent(new GenderReplacedSucceeded(CorrelationId, @event.EventId));
+                }
+                else if (_binaryFlag == FailedToBeRemovedFromGender)
+                {
+                    AddStateEvent(new GenderReplacedFailed(Errors, CorrelationId, @event.EventId));
+                }
             }
         }
     }
@@ -147,7 +155,7 @@ internal sealed class PersonalInformationChangeProcessManager : BaseProcessManag
 
         if (_binaryFlag == ChangedGender && _binaryFlag != RemovedFromGender)
         {
-
+            Processing();
         }
         else
         {
@@ -161,15 +169,14 @@ internal sealed class PersonalInformationChangeProcessManager : BaseProcessManag
             _binaryFlag += RemovedFromGender;
             if (_binaryFlag != WaitingOnGenderAdding && _binaryFlag == ChangedInformation)
             {
-                if(_binaryFlag == AddedToGender)
+                if (_binaryFlag == AddedToGender)
                 {
-
+                    AddStateEvent(new GenderReplacedSucceeded(CorrelationId, @event.EventId));
                 }
-                else if(_binaryFlag == FailedToBeAddedToGender)
+                else if (_binaryFlag == FailedToBeAddedToGender)
                 {
-
+                    AddStateEvent(new GenderReplacedFailed(Errors, CorrelationId, @event.EventId));
                 }
-                //transmit an failer state event, does it matter to wait on the gender removal?
             }
         }
     }

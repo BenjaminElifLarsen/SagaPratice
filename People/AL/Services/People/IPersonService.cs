@@ -1,7 +1,7 @@
 ﻿using Common.ResultPattern;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
-using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvent;
+using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvents;
 using PersonDomain.AL.Services.People.Queries.GetDetails;
 using PersonDomain.AL.Services.People.Queries.GetList;
 using PersonDomain.AL.Services.People.Queries.GetPeoplesGendersOverTime;
@@ -26,4 +26,8 @@ public interface IPersonService
     void Handle(HiredFailed @event);
     void Handle(AddedToGenderSucceeded @event);
     void Handle(AddedToGenderFailed @event);
+    void Handle(GenderReplacedSucceeded @event);
+    void Handle(GenderReplacedFailed @event);
+    void Handle(InformationChangedSucceeded @event);
+    void Handle(InformationChangedFailed @event);
 }

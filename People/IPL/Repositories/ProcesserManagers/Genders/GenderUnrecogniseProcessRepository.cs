@@ -18,7 +18,7 @@ internal class GenderUnrecogniseProcessRepository : IGenderUnrecogniseProcessRep
 
     public async Task<GenderUnrecogniseProcessManager> LoadAsync(Guid correlationId)
     {
-        return await Task.Run(() => _repository.LoadAsync(correlationId));
+        return await _repository.LoadAsync(correlationId);
     }
 
     public void Save(GenderUnrecogniseProcessManager manager)

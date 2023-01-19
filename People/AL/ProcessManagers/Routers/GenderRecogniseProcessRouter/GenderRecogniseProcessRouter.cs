@@ -21,7 +21,7 @@ internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
     public void Handle(GenderRecognisedSucceeded @event)
     {
         var pm = Task.Run(() => _repository.LoadAsync(@event.CorrelationId)).Result;
-        pm ??= new GenderRecogniseProcessManager(@event.CorrelationId);
+        pm ??= new(@event.CorrelationId);
         pm.Handle(@event);
         _repository.Save(pm);
         Transmit(pm);
@@ -30,7 +30,7 @@ internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
     public void Handle(GenderRecognisedFailed @event)
     {
         var pm = _repository.LoadAsync(@event.CorrelationId).Result;
-        pm ??= new GenderRecogniseProcessManager(@event.CorrelationId);
+        pm ??= new(@event.CorrelationId);
         pm.Handle(@event);
         _repository.Save(pm);
         Transmit(pm);
@@ -46,5 +46,7 @@ internal class GenderRecogniseProcessRouter : IGenderRecogniseProcessRouter
         {
             _eventBus.Publish(e);
         }
+        pm.RemoveAllCommands();
+        pm.RemoveAllEvents();
     }
 }

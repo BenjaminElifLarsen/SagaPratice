@@ -46,5 +46,7 @@ internal class GenderUnrecogniseProcessRouter : IGenderUnrecogniseProcessRouter
         {
             _eventBus.Publish(e);
         }
+        pm.RemoveAllCommands();
+        pm.RemoveAllEvents();
     }
 }

@@ -4,6 +4,7 @@ using Common.Routing;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using PersonDomain.AL.ProcessManagers.Routers.GenderRecogniseProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.GenderUnrecogniseProcessRouter;
+using PersonDomain.AL.ProcessManagers.Routers.PersonChangeInformationProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonFireProcessRouter;
 using PersonDomain.AL.ProcessManagers.Routers.PersonHireProcessRouter;
 using PersonDomain.AL.Registries;
@@ -40,7 +41,9 @@ public class ProcessManagerRouterMiddleware
                 selectedRegistry.SetUpRouting(genderUnrecognise);
                 var personFire = pmRoutes.Single(x => x is IPersonFireProcessRouter) as IPersonFireProcessRouter;
                 selectedRegistry.SetUpRouting(personFire);
-                if(nameof(PersonController.Hire) == actionName) //use switch case
+                var personChange = pmRoutes.Single(x => x is IPersonChangeInformationProcessRouter) as IPersonChangeInformationProcessRouter;
+                selectedRegistry.SetUpRouting(personChange);
+                if (nameof(PersonController.Hire) == actionName) //use switch case
                 {
                     var personHire = pmRoutes.Single(x => x is IPersonHireProcessRouter) as IPersonHireProcessRouter;
                     selectedRegistry.SetUpRouting(personHire);

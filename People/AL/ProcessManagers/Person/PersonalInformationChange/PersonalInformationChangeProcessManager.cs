@@ -1,5 +1,4 @@
 ﻿using Common.BinaryFlags;
-using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvents;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
@@ -24,8 +23,7 @@ public sealed class PersonalInformationChangeProcessManager : BaseProcessManager
     } //will need to handle state for removing gender event and adding gender event
 
     /*
-     * makes it such that information change transmit an event and so does the handlers for gender operations
-     * then the caller should wait for response from both group, InformationChanged(Failed/Succeeded) and GenderReplaced(Failed/Succeeded)
+     * when updating to use the events in Common.Events.Save make sure processingSucceeded is only called by PersonPersonalInformationChangedSuccessed if it should not wait on gender changes
      */
 
     public void Handle(PersonPersonalInformationChangedSuccessed @event)

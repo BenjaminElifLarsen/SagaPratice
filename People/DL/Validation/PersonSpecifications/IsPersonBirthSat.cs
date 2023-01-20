@@ -17,7 +17,7 @@ internal sealed class IsPersonBirthSat : ISpecification<Person>, ISpecification<
 
     public bool IsSatisfiedBy(ChangePersonalInformationFromUser candidate)
     {
-        return candidate.Brith is null || IsSatisfiedBy(candidate.Brith.Birth);
+        return candidate.Birth is null || IsSatisfiedBy(candidate.Birth.Birth);
     }
 
     private bool IsSatisfiedBy(DateTime candidate)

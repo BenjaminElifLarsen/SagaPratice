@@ -29,7 +29,7 @@ Regarding the trilemma of domain model purity, application performance, and doma
 
 Given the use of GUIDs for ids each domain model calculates their own Id. This is, from reading, considered a common pratice for DDD and events.
 
-The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough.
+The mock base repository and mock contextes were quickly programmed as they were not the main focus on this project and they are fairly rough. This means e.g. that if a model operation fails that the model is not reversed to the state it was in before the operation started.
 
 Regarding expection handling, expection throwing, and such, these are not really been implemented yet as the focus is on learning new competencies.
 

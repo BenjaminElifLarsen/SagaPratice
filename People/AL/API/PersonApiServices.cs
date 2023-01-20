@@ -85,7 +85,7 @@ public class PersonApiServices
     private static void Events(IServiceCollection services)
     {
         services.AddSingleton<IEventStore<Guid>, MockEventStore>();
-        services.AddScoped<IBaseEventRepository<Guid>, MockEventRepository<Guid, IEventStore<Guid>>>(); //if similarly added to Vehicle domain, the dependency injector can inject the wrong mock repository, consider solulations
+        services.AddScoped<IBaseEventRepository<Guid>, MockEventRepository<Guid, IEventStore<Guid>>>(); 
         services.AddScoped<IGenderEventRepository, GenderEventRepository>();
         services.AddScoped<IPersonEventRepository, PersonEventRepository>();
     }
@@ -107,12 +107,6 @@ public class PersonApiServices
         services.AddScoped<IBaseProcessManagerRepository<PersonalInformationChangeProcessManager>, MockProcessManagerRepository<PersonalInformationChangeProcessManager, IPersonContext>>();
         services.AddScoped<IPersonChangeProcessRepository, PersonChangeProcessRepository>();
 
-        //services.AddScoped<IGenderRecogniseProcessRouter, GenderRecogniseProcessRouter>();
-        //services.AddScoped<IGenderUnrecogniseProcessRouter, GenderUnrecogniseProcessRouter>();
-        //services.AddScoped<IPersonFireProcessRouter, PersonFireProcessRouter>();
-        //services.AddScoped<IPersonHireProcessRouter, PersonHireProcessRouter>();
-        //services.AddScoped<IPersonChangeInformationProcessRouter, PersonChangeInformationProcessRouter>();
-
         services.AddScoped<IProcessManagerRouter, GenderRecogniseProcessRouter>();
         services.AddScoped<IProcessManagerRouter, GenderUnrecogniseProcessRouter>();
         services.AddScoped<IProcessManagerRouter, PersonFireProcessRouter>();
@@ -124,8 +118,7 @@ public class PersonApiServices
     public static void Seed(IServiceProvider provider)
     {
         var serviceProvider = provider.CreateScope().ServiceProvider;
-        Seeder.MockSeedData(serviceProvider.GetService<IPersonContext>(), 
-            serviceProvider.GetService<IUnitOfWork>(), 
+        Seeder.MockSeedData(serviceProvider.GetService<IUnitOfWork>(), 
             serviceProvider.GetService<IPersonCommandBus>(),
             serviceProvider.GetService<IEnumerable<IRoutingRegistry>>(),
             serviceProvider.GetService<IEnumerable<IProcessManagerRouter>>());

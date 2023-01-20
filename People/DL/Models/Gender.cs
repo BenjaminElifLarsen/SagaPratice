@@ -1,5 +1,5 @@
-﻿using Common.Events.Domain;
-using Common.RepositoryPattern;
+﻿using Common.DDD;
+using Common.Events.Domain;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.DL.Models;
@@ -76,15 +76,15 @@ public sealed class Gender : IAggregateRoot
         return !(left == right);
     }
 
-    public static bool operator ==(Gender left, Gender right)
-    {
-        return left.Id == right.Id;
-    }
+    //public static bool operator ==(Gender left, Gender right)
+    //{
+    //    return left.Id == right.Id;
+    //}
 
-    public static bool operator !=(Gender left, Gender right)
-    {
-        return !(left == right);
-    }
+    //public static bool operator !=(Gender left, Gender right)
+    //{
+    //    return !(left == right);
+    //}
 
     internal static Gender Hydrate(Guid id, string subject, string @object)
     {

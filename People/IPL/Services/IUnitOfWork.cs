@@ -1,4 +1,4 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.UnitOfWork;
 using PersonDomain.IPL.Repositories.DomainModels;
 using PersonDomain.IPL.Repositories.EventRepositories.GenderEvent;
 using PersonDomain.IPL.Repositories.EventRepositories.PersonEvent;

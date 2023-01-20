@@ -1,4 +1,5 @@
 ﻿using BaseRepository;
+using Common.DDD;
 using Common.Events.Store.Event;
 using Common.Events.System;
 using Common.ProcessManager;

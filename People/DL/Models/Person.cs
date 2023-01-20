@@ -1,4 +1,5 @@
-﻿using Common.Events.Domain;
+﻿using Common.DDD;
+using Common.Events.Domain;
 using Common.RepositoryPattern;
 
 namespace PersonDomain.DL.Models;
@@ -90,15 +91,15 @@ public sealed class Person : IAggregateRoot, ISoftDeleteDate
         return !(left == right);
     }
 
-    public static bool operator ==(Person left, Person right)
-    {
-        return left.Id == right.Id;
-    }
+    //public static bool operator ==(Person left, Person right)
+    //{
+    //    return left.Id == right.Id;
+    //}
 
-    public static bool operator !=(Person left, Person right)
-    {
-        return !(left == right);
-    }
+    //public static bool operator !=(Person left, Person right)
+    //{
+    //    return !(left == right);
+    //}
 
     internal static Person Hydrate(Guid id, Guid gender, string lastName, string firstName, DateOnly birth)
     {

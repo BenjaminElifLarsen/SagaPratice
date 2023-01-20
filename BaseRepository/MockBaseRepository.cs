@@ -1,4 +1,5 @@
 ﻿using Common.CQRS.Queries;
+using Common.DDD;
 using Common.RepositoryPattern;
 using System.Linq.Expressions;
 

@@ -88,9 +88,9 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
             entity.ReplaceLastName(command.LastName.LastName);
             entity.AddDomainEvent(new PersonChangedLastName(entity, command.CorrelationId, command.CausationId));
         }
-        if (command.Brith is not null)
+        if (command.Birth is not null)
         { //integration event
-            entity.UpdateBirth(command.Brith.Birth);
+            entity.UpdateBirth(command.Birth.Birth);
             entity.AddDomainEvent(new PersonChangedBirth(entity, command.CorrelationId, command.CausationId));
         }
         if (command.Gender is not null && entity.Gender != command.Gender.Gender)
@@ -103,7 +103,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
 
         var firstNameChanged = command.FirstName is not null;
         var lastNameChanged = command.LastName is not null;
-        var birthChanged = command.Brith is not null;
+        var birthChanged = command.Birth is not null;
         var genderChanged = command.Gender is not null && entity.Gender != command.Gender.Gender;
         _unitOfWork.AddSystemEvent(new PersonPersonalInformationChangedSuccessed(firstNameChanged, lastNameChanged, birthChanged, genderChanged, command.CorrelationId, command.CommandId));
         _unitOfWork.PersonRepository.UpdatePersonalInformation(entity);

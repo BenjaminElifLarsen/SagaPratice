@@ -1,4 +1,4 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.DDD;
 using VehicleDomain.DL.Errors;
 using VehicleDomain.DL.Models.Operators.Validation;
 using VehicleDomain.DL.Models.Operators.Validation.LicenseSpecifications;

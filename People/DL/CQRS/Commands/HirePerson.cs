@@ -21,7 +21,7 @@ public sealed class HirePersonFromUser : ICommand
         CausationId = CommandId;
     }
 
-    internal HirePersonFromUser(string firstName, string lastName, Guid gender, DateTime birth) : base()
+    internal HirePersonFromUser(string firstName, string lastName, Guid gender, DateTime birth) : this()
     {
         FirstName = firstName;
         LastName = lastName;

@@ -1,4 +1,5 @@
-﻿using Common.Events.Domain;
+﻿using Common.DDD;
+using Common.Events.Domain;
 using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.LicenseTypes;

@@ -1,5 +1,5 @@
-﻿using Common.Events.Domain;
-using Common.RepositoryPattern;
+﻿using Common.DDD;
+using Common.Events.Domain;
 
 namespace VehicleDomain.DL.Models.VehicleInformations;
 public class VehicleInformation : IAggregateRoot

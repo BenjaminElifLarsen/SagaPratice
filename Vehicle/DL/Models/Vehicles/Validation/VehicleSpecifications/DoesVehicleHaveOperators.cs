@@ -1,4 +1,4 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.DDD;
 using Common.SpecificationPattern;
 using VehicleDomain.DL.Models.Vehicles.CQRS.Commands;
 

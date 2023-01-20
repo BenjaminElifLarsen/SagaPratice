@@ -1,4 +1,4 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.DDD;
 
 namespace BaseRepository;
 public interface IContextData<TEntity> where TEntity : IAggregateRoot

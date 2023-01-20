@@ -1,5 +1,5 @@
-﻿using Common.Events.Domain;
-using Common.RepositoryPattern;
+﻿using Common.DDD;
+using Common.Events.Domain;
 using VehicleDomain.DL.Models.Vehicles.Validation.Errors;
 using VehicleDomain.DL.Models.Vehicles.Validation.VehicleSpecifications;
 

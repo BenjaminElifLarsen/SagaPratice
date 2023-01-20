@@ -1,6 +1,6 @@
-﻿using Common.Events.Domain;
+﻿using Common.DDD;
+using Common.Events.Domain;
 using Common.Events.Store.Event;
-using Common.RepositoryPattern;
 
 namespace VehicleDomain.DL.Models.Operators.Events;
 public sealed record OperatorAdded : DomainEvent

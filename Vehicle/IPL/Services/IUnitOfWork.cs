@@ -1,4 +1,4 @@
-﻿using Common.RepositoryPattern;
+﻿using Common.UnitOfWork;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
 using VehicleDomain.DL.Models.VehicleInformations;

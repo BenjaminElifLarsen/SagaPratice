@@ -2,6 +2,7 @@
 using Common.Events.System;
 using Common.ProcessManager;
 using Common.ResultPattern;
+using Common.UnitOfWork;
 using VehicleDomain.AL.Busses.Event;
 using VehicleDomain.DL.Models.LicenseTypes;
 using VehicleDomain.DL.Models.Operators;
@@ -86,5 +87,15 @@ internal class UnitOfWork : IUnitOfWork
             }
         } while (_context.GetTracked.SelectMany(x => x.Events).Any());
         
+    }
+
+    public void Handle(SaveProcessedWork command)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Handle(DiscardProcesssedWork command)
+    {
+        throw new NotImplementedException();
     }
 }

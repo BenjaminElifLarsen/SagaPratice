@@ -1,4 +1,6 @@
-﻿using PersonDomain.AL.Busses.Command;
+﻿using Common.Events.Save;
+using Common.UnitOfWork;
+using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.Handlers.Command;
 using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
@@ -15,6 +17,7 @@ using PersonDomain.AL.Services.Genders;
 using PersonDomain.AL.Services.People;
 using PersonDomain.DL.CQRS.Commands;
 using PersonDomain.DL.Events.Domain;
+using PersonDomain.IPL.Services;
 
 namespace PersonDomain.AL.Registries;
 public sealed class PersonRegistry : IPersonRegistry
@@ -61,10 +64,12 @@ public sealed class PersonRegistry : IPersonRegistry
 
     public void SetUpRouting(IGenderService service)
     {
-        _eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
-        _eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
-        _eventBus.RegisterHandler<UnrecognisedSucceeded>(service.Handle);
-        _eventBus.RegisterHandler<UnrecognisedFailed>(service.Handle);
+        //_eventBus.RegisterHandler<RecognisedSucceeded>(service.Handle);
+        //_eventBus.RegisterHandler<RecognisedFailed>(service.Handle);
+        //_eventBus.RegisterHandler<UnrecognisedSucceeded>(service.Handle);
+        //_eventBus.RegisterHandler<UnrecognisedFailed>(service.Handle);
+        _eventBus.RegisterHandler<ProcessingSucceeded>(service.Handle);
+        _eventBus.RegisterHandler<ProcessingFailed>(service.Handle);
     }
 
     public void SetUpRouting(IPersonService service)
@@ -108,5 +113,11 @@ public sealed class PersonRegistry : IPersonRegistry
         _eventBus.RegisterHandler<PersonRemovedFromGenderSucceeded>(processRouter.Handle);
         _eventBus.RegisterHandler<PersonRemovedFromGenderFailed>(processRouter.Handle);
         _eventBus.RegisterHandler<PersonReplacedGender>(processRouter.Handle);
+    }
+
+    public void SetUpRouting(IUnitOfWork unitOfWork)
+    {
+        _commandBus.RegisterHandler<SaveProcessedWork>(unitOfWork.Handle);
+        _commandBus.RegisterHandler<DiscardProcesssedWork>(unitOfWork.Handle);
     }
 }

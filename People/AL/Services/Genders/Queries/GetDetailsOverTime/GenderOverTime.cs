@@ -74,6 +74,7 @@ public sealed record GenderOverTime : ISingleProjection<GenderOverTime>, IMultiP
 
                 case nameof(GenderUnrecognisedSucceeded):
                     state = null;
+                    states.Remove(e.AggregateId);
                     break;
 
                 case nameof(PersonAddedToGenderSucceeded):

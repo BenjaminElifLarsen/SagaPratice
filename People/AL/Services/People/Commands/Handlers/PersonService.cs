@@ -1,4 +1,5 @@
-﻿using Common.ProcessManager;
+﻿using Common.Events.Save;
+using Common.ProcessManager;
 using Common.ResultPattern;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
@@ -24,6 +25,10 @@ public partial class PersonService
     public void Handle(AddedToGenderSucceeded @event) => _result = new SuccessResultNoData();
 
     public void Handle(AddedToGenderFailed @event) => _result = new InvalidResultNoData(@event.Errors);
+
+    public void Handle(ProcessingSucceeded @evnet) => _result = new SuccessResultNoData();
+
+    public void Handle(ProcessingFailed @event) => _result = new InvalidResultNoData(@event.Errors);
 
     public void Handle(GenderReplacedSucceeded @event)
     {

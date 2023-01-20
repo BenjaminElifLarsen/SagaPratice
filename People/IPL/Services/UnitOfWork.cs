@@ -1,7 +1,6 @@
 ﻿using Common.Events.Save;
 using Common.Events.System;
 using Common.ProcessManager;
-using Common.ResultPattern;
 using Common.UnitOfWork;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.DL.Models;
@@ -18,7 +17,6 @@ internal sealed class UnitOfWork : IUnitOfWork
     private readonly IPersonRepository _personRepository;
     private readonly IPersonDomainEventBus _eventBus;
     private readonly IPersonContext _context;
-    private readonly IEnumerable<IProcessManager> _processManagers;
     private readonly IGenderRecogniseProcessRepository _genderRecogniseRepository;
     private readonly IGenderEventRepository _genderEventRepository;
     private readonly IPersonEventRepository _personEventRepository;
@@ -31,14 +29,13 @@ internal sealed class UnitOfWork : IUnitOfWork
 
     public IPersonEventRepository PersonEventRepository => _personEventRepository;
 
-    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, IEnumerable<IProcessManager> processManagers, 
+    public UnitOfWork(IGenderRepository genderRepository, IPersonRepository personRepository, IPersonDomainEventBus eventBus, IPersonContext context, 
         IGenderRecogniseProcessRepository genderRecogniseRepository, IGenderEventRepository genderEventRepository, IPersonEventRepository personEventRepository)
     {
         _genderRepository = genderRepository;
         _personRepository = personRepository;
         _eventBus = eventBus;
         _context = context;
-        _processManagers = processManagers;
         _genderRecogniseRepository = genderRecogniseRepository;
         _genderEventRepository = genderEventRepository;
 
@@ -66,7 +63,8 @@ internal sealed class UnitOfWork : IUnitOfWork
         _context.Save(); //could let the ProcessEvents check if the current event is a state event and then the boolean
         //} //or have a special 'save' event that process managers can trigger or... don't have IUnitOfWork.Save() calls in the command handlers at all, rather the pm, when done, transmit either a do save event or do not save event that the unit of work is subscribed too
     } //after all the pm event routers also pushes out events. Hmmm... maybe it should be a command, since it is something the unit of work should do. It could then trigger an event called ProcessingFinished(Succeeded/Failed) that the services can be subscribed too.
-    //the events added in the command handlers are first published when ProcessEvents are called via the UnitOfWork.Save(), maybe have the routers publish an event that causes processing?
+    //the events added via the command handlers are first published when ProcessEvents are called via the UnitOfWork.Save(), maybe have the routers publish an event that causes processing?
+    //remember, processs managers are triggered by the events created by the command handlers, so need to ensure events are processed someway via the command handlers
     public void AddSystemEvent(SystemEvent @event)
     {
         _context.Add(@event);
@@ -76,8 +74,8 @@ internal sealed class UnitOfWork : IUnitOfWork
     {
         do
         {
-            var eventsArray = _context.SystemEvents.ToArray();
-            foreach (var @event in eventsArray)
+            var systemEvents = _context.SystemEvents.ToArray();
+            foreach (var @event in systemEvents)
             {
                 _eventBus.Publish(@event);
                 _context.Remove(@event);
@@ -110,11 +108,13 @@ internal sealed class UnitOfWork : IUnitOfWork
 
     public void Handle(SaveProcessedWork command)
     {
+        //call save
         _eventBus.Publish(new ProcessingSucceeded(command.CorrelationId, command.CommandId));
     }
 
     public void Handle(DiscardProcesssedWork command)
     {
+        //'restore' (would be so more simpler with EntityFramework Core
         _eventBus.Publish(new ProcessingFailed(command.Errors, command.CorrelationId, command.CommandId));
     }
 }

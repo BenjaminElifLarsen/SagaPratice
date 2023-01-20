@@ -1,4 +1,5 @@
-﻿using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
+﻿using Common.UnitOfWork;
+using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.DL.Events.Domain;
 using static PersonDomain.AL.ProcessManagers.Gender.Unrecognise.GenderUnrecogniseProcessManager.UnrecogniseGenderState;
 
@@ -20,7 +21,8 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
         {
             case NotStarted:
                 State = GenderUnrecognised;
-                AddStateEvent(new UnrecognisedSucceeded(@event.CorrelationId, @event.EventId));
+                AddStateEvent(new UnrecognisedSucceeded(CorrelationId, @event.EventId));
+                AddCommand(new SaveProcessedWork(CorrelationId, @event.EventId));
                 break;
 
             case GenderUnrecognised:
@@ -43,7 +45,8 @@ public sealed class GenderUnrecogniseProcessManager : BaseProcessManager, IGende
             case NotStarted:
                 State = GenderFailedToUnrecognise;
                 AddErrors(@event.Errors);
-                AddStateEvent(new UnrecognisedFailed(Errors, @event.CorrelationId, @event.EventId));
+                AddStateEvent(new UnrecognisedFailed(Errors, CorrelationId, @event.EventId));
+                AddCommand(new DiscardProcesssedWork(Errors, CorrelationId, @event.EventId));
                 break;
 
             case GenderUnrecognised:

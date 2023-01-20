@@ -1,4 +1,5 @@
-﻿using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
+﻿using Common.UnitOfWork;
+using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
 using PersonDomain.DL.Events.Domain;
 
 namespace PersonDomain.AL.ProcessManagers.Gender.Recognise;
@@ -47,7 +48,8 @@ public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogni
         {
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderRecognised;
-                AddStateEvent(new RecognisedSucceeded(@event.CorrelationId, @event.EventId));
+                AddStateEvent(new RecognisedSucceeded(CorrelationId, @event.EventId));
+                AddCommand(new SaveProcessedWork(CorrelationId, @event.EventId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.
@@ -72,7 +74,8 @@ public sealed class GenderRecogniseProcessManager : BaseProcessManager, IRecogni
             case RecogniseGenderState.NotStarted:
                 State = RecogniseGenderState.GenderFailedToRecognise;
                 AddErrors(@event.Errors);
-                AddStateEvent(new RecognisedFailed(Errors, @event.CorrelationId, @event.EventId));
+                AddStateEvent(new RecognisedFailed(Errors, CorrelationId, @event.EventId));
+                AddCommand(new DiscardProcesssedWork(Errors, CorrelationId, @event.EventId));
                 break;
 
             case RecogniseGenderState.GenderRecognised: // Idempotence.

@@ -5,8 +5,6 @@ using Common.RepositoryPattern;
 namespace Security.DL.Users;
 internal class User : IAggregateRoot, ISoftDelete
 {
-    private string _firstName;
-    private string _lastName;
     private bool _deleted;
 
     public Guid Id => throw new NotImplementedException();

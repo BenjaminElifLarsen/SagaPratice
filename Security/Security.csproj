@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Folder Include="DL\RefreshTokens\" />
-    <Folder Include="DL\Users\" />
     <Folder Include="IPL\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

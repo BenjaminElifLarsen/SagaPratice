@@ -1,0 +1,5 @@
+if got the time and feel it is important enough, consider writting a code-to-sql converter if reflection permits it.
+Need to be able to convert switch cases to sql if-statements and such
+the purpose is to convert events to specific models over in the sql database
+
+at some point write out ORM

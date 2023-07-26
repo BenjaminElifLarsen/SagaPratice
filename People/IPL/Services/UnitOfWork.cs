@@ -69,7 +69,7 @@ internal sealed class UnitOfWork : IUnitOfWork
         _context.Add(@event);
     }
 
-    public void ProcessEvents()
+    public void ProcessEvents() //should not be called from Save() and should return a bool
     {
         do
         {

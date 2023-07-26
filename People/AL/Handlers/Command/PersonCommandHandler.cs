@@ -31,7 +31,7 @@ internal sealed class PersonCommandHandler : IPersonCommandHandler
         if (result is InvalidResult<Person>)
         { //how to add an event for this as there is no aggregate root? Could let the repository take in orphan events and put them in the context. The question thus become how to retrieve them?
             _unitOfWork.AddSystemEvent(new PersonHiredFailed(result.Errors, command.CorrelationId, command.CommandId));
-            _unitOfWork.Save();
+            _unitOfWork.Save(); // TODO: does not make sense to save on failer.
             return; ; //or maybe via the unit of work?
         }
         _unitOfWork.PersonRepository.Hire(result.Data);

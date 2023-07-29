@@ -1,5 +1,4 @@
 ﻿using Common.Events.Base;
-using Common.Events.Domain;
 using System.Diagnostics;
 
 namespace PersonDomain.AL.Busses.Event;
@@ -30,11 +29,7 @@ internal sealed class MockDomainEventBus : IPersonDomainEventBus
     public void Publish<T>(T @event) where T : IBaseEvent
     {
         List<Action<IBaseEvent>> handlers;
-        #if(DEBUG)
-            Debug.WriteLine($"{@event.CorrelationId} : {@event.CausationId} : {@event.EventId} : {@event.GetType()}");
-        #else
-            //write to log
-        #endif
+
         if (!_routes.TryGetValue(@event.GetType(), out handlers))
             return;
 

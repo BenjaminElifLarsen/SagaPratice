@@ -1,10 +1,10 @@
-﻿using Common.Events.Save;
+﻿using Common.Events.Base;
+using Common.Events.Save;
+using Common.Logger;
 using Common.UnitOfWork;
 using PersonDomain.AL.Busses.Command;
 using PersonDomain.AL.Busses.Event;
 using PersonDomain.AL.Handlers.Command;
-using PersonDomain.AL.ProcessManagers.Gender.Recognise.StateEvents;
-using PersonDomain.AL.ProcessManagers.Gender.Unrecognise.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Fire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.Hire.StateEvents;
 using PersonDomain.AL.ProcessManagers.Person.PersonalInformationChange.StatesEvents;
@@ -25,17 +25,20 @@ public sealed class PersonRegistry : IPersonRegistry
     private readonly IPersonCommandBus _commandBus;
     private readonly IPersonDomainEventBus _eventBus;
     private readonly IPersonCommandHandler _commandHandler;
+    private readonly IEventLogger _eventLogger;
 
-    public PersonRegistry(IPersonCommandBus commandBus, IPersonDomainEventBus eventBus, IPersonCommandHandler commandHandler)
+    public PersonRegistry(IPersonCommandBus commandBus, IPersonDomainEventBus eventBus, IPersonCommandHandler commandHandler, IEventLogger eventLogger)
     {
         _commandBus = commandBus;
         _eventBus = eventBus;
         _commandHandler = commandHandler; //consider some way to set it up such than a domain event gets converted to an intergration event and placed on an intergration handler
+        _eventLogger = eventLogger;
     } //so an intergration bus that registrates domain events, converts them to intergration events and publish them to its handlers
 
     public void SetUpRouting()
     {
         RoutingCommand();
+        SetUpRouting(_eventLogger);
     }
 
     private void RoutingCommand()
@@ -48,6 +51,11 @@ public sealed class PersonRegistry : IPersonRegistry
         _commandBus.RegisterHandler<ChangePersonalInformationFromUser>(_commandHandler.Handle);
         _commandBus.RegisterHandler<RecogniseGender>(_commandHandler.Handle);
         _commandBus.RegisterHandler<UnrecogniseGender>(_commandHandler.Handle);
+    }
+
+    public void SetUpRouting(IEventLogger logger)
+    {
+        _eventBus.RegisterHandler<IBaseEvent>(logger.Handle);
     }
 
     public void SetUpRouting(IGenderRecogniseProcessRouter processRouter)

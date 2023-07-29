@@ -1,5 +1,6 @@
 ﻿using BaseRepository;
 using Common.Events.Store.Event;
+using Common.Logger;
 using Common.ProcessManager;
 using Common.RepositoryPattern;
 using Common.RepositoryPattern.Events;
@@ -45,11 +46,17 @@ public class PersonApiServices
         Handlers(services);
         Events(services);
         ProcessManagers(services);
+        Logger(services);
     }
 
     private static void Context(IServiceCollection services)
     {
         services.AddSingleton<IPersonContext, MockPeopleContext>(); // Singleton because the data is stored in-memory.
+    }
+    
+    private static void Logger(IServiceCollection service)
+    {
+        service.AddScoped<IEventLogger, TestingEventLogger>();
     }
 
     private static void Factories(IServiceCollection services)
